@@ -1,0 +1,358 @@
+/* =============================================================================
+   ESTILOS ESPECÍFICOS DEL MÓDULO 2: EQUIPOS Y PARTICIPANTES
+   ============================================================================= */
+
+/* --- Barra de navegación superior --- */
+.barra-nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    background: rgba(10, 14, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-borde);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.logo-nav {
+    font-family: var(--fuente-titulo);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #60a5fa;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.menu-nav {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.menu-nav a {
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transicion);
+}
+
+.menu-nav a:hover {
+    color: var(--color-texto-principal);
+}
+
+.usuario-nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.85rem;
+    color: var(--color-texto-secundario);
+}
+
+.boton-logout {
+    color: #f87171;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transicion);
+}
+
+.boton-logout:hover {
+    color: #ef4444;
+}
+
+/* --- Contenedor de página --- */
+.contenedor-pagina {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px;
+    width: 100%;
+}
+
+/* --- Barra superior de sección --- */
+.barra-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.titulo-pagina {
+    font-family: var(--fuente-titulo);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--color-texto-principal);
+}
+
+.subtitulo-seccion {
+    font-family: var(--fuente-titulo);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+}
+
+/* --- Tarjeta de formulario --- */
+.tarjeta-formulario {
+    background: var(--color-tarjeta);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+/* --- Tarjeta de sección de contenido --- */
+.tarjeta-seccion {
+    background: var(--color-tarjeta);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 24px;
+}
+
+/* --- Botones adicionales --- */
+.boton-secundario {
+    padding: 11px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--fuente-titulo);
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radio-control);
+    cursor: pointer;
+    transition: var(--transicion);
+    white-space: nowrap;
+}
+
+.boton-secundario:hover {
+    background: rgba(59, 130, 246, 0.25);
+    transform: translateY(-1px);
+}
+
+.boton-exito {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transicion);
+}
+
+.boton-exito:hover {
+    background: rgba(16, 185, 129, 0.25);
+}
+
+.boton-peligro {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transicion);
+}
+
+.boton-peligro:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+/* --- Grilla de equipos --- */
+.grilla-equipos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.tarjeta-equipo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--color-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    padding: 18px;
+    text-decoration: none;
+    color: var(--color-texto-principal);
+    transition: var(--transicion);
+    animation: aparecer 0.5s ease-out;
+}
+
+.tarjeta-equipo:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.escudo-equipo {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.escudo-grande {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    margin: 0 auto;
+}
+
+.escudo-placeholder {
+    font-family: var(--fuente-titulo);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #60a5fa;
+}
+
+.info-equipo {
+    flex: 1;
+}
+
+.info-equipo h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.info-equipo p {
+    font-size: 0.82rem;
+    color: var(--color-texto-secundario);
+}
+
+.etiqueta-ver {
+    font-size: 0.78rem;
+    color: #3b82f6;
+    white-space: nowrap;
+}
+
+/* --- Estado vacío --- */
+.estado-vacio {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-texto-secundario);
+}
+
+/* --- Grilla de dos columnas para detalle --- */
+.grilla-dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+
+/* --- Lista de miembros --- */
+.lista-miembros {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fila-miembro {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-mini {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #60a5fa;
+    flex-shrink: 0;
+}
+
+/* --- Lista de solicitudes --- */
+.lista-solicitudes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.fila-solicitud {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid var(--color-borde);
+}
+
+.botones-solicitud {
+    display: flex;
+    gap: 8px;
+}
+
+/* --- Info box --- */
+.info-box {
+    padding: 16px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 10px;
+}
+
+/* --- Radio buttons estilizados --- */
+.opcion-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicion);
+    font-size: 0.9rem;
+}
+
+.opcion-radio:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+    .barra-nav {
+        padding: 12px 16px;
+    }
+    .grilla-dos-columnas {
+        grid-template-columns: 1fr;
+    }
+    .grilla-equipos {
+        grid-template-columns: 1fr;
+    }
+    .barra-superior {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

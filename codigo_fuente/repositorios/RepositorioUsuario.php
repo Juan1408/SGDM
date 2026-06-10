@@ -79,7 +79,10 @@ class RepositorioUsuario {
                 VALUES (:email, :contrasena_hash, :nombre_completo, :telefono, :fecha_nacimiento, :rol_id, :esta_activo, :email_verificado)";
 
         $sentencia = $this->conexion->prepare($sql);
-        
+
+        $telefono = $usuario->telefono !== null && trim($usuario->telefono) !== '' ? $usuario->telefono : null;
+        $fechaNacimiento = $usuario->fechaNacimiento !== null && trim($usuario->fechaNacimiento) !== '' ? $usuario->fechaNacimiento : null;
+
         /**
          * @var bool $resultado Indica si la inserción fue correcta.
          */
@@ -87,8 +90,8 @@ class RepositorioUsuario {
             'email' => $usuario->email,
             'contrasena_hash' => $usuario->contrasenaHash,
             'nombre_completo' => $usuario->nombreCompleto,
-            'telefono' => $usuario->telefono,
-            'fecha_nacimiento' => $usuario->fechaNacimiento,
+            'telefono' => $telefono,
+            'fecha_nacimiento' => $fechaNacimiento,
             'rol_id' => $usuario->rolId,
             'esta_activo' => $usuario->estaActivo ? 1 : 0,
             'email_verificado' => $usuario->emailVerificado ? 1 : 0

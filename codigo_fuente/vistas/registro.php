@@ -26,7 +26,7 @@
             <?php endif; ?>
 
             <form action="/registro" method="POST">
-                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf); ?>">
+                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf ?? ''); ?>">
 
                 <div class="grupo-formulario">
                     <label for="nombre_completo">Nombre Completo</label>
@@ -41,6 +41,19 @@
                 <div class="grupo-formulario">
                     <label for="contrasena">Contraseña</label>
                     <input type="password" id="contrasena" name="contrasena" class="control-formulario" placeholder="Mínimo 8 caracteres, números y letras" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="confirmar_contrasena">Confirmar Contraseña</label>
+                    <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" class="control-formulario" placeholder="Repite tu contraseña" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="rol_id">Tipo de Usuario</label>
+                    <select id="rol_id" name="rol_id" class="control-formulario" required>
+                        <option value="3" <?php echo ((int)($datos['rol_id'] ?? 3) === 3) ? 'selected' : ''; ?>>Jugador</option>
+                        <option value="2" <?php echo ((int)($datos['rol_id'] ?? 3) === 2) ? 'selected' : ''; ?>>Organizador</option>
+                    </select>
                 </div>
 
                 <div class="grupo-formulario">

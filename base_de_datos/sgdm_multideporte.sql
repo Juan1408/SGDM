@@ -391,8 +391,7 @@ CREATE TABLE torneo_suizo_parejas (
         ON UPDATE CASCADE,
     CONSTRAINT fk_suizo_participanteB FOREIGN KEY (participante_b_id) REFERENCES participantes_torneo(id) 
         ON DELETE CASCADE 
-        ON UPDATE CASCADE,
-    CONSTRAINT distintos CHECK (participante_a_id != participante_b_id)
+        ON UPDATE CASCADE
 );
 
 -- 19. resultados_detalle (datos extra del encuentro, ej. kills, motivo de victoria)

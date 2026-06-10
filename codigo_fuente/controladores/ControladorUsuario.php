@@ -161,8 +161,13 @@ class ControladorUsuario extends ControladorBase {
         $nombreCompleto = trim($_POST['nombre_completo'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $contrasena = $_POST['contrasena'] ?? '';
+        $confirmarContrasena = $_POST['confirmar_contrasena'] ?? '';
         $telefono = trim($_POST['telefono'] ?? null);
         $fechaNacimiento = $_POST['fecha_nacimiento'] ?? null;
+        $rolId = (int)($_POST['rol_id'] ?? 3);
+        if (!in_array($rolId, [2, 3], true)) {
+            $rolId = 3;
+        }
 
         /**
          * @var string[] $errores Colección de mensajes de validación fallida.
@@ -178,6 +183,9 @@ class ControladorUsuario extends ControladorBase {
         }
         if (empty($contrasena)) {
             $errores[] = "La contraseña es obligatoria.";
+        }
+        if ($contrasena !== $confirmarContrasena) {
+            $errores[] = "La confirmación de la contraseña no coincide.";
         }
 
         // Comprobación de existencia previa de correo
@@ -220,7 +228,7 @@ class ControladorUsuario extends ControladorBase {
             $fechaNacimiento,
             null, // foto_perfil_url
             '',   // fecha_registro autogenerada por BD
-            3,    // rol_id = 3 (Participante por defecto)
+            $rolId,
             true, // esta_activo
             false // email_verificado
         );

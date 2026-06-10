@@ -9,7 +9,17 @@
 // Carga automática mínima de archivos del núcleo, modelos y controladores
 require_once __DIR__ . '/nucleo/AdministradorSesion.php';
 require_once __DIR__ . '/nucleo/ControladorBase.php';
+// Módulo 1: Autenticación
 require_once __DIR__ . '/controladores/ControladorUsuario.php';
+// Módulo 2: Equipos y Participantes
+require_once __DIR__ . '/controladores/ControladorEquipo.php';
+require_once __DIR__ . '/controladores/ControladorParticipante.php';
+// Módulo 3: Torneos configurables
+require_once __DIR__ . '/controladores/TorneoControlador.php';
+// Módulo 4: Resultados y posiciones
+require_once __DIR__ . '/controladores/EnfrentamientoControlador.php';
+// Módulo 5: Roles y permisos
+require_once __DIR__ . '/controladores/RolControlador.php';
 
 // Iniciar sesión de forma segura
 AdministradorSesion::iniciar();
@@ -45,46 +55,42 @@ if ($ruta === '/' || $ruta === '/login') {
 } elseif ($ruta === '/logout') {
     $controlador = new ControladorUsuario();
     $controlador->logout();
+
+// =============================================================================
+// RUTAS DEL MÓDULO 2: EQUIPOS Y PARTICIPANTES
+// =============================================================================
+} elseif ($ruta === '/equipos') {
+    (new ControladorEquipo())->listar();
+} elseif ($ruta === '/equipos/crear') {
+    (new ControladorEquipo())->crear();
+} elseif ($ruta === '/equipos/ver') {
+    (new ControladorEquipo())->ver();
+} elseif ($ruta === '/equipos/unirse') {
+    (new ControladorEquipo())->unirse();
+} elseif ($ruta === '/equipos/solicitudes/procesar') {
+    (new ControladorEquipo())->procesarSolicitud();
+} elseif ($ruta === '/participantes/inscribir') {
+    (new ControladorParticipante())->inscribir();
+
+// =============================================================================
+// RUTAS DEL MÓDULO 1: PANEL PRINCIPAL
+// =============================================================================
 } elseif ($ruta === '/torneos') {
-    // Redirigir al login si no está autenticado (Middleware básico)
-    if (!AdministradorSesion::estaAutenticado()) {
-        header('Location: /login');
-        exit;
-    }
-
-    /**
-     * @var string $nombreUsuario Nombre completo del usuario en sesión.
-     */
-    $nombreUsuario = $_SESSION['nombre_completo'] ?? 'Usuario';
-
-    // Vista de prueba básica para confirmar que la autenticación funciona
-    ?>
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Panel Principal - SGDM</title>
-        <link rel="stylesheet" href="/publico/css/style.css">
-    </head>
-    <body>
-        <div class="contenedor-pantalla" style="max-width: 600px;">
-            <div class="tarjeta-autenticacion" style="text-align: center;">
-                <div class="cabecera-autenticacion">
-                    <h1>¡Bienvenido, <?php echo htmlspecialchars($nombreUsuario); ?>!</h1>
-                    <p>Has iniciado sesión correctamente en el sistema SGDM 2.0</p>
-                </div>
-                
-                <div style="margin: 30px 0; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-size: 0.9rem; color: var(--color-texto-secundario);">
-                    El Módulo 1 (Autenticación, Seguridad y Roles) está completamente funcional. Las variables en el código se encuentran documentadas y los formularios están protegidos contra ataques CSRF y políticas de complejidad de contraseñas.
-                </div>
-
-                <a href="/logout" class="boton-primario" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 24px;">Cerrar Sesión</a>
-            </div>
-        </div>
-    </body>
-    </html>
-    <?php
+    (new TorneoControlador())->listar();
+} elseif ($ruta === '/torneos/crear') {
+    (new TorneoControlador())->crear();
+} elseif ($ruta === '/torneos/ver') {
+    (new TorneoControlador())->ver();
+} elseif ($ruta === '/torneos/detalle') {
+    (new TorneoControlador())->detalle();
+} elseif ($ruta === '/torneos/resultados') {
+    (new EnfrentamientoControlador())->resultados();
+} elseif ($ruta === '/torneos/resultados/guardar') {
+    (new EnfrentamientoControlador())->guardarResultado();
+} elseif ($ruta === '/roles') {
+    (new RolControlador())->listar();
+} elseif ($ruta === '/roles/panel') {
+    (new RolControlador())->panel();
 } else {
     // Página no encontrada (404)
     http_response_code(404);

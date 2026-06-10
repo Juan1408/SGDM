@@ -46,8 +46,8 @@ services:
     # Persistencia de datos: guarda la información aunque apagues el contenedor
     volumes:
       - sgdm_datos:/var/lib/mysql
-      # Monta la carpeta con tus migraciones SQL para que se ejecuten automáticamente la primera vez
-      - ../base_de_datos/migraciones:/docker-entrypoint-initdb.d
+      # Importa el esquema completo de la base de datos al arrancar por primera vez
+      - ../base_de_datos/sgdm_multideporte.sql:/docker-entrypoint-initdb.d/001_sgdm_multideporte.sql:ro
     networks:
       - sgdm_red
 

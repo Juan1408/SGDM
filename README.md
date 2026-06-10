@@ -79,6 +79,7 @@ docker-compose logs -f db
 Seguridad y buenas prácticas
 - NO subir credenciales reales al repositorio. Usar `.env` para variables sensibles.
 - En producción, configurar backup regular de la base de datos y activar TLS/HTTPS en el proxy frontal.
+- Regla funcional: un usuario con rol de Jugador/Participante puede ver torneos y participar, pero no puede crear ni administrar torneos. Esa acción está reservada a Organizadores y Administradores.
 
 Solución de problemas
 - Si el contenedor `db` no está listo, ver los logs con `docker-compose logs db` y esperar a que MySQL inicialice.
