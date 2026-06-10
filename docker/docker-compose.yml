@@ -1,24 +1,94 @@
-# docker-compose: orquesta los contenedores necesarios para la app SGDM
-# - servicio web (PHP/Apache)
-# - servicio de base de datos (MySQL)
-
+# Versión de la sintaxis de Docker Compose (3.8 es estable y recomendada)
 version: '3.8'
+
+# Definición de los servicios (contenedores) que componen la aplicación
 services:
+  # ------------------------------------------------------------
+  # SERVICIO 1: Servidor web con PHP y Apache
+  # ------------------------------------------------------------
   web:
-    build: ./docker
+    # Construye la imagen a partir del Dockerfile que está en esta misma carpeta (./docker)
+    build: .
+    # Nombre único del contenedor para identificarlo fácilmente
+    container_name: sgdm_web
+    # Mapeo de puertos: [puerto de tu PC] : [puerto dentro del contenedor]
+    # Así podrás ver la app en http://localhost:8080
     ports:
       - "8080:80"
+    # Monta tu código fuente dentro del contenedor.
+    # "../codigo_fuente" es la carpeta que está al lado de "docker" (raíz del proyecto)
+    # Se monta en "/var/www/html", que es donde Apache busca los archivos por defecto
     volumes:
-      - ./codigo_fuente:/var/www/html
+      - ../codigo_fuente:/var/www/html
+    # Este servicio depende de la base de datos; Docker esperará a que "db" esté listo
     depends_on:
       - db
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: sgdm
-    volumes:
-      - db_data:/var/lib/mysql
+    # Conecta este contenedor a la red interna "sgdm_red" para que pueda comunicarse con otros
+    networks:
+      - sgdm_red
 
+  # ------------------------------------------------------------
+  # SERVICIO 2: Base de datos MySQL 8.0
+  # ------------------------------------------------------------
+  db:
+    # Imagen oficial de MySQL versión 8.0 (la misma que usa XAMPP actualmente)
+    image: mysql:8.0
+    container_name: sgdm_db
+    # Variables de entorno para configurar la base de datos al primer inicio
+    environment:
+      MYSQL_ROOT_PASSWORD: root123      # Contraseña del usuario administrador "root"
+      MYSQL_DATABASE: sgdm              # Nombre de la base de datos que se crea automáticamente
+      MYSQL_USER: sgdm_usuario          # Usuario para que la aplicación se conecte
+      MYSQL_PASSWORD: sgdm_contraseña   # Contraseña de ese usuario
+    # Puerto 3306 (el estándar de MySQL) mapeado a tu PC para conectarte desde phpMyAdmin o Workbench
+    ports:
+      - "3306:3306"
+    # Persistencia de datos: guarda la información aunque apagues el contenedor
+    volumes:
+      - sgdm_datos:/var/lib/mysql
+      # Monta la carpeta con tus migraciones SQL para que se ejecuten automáticamente la primera vez
+      - ../base_de_datos/migraciones:/docker-entrypoint-initdb.d
+    networks:
+      - sgdm_red
+
+  # ------------------------------------------------------------
+  # SERVICIO 3: phpMyAdmin (interfaz web para administrar la base de datos)
+  # ------------------------------------------------------------
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sgdm_phpmyadmin
+    # Variables para que sepa dónde está la base de datos
+    environment:
+      PMA_HOST: db          # Nombre del servicio de base de datos (resolución interna)
+      PMA_PORT: 3306
+    # Mapeo del puerto 8081 de tu PC al 80 del contenedor: http://localhost:8081
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - sgdm_red
+
+  # ------------------------------------------------------------
+  # SERVICIO 4: Grafana (monitoreo – requisito de Administración de Sistemas Operativos)
+  # ------------------------------------------------------------
+  grafana:
+    image: grafana/grafana
+    container_name: sgdm_grafana
+    ports:
+      - "3000:3000"   # Acceso a Grafana en http://localhost:3000
+    networks:
+      - sgdm_red
+
+# ------------------------------------------------------------
+# Volúmenes: almacenan datos persistentes (como la base de datos)
+# ------------------------------------------------------------
 volumes:
-  db_data:
+  sgdm_datos:      # Este volumen se asocia a /var/lib/mysql del contenedor "db"
+
+# ------------------------------------------------------------
+# Red: permite que los contenedores se comuniquen entre sí usando sus nombres de servicio
+# ------------------------------------------------------------
+networks:
+  sgdm_red:
+    driver: bridge   # Red tipo puente (la más común para entornos locales)

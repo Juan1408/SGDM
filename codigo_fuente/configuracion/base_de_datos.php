@@ -7,6 +7,6 @@
 return [
     'host' => 'db',
     'user' => 'root',
-    'password' => 'example',
+    'password' => 'root123',
     'database' => 'sgdm',
 ];

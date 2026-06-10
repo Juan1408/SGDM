@@ -21,27 +21,35 @@ docker-compose ps
 docker-compose logs -f web
 ```
 
-Importar migraciones (crear las tablas)
+Importar Base de Datos Multideportiva (Recomendado)
+- Se ha diseñado una base de datos robusta de 25 tablas normalizadas en 3FN con soporte multideportivo, relaciones, cascadas, índices de rendimiento y datos iniciales pre-cargados.
+- Para importar este script completo:
+
+```bash
+docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/sgdm_multideporte.sql
+```
+
+Importar migraciones heredadas (crear las tablas paso a paso)
 - Usando `docker-compose exec -T` para redirigir los .sql hacia MySQL (funciona en Linux/macOS y PowerShell):
 
 ```bash
-docker-compose exec -T db mysql -u root -pexample sgdm < base_de_datos/migraciones/001_crear_tabla_usuarios.sql
+docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/migraciones/001_crear_tabla_usuarios.sql
 # Para importar todas las migraciones (Linux/macOS):
-for f in base_de_datos/migraciones/*.sql; do docker-compose exec -T db mysql -u root -pexample sgdm < "$f"; done
+for f in base_de_datos/migraciones/*.sql; do docker-compose exec -T db mysql -u root -proot123 sgdm < "$f"; done
 ```
 
 Notas para PowerShell (Windows)
 - Si usás PowerShell, el primer comando sigue funcionando; para un batch en PowerShell podés ejecutar:
 
 ```powershell
-Get-ChildItem base_de_datos/migraciones\*.sql | ForEach-Object { docker-compose exec -T db mysql -u root -pexample sgdm < $_.FullName }
+Get-ChildItem base_de_datos/migraciones\*.sql | ForEach-Object { docker-compose exec -T db mysql -u root -proot123 sgdm < $_.FullName }
 ```
 
-Semillas (datos de ejemplo)
-- Importar el archivo de semillas:
+Semillas heredadas (datos de ejemplo)
+- Si usás el esquema de migraciones heredadas, podés importar el archivo de semillas adicional:
 
 ```bash
-docker-compose exec -T db mysql -u root -pexample sgdm < base_de_datos/semillas/datos_ejemplo.sql
+docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/semillas/datos_ejemplo.sql
 ```
 
 Configuración
