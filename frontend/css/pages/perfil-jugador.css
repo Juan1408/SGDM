@@ -1,0 +1,221 @@
+.player-profile-page {
+   min-height: 100vh;
+   padding: 50px 4%;
+   display: grid;
+   grid-template-columns: 330px 1fr;
+   gap: 35px;
+   background:
+      radial-gradient(circle at 20% 20%, rgba(170, 45, 255, .25), transparent 30%),
+      radial-gradient(circle at 80% 80%, rgba(255, 0, 200, .18), transparent 35%),
+      #0b1020;
+   color: #fff;
+   font-family: 'Poppins', sans-serif;
+}
+
+.profile-sidebar,
+.profile-card {
+   background: rgba(8, 10, 30, .88);
+   border: 1px solid rgba(170, 45, 255, .45);
+   box-shadow: 0 0 28px rgba(170, 45, 255, .22);
+   border-radius: 18px;
+}
+
+.profile-sidebar {
+   padding: 35px 25px;
+   text-align: center;
+}
+
+.profile-avatar {
+   width: 170px;
+   height: 170px;
+   margin: 0 auto 25px;
+   border-radius: 50%;
+   padding: 6px;
+   background: linear-gradient(135deg, #ff00c8, #7c35ff);
+   box-shadow: 0 0 30px rgba(170, 45, 255, .6);
+}
+
+.profile-avatar img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   border-radius: 50%;
+}
+
+.profile-sidebar h2 {
+   font-size: 28px;
+}
+
+.player-role {
+   color: #c13cff;
+   font-weight: 700;
+   margin: 8px 0 30px;
+}
+
+.profile-info {
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+.profile-info i {
+   color: #c13cff;
+   margin-right: 10px;
+}
+
+.profile-stats {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   border: 1px solid rgba(170, 45, 255, .45);
+   border-radius: 14px;
+   overflow: hidden;
+}
+
+.profile-stats div {
+   padding: 22px;
+}
+
+.profile-stats strong {
+   display: block;
+   font-size: 34px;
+}
+
+.profile-stats span {
+   color: #c9c9dc;
+   text-transform: uppercase;
+   font-size: 12px;
+}
+
+.profile-content {
+   display: flex;
+   flex-direction: column;
+   gap: 25px;
+}
+
+.profile-tabs {
+   display: flex;
+   gap: 35px;
+   padding: 20px 25px;
+   background: rgba(8, 10, 30, .75);
+   border-bottom: 1px solid rgba(170, 45, 255, .4);
+}
+
+.profile-tabs a {
+   color: #c9c9dc;
+   text-decoration: none;
+   font-weight: 700;
+   text-transform: uppercase;
+}
+
+.profile-tabs a.active,
+.profile-tabs a:hover {
+   color: #ff4cff;
+}
+
+.profile-grid {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 25px;
+}
+
+.profile-card {
+   padding: 28px;
+}
+
+.profile-card h3 {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   margin-bottom: 22px;
+   text-transform: uppercase;
+}
+
+.profile-card h3 i {
+   color: #c13cff;
+}
+
+.games-profile-grid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 14px;
+}
+
+.games-profile-grid div {
+   padding: 18px;
+   text-align: center;
+   border-radius: 12px;
+   background: rgba(255,255,255,.04);
+   border: 1px solid rgba(170, 45, 255, .25);
+}
+
+.games-profile-grid i {
+   font-size: 35px;
+   color: #30f5d2;
+   margin-bottom: 10px;
+}
+
+.games-profile-grid p,
+.profile-card p {
+   color: #c9c9dc;
+   line-height: 1.6;
+}
+
+.achievement {
+   display: flex;
+   gap: 18px;
+   margin-bottom: 22px;
+}
+
+.achievement i {
+   color: #ff4cff;
+   font-size: 28px;
+}
+
+.skill {
+   margin-bottom: 20px;
+}
+
+.skill span {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 8px;
+}
+
+.skill div {
+   height: 10px;
+   background: rgba(255,255,255,.08);
+   border-radius: 20px;
+   overflow: hidden;
+}
+
+.skill p {
+   height: 100%;
+   background: linear-gradient(90deg, #ff00c8, #7c35ff);
+}
+
+.profile-card a {
+   display: inline-block;
+   margin-top: 18px;
+   padding: 10px 24px;
+   color: #fff;
+   text-decoration: none;
+   background: rgba(170,45,255,.25);
+   border: 1px solid rgba(170,45,255,.6);
+   border-radius: 8px;
+}
+
+@media (max-width: 950px) {
+   .player-profile-page {
+      grid-template-columns: 1fr;
+   }
+
+   .profile-grid {
+      grid-template-columns: 1fr;
+   }
+
+   .profile-tabs {
+      overflow-x: auto;
+   }
+}

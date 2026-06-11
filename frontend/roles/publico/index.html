@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM</title>
+   
+   <!-- Swiper.js -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+   
+   <!-- CSS -->
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/pages/home.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/components/carruseles.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+   <!-- NAVBAR -->
+
+   <header class="navbar">
+
+      <div class="logo-container">
+         <i class="fa-solid fa-trophy"></i>
+         <h1>SGDM</h1>
+      </div>
+
+      <nav class="nav-links" id="nav-links">
+
+         <a href="#">Inicio</a>
+         
+<!-- DROPDOWN TORNEOS -->
+
+<div class="dropdown">
+
+   <button class="dropdown-btn" type="button" id="tournamentsDropdown">
+      Torneos
+      <i class="fa-solid fa-chevron-down"></i>
+   </button>
+
+   <div class="dropdown-content" id="tournamentsMenu">
+
+      <a href="../publico/torneos.html">Todos los torneos</a>
+      <a href="#">Detalles</a>
+      <a href="#">Match</a>
+   </div>
+
+</div>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+         <div class="auth-links">
+            <a href="login.html" class="login-link">
+               <i class="fa-solid fa-right-to-bracket"></i>
+            </a>
+
+            <a href="../publico/login.html" class="register-btn">
+               Registrarse
+            </a>
+         </div>
+
+      </nav>
+
+<!-- MENU MOBILE -->
+
+      <div class="menu-toggle" id="menu-toggle">
+         <i class="fa-solid fa-bars"></i>
+      </div>
+
+   </header>
+
+<!-- HERO -->
+
+   <section class="hero reveal">
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+
+         <p class="hero-subtitle">
+            Sistema de Gestión de Deportes y eSports
+         </p>
+
+         <h2>
+            Organiza y Gestiona
+            <span>Torneos Profesionales</span>
+         </h2>
+
+         <p class="hero-description">
+            Administra competiciones, rankings, participantes y resultados
+            desde una sola plataforma moderna.
+         </p>
+
+         <div class="hero-buttons">
+
+
+            <a href="#" class="primary-btn">
+               Explorar Torneos
+            </a>
+
+            <a href="../publico/login.html" class="secondary-btn">
+               Comenzar
+            </a>
+
+         </div>
+
+      </div>
+
+   </section>
+
+   <!-- TARJETAS -->
+
+   <section class="home-categories">
+
+   <article class="home-category-card">
+      <i class="fa-solid fa-chess-board"></i>
+      <h3>Juegos de Mesa</h3>
+      <p>Participá en torneos de ajedrez, damas, cartas y otros juegos estratégicos.</p>
+   </article>
+
+   <article class="home-category-card home-category-active">
+      <i class="fa-solid fa-gamepad"></i>
+      <h3>eSports</h3>
+      <p>Competencias online de videojuegos, equipos, rankings y resultados.</p>
+   </article>
+
+   <article class="home-category-card">
+      <i class="fa-solid fa-trophy"></i>
+      <h3>Juegos Tradicionales</h3>
+      <p>Organizá torneos de deportes, juegos clásicos y competencias presenciales.</p>
+   </article>
+
+</section>
+
+<!-- FUNCIONALIDADES -->
+
+<section class="features-section reveal">
+
+   <div class="features-image">
+      <img src="../../img/bg.jpg" alt="Funcionalidades SGDM">
+   </div>
+
+   <div class="features-content">
+
+      <p class="features-tag"># FUNCIONALIDADES SGDM</p>
+
+      <h3>
+         Gestioná todo el torneo
+         <span>desde un solo lugar</span>
+      </h3>
+
+      <div class="features-slider">
+
+         <div class="feature-item">
+            <div class="feature-icon cyan">
+               <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+               <h4>Crear torneos</h4>
+               <p>Configurá torneos de liga, eliminación directa o sistema suizo.</p>
+            </div>
+         </div>
+
+         <div class="feature-item">
+            <div class="feature-icon pink">
+               <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+               <h4>Gestionar participantes</h4>
+               <p>Registrá jugadores, equipos e inscripciones de forma ordenada.</p>
+            </div>
+         </div>
+
+         <div class="feature-item">
+            <div class="feature-icon cyan">
+               <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <div>
+               <h4>Calendario de partidas</h4>
+               <p>Mostrá fechas, horarios, rondas y próximos enfrentamientos.</p>
+            </div>
+         </div>
+
+         <div class="feature-item">
+            <div class="feature-icon pink">
+               <i class="fa-solid fa-chart-simple"></i>
+            </div>
+            <div>
+               <h4>Resultados y posiciones</h4>
+               <p>Cargá resultados y generá tablas, rankings o llaves.</p>
+            </div>
+         </div>
+
+      </div>
+
+   </div>
+
+</section>
+
+
+
+<!-- TORNEOS DESTACADOS -->
+
+<section class="featured-tournaments reveal">
+
+   <div class="section-title">
+
+      <h3>Torneos Destacados</h3>
+
+      <a href="#">
+         Ver todos
+      </a>
+
+   </div>
+
+   <div class="tournaments-slider">
+   <div class="tournaments-carousel" mask>
+
+<!-- CARD -->
+
+      <article class="tournament-card">
+         <img src="../../img/torneos/odyssey.png" alt="Valorant">
+         <div class="card-content">
+            <h4>Virtual Osyssey Chronicles</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+
+<!-- DUPLICAR CARDS -->
+
+<article class="tournament-card">
+         <img src="../../img/torneos/quantum.png" alt="Valorant">
+         <div class="card-content">
+            <h4>Quantum Puzzle Quest</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+      <article class="tournament-card">
+         <img src="../../img/torneos/mystic.png" alt="Valorant">
+         <div class="card-content">
+            <h4>Mystic Legends Unraveled</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+      <article class="tournament-card">
+         <img src="../../img/torneos/gun.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Champion Series</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+      <article class="tournament-card">
+         <img src="../../img/torneos/quantum.png" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Champion Series</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+      <article class="tournament-card">
+         <img src="../../img/torneos/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Champion Series</h4>
+            <div class="card-meta">
+               <span>
+                  <i class="fa-solid fa-gamepad"></i>
+                  eSports
+               </span>
+               <span>
+                  <i class="fa-solid fa-users"></i>
+                  32 Personas
+               </span>
+               <span>
+                  <i class="fa-solid fa-trophy"></i>
+                  Finales
+               </span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación Directa</p>
+            </div>
+            <div class="card-date">
+               Mayo 2026 - Junio 2026
+            </div>
+         </div>
+      </article>
+      </div>
+   </div>
+</section>
+
+<!-- AGENDA DEL DÍA -->
+
+<section class="calendar-vs-section reveal">
+
+   <div class="agenda-header">
+      <p class="section-subtitle"># CALENDARIO</p>
+      <h3>Próximos Enfrentamientos</h3>
+      <span>Partidas programadas por fecha y horario</span>
+   </div>
+
+   <div class="vs-list">
+
+      <article class="split-vs-card">
+
+         <div class="vs-team-box team-left">
+            <img src="../../img/logos/durazno.png" alt="Fire Wolves">
+            <div>
+               <h4>Fire Wolves</h4>
+               <p>32 Jugadores</p>
+               <span>Eliminación directa</span>
+            </div>
+         </div>
+
+         <div class="vs-middle">
+            <strong>VS</strong>
+            <p>26 Mayo 2026</p>
+            <span>18:00 hs</span>
+         </div>
+
+         <div class="vs-team-box team-right">
+            <div>
+               <h4>Cyber Titans</h4>
+               <p>32 Jugadores</p>
+               <span>Eliminación directa</span>
+            </div>
+            <img src="../../img/logos/flores.png" alt="Cyber Titans">
+         </div>
+
+      </article>
+
+      <article class="split-vs-card">
+
+         <div class="vs-team-box team-left">
+            <img src="../../img/logos/flores.png" alt="Nova Chess">
+            <div>
+               <h4>Nova Chess</h4>
+               <p>16 Jugadores</p>
+               <span>Sistema suizo</span>
+            </div>
+         </div>
+
+         <div class="vs-middle">
+            <strong>VS</strong>
+            <p>28 Mayo 2026</p>
+            <span>20:30 hs</span>
+         </div>
+
+         <div class="vs-team-box team-right">
+            <div>
+               <h4>Mental Squad</h4>
+               <p>16 Jugadores</p>
+               <span>Sistema suizo</span>
+            </div>
+            <img src="../../img/logos/durazno.png" alt="Mental Squad">
+         </div>
+
+      </article>
+
+   </div>
+
+   <div class="agenda-button">
+      <a href="calendario.html">Ver calendario completo</a>
+   </div>
+
+</section>
+
+
+<!-- JUEGOS DESTACADOS -->
+
+<section class="games-showcase-section">
+
+   <div class="games-info-panel">
+      <span id="gameCategory">eSports</span>
+      <h3 id="showcaseTitle">Valorant</h3>
+      <p id="showcaseText">
+         Torneos competitivos por equipos, con partidas rápidas, rankings y resultados.
+      </p>
+
+      <a href="../publico/torneos.html">Ver torneos</a>
+   </div>
+
+   <div class="games-card-carousel">
+
+      <button class="game-slide side left"
+         data-title="Ajedrez"
+         data-category="Mental"
+         data-text="Competencias mentales para jugadores estratégicos."
+         data-img="img/juegos/chess.jpg">
+         <img src="../img/juegos/chess.jpg" alt="Ajedrez">
+         <h4>Ajedrez</h4>
+      </button>
+
+      <button class="game-slide active"
+         data-title="Valorant"
+         data-category="eSports"
+         data-text="Torneos competitivos por equipos, con partidas rápidas, rankings y resultados."
+         data-img="img/torneos/mystic.jpg">
+         <img src="../../img/torneos/mystic.png" alt="Valorant">
+         <h4>Valorant</h4>
+      </button>
+
+      <button class="game-slide side right"
+         data-title="UNO"
+         data-category="Mesa"
+         data-text="Torneos de juegos de mesa y cartas para competir de forma simple y divertida."
+         data-img="../img/torneos/bn.jpg">
+         <img src="../img/torneos/bn.jpg" alt="UNO">
+         <h4>UNO</h4>
+      </button>
+
+   </div>
+
+</section>
+
+<!-- TOP JUGADORES -->
+
+<section class="top-players-section">
+
+   <div class="top-players-header">
+      <span>Ranking de jugadores</span>
+      <h3>Top Jugadores</h3>
+      <p>Competidores destacados por rendimiento, partidas ganadas y participación.</p>
+   </div>
+
+   <div class="top-players-row">
+
+      <article class="player-feature-card drop-down">
+         <div class="player-img-box">
+            <img src="../../img/avatars/a1.png" alt="Jugador">
+         </div>
+
+         <div class="player-info">
+            <h4>KryptoNick</h4>
+            <p>Jugador destacado</p>
+            <div class="player-icons">
+               <i class="fa-solid fa-trophy"></i>
+               <i class="fa-solid fa-gamepad"></i>
+            </div>
+         </div>
+      </article>
+
+      <article class="player-feature-card drop-up">
+         <div class="player-img-box">
+            <img src="../../img/avatars/a2.png" alt="Jugador">
+         </div>
+
+         <div class="player-info">
+            <h4>Tonysparkog</h4>
+            <p>Top eSports</p>
+            <div class="player-icons">
+               <i class="fa-solid fa-trophy"></i>
+               <i class="fa-solid fa-gamepad"></i>
+            </div>
+         </div>
+      </article>
+
+      <article class="player-feature-card drop-down">
+         <div class="player-img-box">
+            <img src="../../img/avatars/a3.png" alt="Jugador">
+         </div>
+
+         <div class="player-info">
+            <h4>Awwwsnap</h4>
+            <p>Jugador estratégico</p>
+            <div class="player-icons">
+               <i class="fa-solid fa-trophy"></i>
+               <i class="fa-solid fa-chess-knight"></i>
+            </div>
+         </div>
+      </article>
+
+      <article class="player-feature-card drop-up">
+         <div class="player-img-box">
+            <img src="../../img/avatars/a5.png" alt="Jugador">
+         </div>
+
+         <div class="player-info">
+            <h4>CyberNova</h4>
+            <p>Top mental</p>
+            <div class="player-icons">
+               <i class="fa-solid fa-trophy"></i>
+               <i class="fa-solid fa-brain"></i>
+            </div>
+         </div>
+      </article>
+
+   </div>
+
+</section>
+
+<!-- CONTACTO -->
+
+<section class="contact-section reveal" id="contacto">
+
+   <div class="contact-info">
+
+      <span class="section-tag">CONTACTO SGDM</span>
+
+      <h3>
+         Contactanos y conocé
+         <span>nuestro equipo</span>
+      </h3>
+
+      <div class="contact-item">
+         <div class="contact-icon">
+            <i class="fa-solid fa-location-dot"></i>
+         </div>
+         <div>
+            <h4>Ubicación</h4>
+            <p>Instituto Tecnológico Superior Arias-Balparda</p>
+         </div>
+      </div>
+
+      <div class="contact-item">
+         <div class="contact-icon">
+            <i class="fa-solid fa-envelope"></i>
+         </div>
+         <div>
+            <h4>Contacto</h4>
+            <p>arena.core@torneos.com</p>
+         </div>
+      </div>
+
+   </div>
+
+   <form class="contact-form">
+      <input type="text" placeholder="Tu nombre *" required>
+      <input type="email" placeholder="Tu email *" required>
+      <textarea placeholder="Escribí tu mensaje"></textarea>
+      <button type="submit">Enviar mensaje</button>
+   </form>
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+   <div class="footer-content">
+      <div class="footer-brand">
+         <div class="footer-logo">
+            <i class="fa-solid fa-trophy"></i>
+            <h3>SGDM</h3>
+         </div>
+
+         <p>Plataforma de gestión de torneos deportivos,
+            mentales y eSports.</p>
+      </div>
+      <div class="footer-links">
+
+         <h4>Navegación</h4>
+
+         <a href="#">Inicio</a>
+         <a href="#">Torneos</a>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+      </div>
+      <div class="footer-links">
+
+         <h4>Torneos</h4>
+
+         <a href="#">Liga</a>
+         <a href="#">Eliminación Directa</a>
+         <a href="#">Sistema Suizo</a>
+      </div>
+      <div class="footer-links">
+
+         <h4>Seguinos</h4>
+
+         <div class="footer-social">
+            <a href="#">
+               <i class="fab fa-discord"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+
+      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
+      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
+
+   </div>
+
+</footer>
+
+            
+
+<script src="../../js/scroll-reveal.js"></script>
+<script src="../../js/preloader.js"></script>
+<script src="../../js/navbar.js"></script>
+<script src="../../js/featured-games.js"></script>
+<script src="../../js/games-carousel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+</body>
+</html>

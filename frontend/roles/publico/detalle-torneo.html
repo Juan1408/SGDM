@@ -1,0 +1,298 @@
+   <!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM</title>
+   
+   <!-- Swiper.js -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+   
+   <!-- CSS -->
+    <link rel="stylesheet" href="../../css/pages/detalle-torneo.css">
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/pages/home.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+   
+   <!-- NAVBAR -->
+
+   <header class="navbar">
+
+      <div class="logo-container">
+         <i class="fa-solid fa-trophy"></i>
+         <h1>SGDM</h1>
+      </div>
+
+      <nav class="nav-links" id="nav-links">
+
+         <a href="../../publico/index.html">Inicio</a>
+         
+         <!-- DROPDOWN TORNEOS -->
+
+<div class="dropdown">
+
+   <button class="dropdown-btn" type="button" id="tournamentsDropdown">
+      Torneos
+      <i class="fa-solid fa-chevron-down"></i>
+   </button>
+
+   <div class="dropdown-content" id="tournamentsMenu">
+
+      <a href="../../torneos.html">Todos los torneos</a>
+      <a href="#">Detalles</a>
+      <a href="#">Match</a>
+   </div>
+
+</div>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+         <div class="auth-links">
+            <a href="../../login.html" class="login-link">
+               <i class="fa-solid fa-right-to-bracket"></i>
+            </a>
+
+            <a href="../../login.html" class="register-btn">
+               Registrarse
+            </a>
+         </div>
+
+      </nav>
+
+            <!-- MENU MOBILE -->
+      <div class="menu-toggle" id="menu-toggle">
+         <i class="fa-solid fa-bars"></i>
+      </div>
+
+   </header>
+
+  <main class="tournament-detail">
+
+   
+
+   <section class="td-hero">
+      <div class="td-team-logo">
+         <img src="../../img/logos/durazno.png" alt="Soldier">
+      </div>
+
+      <div class="td-hero-content">
+         <p>Torneo mental de Ajedrez</p>
+         <h2>DURAZNO VS FLORES</h2>
+         <span>26 Mayo 2026 - 08 Diciembre 2026</span>
+
+         <div class="td-actions">
+            <p>Inscripciones abiertas</p>
+            <a href="#">JOIN NOW</a>
+         </div>
+      </div>
+
+      <div class="td-team-logo">
+         <img src="../../img/logos/flores.png" alt="Roosgum">
+      </div>
+   </section>
+
+
+   <!-- TABS -->
+
+   <section class="td-tabs-search">
+      <div class="td-tabs">
+         <button class="active">Información</button>
+         <button>Participantes</button>
+         <button>Partidos</button>
+         <button>Brackets</button>
+         <button>Resultados</button>
+      </div>
+
+      <div class="td-search">
+         <input type="text" placeholder="Buscar torneo">
+      </div>
+   </section>
+
+<!-- CONTENIDO -->
+
+   <section class="td-content">
+
+      <div class="td-main-info">
+         <div class="td-meta">
+            <span>Eliminación directa</span>
+            <span>32 Equipos</span>
+            <span>En curso</span>
+         </div>
+
+         <h3>Información</h3>
+
+         <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Este torneo
+            reúne a jugadores y equipos para competir en una modalidad organizada,
+            con fechas, resultados y seguimiento dentro de la plataforma.
+         </p>
+
+         <h3>Reglas:</h3>
+
+         <p>
+            Los participantes deberán respetar los horarios establecidos, el formato
+            de eliminación directa y las normas definidas por el organizador.
+         </p>
+      </div>
+
+
+      <aside class="td-sidebar">
+         <div class="next-tournament">
+            <h3>PRÓXIMO TORNEO</h3>
+            <img src="../../img/torneos/odyssey.png" alt="Próximo torneo">
+            <h4>Virtual Odyssey Chronicles</h4>
+         </div>
+
+         <div class="organizer-card">
+            <div class="organizer-avatar"></div>
+            <div>
+               <p>Organizado por:</p>
+               <h4>Nombre Organizador</h4>
+               <a href="#">Ver Perfil</a>
+            </div>
+         </div>
+      </aside>
+
+   </section>
+
+   <!-- PREMIOS -->
+
+   <section class="td-prizes">
+      <div class="prize-card">
+         <i class="fa-solid fa-trophy"></i>
+         <h4>Prize pool</h4>
+         <p>+ $200</p>
+      </div>
+
+      <div class="prize-card">
+         <i class="fa-solid fa-trophy"></i>
+         <p>+ $100</p>
+      </div>
+
+      <div class="prize-card">
+         <i class="fa-solid fa-trophy"></i>
+         <p>+ $50</p>
+      </div>
+   </section>
+
+   <!-- COMENTARIOS -->
+
+   <section class="td-comments">
+      <h3>7 Comentarios</h3>
+
+      <div class="comment-box">
+         <div class="comment-avatar"></div>
+         <div>
+            <h4>Usuario <span>29/09/2026</span></h4>
+            <p>Comentario hecho por el usuario sobre los torneos.</p>
+            <button>Responder</button>
+         </div>
+      </div>
+
+      <div class="comment-box">
+         <div class="comment-avatar"></div>
+         <div>
+            <h4>Usuario <span>29/09/2026</span></h4>
+            <p>Comentario hecho por el usuario sobre los torneos.</p>
+            <button>Responder</button>
+         </div>
+      </div>
+
+      <a class="load-more" href="#">Cargar mas</a>
+   </section>
+
+   <section class="td-comment-form">
+      <h3>Dejar un comentario</h3>
+
+      <div class="form-row">
+         <input type="text" placeholder="Nombre">
+         <input type="email" placeholder="Email">
+      </div>
+
+      <textarea></textarea>
+
+      <button>Comentar</button>
+   </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+   <div class="footer-content">
+      <div class="footer-brand">
+         <div class="footer-logo">
+            <i class="fa-solid fa-trophy"></i>
+            <h3>SGDM</h3>
+         </div>
+
+         <p>Plataforma de gestión de torneos deportivos,
+            mentales y eSports.</p>
+      </div>
+      <div class="footer-links">
+
+         <h4>Navegación</h4>
+
+         <a href="#">Inicio</a>
+         <a href="#">Torneos</a>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+      </div>
+      <div class="footer-links">
+
+         <h4>Torneos</h4>
+
+         <a href="#">Liga</a>
+         <a href="#">Eliminación Directa</a>
+         <a href="#">Sistema Suizo</a>
+      </div>
+      <div class="footer-links">
+
+         <h4>Seguinos</h4>
+
+         <div class="footer-social">
+            <a href="#">
+               <i class="fab fa-discord"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+
+      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
+      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
+
+   </div>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+.tournaments-page {
+   padding: 90px 8%;
+   background:
+      radial-gradient(circle at top left, rgba(255, 0, 200, 0.18), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
+      #070812;
+   color: #fff;
+}
+
+.page-header {
+   max-width: 780px;
+   margin-bottom: 40px;
+}
+
+.page-subtitle {
+   color: #30f5d2;
+   text-transform: uppercase;
+   font-weight: 700;
+   letter-spacing: 2px;
+   margin-bottom: 10px;
+}
+
+.page-header h2 {
+   font-size: clamp(38px, 6vw, 70px);
+   line-height: 1;
+   margin-bottom: 18px;
+}
+
+.page-header p {
+   color: #c9c9dc;
+   line-height: 1.7;
+}
+
+.filters-panel {
+    width: 100vw;
+   margin-left: calc(50% - 50vw);
+   margin-right: calc(50% - 50vw);
+   padding: 35px 8%;
+   display: flex;
+   flex-direction: column;
+   gap: 22px;
+   background: #fff;
+   margin-bottom: 50px;
+}
+
+.search-box {
+   height: 52px;
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 0 18px;
+   background: #e8e8e8;
+}
+
+.search-box i {
+   color: #351080;
+}
+
+.search-box input {
+   width: 100%;
+   border: none;
+   outline: none;
+   background: transparent;
+   color: #111;
+   font-family: inherit;
+}
+
+.search-box input::placeholder {
+   color: #555;
+}
+
+.chips-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
+}
+
+.chip {
+   border: none;
+   background: transparent;
+   color: #351080;
+   font-size: 17px;
+   cursor: pointer;
+   padding: 12px;
+}
+
+.chip.active,
+.chip:hover {
+   background: linear-gradient(90deg, #30f5d2, #ff00c8);
+   color: #351080;
+   box-shadow: none;
+}
+
+.select-filters {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 14px;
+}
+
+.select-filters select {
+   height: 48px;
+   border: none;
+   background: #e8e8e8;
+   color: #351080;
+   padding: 0 14px;
+   outline: none;
+   font-family: inherit;
+}
+
+@media (max-width: 900px) {
+   .select-filters {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (max-width: 600px) {
+   .select-filters {
+      grid-template-columns: 1fr;
+   }
+}
+
+.tournaments-grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 34px;
+}
+
+.tournament-card {
+   background: rgba(18, 18, 42, 0.86);
+   border-radius: 24px;
+   overflow: hidden;
+   border: 1px solid rgba(255, 0, 200, 0.34);
+   box-shadow: 0 0 28px rgba(255, 0, 200, 0.16);
+   transition: 0.3s ease;
+}
+
+.tournament-card:hover {
+   transform: translateY(-8px);
+   border-color: #30f5d2;
+   box-shadow: 0 0 32px rgba(48, 245, 210, 0.28);
+}
+
+.tournament-card img {
+   width: 100%;
+   height: 190px;
+   object-fit: cover;
+}
+
+.card-content {
+   padding: 22px;
+}
+
+.card-content h4 {
+   font-size: 22px;
+   margin-bottom: 16px;
+}
+
+.card-meta {
+   display: flex;
+   justify-content: space-between;
+   gap: 10px;
+   font-size: 12px;
+   color: #cfd0e6;
+   margin-bottom: 18px;
+}
+
+.card-meta i,
+.card-type i {
+   color: #30f5d2;
+   margin-right: 5px;
+}
+
+.card-type {
+   display: flex;
+   align-items: center;
+   color: #dcdcf0;
+   font-size: 14px;
+   margin-bottom: 18px;
+}
+
+.card-footer {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding-top: 14px;
+   border-top: 1px solid rgba(255,255,255,0.1);
+   font-size: 13px;
+}
+
+.card-footer span {
+   color: #ff8be8;
+}
+
+.card-footer a {
+   color: #30f5d2;
+   text-decoration: none;
+   font-weight: 700;
+}
+
+/* BOTON */
+
+   
+.agenda-button a {
+display: inline-block;
+    padding: 15px 34px;
+    color: #07101c;
+    background: linear-gradient(90deg, #30f5d2, #20c4ff);
+    text-decoration: none;
+    font-weight: 800;
+    border-radius: 999px;
+    box-shadow: 0 0 25px rgba(48, 245, 210, 0.35);
+    transition: .3s ease;
+    
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+   .select-filters,
+   .tournaments-grid {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (max-width: 650px) {
+   .tournaments-page {
+      padding: 70px 6%;
+   }
+
+   .select-filters,
+   .tournaments-grid {
+      grid-template-columns: 1fr;
+   }
+
+   .card-meta {
+      flex-direction: column;
+   }
+}
+

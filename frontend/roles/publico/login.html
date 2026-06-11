@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM - Login</title>
+
+   <!-- CSS -->
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/auth.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+   <div class="auth-container">
+
+<!-- PANEL IZQUIERDO -->
+ 
+      <div class="auth-banner">
+
+      
+      </div>
+
+<!-- PANEL DERECHO -->
+
+      <div class="auth-panel">
+
+<!-- INICIAR SESION -->
+
+         <div class="form-container active" id="login-form">
+
+            <div class="form-logo">
+               <<i class="fa-solid fa-trophy"></i>>
+               <span>SGDM</span>
+            </div>
+
+            <h2>Iniciar Sesión</h2>
+
+            <form>
+
+          <div class="input-group">
+   <input type="email" required>
+   <label>Correo electrónico</label>
+</div>
+
+<div class="input-group password-group">
+   <input type="password" required>
+   <label>Contraseña</label>
+   <i class="fa-regular fa-eye-slash"></i>
+</div>
+
+               <div class="forgot-password">
+                     <a href="#" onclick="showRecovery()">¿Olvidaste tu contraseña?</a>
+               </div>
+
+               <button type="button" class="auth-btn">
+                  Ingresar
+               </button>
+
+            </form>
+
+            <p class="switch-text">
+               ¿No tienes cuenta?
+               <span onclick="showRegister()">Registrarse</span>
+            </p>
+
+         </div>
+
+<!-- REGISTRO -->
+
+         <div class="form-container" id="register-form">
+
+            <div class="form-logo">
+               <i class="fa-solid fa-trophy"></i>
+               <span>SGDM</span>
+            </div>
+
+            <h2>Crear Cuenta</h2>
+
+            <form>
+
+           <div class="input-group">
+   <input type="text" required>
+   <label>Nombre completo</label>
+</div>
+
+<div class="input-group">
+   <input type="text" required>
+   <label>Usuario</label>
+</div>
+
+<div class="role-toggle">
+
+   <p>Rol</p>
+
+   <div class="role-options">
+
+      <input type="radio" name="rol" id="rol-jugador" value="jugador" checked>
+      <label for="rol-jugador">
+         <i class="fa-solid fa-user"></i>
+         Jugador
+      </label>
+
+      <input type="radio" name="rol" id="rol-organizador" value="organizador">
+      <label for="rol-organizador">
+         <i class="fa-solid fa-user-shield"></i>
+         Organizador
+      </label>
+
+   </div>
+
+</div>
+
+<div class="input-group">
+   <input type="email" required>
+   <label>Correo electrónico</label>
+</div>
+
+<div class="input-group password-group">
+   <input type="password" required>
+   <label>Contraseña</label>
+   <i class="fa-regular fa-eye-slash"></i>
+</div>
+
+<div class="input-group password-group">
+   <input type="password" required>
+   <label>Confirmar contraseña</label>
+   <i class="fa-regular fa-eye-slash"></i>
+</div>
+
+               <button type="button" class="auth-btn">
+                  Registrarse
+               </button>
+
+            </form>
+
+            <p class="switch-text">
+               ¿Ya tienes cuenta?
+                  <span onclick="showLogin()">Iniciar sesión</span>
+                       </p>
+
+       
+         </div>
+
+
+   <div class="form-container" id="recovery-form">
+
+   <div class="form-logo">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span>SGDM</span>
+   </div>
+
+   <h2>Recuperar Contraseña</h2>
+
+   <!-- PASO 1 -->
+
+   <div id="recovery-step-1">
+
+      <p class="recovery-text">
+         Ingresá tu correo electrónico.
+      </p>
+
+      <div class="input-group">
+         <input type="email" required>
+         <label>Correo electrónico</label>
+      </div>
+
+      <button type="button"
+              class="auth-btn"
+              onclick="showRecoveryCode()">
+         Enviar código
+      </button>
+
+   </div>
+
+   <!-- PASO 2 -->
+
+   <div id="recovery-step-2" style="display:none;">
+
+      <p class="recovery-text">
+         Ingresá el código recibido.
+      </p>
+
+      <div class="code-box">
+         <input maxlength="1">
+         <input maxlength="1">
+         <input maxlength="1">
+         <input maxlength="1">
+      </div>
+
+      <button type="button"
+              class="auth-btn"
+              onclick="showRecoveryPassword()">
+         Verificar
+      </button>
+
+   </div>
+
+   <!-- PASO 3 -->
+
+   <div id="recovery-step-3" style="display:none;">
+
+      <p class="recovery-text">
+         Elegí una nueva contraseña.
+      </p>
+
+      <div class="input-group">
+         <input type="password" required>
+         <label>Nueva contraseña</label>
+      </div>
+
+      <div class="input-group">
+         <input type="password" required>
+         <label>Confirmar contraseña</label>
+      </div>
+
+      <button type="button"
+              class="auth-btn"
+              onclick="showLogin()">
+         Guardar contraseña
+      </button>
+
+   </div>
+
+   <p class="switch-text">
+      <span onclick="showLogin()">Volver al login</span>
+   </p>
+
+</div>
+</div>
+
+   <script src="../../js/auth.js"></script>
+
+</body>
+
+</html>
