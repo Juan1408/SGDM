@@ -1,0 +1,28 @@
+ROLES: Publico, Jugador, Organizador, Administrador
+
+====> Publico 
+
+home ---> torneos* 
+          /\
+    detalle-torneo*
+          \/
+participantes, partidas, brackets, resultados
+
+
+====> Jugador
+
+Login ---> perfil-jugador 
+
+
+
+
+====> Organizador
+
+Login ---> 
+
+FLUJO DEL FRONTEND.
+
+El LOGIN ===> Click en home(navbar"registro") = pagina login.
+
+Iniciar Sesion* Recuperar Contrasenia* Registro usuario*
+

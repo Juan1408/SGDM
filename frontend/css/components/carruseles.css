@@ -1,0 +1,207 @@
+/* =========================
+   CARRUSEL VERTICAL
+   Usado en: Home / Funcionalidades
+========================= */
+
+.vertical-carousel-wrapper {
+   height: 430px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   overflow: hidden;
+   position: relative;
+}
+
+.vertical-carousel {
+   position: relative;
+   width: 100%;
+   max-width: 560px;
+   height: 300px;
+}
+
+.vertical-carousel-item {
+   position: absolute;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   opacity: 0;
+   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+   animation: carouselVertical 12s linear infinite;
+   will-change: transform, opacity;
+}
+
+.vc-item-1 {
+   animation-delay: 0s;
+}
+
+.vc-item-2 {
+   animation-delay: 3s;
+}
+
+.vc-item-3 {
+   animation-delay: 6s;
+}
+
+.vc-item-4 {
+   animation-delay: 9s;
+}
+
+.vertical-carousel-head {
+   width: 96px;
+   height: 96px;
+   border-radius: 50%;
+   background: linear-gradient(135deg, #30f5d2, #ff00c8);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 38px;
+   color: #07101c;
+   margin-right: -45px;
+   z-index: 2;
+   flex-shrink: 0;
+   box-shadow:
+      0 0 25px rgba(48, 245, 210, 0.45),
+      0 0 45px rgba(255, 0, 200, 0.25);
+}
+
+.vertical-carousel-body {
+   width: 100%;
+   min-height: 122px;
+   background: rgba(22, 22, 45, 0.92);
+   border: 1px solid rgba(255, 0, 200, 0.35);
+   border-radius: 18px;
+   padding: 22px 24px 22px 78px;
+   color: #fff;
+   box-shadow:
+      0 0 26px rgba(255, 0, 200, 0.18),
+      inset 0 0 24px rgba(48, 245, 210, 0.04);
+   backdrop-filter: blur(14px);
+}
+
+.vertical-carousel-body .title {
+   text-transform: uppercase;
+   font-size: 20px;
+   font-weight: 800;
+   color: #30f5d2;
+   margin-bottom: 8px;
+   letter-spacing: 1px;
+}
+
+.vertical-carousel-body p {
+   color: #c9c9dc;
+   line-height: 1.6;
+   font-size: 15px;
+}
+
+/* Animación */
+@keyframes carouselVertical {
+   0% {
+      transform: translateY(120%) scale(0.55);
+      opacity: 0;
+      visibility: hidden;
+   }
+
+   8%,
+   22% {
+      transform: translateY(105%) scale(0.72);
+      opacity: 0.35;
+      visibility: visible;
+   }
+
+   30%,
+   48% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      visibility: visible;
+   }
+
+   56%,
+   70% {
+      transform: translateY(-105%) scale(0.72);
+      opacity: 0.35;
+      visibility: visible;
+   }
+
+   78%,
+   100% {
+      transform: translateY(-120%) scale(0.55);
+      opacity: 0;
+      visibility: hidden;
+   }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+   .vertical-carousel-wrapper {
+      height: 420px;
+   }
+
+   .vertical-carousel {
+      max-width: 100%;
+      height: 300px;
+   }
+
+   .vertical-carousel-item {
+      flex-direction: column;
+      text-align: center;
+   }
+
+   .vertical-carousel-head {
+      margin-right: 0;
+      margin-bottom: -30px;
+   }
+
+   .vertical-carousel-body {
+      padding: 55px 22px 22px;
+   }
+}
+
+/* CARRUSEL INFINITOS EN TORNEOS DESTACADOS */
+/* =========================
+   CARRUSEL INFINITO TORNEOS
+========================= */
+.tournaments-slider {
+   width: 100%;
+   overflow: visible;
+}
+
+.tournaments-carousel {
+   --items: 6;
+   --duration: 34s;
+   --card-width: 360px;
+   --card-height: 410px;
+   --gap: 32px;
+
+   position: relative;
+   width: 100%;
+   height: 540px;
+   overflow: visible;
+   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.tournaments-carousel:hover article {
+   animation-play-state: paused;
+}
+
+.tournaments-carousel article {
+   position: absolute !important;
+   top: 25px;
+   left: calc(100% + var(--gap));
+   width: var(--card-width) !important;
+   height: var(--card-height);
+   animation: tournamentsMarquee var(--duration) linear infinite;
+   animation-delay: calc(var(--duration) / var(--items) * var(--i) * -1);
+}
+
+.tournaments-carousel article:nth-child(1) { --i: 0; }
+.tournaments-carousel article:nth-child(2) { --i: 1; }
+.tournaments-carousel article:nth-child(3) { --i: 2; }
+.tournaments-carousel article:nth-child(4) { --i: 3; }
+.tournaments-carousel article:nth-child(5) { --i: 4; }
+.tournaments-carousel article:nth-child(6) { --i: 5; }
+
+@keyframes tournamentsMarquee {
+   to {
+      transform: translateX(calc((var(--items) * (var(--card-width) + var(--gap))) * -1));
+   }
+}
