@@ -1,0 +1,24 @@
+/* login */
+
+:root {
+   --primary: #7c5cff;
+   --primary-dark: #6b4df1;
+   --dark: #111827;
+   --gray: #6b7280;
+   --light: #f3f4f6;
+   --white: #ffffff;
+   --border: #d1d5db;
+}
+
+/* navbar */
+
+:root {
+
+   --primary: #7c5cff;
+   --primary-dark: #6948f0;
+   --dark: #111827;
+   --light: #f3f4f6;
+   --gray: #6b7280;
+   --white: #ffffff;
+
+}

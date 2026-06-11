@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM</title>
+   
+   <!-- Swiper.js -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+   
+   <!-- CSS -->
+    <link rel="stylesheet" href="css/pages/torneo.css">
+   <link rel="stylesheet" href="css/variables.css">
+   <link rel="stylesheet" href="css/layouts/navbar.css">
+   <link rel="stylesheet" href="css/pages/home.css">
+   <link rel="stylesheet" href="css/layouts/footer.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+
+
+
+   <!-- NAVBAR -->
+
+   <header class="navbar">
+
+      <div class="logo-container">
+         <i class="fa-solid fa-trophy"></i>
+         <h1>SGDM</h1>
+      </div>
+
+      <nav class="nav-links" id="nav-links">
+
+         <a href="index.html">Inicio</a>
+         
+         <!-- DROPDOWN TORNEOS -->
+
+<div class="dropdown">
+
+   <button class="dropdown-btn">
+      Torneos
+      <i class="fa-solid fa-chevron-down"></i>
+   </button>
+
+   <div class="dropdown-content">
+
+      <a href="#">Todos los torneos</a>
+      <a href="#">Detalles</a>
+      <a href="#">Match</a>
+   </div>
+
+</div>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+         <div class="auth-links">
+            <a href="login.html" class="login-link">
+               <i class="fa-solid fa-right-to-bracket"></i>
+            </a>
+
+            <a href="login.html" class="register-btn">
+               Registrarse
+            </a>
+         </div>
+
+      </nav>
+
+            <!-- MENU MOBILE -->
+      <div class="menu-toggle" id="menu-toggle">
+         <i class="fa-solid fa-bars"></i>
+      </div>
+
+   </header>
+
+   <!-- HERO -->
+
+   <section class="hero reveal">
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+
+         <p class="hero-subtitle">
+            Sistema de Gestión de Deportes y eSports
+         </p>
+
+         <h2>
+            Organiza y Gestiona
+            <span>Torneos Profesionales</span>
+         </h2>
+
+         <p class="hero-description">
+            Administra competiciones, rankings, participantes y resultados
+            desde una sola plataforma moderna.
+         </p>
+
+         <div class="hero-buttons">
+
+
+            <a href="#" class="primary-btn">
+               Explorar Torneos
+            </a>
+
+            <a href="login.html" class="secondary-btn">
+               Comenzar
+            </a>
+
+         </div>
+
+      </div>
+
+   </section>
+
+   <!-- CONTENIDO -->
+
+   <section class="tournaments-page">
+
+   <div class="page-header">
+      <p class="page-subtitle">Explorá las competencias disponibles</p>
+      <h2>Todos los Torneos</h2>
+      <p>
+         Encontrá torneos activos, próximos y finalizados. Filtrá por juego,
+         tipo de competencia, región o estado.
+      </p>
+   </div>
+
+   <div class="filters-panel">
+
+      <div class="search-box">
+         <i class="fa-solid fa-magnifying-glass"></i>
+         <input type="text" placeholder="Buscar torneo...">
+      </div>
+
+      <div class="chips-container">
+         <button class="chip active">Todos</button>
+         <button class="chip">En curso</button>
+         <button class="chip">Próximos</button>
+         <button class="chip">Finalizados</button>
+         <button class="chip">eSports</button>
+         <button class="chip">Tradicionales</button>
+         <button class="chip">Mentales</button>
+      </div>
+
+      <div class="select-filters">
+
+         <select>
+            <option>Juego</option>
+            <option>Valorant</option>
+            <option>League of Legends</option>
+            <option>Ajedrez</option>
+            <option>Truco</option>
+         </select>
+
+         <select>
+            <option>Tipo de eliminación</option>
+            <option>Liga</option>
+            <option>Eliminación directa</option>
+            <option>Sistema suizo</option>
+         </select>
+
+         <select>
+            <option>Región</option>
+            <option>Uruguay</option>
+            <option>Latam</option>
+            <option>Online</option>
+         </select>
+
+         <select>
+            <option>Estado</option>
+            <option>Inscripciones abiertas</option>
+            <option>En curso</option>
+            <option>Finalizado</option>
+         </select>
+
+      </div>
+
+   </div>
+
+   <div class="tournaments-grid">
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="detalle-torneo.html">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/lol.jpg" alt="League of Legends">
+         <div class="card-content">
+            <h4>LoL Summer Cup</h4>
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 24 equipos</span>
+               <span><i class="fa-solid fa-clock"></i> En curso</span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-list-ol"></i>
+               <p>Liga</p>
+            </div>
+            <div class="card-footer">
+               <span>01 Jun - 30 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/chess.jpg" alt="Ajedrez">
+         <div class="card-content">
+            <h4>Ajedrez Master</h4>
+            <div class="card-meta">
+               <span><i class="fa-solid fa-chess-knight"></i> Mental</span>
+               <span><i class="fa-solid fa-users"></i> 16 personas</span>
+               <span><i class="fa-solid fa-user-plus"></i> Abierto</span>
+            </div>
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Sistema suizo</p>
+            </div>
+            <div class="card-footer">
+               <span>10 Jun - 15 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+      <article class="tournament-card">
+         <img src="img/tournaments/valorant.jpg" alt="Valorant">
+         <div class="card-content">
+            <h4>Valorant Torneo</h4>
+
+            <div class="card-meta">
+               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
+               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-trophy"></i> Finales</span>
+            </div>
+
+            <div class="card-type">
+               <i class="fa-solid fa-diagram-project"></i>
+               <p>Eliminación directa</p>
+            </div>
+
+            <div class="card-footer">
+               <span>16 Mayo - 20 Jun</span>
+               <a href="#">Ver más</a>
+            </div>
+         </div>
+      </article>
+
+        <div class="agenda-button">
+      <a href="calendario.html">Ver más fechas</a>
+   </div>
+
+   </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+   <div class="footer-content">
+      <div class="footer-brand">
+         <div class="footer-logo">
+            <i class="fa-solid fa-trophy"></i>
+            <h3>SGDM</h3>
+         </div>
+
+         <p>Plataforma de gestión de torneos deportivos,
+            mentales y eSports.</p>
+      </div>
+      <div class="footer-links">
+
+         <h4>Navegación</h4>
+
+         <a href="#">Inicio</a>
+         <a href="#">Torneos</a>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+      </div>
+      <div class="footer-links">
+
+         <h4>Torneos</h4>
+
+         <a href="#">Liga</a>
+         <a href="#">Eliminación Directa</a>
+         <a href="#">Sistema Suizo</a>
+      </div>
+      <div class="footer-links">
+
+         <h4>Seguinos</h4>
+
+         <div class="footer-social">
+            <a href="#">
+               <i class="fab fa-discord"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+
+      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
+      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
+
+   </div>
+
+</footer>
+
+<script src="js/navbar.js"></script>
+
+</body>
+</html>
