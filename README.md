@@ -1,7 +1,7 @@
 # SGDM — Instrucciones para levantar con Docker
 
 Resumen
-- Proyecto SGDM: gestor de torneos con capas MVC minimalistas.
+- Proyecto SGDM: gestor de torneos con capas MVC.
 
 Requisitos
 - Docker y Docker Compose instalados.
@@ -84,5 +84,3 @@ Solución de problemas
 - Si el contenedor `db` no está listo, ver los logs con `docker-compose logs db` y esperar a que MySQL inicialice.
 - Si las migraciones fallan, comprobar que la base de datos `sgdm` exista y que las credenciales coincidan.
 
-Contacto
-- Si necesitás que automatice la ejecución de migraciones al levantar el contenedor (init scripts) o genere un `.env` de ejemplo, decímelo y lo hago.
