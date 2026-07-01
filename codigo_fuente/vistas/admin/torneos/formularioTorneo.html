@@ -1,0 +1,142 @@
+<!-- 
+ VISTA FORMULARIO CREAR/EDITAR TORNEO
+ UBICACION vistas/admin/torneos/formulario.html -->
+
+<div class="formulario-wrapper">
+    <div class="cabecera-header">
+        <h1 class="titulo-formulario" id="formularioTituloTorneo">Crear/Editar Torneo</h1>
+        <a href="index.html" class="boton boton-secundario">Volver</a>
+    </div>
+
+    <form id="formularioTorneo" class="formulario">
+        <fieldset>
+            <legend>Datos Generales</legend>
+
+            <!-- CAMPO DE NOMBRE DE TORNEO-->
+            <div class="campo-formulario">
+                <label for="nombreTorneo">Nombre del Torneo:</label>
+                <input type="text" id="nombreTorneo" name="nombre" placeholder="Nombre del Torneo" required>
+            </div>
+
+            <!-- CAMPO DE DESCRIPCION-->
+            <div class="campo-formulario">
+                <label for="fechaInicio">Descripción:</label>
+                <input type="text" id="descripcion" name="descripcion" placeholder="Descripción del Torneo" required>
+            </div>
+
+            <!-- CAMPO DE UBICACION-->
+            <div class="campo-formulario">
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" name="ubicacion" placeholder="Ubicación del Torneo" required>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Detalles del Torneo</legend>
+            <div class="grid-2-columnas">
+                <!-- CAMPO FORMATO-->
+                <div class="campo-formulario">
+                    <label for="formato">Formato:</label>
+                    <select id="formato" name="formato" required>
+                        <option value="">Seleccione un formato</option>
+                        <option value="eliminacion">Eliminación</option>
+                        <option value="liga">Liga</option>
+                        <option value="grupos">Grupos</option>
+                    </select>
+                </div>
+
+                <!-- CAMPO DE MODALIDAD-->
+                <div class="campo-formulario">
+                    <label for="modalidad">Modalidad:</label>
+                    <select id="modalidad" name="modalidad" required>
+                        <option value="">Seleccione una modalidad</option>
+                        <option value="individual">Individual</option>
+                        <option value="equipos">Equipos</option>
+                    </select>
+                </div>
+
+                <!-- CAMPOR SISTEMA DE PUNTOS-->
+                <div class="campo-formulario">
+                    <label for="sistemaPuntos">Sistema de Puntos:</label>
+                    <select id="sistemaPuntos" name="sistemaPuntos" required>
+                        <option value="">Seleccione un sistema de puntos</option>
+                        <option value="puntos">Puntos</option>
+                        <option value="sets">Sets</option>
+                        <option value="tiempo">Tiempo</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Fechas y Cupos</legend>
+            <div class="grid-3-columnas">
+
+                <div class="campo-formulario">
+                    <label for="fechaInicio">Fecha de Inicio:</label>
+                    <input type="date" id="fechaInicio" name="fechaInicio" class="control-formulario" required>
+                </div>
+
+                <!-- CAMPO DE FECHA DE INICIO-->
+                <div class="campo-formulario">
+                    <label for="fechaFin">Fecha de Fin:</label>
+                    <input type="date" id="fechaFin" name="fechaFin" required>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="cupos">Limite Inscripcion:</label>
+                    <input type="number" id="cupos" name="cupos" min="1" required>
+                </div>
+            </div>
+
+            <div class="grid-2-columnas">
+                <div class="campo-formulario">
+                    <label for="cupoMin">Cupo Minimo:</label>
+                    <input type="numero" id="cupoMin" name="cupoMin" min="1" required>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="cupoMax">Cupo Maximo:</label>
+                    <input type="numero" id="cupoMax" name="cupoMax" min="1" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Organizacion</legend>
+            <div class="campo-formulario">
+                <label for="organizador">Asignar Organizador:</label>
+                <input type="text" id="organizador" name="organizador" placeholder="Nombre del Organizador" required>
+                <select id="organizadorTorneo" name="organizadorTorneo"  required>
+                    <option value="">Seleccione un organizador</option>
+                    <option value="organizador1">Administrador</option>
+                    <option value="organizador2">Organizador 2</option>
+                    <option value="organizador3">Organizador 3</option>
+                </select>
+            </div>
+
+            <!-- ESTADO DEL TORNEO-->
+            <div class="campo-formulario">
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="">Seleccione un estado</option>
+                    <option value="abierto">Abierto</option>
+                    <option value="cerrado">Cerrado</option>
+                    <option value="finalizado">Finalizado</option>
+                </select>
+        </fieldset>
+
+    </form>
+
+
+
+    <!-- CAMPOR DE ESTADO-->
+    <div class="campo-formulario">
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado" required>
+            <option value="">Seleccione un estado</option>
+            <option value="abierto">Abierto</option>
+            <option value="cerrado">Cerrado</option>
+            <option value="finalizado">Finalizado</option>
+        </select>
+    </div>

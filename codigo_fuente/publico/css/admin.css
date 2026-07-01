@@ -1,0 +1,251 @@
+/* Estilos específicos para el panel de administración (Dashboard Admin) */
+:root {
+    --admin-bg: #f4f6f9;
+    --admin-sidebar-bg: #343a40;
+    --admin-sidebar-text: #c2c7d0;
+    --admin-sidebar-hover: #ffffff;
+    --admin-sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+    --admin-header-bg: #ffffff;
+    --admin-text: #333333;
+}
+
+.admin-body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* =========================================
+   Navegación / Header
+========================================= */
+.admin-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--admin-header-bg);
+    padding: 0.5rem 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.logo-ascend {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-ascend img {
+    height: 60px;
+}
+
+.informacion-usuario {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.boton-logout {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.boton-logout:hover {
+    background-color: #c82333;
+}
+
+/* =========================================
+   Contenedor Principal y Barra Lateral
+========================================= */
+.contenedor-admin {
+    display: flex;
+    flex: 1;
+}
+
+.barra-lateral {
+    width: 250px;
+    background-color: var(--admin-sidebar-bg);
+    color: var(--admin-sidebar-text);
+    min-height: calc(100vh - 60px);
+    /* Ajustar según alto del header */
+    transition: background-color 0.3s;
+}
+
+.nav-barra-lateral {
+    padding-top: 1rem;
+}
+
+.nav-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 0.5rem;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--admin-sidebar-text);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.activo {
+    background-color: var(--admin-sidebar-hover-bg);
+    color: var(--admin-sidebar-hover);
+    border-left: 4px solid #007bff;
+}
+
+/* =========================================
+   Contenido Principal y Dashboard
+========================================= */
+.contenido-principal {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--admin-bg);
+}
+
+.titulo-seccion,
+.titulo {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Tarjetas Resumen */
+.tarjeta-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #007bff;
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #343a40;
+}
+
+/* Tablas */
+.tabla-datos,
+.datos-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tabla-datos th,
+.datos-tabla th {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.tabla-datos td,
+.datos-tabla td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+}
+
+.tabla-datos tbody tr:hover,
+.datos-tabla tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Badges y Botones */
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge-abierto {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-participante {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+.badge-organizador {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.boton-ver {
+    background-color: #17a2b8;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+/* =========================================
+   Footer Admin
+========================================= */
+.footer-admin {
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #dee2e6;
+    margin-top: auto;
+}
+
+.footer-contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-info p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 0.9rem;
+}

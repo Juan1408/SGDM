@@ -30,7 +30,7 @@
 
             <form action="/login" method="POST">
                 <!-- Token CSRF para mitigar ataques de falsificación de peticiones en sitios cruzados -->
-                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf); ?>">
+                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf ?? ''); ?>">
 
                 <div class="grupo-formulario">
                     <label for="email">Correo Electrónico</label>

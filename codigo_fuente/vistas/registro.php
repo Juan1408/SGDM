@@ -26,7 +26,7 @@
             <?php endif; ?>
 
             <form action="/registro" method="POST">
-                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf); ?>">
+                <input type="hidden" name="token_csrf" value="<?php echo htmlspecialchars($token_csrf ?? ''); ?>">
 
                 <div class="grupo-formulario">
                     <label for="nombre_completo">Nombre Completo</label>
