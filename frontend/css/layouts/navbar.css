@@ -1,29 +1,37 @@
+/* ==========================================================================
+   ESTILOS GENERALES Y CONTENEDOR
+   ========================================================================== */
 * {
    margin: 0;
    padding: 0;
    box-sizing: border-box;
 }
 
-body {
-   font-family: 'Poppins', sans-serif;
-}
-
 .navbar {
    width: 100%;
-   height: 64px;
+   height: 80px;
    position: fixed;
    top: 0;
    left: 0;
-   z-index: 1000;
+   z-index: 999;
    display: flex;
    align-items: center;
-   justify-content: space-between;
-   padding: 0 11%;
-   background: rgba(5, 5, 12, 0.82);
-   border-bottom: 1px solid rgba(255,255,255,0.06);
+   justify-content: center;
+   background: rgba(5, 5, 12, 0.85);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
    backdrop-filter: blur(14px);
 }
 
+.navbar-container {
+   width: 100%;
+   max-width: 1600px;
+   padding: 0 2rem;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+/* --- LOGO --- */
 .logo-container {
    display: flex;
    align-items: center;
@@ -32,133 +40,38 @@ body {
 }
 
 .logo-container i {
-   color: #bc3cff;
+   color: #30f5d2;
+   filter: drop-shadow(0 0 8px rgba(48, 245, 210, 0.6));
 }
 
 .logo-container h1 {
-   font-size: 17px;
+   font-size: 18px;
    font-weight: 800;
    letter-spacing: .5px;
 }
 
-.nav-links {
+/* --- MENÚ DE ENLACES (ESCRITORIO) --- */
+.navbar-menu {
    display: flex;
    align-items: center;
-   gap: 22px;
+   gap: 1.5rem;
+   list-style: none;
 }
 
-.nav-links a,
-.dropdown-btn {
+.navbar-menu li a {
    text-decoration: none;
    color: #fff;
    font-size: 15px;
    font-weight: 500;
-   transition: .3s ease;
+   padding: 6px 12px;
+   transition: all 0.3s ease;
 }
 
-.nav-links a:hover,
-.dropdown-btn:hover {
-   color: #d53cff;
+.navbar-menu li a:hover {
+   color: #30f5d2;
 }
 
-.auth-links {
-   display: flex;
-   align-items: center;
-   gap: 12px;
-   margin-left: 10px;
-}
-
-.login-link {
-   width: 32px;
-   height: 32px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   border-radius: 50%;
-   background: linear-gradient(135deg, #35e6ff, #d53cff);
-}
-
-.register-btn {
-   padding: 8px 0;
-   background: transparent;
-}
-
-.menu-toggle {
-   display: none;
-   color: white;
-   font-size: 1.7rem;
-   cursor: pointer;
-}
-
-.dropdown {
-   position: relative;
-}
-
-.dropdown-btn {
-   background: transparent;
-   border: none;
-   cursor: pointer;
-   display: flex;
-   align-items: center;
-   gap: 8px;
-   font-family: 'Poppins', sans-serif;
-}
-
-.dropdown-content {
-   position: absolute;
-   top: 34px;
-   left: 0;
-   min-width: 220px;
-   background: rgba(16, 16, 32, .96);
-   border: 1px solid rgba(213, 60, 255, .28);
-   border-radius: 14px;
-   overflow: hidden;
-   display: none;
-   box-shadow: 0 20px 45px rgba(0,0,0,.45);
-}
-
-.dropdown-content a {
-   display: block;
-   padding: 13px 17px;
-}
-
-.dropdown-content a:hover {
-   background: rgba(213, 60, 255, .16);
-}
-
-.dropdown:hover .dropdown-content {
-   display: block;
-}
-
-@media (max-width: 950px) {
-   .navbar {
-      padding: 0 6%;
-   }
-
-   .menu-toggle {
-      display: block;
-   }
-
-   .nav-links {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: #080914;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 0;
-      gap: 25px;
-      display: none;
-   }
-
-   .nav-links.active {
-      display: flex;
-   }
-}
-
-/* DROPDOWN */
-
+/* --- DROPDOWN (TORNEOS) --- */
 .dropdown {
    position: relative;
 }
@@ -169,24 +82,32 @@ body {
    color: #fff;
    font-family: inherit;
    font-size: 15px;
+   font-weight: 500;
    cursor: pointer;
    display: flex;
    align-items: center;
    gap: 6px;
+   padding: 6px 12px;
+   transition: 0.3s ease;
+}
+
+.dropdown-btn:hover {
+   color: #30f5d2;
 }
 
 .dropdown-content {
    position: absolute;
    top: calc(100% + 10px);
-   left: 0;
+   left: 50%;
+   transform: translateX(-50%);
    min-width: 220px;
    padding: 12px;
-   background: rgba(12, 12, 28, 0.96);
+   background: rgba(12, 12, 28, 0.98);
    border: 1px solid rgba(255, 0, 200, 0.35);
    border-radius: 14px;
    box-shadow: 0 0 25px rgba(255, 0, 200, 0.25);
    display: none;
-   z-index: 999;
+   z-index: 1000;
 }
 
 .dropdown-content::before {
@@ -199,16 +120,18 @@ body {
 }
 
 .dropdown-content a {
-   display: block;
-   padding: 10px 12px;
-   color: #fff;
+   display: block !important;
+   padding: 10px 12px !important;
+   color: #fff !important;
    text-decoration: none;
    border-radius: 10px;
+   font-size: 14px !important;
+   text-align: left !important;
 }
 
 .dropdown-content a:hover {
-   background: rgba(48, 245, 210, 0.12);
-   color: #30f5d2;
+   background: rgba(48, 245, 210, 0.12) !important;
+   color: #30f5d2 !important;
 }
 
 .dropdown:hover .dropdown-content,
@@ -218,4 +141,139 @@ body {
 
 .dropdown.open .dropdown-btn i {
    transform: rotate(180deg);
+}
+
+/* --- BOTONES AUTH --- */
+.auth-links {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+}
+
+.login-link {
+   width: 34px;
+   height: 34px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   background: linear-gradient(135deg, #30f5d2, #ff00c8);
+   box-shadow: 0 0 10px rgba(255, 0, 200, 0.3);
+}
+
+.register-btn {
+   font-size: 14px;
+   font-weight: 600;
+   border: 1px solid rgba(255, 0, 200, 0.4);
+   background: rgba(255, 0, 200, 0.05);
+   border-radius: 6px;
+   padding: 8px 16px !important;
+}
+
+.register-btn:hover {
+   background: #ff00c8;
+   box-shadow: 0 0 15px rgba(255, 0, 200, 0.5);
+}
+
+/* --- DISEÑO BOTÓN HAMBURGUESA --- */
+.navbar-toggle {
+   display: none;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 5px;
+   z-index: 1010;
+}
+
+.bar {
+   display: block;
+   width: 25px;
+   height: 3px;
+   margin: 5px auto;
+   background-color: #fff;
+   transition: all 0.3s ease-in-out;
+   border-radius: 2px;
+}
+
+/* ==========================================================================
+   MODO RESPONSIVO: ESTILO BARRA LATERAL (880PX)
+   ========================================================================== */
+@media (max-width: 880px) {
+   .navbar-toggle {
+      display: block;
+   }
+
+   /* Transformación de Hamburguesa a "X" */
+   .navbar-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+   }
+
+   .navbar-toggle.active .bar:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+      background-color: #30f5d2; /* Cambia a cian activa */
+   }
+
+   .navbar-toggle.active .bar:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+      background-color: #30f5d2;
+   }
+
+   /* Panel Lateral Derecho */
+   .navbar-menu {
+      position: fixed;
+      top: 0;
+      right: -100%; /* Escondido por defecto a la derecha */
+      width: 270px;
+      height: 100vh;
+      background: rgba(7, 8, 18, 0.96);
+      backdrop-filter: blur(12px);
+      border-left: 1px solid rgba(255, 0, 200, 0.2);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 100px 2rem 40px 2rem; /* El padding top evita que el logo/X tapen los links */
+      gap: 1.8rem;
+      transition: right 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+      z-index: 1005;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+   }
+
+   /* Despliegue del menú */
+   .navbar-menu.active {
+      right: 0;
+   }
+
+   .navbar-menu li {
+      width: 100%;
+   }
+
+   .navbar-menu li a, 
+   .dropdown-btn {
+      font-size: 17px;
+      font-weight: 600;
+      width: 100%;
+      text-align: left;
+      padding: 8px 0;
+   }
+
+   /* Dropdown adaptado a la barra lateral */
+   .dropdown-content {
+      position: static;
+      transform: none;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 0, 200, 0.15);
+      box-shadow: none;
+      margin-top: 5px;
+      padding: 6px;
+   }
+
+   /* Botones Auth en la parte inferior del menú móvil */
+   .auth-links {
+      width: 100%;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      justify-content: flex-start;
+      gap: 15px;
+   }
 }

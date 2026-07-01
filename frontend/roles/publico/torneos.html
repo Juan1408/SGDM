@@ -12,11 +12,11 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
    
    <!-- CSS -->
-    <link rel="stylesheet" href="css/pages/torneo.css">
-   <link rel="stylesheet" href="css/variables.css">
-   <link rel="stylesheet" href="css/layouts/navbar.css">
-   <link rel="stylesheet" href="css/pages/home.css">
-   <link rel="stylesheet" href="css/layouts/footer.css">
+    <link rel="stylesheet" href="../../css/pages/torneo.css">
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/pages/home.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
 
    <!-- Font Awesome -->
    <link
@@ -33,104 +33,102 @@
 
 <body>
 
+<!-- NAVBAR -->
 
-
-
-
-   <!-- NAVBAR -->
-
-   <header class="navbar">
-
+ <nav class="navbar">
+   <div class="navbar-container">
       <div class="logo-container">
-         <i class="fa-solid fa-trophy"></i>
-         <h1>SGDM</h1>
+         <i class="fa-solid fa-trophy"></i> <h1>SGDM</h1>
       </div>
 
-      <nav class="nav-links" id="nav-links">
+      <button class="navbar-toggle" id="menu-toggle">
+         <span class="bar"></span>
+         <span class="bar"></span>
+         <span class="bar"></span>
+      </button>
 
-         <a href="index.html">Inicio</a>
+      <ul class="navbar-menu" id="nav-links">
+         <li><a href="../../roles/publico/index.html">Inicio</a></li>
          
-         <!-- DROPDOWN TORNEOS -->
+         <li class="dropdown">
+            <button class="dropdown-btn" id="tournamentsDropdown">
+               Torneos <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-content">
+               <a href="../publico/torneos.html">Todos los Torneos</a>
+               <a href="../publico/detalle-torneo.html">Detalle Torneos</a>
+            </div>
+         </li>
 
-<div class="dropdown">
+         <li><a href="#">Rankings</a></li>
+         <li><a href="#">Nosotros</a></li>
+         <li><a href="#contacto">Contacto</a></li>
 
-   <button class="dropdown-btn">
-      Torneos
-      <i class="fa-solid fa-chevron-down"></i>
-   </button>
-
-   <div class="dropdown-content">
-
-      <a href="#">Todos los torneos</a>
-      <a href="#">Detalles</a>
-      <a href="#">Match</a>
+         <li class="auth-links">
+            <a href="../publico/login.html" class="login-link"><i class="fa-solid fa-user"></i></a>
+            <a href="../publico/login.html" class="register-btn">Sign up</a>
+         </li>
+      </ul>
    </div>
+</nav>
 
-</div>
-         <a href="#">Rankings</a>
-         <a href="#contacto">Contacto</a>
 
-         <div class="auth-links">
-            <a href="login.html" class="login-link">
-               <i class="fa-solid fa-right-to-bracket"></i>
-            </a>
+<!-------------------------------------->
+<!-- HERO ------------------------------>
+<!-------------------------------------->
 
-            <a href="login.html" class="register-btn">
-               Registrarse
-            </a>
-         </div>
+<section class="hero reveal">
 
-      </nav>
+   <div class="hero-slider">
 
-            <!-- MENU MOBILE -->
-      <div class="menu-toggle" id="menu-toggle">
-         <i class="fa-solid fa-bars"></i>
+      <div class="hero-slide active">
+         <img src="../../img/banners/header01.jpg" alt="">
       </div>
 
-   </header>
+      <div class="hero-slide">
+         <img src="../../img/banners/header2.jpg" alt="">
+      </div>
 
-   <!-- HERO -->
-
-   <section class="hero reveal">
+      <div class="hero-slide">
+         <img src="../../img/banners/header3.jpg" alt="">
+      </div>
+   </div>
 
       <div class="hero-overlay"></div>
 
-      <div class="hero-content">
+      <div class="hero-contenido">
 
-         <p class="hero-subtitle">
+         <p class="hero-subtitulo">
             Sistema de Gestión de Deportes y eSports
          </p>
 
          <h2>
-            Organiza y Gestiona
-            <span>Torneos Profesionales</span>
+            Organiza y <br>Gestiona Torneos<br> 
          </h2>
 
-         <p class="hero-description">
+         <p class="hero-descripcion">
             Administra competiciones, rankings, participantes y resultados
             desde una sola plataforma moderna.
          </p>
 
-         <div class="hero-buttons">
+         <div class="hero-botones">
 
-
+           
             <a href="#" class="primary-btn">
-               Explorar Torneos
+             <span>Explorar Torneos</span>
             </a>
 
-            <a href="login.html" class="secondary-btn">
+            <a href="../publico/login.html" class="secondary-btn">
                Comenzar
             </a>
 
          </div>
-
       </div>
-
    </section>
 
    <!-- CONTENIDO -->
 
-   <section class="tournaments-page">
+<section class="seccion-torneos">
 
    <div class="page-header">
       <p class="page-subtitle">Explorá las competencias disponibles</p>
@@ -141,22 +139,38 @@
       </p>
    </div>
 
+      <div class="custom-shape-divider-bottom-1782780458">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z" class="shape-fill"></path>
+    </svg>
+</div>
+
+</section>
+
+<!-------------------------------------->
+<!-- PANEL DE FILTRO ------------------->
+<!-------------------------------------->
+
+ <section class="filters-panel">
+
    <div class="filters-panel">
+
+   <div class="top-row">
+
+      <div class="chips-container">
+         <button class="chip active">Todos</button>
+         <button class="chip">eSports</button>
+         <button class="chip">Tradicionales</button>
+         <button class="chip">Mentales</button>
+      </div>
 
       <div class="search-box">
          <i class="fa-solid fa-magnifying-glass"></i>
          <input type="text" placeholder="Buscar torneo...">
       </div>
 
-      <div class="chips-container">
-         <button class="chip active">Todos</button>
-         <button class="chip">En curso</button>
-         <button class="chip">Próximos</button>
-         <button class="chip">Finalizados</button>
-         <button class="chip">eSports</button>
-         <button class="chip">Tradicionales</button>
-         <button class="chip">Mentales</button>
-      </div>
+
+</div>
 
       <div class="select-filters">
 
@@ -187,26 +201,32 @@
             <option>Inscripciones abiertas</option>
             <option>En curso</option>
             <option>Finalizado</option>
+            <option>Proximos</option>
          </select>
-
       </div>
-
    </div>
+</section>
+
+<!-------------------------------------->
+<!------ TORNEOS ----------------------->
+<!-------------------------------------->
+   <section class="tournaments-page">
+
 
    <div class="tournaments-grid">
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card1.jpg" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
-               <span><i class="fa-solid fa-users"></i> 33 personas</span>
+               <span><i class="fa-solid fa-users"></i> 16 equipos</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -218,16 +238,16 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/lol.jpg" alt="League of Legends">
-         <div class="card-content">
-            <h4>LoL Summer Cup</h4>
-            <div class="card-meta">
-               <span><i class="fa-solid fa-gamepad"></i> eSports</span>
-               <span><i class="fa-solid fa-users"></i> 24 equipos</span>
-               <span><i class="fa-solid fa-clock"></i> En curso</span>
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card2.png" alt="League of Legends">
+         <div class="tarjeta-contenido">
+            <h4>Campeonato de Truco</h4>
+            <div class="tarjeta-meta">
+               <span><i class="fa-solid fa-gamepad"></i> De Mesa</span>
+               <span><i class="fa-solid fa-users"></i> 64 jugadores</span>
+               <span><i class="fa-solid fa-trophy"></i> En curso</span>
             </div>
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-list-ol"></i>
                <p>Liga</p>
             </div>
@@ -238,16 +258,16 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/chess.jpg" alt="Ajedrez">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card4.png" alt="Ajedrez">
+         <div class="tarjeta-contenido">
             <h4>Ajedrez Master</h4>
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-chess-knight"></i> Mental</span>
                <span><i class="fa-solid fa-users"></i> 16 personas</span>
                <span><i class="fa-solid fa-user-plus"></i> Abierto</span>
             </div>
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Sistema suizo</p>
             </div>
@@ -258,18 +278,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card3.png" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -281,18 +301,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card5.jpg" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -304,18 +324,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/gallery02.jpg" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -327,18 +347,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/t01.avif" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -350,18 +370,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/torneos/card6.png" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -373,18 +393,18 @@
          </div>
       </article>
 
-      <article class="tournament-card">
-         <img src="img/tournaments/valorant.jpg" alt="Valorant">
-         <div class="card-content">
+      <article class="torneo-tarjeta">
+         <img src="../../img/t02.avif" alt="Valorant">
+         <div class="tarjeta-contenido">
             <h4>Valorant Torneo</h4>
 
-            <div class="card-meta">
+            <div class="tarjeta-meta">
                <span><i class="fa-solid fa-gamepad"></i> eSports</span>
                <span><i class="fa-solid fa-users"></i> 33 personas</span>
                <span><i class="fa-solid fa-trophy"></i> Finales</span>
             </div>
 
-            <div class="card-type">
+            <div class="tarjeta-tipo">
                <i class="fa-solid fa-diagram-project"></i>
                <p>Eliminación directa</p>
             </div>
@@ -395,12 +415,18 @@
             </div>
          </div>
       </article>
+
+   </div>
 
         <div class="agenda-button">
-      <a href="calendario.html">Ver más fechas</a>
+      <a href="calendario.html" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
+   transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
+   hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Ver más fechas</a>
    </div>
 
-   </div>
+   
+  
+
 
 </section>
 
@@ -462,7 +488,7 @@
 
 </footer>
 
-<script src="js/navbar.js"></script>
-
+<script src="../../js/navbar.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>

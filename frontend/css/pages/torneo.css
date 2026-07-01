@@ -7,6 +7,17 @@
    color: #fff;
 }
 
+.seccion-torneos {
+   width: 100vw;
+   position: relative;
+   margin-top: 4%;
+   margin-bottom: 0; /* sacá el margin-bottom */
+   padding-bottom: 67px; /* altura del svg del divisor */
+   padding: 35px 8%;
+   
+}
+
+
 .page-header {
    max-width: 780px;
    margin-bottom: 40px;
@@ -31,6 +42,29 @@
    line-height: 1.7;
 }
 
+.custom-shape-divider-bottom-1782780458 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    
+}
+
+.custom-shape-divider-bottom-1782780458 svg {
+    position: relative;
+    display: block;
+    width: calc(102% + 1.3px);
+    height: 67px;
+}
+
+.custom-shape-divider-bottom-1782780458 .shape-fill {
+    fill: #070812;
+}
+
+/****** PANEL DE FILTROS *********/
+
 .filters-panel {
     width: 100vw;
    margin-left: calc(50% - 50vw);
@@ -40,7 +74,15 @@
    flex-direction: column;
    gap: 22px;
    background: #fff;
-   margin-bottom: 50px;
+   margin-bottom: 0%;
+}
+
+/* fila superior: chips + search juntos */
+.top-row {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 16px;
 }
 
 .search-box {
@@ -125,7 +167,7 @@
    gap: 34px;
 }
 
-.tournament-card {
+.torneo-tarjeta {
    background: rgba(18, 18, 42, 0.86);
    border-radius: 24px;
    overflow: hidden;
@@ -134,28 +176,28 @@
    transition: 0.3s ease;
 }
 
-.tournament-card:hover {
+.torneo-tarjeta:hover {
    transform: translateY(-8px);
    border-color: #30f5d2;
    box-shadow: 0 0 32px rgba(48, 245, 210, 0.28);
 }
 
-.tournament-card img {
+.torneo-tarjeta img {
    width: 100%;
    height: 190px;
    object-fit: cover;
 }
 
-.card-content {
+.tarjeta-contenido {
    padding: 22px;
 }
 
-.card-content h4 {
+.tarjeta-contenido h4 {
    font-size: 22px;
    margin-bottom: 16px;
 }
 
-.card-meta {
+.tarjeta-meta {
    display: flex;
    justify-content: space-between;
    gap: 10px;
@@ -164,13 +206,13 @@
    margin-bottom: 18px;
 }
 
-.card-meta i,
-.card-type i {
+.tarjeta-meta i,
+.tarjeta-tipo i {
    color: #30f5d2;
    margin-right: 5px;
 }
 
-.card-type {
+.tarjeta-tipo {
    display: flex;
    align-items: center;
    color: #dcdcf0;
@@ -200,7 +242,7 @@
 /* BOTON */
 
    
-.agenda-button a {
+/*.agenda-button a {
 display: inline-block;
     padding: 15px 34px;
     color: #07101c;
@@ -211,7 +253,14 @@ display: inline-block;
     box-shadow: 0 0 25px rgba(48, 245, 210, 0.35);
     transition: .3s ease;
     
+}*/
+
+.agenda-button {
+   margin-top: 5%;
+   display: flex;
+   justify-content: center;
 }
+
 
 /* RESPONSIVE */
 @media (max-width: 1000px) {
@@ -231,7 +280,7 @@ display: inline-block;
       grid-template-columns: 1fr;
    }
 
-   .card-meta {
+   .tarjeta-meta {
       flex-direction: column;
    }
 }

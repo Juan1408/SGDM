@@ -160,12 +160,12 @@
 /* =========================
    CARRUSEL INFINITO TORNEOS
 ========================= */
-.tournaments-slider {
+.torneos-slider {
    width: 100%;
    overflow: visible;
 }
 
-.tournaments-carousel {
+.torneos-carrusel {
    --items: 6;
    --duration: 34s;
    --card-width: 360px;
@@ -179,11 +179,11 @@
    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
-.tournaments-carousel:hover article {
+.torneos-carrusel:hover article {
    animation-play-state: paused;
 }
 
-.tournaments-carousel article {
+.torneos-carrusel article {
    position: absolute !important;
    top: 25px;
    left: calc(100% + var(--gap));
@@ -193,12 +193,12 @@
    animation-delay: calc(var(--duration) / var(--items) * var(--i) * -1);
 }
 
-.tournaments-carousel article:nth-child(1) { --i: 0; }
-.tournaments-carousel article:nth-child(2) { --i: 1; }
-.tournaments-carousel article:nth-child(3) { --i: 2; }
-.tournaments-carousel article:nth-child(4) { --i: 3; }
-.tournaments-carousel article:nth-child(5) { --i: 4; }
-.tournaments-carousel article:nth-child(6) { --i: 5; }
+.torneos-carrusel article:nth-child(1) { --i: 0; }
+.torneos-carrusel article:nth-child(2) { --i: 1; }
+.torneos-carrusel article:nth-child(3) { --i: 2; }
+.torneos-carrusel article:nth-child(4) { --i: 3; }
+.torneos-carrusel article:nth-child(5) { --i: 4; }
+.torneos-carrusel article:nth-child(6) { --i: 5; }
 
 @keyframes tournamentsMarquee {
    to {

@@ -59,9 +59,9 @@ CODIGO VIEJO
 
       <div class="hero-overlay"></div>
 
-      <div class="hero-content">
+      <div class="hero-contenido">
 
-         <p class="hero-subtitle">
+         <p class="hero-subtitulo">
             Sistema de Gestión de Deportes y eSports
          </p>
 
@@ -70,12 +70,12 @@ CODIGO VIEJO
             <span>Torneos Profesionales</span>
          </h2>
 
-         <p class="hero-description">
+         <p class="hero-descripcion">
             Administra competiciones, rankings, participantes y resultados
             desde una sola plataforma moderna.
          </p>
 
-         <div class="hero-buttons">
+         <div class="hero-botones">
 
 
             <a href="#" class="primary-btn">
@@ -137,13 +137,13 @@ CSS---------------------------------
    background: linear-gradient(to bottom, transparent, #070812 95%);
 }
 
-.hero-content {
+.hero-contenido {
    position: relative;
    z-index: 2;
    max-width: 760px;
 }
 
-.hero-subtitle {
+.hero-subtitulo {
    color: #30f5d2;
    font-weight: 600;
    letter-spacing: 2px;
@@ -152,21 +152,21 @@ CSS---------------------------------
    text-shadow: 0 0 18px rgba(48, 245, 210, 0.7);
 }
 
-.hero-content h2 {
+.hero-contenido h2 {
    font-size: clamp(42px, 7vw, 86px);
    line-height: 1.05;
    font-weight: 800;
    margin-bottom: 24px;
 }
 
-.hero-content h2 span {
+.hero-contenido h2 span {
    display: block;
    color: transparent;
    -webkit-text-stroke: 1.5px #fff;
    text-shadow: 0 0 28px rgba(255, 0, 200, 0.55);
 }
 
-.hero-description {
+.hero-descripcion {
    max-width: 580px;
    color: #c9c9dc;
    font-size: 17px;
@@ -174,7 +174,7 @@ CSS---------------------------------
    margin-bottom: 34px;
 }
 
-.hero-buttons {
+.hero-botones {
    display: flex;
    gap: 18px;
    flex-wrap: wrap;
@@ -222,32 +222,32 @@ CSS---------------------------------
       text-align: center;
    }
 
-   .hero-content {
+   .hero-contenido {
       width: 100%;
       max-width: 520px;
       align-items: center;
    }
 
-   .hero-subtitle {
+   .hero-subtitulo {
       font-size: 13px;
       letter-spacing: 2px;
    }
 
-   .hero-content h2 {
+   .hero-contenido h2 {
       font-size: 42px;
       line-height: 1.15;
    }
 
-   .hero-content h2 span {
+   .hero-contenido h2 span {
       display: block;
    }
 
-   .hero-description {
+   .hero-descripcion {
       font-size: 15px;
       line-height: 1.7;
    }
 
-   .hero-buttons {
+   .hero-botones {
       justify-content: center;
       flex-wrap: wrap;
    }
@@ -259,15 +259,15 @@ CSS---------------------------------
       padding: 120px 5% 60px;
    }
 
-   .hero-content h2 {
+   .hero-contenido h2 {
       font-size: 34px;
    }
 
-   .hero-description {
+   .hero-descripcion {
       font-size: 14px;
    }
 
-   .hero-buttons {
+   .hero-botones {
       flex-direction: column;
       width: 100%;
    }

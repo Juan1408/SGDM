@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM</title>
+   
+   <!-- Swiper.js -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+   
+   <!-- CSS -->
+   <link rel="stylesheet" href="../../css/pages/rankings.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/pages/home.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/components/carruseles.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-------------------------------------->
+<!-- NAVBAR ---------------------------->
+<!-------------------------------------->
+
+ <nav class="navbar">
+   <div class="navbar-container">
+      <div class="logo-container">
+         <i class="fa-solid fa-trophy"></i> <h1>SGDM</h1>
+      </div>
+
+      <button class="navbar-toggle" id="menu-toggle">
+         <span class="bar"></span>
+         <span class="bar"></span>
+         <span class="bar"></span>
+      </button>
+
+      <ul class="navbar-menu" id="nav-links">
+         <li><a href="#">Inicio</a></li>
+         
+         <li class="dropdown">
+            <button class="dropdown-btn" id="tournamentsDropdown">
+               Torneos <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-content">
+               <a href="../publico/torneos.html">Todos los Torneos</a>
+               <a href="../publico/detalle-torneo.html">Detalle Torneos</a>
+            </div>
+         </li>
+
+         <li><a href="#">Rankings</a></li>
+         <li><a href="#">Nosotros</a></li>
+         <li><a href="#contacto">Contacto</a></li>
+
+         <li class="auth-links">
+            <a href="../../roles/publico/login.html" class="login-link"><i class="fa-solid fa-user"></i></a>
+            <a href="../../roles/publico/login.html" class="register-btn">Sign up</a>
+         </li>
+      </ul>
+   </div>
+</nav>
+
+<!-------------------------------------->
+<!-- HERO ------------------------------>
+<!-------------------------------------->
+
+<section class="hero reveal">
+
+   <div class="hero-slider">
+
+      <div class="hero-slide active">
+         <img src="../../img/banners/header01.jpg" alt="">
+      </div>
+
+      <div class="hero-slide">
+         <img src="../../img/banners/header2.jpg" alt="">
+      </div>
+
+      <div class="hero-slide">
+         <img src="../../img/banners/header3.jpg" alt="">
+      </div>
+   </div>
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-contenido">
+
+         <p class="hero-subtitulo">
+            Sistema de Gestión de Deportes y eSports
+         </p>
+
+         <h2>
+            Organiza y <br>Gestiona Torneos<br> 
+         </h2>
+
+         <p class="hero-descripcion">
+            Administra competiciones, rankings, participantes y resultados
+            desde una sola plataforma moderna.
+         </p>
+
+         <div class="hero-botones">
+
+           
+            <a href="#" class="primary-btn">
+             <span>Explorar Torneos</span>
+            </a>
+
+            <a href="../publico/login.html" class="secondary-btn">
+               Comenzar
+            </a>
+
+         </div>
+      </div>
+   </section> 
+         
+   
+<!-------------------------------------->
+<!-- TOP 3 ----------------------------->
+<!-------------------------------------->
+
+<section class="winners-section">
+  <div class="winners-left">
+    <p class="tag">Mejores resultados</p>
+    <h2>Los mayores<br><span>ganadores</span><br>de hoy</h2>
+    <div class="trophy">🏆</div>
+  </div>
+
+  <div class="winners-right">
+    <span class="winners-badge">Mejores jugadores</span>
+    <div class="winners-list">
+
+      <div class="winner-row gold">
+        <div class="winner-rank">1</div>
+        <div class="winner-avatar">JS</div>
+        <span class="winner-name">Joaquín Silva</span>
+        <span class="winner-amount">+ 3,920 pts</span>
+      </div>
+
+      <div class="winner-row silver">
+        <div class="winner-rank">2</div>
+        <div class="winner-avatar">MR</div>
+        <span class="winner-name">Maxi Rodríguez</span>
+        <span class="winner-amount">+ 2,840 pts</span>
+      </div>
+
+      <div class="winner-row bronze">
+        <div class="winner-rank">3</div>
+        <div class="winner-avatar">LF</div>
+        <span class="winner-name">Lucía Fontana</span>
+        <span class="winner-amount">+ 2,610 pts</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-------------------------------------->
+<!-- JUEGOS DESTACADOS ----------------->
+<!-------------------------------------->
+
+<section class="juegos-destacados">
+  <div class="juegos-header">
+    <p class="juegos-subtitle">Competencias activas</p>
+    <h2>Juegos Destacados</h2>
+  </div>
+
+  <div class="carrusel-wrapper">
+    <button class="carrusel-btn" id="prev-btn">&#8592;</button>
+
+    <div class="carrusel-track-wrapper">
+      <div class="games-grid" id="games-track">
+
+        <div class="game-card lol">
+          <div class="card-info">
+            <img src="../../img/juegos/dos.jpg" alt="League of Legends">
+            <div class="card-overlay"><h3>League of Legends</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+        <div class="game-card apex">
+          <div class="card-info">
+            <img src="../../img/juegos/uno.jpg" alt="Apex Legends">
+            <div class="card-overlay"><h3>Apex Legends</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+        <div class="game-card cs">
+          <div class="card-info">
+            <img src="../../img/juegos/fly.jpg" alt="Counter Strike">
+            <div class="card-overlay"><h3>Counter Strike</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+        <div class="game-card wow">
+          <div class="card-info">
+            <img src="../../img/juegos/mystic.png" alt="World of Warcraft">
+            <div class="card-overlay"><h3>World of Warcraft</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+        <div class="game-card val">
+          <div class="card-info">
+            <img src="../../img/juegos/dos.jpg" alt="Valorant">
+            <div class="card-overlay"><h3>Valorant</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+        <div class="game-card chess">
+          <div class="card-info">
+            <img src="../../img/juegos/uno.jpg" alt="Ajedrez">
+            <div class="card-overlay"><h3>Ajedrez</h3><p>4 anuncios</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="carrusel-btn" id="next-btn">&#8594;</button>
+  </div>
+</section>
+
+<!-------------------------------------->
+<!-- RANKINGS -------------------------->
+<!-------------------------------------->
+
+<section class="ranking-section">
+  <div class="ranking-header">
+    <p>Tabla completa</p>
+    <h2>Ranking general</h2>
+
+    <div class="ranking-tabs">
+      <button class="rk-tab active" data-tab="jugadores">Jugadores</button>
+      <button class="rk-tab" data-tab="equipos">Equipos</button>
+    </div>
+  </div>
+
+  <div class="ranking-table">
+    <div class="ranking-row head">
+      <span>Pos</span>
+      <span id="rk-col-name">Jugador</span>
+      <span>Juego</span>
+      <span>Partidas</span>
+      <span style="text-align:right">Puntos</span>
+    </div>
+
+    <div id="ranking-body">
+      <!-- las filas se inyectan con JS -->
+    </div>
+  </div>
+</section>
+
+<!-------------------------------------->
+<!-- FOOTER ---------------------------->
+<!-------------------------------------->
+
+<footer class="footer">
+   <div class="footer-content">
+      <div class="footer-brand">
+         <div class="footer-logo">
+            <i class="fa-solid fa-trophy"></i>
+            <h3>SGDM</h3>
+         </div>
+
+         <p>Plataforma de gestión de torneos deportivos,
+            mentales y eSports.</p>
+      </div>
+      <div class="footer-links">
+
+         <h4>Navegación</h4>
+
+         <a href="#">Inicio</a>
+         <a href="#">Torneos</a>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
+
+      </div>
+      <div class="footer-links">
+
+         <h4>Torneos</h4>
+
+         <a href="#">Liga</a>
+         <a href="#">Eliminación Directa</a>
+         <a href="#">Sistema Suizo</a>
+      </div>
+      <div class="footer-links">
+
+         <h4>Seguinos</h4>
+
+         <div class="footer-social">
+            <a href="#">
+               <i class="fab fa-discord"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+
+      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
+      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
+
+   </div>
+
+</footer>
+
+            
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../../js/scroll-reveal.js"></script>
+<script src="../../js/navbar.js"></script>
+<script src="../../js/games-carousel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+</body>
+</html>
