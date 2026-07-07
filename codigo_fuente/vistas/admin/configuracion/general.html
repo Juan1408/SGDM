@@ -1,0 +1,42 @@
+<div>
+    <h2>Configuración General del Sistema</h2>
+    
+    <section>
+        <form action="/configuracion/guardar" method="POST">
+            <fieldset>
+                <legend>Datos de la Plataforma</legend>
+                
+                <label for="nombre_plataforma">Nombre de la Plataforma:</label>
+                <input type="text" name="nombre_plataforma" value="Sistema de Gestión Deportiva Modular" required>
+                
+                <label for="correo_contacto">Correo de Contacto Público:</label>
+                <input type="email" name="correo_contacto" value="contacto@sgdm.ejemplo.com" required>
+                
+                <label for="logotipo">Logotipo del Sistema (URL o Archivo):</label>
+                <input type="file" name="logotipo" accept="image/png, image/jpeg">
+            </fieldset>
+            
+            <fieldset>
+                <legend>Gestión de Módulos</legend>
+                <p>Habilite o deshabilite los módulos de competencia disponibles en el sistema.</p>
+                
+                <label>
+                    <input type="checkbox" name="modulo_liga" checked> 
+                    Módulo de Liga (Todos contra todos)
+                </label>
+                
+                <label>
+                    <input type="checkbox" name="modulo_eliminacion" checked> 
+                    Módulo de Eliminación Directa
+                </label>
+                
+                <label>
+                    <input type="checkbox" name="modulo_suizo" checked> 
+                    Módulo de Sistema Suizo
+                </label>
+            </fieldset>
+            
+            <button type="submit">Guardar Configuración General</button>
+        </form>
+    </section>
+</div>

@@ -1,0 +1,55 @@
+<div>
+    <h2>Registro de Auditoría</h2>
+    
+    <section>
+        <p>Este registro muestra todas las acciones críticas realizadas por los usuarios administrativos y organizadores dentro del sistema (creación de torneos, modificación de resultados, etc).</p>
+        
+        <form action="/configuracion/auditoria.html" method="GET">
+            <label for="fecha">Filtrar por fecha:</label>
+            <input type="date" name="fecha">
+            <button type="submit">Aplicar Filtro</button>
+        </form>
+    </section>
+    
+    <section>
+        <h3>Últimas Acciones</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Acción Realizada</th>
+                    <th>Módulo Afectado</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>15/07/2026 14:30</td>
+                    <td>Juan Pérez</td>
+                    <td>Administrador General</td>
+                    <td>Edición de Resultado</td>
+                    <td>Resultados</td>
+                    <td>Modificó el resultado del enfrentamiento ID 101.</td>
+                </tr>
+                <tr>
+                    <td>15/07/2026 12:00</td>
+                    <td>Carlos Gómez</td>
+                    <td>Organizador</td>
+                    <td>Creación de Torneo</td>
+                    <td>Torneos</td>
+                    <td>Creó el "Torneo de Ajedrez Rápido" (Sistema Suizo).</td>
+                </tr>
+                <tr>
+                    <td>14/07/2026 09:15</td>
+                    <td>Juan Pérez</td>
+                    <td>Administrador General</td>
+                    <td>Desactivar Usuario</td>
+                    <td>Usuarios</td>
+                    <td>Desactivó la cuenta del usuario Carlos Gómez (Temporal).</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

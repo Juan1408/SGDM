@@ -1,0 +1,40 @@
+<div>
+    <h2>Formulario de Equipo</h2>
+    
+    <nav>
+        <a href="lista.html">Volver al Listado</a>
+    </nav>
+    
+    <section>
+        <form action="/equipos/guardar" method="POST">
+            <fieldset>
+                <legend>Datos del Equipo</legend>
+                
+                <label for="nombre">Nombre del Equipo:</label>
+                <input type="text" name="nombre" value="" required>
+                
+                <label for="escudo">Escudo o Logotipo del Equipo:</label>
+                <input type="file" name="escudo" accept="image/png, image/jpeg">
+                
+                <label for="descripcion">Descripción o Breve Historia:</label>
+                <textarea name="descripcion" rows="4"></textarea>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Participantes (Integrantes del Equipo)</legend>
+                
+                <label for="capitan">Capitán o Responsable:</label>
+                <select name="capitan" required>
+                    <option value="">Seleccione un usuario...</option>
+                    <option value="1">Juan Pérez</option>
+                    <option value="2">Carlos Gómez</option>
+                </select>
+                
+                <p>Para agregar más integrantes, primero guarde el equipo y luego edítelo para sumar participantes a la lista.</p>
+            </fieldset>
+            
+            <button type="submit">Guardar Equipo</button>
+            <button type="reset">Restablecer</button>
+        </form>
+    </section>
+</div>

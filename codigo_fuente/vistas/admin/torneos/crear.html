@@ -1,0 +1,48 @@
+<div>
+    <h2>Crear Nuevo Torneo</h2>
+    
+    <nav>
+        <a href="lista.html">Volver al Listado</a>
+    </nav>
+    
+    <section>
+        <form action="/torneos/guardar" method="POST">
+            <fieldset>
+                <legend>Información Básica</legend>
+                
+                <label for="nombre">Nombre del Torneo:</label>
+                <input type="text" name="nombre" value="" required>
+                
+                <label for="descripcion">Descripción o Reglas Generales:</label>
+                <textarea name="descripcion" rows="5"></textarea>
+                
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" name="fecha_inicio" required>
+                
+                <label for="fecha_fin">Fecha de Finalización (Opcional):</label>
+                <input type="date" name="fecha_fin">
+            </fieldset>
+            
+            <fieldset>
+                <legend>Formato de Competencia</legend>
+                
+                <label for="modulo">Módulo de Competencia:</label>
+                <select name="modulo" required>
+                    <option value="">Seleccione un formato...</option>
+                    <option value="liga">Liga (Todos contra todos)</option>
+                    <option value="eliminacion">Eliminación Directa</option>
+                    <option value="suizo">Sistema Suizo</option>
+                </select>
+                
+                <label for="tipo_participante">Tipo de Participante:</label>
+                <select name="tipo_participante" required>
+                    <option value="individual">Individual</option>
+                    <option value="equipo">Equipos</option>
+                </select>
+            </fieldset>
+            
+            <button type="submit">Crear Torneo</button>
+            <button type="reset">Limpiar Formulario</button>
+        </form>
+    </section>
+</div>

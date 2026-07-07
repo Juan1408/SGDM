@@ -1,81 +1,80 @@
-<div class="dashboard">
-    <h1 class="titulo">Resumen del Sistema</h1>
+<div>
+    <h2>Resumen del Sistema</h2>
 
-    <section class="tarjeta-resumen" id="tarjetaResumen">
-        <div class="card card-torneos" id="cardTorneosActivos">
+    <section>
+        <article>
             <h3>Torneos Activos</h3>
-            <p class="card-value" id="">12</p>
-        </div>
-        <div class="card card-usuarios" id="tarjetaTotalUsuarios">
-            <h3>Total Usuarios</h3>
-            <p class="card-value" id="">300</p>
-        </div>
-        <div class="card card-equipos" id="cardEquipos">
-            <h3>Total Equipos</h3>
-            <p class="card-value" id="">30</p>
-        </div>
+            <p>12</p>
+        </article>
+        <article>
+            <h3>Usuarios Totales</h3>
+            <p>300</p>
+        </article>
+        <article>
+            <h3>Equipos Totales</h3>
+            <p>30</p>
+        </article>
     </section>
 
-    <div class="dashboard-grilla" id="dashboardGrilla">
-        <section class="seccion-reciente" id="">
-            <h2>Ultimos Torneos Creados</h2>
-            <table class="tabla-datos" id="tabla-torneos-recientes">
+    <div>
+        <section>
+            <h3>Últimos Torneos Creados</h3>
+            <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
+                        <th>Nombre del Torneo</th>
                         <th>Estado</th>
                         <th>Fecha de Inicio</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Torneo Activo</td>
-                        <td><span class="badge badge-abierto">Abierto</span></td>
-                        <td>15/07/26</td>
-                        <td><a href="torneos/detalle.html" class="boton boton-ver">Ver</a></td>
+                        <td>Torneo de Verano</td>
+                        <td>Abierto</td>
+                        <td>15/07/2026</td>
+                        <td><a href="torneos/detalle.html">Ver Detalles</a></td>
                     </tr>
-                    <!-- Agregamos mas filas aca cuando las necesitemos-->
                 </tbody>
             </table>
         </section>
 
-        <section class="seccion-registrados" id="usuarios-registrados">
-            <h2>Ultimos Usuarios Registrados</h2>
-            <table class="datos-tabla" id="tablaUsuariosRegistrados">
+        <section>
+            <h3>Últimos Usuarios Registrados</h3>
+            <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Correo Electronico</th>
-                        <th>Rol</th>
+                        <th>Nombre Completo</th>
+                        <th>Correo Electrónico</th>
+                        <th>Rol en el Sistema</th>
                         <th>Fecha de Registro</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Michael Barnetto</td>
-                        <td>[EMAIL_ADDRESS]</td>
-                        <td><span class="badge badge-participante">Participante</span></td>
-                        <td>15/07/26</td>
+                        <td>Miguel Barneto</td>
+                        <td>miguel@ejemplo.com</td>
+                        <td>Participante</td>
+                        <td>15/07/2026</td>
                     </tr>
                     <tr>
-                        <td>valentina Paselli</td>
-                        <td>[EMAIL_ADDRESS]</td>
-                        <td><span class="badge badge-participante">Participante</span></td>
-                        <td>15/07/26</td>
+                        <td>Valentina Paselli</td>
+                        <td>valentina@ejemplo.com</td>
+                        <td>Participante</td>
+                        <td>15/07/2026</td>
                     </tr>
                     <tr>
                         <td>Mauricio Pedrozo</td>
-                        <td>[EMAIL_ADDRESS]</td>
-                        <td><span class="badge badge-participante">Organizador</span></td>
-                        <td>15/07/26</td>
+                        <td>mauricio@ejemplo.com</td>
+                        <td>Organizador</td>
+                        <td>15/07/2026</td>
                     </tr>
                     <tr>
-                        <td>Juan Fernandez</td>
-                        <td>[EMAIL_ADDRESS]</td>
-                        <td><span class="badge badge-participante">Organizador</span></td>
-                        <td>15/07/26</td>
+                        <td>Juan Fernández</td>
+                        <td>juan@ejemplo.com</td>
+                        <td>Organizador</td>
+                        <td>15/07/2026</td>
                     </tr>
-                    <!-- Agregamos mas filas aca cuando las necesitemos-->
                 </tbody>
             </table>
         </section>
