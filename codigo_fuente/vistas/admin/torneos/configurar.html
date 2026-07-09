@@ -1,54 +1,34 @@
 <div>
-    <h2>Configuración del Torneo</h2>
+    <h2 class="titulo-pantalla">Configuración: Torneo de Verano</h2>
     
-    <nav>
-        <a href="lista.html">Volver al Listado de Torneos</a>
-    </nav>
-    
+    <div class="grupo-botones" style="margin-top: 0; margin-bottom: 20px;">
+        <a href="#" class="boton-accion">Generar Llaves/Partidos</a>
+        <a href="index.php?vista=torneos/lista" class="boton-secundario">Volver a la Lista</a>
+    </div>
+
     <section>
-        <form action="/torneos/configurar/guardar" method="POST">
-            <input type="hidden" name="torneo_id" value="1">
-            
-            <fieldset>
-                <legend>Configuración Específica del Módulo (Ejemplo: Liga)</legend>
-                
-                <label for="puntos_victoria">Puntos por Victoria:</label>
-                <input type="number" name="puntos_victoria" value="3" required>
-                
-                <label for="puntos_empate">Puntos por Empate:</label>
-                <input type="number" name="puntos_empate" value="1" required>
-                
-                <label for="puntos_derrota">Puntos por Derrota:</label>
-                <input type="number" name="puntos_derrota" value="0" required>
-            </fieldset>
-
-            <fieldset>
-                <legend>Estado y Visibilidad</legend>
-
-                <label for="estado">Estado del Torneo:</label>
-                <select name="estado" required>
-                    <option value="borrador">Borrador (Oculto)</option>
-                    <option value="abierto">Abierto a Inscripciones</option>
-                    <option value="en_curso">En Curso</option>
-                    <option value="finalizado">Finalizado</option>
-                </select>
-
-                <label>
-                    <input type="checkbox" name="publico" checked> 
-                    Mostrar este torneo públicamente a los usuarios no autenticados
-                </label>
-            </fieldset>
-            
-            <button type="submit">Guardar Configuración</button>
-        </form>
-    </section>
-    
-    <section>
-        <h3>Generar Enfrentamientos Automáticamente</h3>
-        <p>Según el módulo seleccionado y los participantes inscritos, el sistema generará el calendario.</p>
-        <form action="/torneos/generar_rondas" method="POST">
-            <input type="hidden" name="torneo_id" value="1">
-            <button type="submit">Generar Calendario / Llaves</button>
-        </form>
+        <h3 class="titulo-pantalla">Participantes Inscritos</h3>
+        <table class="tabla-estandar">
+            <thead>
+                <tr>
+                    <th>Nombre / Equipo</th>
+                    <th>Fecha de Inscripción</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Los Titanes</td>
+                    <td>12/07/2026</td>
+                    <td>Aprobado</td>
+                    <td>
+                        <div class="acciones-tabla">
+                            <a href="#" class="boton-peligro accion-eliminar">Descalificar</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 </div>

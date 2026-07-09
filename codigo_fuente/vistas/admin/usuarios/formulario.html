@@ -1,46 +1,28 @@
 <div>
-    <h2>Formulario de Usuario</h2>
-    
-    <nav>
-        <a href="lista.html">Volver al Listado</a>
-    </nav>
-    
-    <section>
-        <form action="/usuarios/guardar" method="POST">
-            <fieldset>
-                <legend>Datos Personales</legend>
-                
-                <label for="nombre">Nombre Completo:</label>
-                <input type="text" name="nombre" value="" required>
-                
-                <label for="correo">Correo Electrónico:</label>
-                <input type="email" name="correo" value="" required>
-                
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" name="contrasena" value="">
-                <small>Dejar en blanco para no modificar si está editando.</small>
-            </fieldset>
+    <h2 class="titulo-pantalla">Registrar Nuevo Usuario</h2>
+    <form action="/admin/usuarios/guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <legend>Datos Personales y de Cuenta</legend>
+            <label for="nombre">Nombre Completo:</label>
+            <input type="text" id="nombre" name="nombre" class="campo-requerido" required>
             
-            <fieldset>
-                <legend>Configuración de Cuenta</legend>
-                
-                <label for="rol">Rol en el Sistema:</label>
-                <select name="rol" required>
-                    <option value="">Seleccione un rol...</option>
-                    <option value="administrador">Administrador General</option>
-                    <option value="organizador">Organizador de Torneo</option>
-                    <option value="participante">Participante</option>
-                </select>
-                
-                <label for="estado">Estado de la Cuenta:</label>
-                <select name="estado" required>
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                </select>
-            </fieldset>
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" name="correo" class="campo-requerido" required>
             
-            <button type="submit">Guardar Usuario</button>
-            <button type="reset">Limpiar Formulario</button>
-        </form>
-    </section>
+            <label for="contrasena">Contraseña Temporal:</label>
+            <input type="password" id="contrasena" name="contrasena" class="campo-requerido" required>
+            
+            <label for="rol">Rol en el Sistema:</label>
+            <select id="rol" name="rol" class="campo-requerido">
+                <option value="Administrador General">Administrador General</option>
+                <option value="Organizador">Organizador</option>
+                <option value="Participante">Participante</option>
+            </select>
+        </fieldset>
+        
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Usuario</button>
+            <a href="index.php?vista=usuarios/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
 </div>

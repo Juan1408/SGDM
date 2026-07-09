@@ -1,65 +1,31 @@
 <div>
-    <h2>Gestión de Resultados</h2>
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla">Registro de Resultados</h2>
+        <a href="index.php?vista=resultados/formulario" class="boton-accion">Registrar Nuevo Resultado</a>
+    </div>
     
-    <section>
-        <h3>Filtros de Búsqueda</h3>
-        <form action="/resultados/lista.html" method="GET">
-            <label for="torneo_id">Seleccionar Torneo:</label>
-            <select name="torneo_id" required>
-                <option value="">Seleccione un torneo...</option>
-                <option value="1">Liga de Fútbol Regional</option>
-                <option value="2">Torneo de Ajedrez Rápido</option>
-            </select>
-            
-            <label for="ronda">Ronda / Fecha:</label>
-            <select name="ronda">
-                <option value="">Todas las rondas</option>
-                <option value="1">Ronda 1</option>
-                <option value="2">Ronda 2</option>
-            </select>
-            
-            <button type="submit">Filtrar Enfrentamientos</button>
-        </form>
-    </section>
-
-    <section>
-        <h3>Enfrentamientos Pendientes y Registrados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ronda</th>
-                    <th>Participante A</th>
-                    <th>Participante B</th>
-                    <th>Resultado</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>101</td>
-                    <td>Ronda 1</td>
-                    <td>Los Leones</td>
-                    <td>Club Atlético Norte</td>
-                    <td>2 - 1</td>
-                    <td>Finalizado</td>
-                    <td>
-                        <a href="registrar.html?enfrentamiento=101">Modificar Resultado</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>102</td>
-                    <td>Ronda 1</td>
-                    <td>Deportivo Sur</td>
-                    <td>Estrella Roja</td>
-                    <td>Pendiente</td>
-                    <td>Pendiente</td>
-                    <td>
-                        <a href="registrar.html?enfrentamiento=102">Registrar Resultado</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Torneo</th>
+                <th>Encuentro</th>
+                <th>Resultado</th>
+                <th>Fecha del Partido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Torneo de Verano</td>
+                <td>Los Titanes vs. Equipo Beta</td>
+                <td>2 - 1</td>
+                <td>14/07/2026</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a href="#" class="boton-accion">Editar</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

@@ -1,16 +1,16 @@
 <div>
-    <h2>Resumen del Sistema</h2>
+    <h2 class="titulo-pantalla">Resumen del Sistema</h2>
 
-    <section>
-        <article>
+    <section class="contenedor-tarjetas">
+        <article class="tarjeta-estadistica">
             <h3>Torneos Activos</h3>
             <p>12</p>
         </article>
-        <article>
+        <article class="tarjeta-estadistica">
             <h3>Usuarios Totales</h3>
             <p>300</p>
         </article>
-        <article>
+        <article class="tarjeta-estadistica">
             <h3>Equipos Totales</h3>
             <p>30</p>
         </article>
@@ -18,8 +18,8 @@
 
     <div>
         <section>
-            <h3>Últimos Torneos Creados</h3>
-            <table>
+            <h3 class="titulo-pantalla" style="font-size: 1.2rem; border: none;">Últimos Torneos Creados</h3>
+            <table class="tabla-estandar">
                 <thead>
                     <tr>
                         <th>Nombre del Torneo</th>
@@ -33,15 +33,15 @@
                         <td>Torneo de Verano</td>
                         <td>Abierto</td>
                         <td>15/07/2026</td>
-                        <td><a href="torneos/detalle.html">Ver Detalles</a></td>
+                        <td><a href="index.php?vista=torneos/configurar" class="boton-accion">Ver Detalles</a></td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-        <section>
-            <h3>Últimos Usuarios Registrados</h3>
-            <table>
+        <section style="margin-top: 30px;">
+            <h3 class="titulo-pantalla" style="font-size: 1.2rem; border: none;">Últimos Usuarios Registrados</h3>
+            <table class="tabla-estandar">
                 <thead>
                     <tr>
                         <th>Nombre Completo</th>
@@ -66,12 +66,6 @@
                     <tr>
                         <td>Mauricio Pedrozo</td>
                         <td>mauricio@ejemplo.com</td>
-                        <td>Organizador</td>
-                        <td>15/07/2026</td>
-                    </tr>
-                    <tr>
-                        <td>Juan Fernández</td>
-                        <td>juan@ejemplo.com</td>
                         <td>Organizador</td>
                         <td>15/07/2026</td>
                     </tr>

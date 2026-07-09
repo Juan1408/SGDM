@@ -1,58 +1,51 @@
 <div>
-    <h2>Gestión de Usuarios</h2>
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla">Gestión de Usuarios</h2>
+        <div class="grupo-acciones-encabezado">
+            <form action="index.php" method="GET" class="formulario-busqueda">
+                <input type="hidden" name="vista" value="usuarios/lista">
+                <input type="text" name="buscar" class="campo-busqueda" placeholder="Buscar por nombre o correo...">
+                <button type="submit" class="boton-secundario">Buscar</button>
+            </form>
+            <a href="index.php?vista=usuarios/formulario" class="boton-accion">Registrar Nuevo Usuario</a>
+        </div>
+    </div>
     
-    <nav>
-        <a href="formulario.html">Crear Nuevo Usuario</a>
-    </nav>
-    
-    <section>
-        <h3>Listado de Usuarios Registrados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre Completo</th>
-                    <th>Correo Electrónico</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Juan Pérez</td>
-                    <td>juan@ejemplo.com</td>
-                    <td>Administrador General</td>
-                    <td>Activo</td>
-                    <td>
-                        <a href="formulario.html?id=1">Editar</a>
-                        <a href="/usuarios/eliminar?id=1">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>María López</td>
-                    <td>maria@ejemplo.com</td>
-                    <td>Organizador de Torneo</td>
-                    <td>Activo</td>
-                    <td>
-                        <a href="formulario.html?id=2">Editar</a>
-                        <a href="/usuarios/eliminar?id=2">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Carlos Gómez</td>
-                    <td>carlos@ejemplo.com</td>
-                    <td>Participante</td>
-                    <td>Inactivo</td>
-                    <td>
-                        <a href="formulario.html?id=3">Editar</a>
-                        <a href="/usuarios/eliminar?id=3">Eliminar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Nombre Completo</th>
+                <th>Correo Electrónico</th>
+                <th>Rol</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Miguel Barneto</td>
+                <td>miguel@ejemplo.com</td>
+                <td>Participante</td>
+                <td>15/07/2026</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a href="#" class="boton-accion">Editar</a>
+                        <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Mauricio Pedrozo</td>
+                <td>mauricio@ejemplo.com</td>
+                <td>Organizador</td>
+                <td>15/07/2026</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a href="#" class="boton-accion">Editar</a>
+                        <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

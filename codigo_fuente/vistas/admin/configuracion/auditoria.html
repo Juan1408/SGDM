@@ -1,55 +1,39 @@
 <div>
-    <h2>Registro de Auditoría</h2>
+    <h2 class="titulo-pantalla">Registro de Auditoría</h2>
+    <p>Historial de acciones críticas realizadas en el sistema (Solo lectura).</p>
     
-    <section>
-        <p>Este registro muestra todas las acciones críticas realizadas por los usuarios administrativos y organizadores dentro del sistema (creación de torneos, modificación de resultados, etc).</p>
-        
-        <form action="/configuracion/auditoria.html" method="GET">
-            <label for="fecha">Filtrar por fecha:</label>
-            <input type="date" name="fecha">
-            <button type="submit">Aplicar Filtro</button>
-        </form>
-    </section>
-    
-    <section>
-        <h3>Últimas Acciones</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha y Hora</th>
-                    <th>Usuario</th>
-                    <th>Rol</th>
-                    <th>Acción Realizada</th>
-                    <th>Módulo Afectado</th>
-                    <th>Detalle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>15/07/2026 14:30</td>
-                    <td>Juan Pérez</td>
-                    <td>Administrador General</td>
-                    <td>Edición de Resultado</td>
-                    <td>Resultados</td>
-                    <td>Modificó el resultado del enfrentamiento ID 101.</td>
-                </tr>
-                <tr>
-                    <td>15/07/2026 12:00</td>
-                    <td>Carlos Gómez</td>
-                    <td>Organizador</td>
-                    <td>Creación de Torneo</td>
-                    <td>Torneos</td>
-                    <td>Creó el "Torneo de Ajedrez Rápido" (Sistema Suizo).</td>
-                </tr>
-                <tr>
-                    <td>14/07/2026 09:15</td>
-                    <td>Juan Pérez</td>
-                    <td>Administrador General</td>
-                    <td>Desactivar Usuario</td>
-                    <td>Usuarios</td>
-                    <td>Desactivó la cuenta del usuario Carlos Gómez (Temporal).</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario (Admin)</th>
+                <th>Acción Realizada</th>
+                <th>Detalle</th>
+                <th>Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>105</td>
+                <td>Juan Fernández</td>
+                <td>Eliminación</td>
+                <td>Eliminó el Torneo "Copa de Invierno" (ID: 5)</td>
+                <td>16/07/2026 14:30:22</td>
+            </tr>
+            <tr>
+                <td>104</td>
+                <td>Miguel Barneto</td>
+                <td>Modificación</td>
+                <td>Cambió el resultado del encuentro ID: 2 (de 1-0 a 2-0)</td>
+                <td>16/07/2026 10:15:00</td>
+            </tr>
+            <tr>
+                <td>103</td>
+                <td>Juan Fernández</td>
+                <td>Creación</td>
+                <td>Creó un nuevo usuario "Pedro Gómez" (ID: 80)</td>
+                <td>15/07/2026 09:00:10</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

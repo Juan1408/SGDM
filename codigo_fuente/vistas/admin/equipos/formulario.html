@@ -1,40 +1,21 @@
 <div>
-    <h2>Formulario de Equipo</h2>
-    
-    <nav>
-        <a href="lista.html">Volver al Listado</a>
-    </nav>
-    
-    <section>
-        <form action="/equipos/guardar" method="POST">
-            <fieldset>
-                <legend>Datos del Equipo</legend>
-                
-                <label for="nombre">Nombre del Equipo:</label>
-                <input type="text" name="nombre" value="" required>
-                
-                <label for="escudo">Escudo o Logotipo del Equipo:</label>
-                <input type="file" name="escudo" accept="image/png, image/jpeg">
-                
-                <label for="descripcion">Descripción o Breve Historia:</label>
-                <textarea name="descripcion" rows="4"></textarea>
-            </fieldset>
+    <h2 class="titulo-pantalla">Registrar Nuevo Equipo</h2>
+    <form action="/admin/equipos/guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <legend>Información Principal del Equipo</legend>
+            <label for="nombre_equipo">Nombre del Equipo:</label>
+            <input type="text" id="nombre_equipo" name="nombre_equipo" class="campo-requerido" required>
             
-            <fieldset>
-                <legend>Participantes (Integrantes del Equipo)</legend>
-                
-                <label for="capitan">Capitán o Responsable:</label>
-                <select name="capitan" required>
-                    <option value="">Seleccione un usuario...</option>
-                    <option value="1">Juan Pérez</option>
-                    <option value="2">Carlos Gómez</option>
-                </select>
-                
-                <p>Para agregar más integrantes, primero guarde el equipo y luego edítelo para sumar participantes a la lista.</p>
-            </fieldset>
-            
-            <button type="submit">Guardar Equipo</button>
-            <button type="reset">Restablecer</button>
-        </form>
-    </section>
+            <label for="capitan">Capitán del Equipo:</label>
+            <select id="capitan" name="capitan" class="campo-requerido">
+                <option value="4">Juan Fernández (juan@ejemplo.com)</option>
+                <option value="5">Miguel Barneto (miguel@ejemplo.com)</option>
+            </select>
+        </fieldset>
+        
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Equipo</button>
+            <a href="index.php?vista=equipos/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
 </div>

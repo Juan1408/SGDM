@@ -1,58 +1,32 @@
 <div>
-    <h2>Gestión de Torneos</h2>
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla">Gestión de Torneos</h2>
+        <a href="index.php?vista=torneos/crear" class="boton-accion">Crear Nuevo Torneo</a>
+    </div>
     
-    <nav>
-        <a href="crear.html">Crear Nuevo Torneo</a>
-    </nav>
-    
-    <section>
-        <h3>Listado de Torneos</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre del Torneo</th>
-                    <th>Formato (Módulo)</th>
-                    <th>Estado</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Liga de Fútbol Regional</td>
-                    <td>Liga (Todos contra todos)</td>
-                    <td>Abierto</td>
-                    <td>01/08/2026</td>
-                    <td>
-                        <a href="configurar.html?id=1">Configurar</a>
-                        <a href="/torneos/eliminar?id=1">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Torneo de Ajedrez Rápido</td>
-                    <td>Sistema Suizo</td>
-                    <td>En Curso</td>
-                    <td>10/07/2026</td>
-                    <td>
-                        <a href="configurar.html?id=2">Configurar</a>
-                        <a href="/torneos/eliminar?id=2">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Copa Electrónica de Verano</td>
-                    <td>Eliminación Directa</td>
-                    <td>Finalizado</td>
-                    <td>01/01/2026</td>
-                    <td>
-                        <a href="configurar.html?id=3">Configurar</a>
-                        <a href="/torneos/eliminar?id=3">Eliminar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Torneo</th>
+                <th>Modalidad</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Torneo de Verano</td>
+                <td>Eliminación Directa</td>
+                <td>Abierto</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a href="index.php?vista=torneos/configurar" class="boton-accion">Configurar</a>
+                        <a href="#" class="boton-peligro accion-eliminar">Finalizar</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

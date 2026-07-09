@@ -1,44 +1,32 @@
 <div>
-    <h2>Gestión de Equipos y Participantes</h2>
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla">Gestión de Equipos</h2>
+        <a href="index.php?vista=equipos/formulario" class="boton-accion">Registrar Nuevo Equipo</a>
+    </div>
     
-    <nav>
-        <a href="formulario.html">Crear Nuevo Equipo</a>
-    </nav>
-    
-    <section>
-        <h3>Listado de Equipos</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre del Equipo</th>
-                    <th>Capitán / Responsable</th>
-                    <th>Cantidad de Participantes</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Los Leones</td>
-                    <td>Juan Pérez</td>
-                    <td>11</td>
-                    <td>
-                        <a href="formulario.html?id=1">Editar</a>
-                        <a href="/equipos/eliminar?id=1">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Club Atlético Norte</td>
-                    <td>Carlos Gómez</td>
-                    <td>15</td>
-                    <td>
-                        <a href="formulario.html?id=2">Editar</a>
-                        <a href="/equipos/eliminar?id=2">Eliminar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Nombre del Equipo</th>
+                <th>Capitán</th>
+                <th>Miembros</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Los Titanes</td>
+                <td>Juan Fernández</td>
+                <td>5 Jugadores</td>
+                <td>10/07/2026</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a href="#" class="boton-accion">Editar</a>
+                        <a href="#" class="boton-peligro accion-eliminar">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

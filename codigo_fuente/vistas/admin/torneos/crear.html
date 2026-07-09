@@ -1,48 +1,34 @@
 <div>
-    <h2>Crear Nuevo Torneo</h2>
-    
-    <nav>
-        <a href="lista.html">Volver al Listado</a>
-    </nav>
-    
-    <section>
-        <form action="/torneos/guardar" method="POST">
-            <fieldset>
-                <legend>Información Básica</legend>
-                
-                <label for="nombre">Nombre del Torneo:</label>
-                <input type="text" name="nombre" value="" required>
-                
-                <label for="descripcion">Descripción o Reglas Generales:</label>
-                <textarea name="descripcion" rows="5"></textarea>
-                
-                <label for="fecha_inicio">Fecha de Inicio:</label>
-                <input type="date" name="fecha_inicio" required>
-                
-                <label for="fecha_fin">Fecha de Finalización (Opcional):</label>
-                <input type="date" name="fecha_fin">
-            </fieldset>
+    <h2 class="titulo-pantalla">Crear Nuevo Torneo</h2>
+    <form action="/admin/torneos/guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <legend>Información General</legend>
+            <label for="nombre">Nombre del Torneo:</label>
+            <input type="text" id="nombre" name="nombre" class="campo-requerido" required>
             
-            <fieldset>
-                <legend>Formato de Competencia</legend>
-                
-                <label for="modulo">Módulo de Competencia:</label>
-                <select name="modulo" required>
-                    <option value="">Seleccione un formato...</option>
-                    <option value="liga">Liga (Todos contra todos)</option>
-                    <option value="eliminacion">Eliminación Directa</option>
-                    <option value="suizo">Sistema Suizo</option>
-                </select>
-                
-                <label for="tipo_participante">Tipo de Participante:</label>
-                <select name="tipo_participante" required>
-                    <option value="individual">Individual</option>
-                    <option value="equipo">Equipos</option>
-                </select>
-            </fieldset>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Configuración de Formato</legend>
+            <label for="tipo_modalidad">Modalidad:</label>
+            <select id="tipo_modalidad" name="tipo_modalidad" class="campo-requerido">
+                <option value="Individual">Individual</option>
+                <option value="Equipos">Equipos</option>
+            </select>
             
-            <button type="submit">Crear Torneo</button>
-            <button type="reset">Limpiar Formulario</button>
-        </form>
-    </section>
+            <label for="formato_competicion">Formato de Competición:</label>
+            <select id="formato_competicion" name="formato_competicion" class="campo-requerido">
+                <option value="Liga">Liga (Todos contra Todos)</option>
+                <option value="Eliminacion">Eliminación Directa</option>
+                <option value="Suizo">Sistema Suizo</option>
+            </select>
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Crear Torneo</button>
+            <a href="index.php?vista=torneos/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
 </div>
