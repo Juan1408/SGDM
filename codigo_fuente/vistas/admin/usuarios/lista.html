@@ -1,16 +1,16 @@
-<div>
+<section class="modulo-admin">
     <div class="encabezado-seccion">
-        <h2 class="titulo-pantalla">Gestión de Usuarios</h2>
+        <h2 class="titulo-pantalla">Gestión de Usuarios Administrativos </h2>
         <div class="grupo-acciones-encabezado">
             <form action="index.php" method="GET" class="formulario-busqueda">
                 <input type="hidden" name="vista" value="usuarios/lista">
                 <input type="text" name="buscar" class="campo-busqueda" placeholder="Buscar por nombre o correo...">
                 <button type="submit" class="boton-secundario">Buscar</button>
             </form>
-            <a href="index.php?vista=usuarios/formulario" class="boton-accion">Registrar Nuevo Usuario</a>
+            <a href="#usuarios/formulario" class="boton-accion">Registrar Nuevo Usuario</a>
         </div>
     </div>
-    
+
     <table class="tabla-estandar">
         <thead>
             <tr>
@@ -23,29 +23,42 @@
         </thead>
         <tbody>
             <tr>
-                <td>Miguel Barneto</td>
-                <td>miguel@ejemplo.com</td>
-                <td>Participante</td>
+                <td>Michael Barneto</td>
+                <td>michaelsoporte@ascend.com</td>
+                <td>Soporte Tecnico</td>
                 <td>15/07/2026</td>
                 <td>
-                    <div class="acciones-tabla">
-                        <a href="#" class="boton-accion">Editar</a>
-                        <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
-                    </div>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#usuarios/formulario?id=1" class="boton-accion">Editar</a>
+                            <a href="#configuracion/auditoria" class="boton-accion">Ver Auditorias</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Eliminar</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Restablecer Contraseña</a>
+                        </div>
+                    </details>
                 </td>
             </tr>
             <tr>
                 <td>Mauricio Pedrozo</td>
-                <td>mauricio@ejemplo.com</td>
-                <td>Organizador</td>
+                <td>mauricio@ascend.com</td>
+                <td>Organizador de Torneos</td>
                 <td>15/07/2026</td>
                 <td>
-                    <div class="acciones-tabla">
-                        <a href="#" class="boton-accion">Editar</a>
-                        <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
-                    </div>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#usuarios/formulario?id=2" class="boton-accion">Editar</a>
+                            <a href="#configuracion/auditoria" class="boton-accion">Ver Auditorias</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Bloquear</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Eliminar</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Restablecer Contraseña</a>
+                        </div>
+                    </details>
                 </td>
             </tr>
         </tbody>
     </table>
-</div>
+</section>
+

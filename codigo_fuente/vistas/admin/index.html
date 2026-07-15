@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - ASCEND</title>
+    <link rel="stylesheet" href="../../publico/css/admin/admin.css">
+</head>
+
+<body class="tema-admin en-inicio">
+    <header class="cabecera-principal">
+        <div class="contenedor-logo">
+            <a href="#dashboard" class="enlace-logo">
+                <img src="../../publico/img/logos/logoAscend.jpg" alt="Logotipo del Sistema">
+            </a>
+            <h1 class="titulo-cabecera">ASCEND</h1>
+        </div>
+
+        <div class="perfil-admin dropdown">
+            <button class="dropdown-btn" id="btnPerfilAdmin">
+                <span class="avatar-placeholder">A</span>
+                <span>Administrador General ▾</span>
+            </button>
+            <div class="dropdown-content" id="menuPerfilAdmin">
+                <a href="#perfil/editar-perfil">Editar Perfil</a>
+                <a href="#configuracion/general">Configuración</a>
+                <a href="../../vistas/organizador/index.html" class="enlace-destacado">Mis Torneos (Modo
+                    Organizador)</a>
+                <a href="#" class="enlace-salir">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="barra-movil">
+        <button class="boton-menu-movil" id="btnMenuMovil">☰ Abrir Menú</button>
+    </div>
+
+    <div class="cuerpo-admin">
+        <aside class="menu-lateral">
+            <nav>
+                <ul class="menu-lista">
+                    <li><a href="#dashboard" class="menu-enlace">Inicio</a></li>
+
+                    <li><a href="#" class="menu-enlace">Usuarios Administrativos</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#usuarios/lista" class="menu-enlace">Ver Usuarios</a></li>
+                            <li><a href="#usuarios/formulario" class="menu-enlace">Nuevo Usuario</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="menu-enlace">Torneos</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#torneos/lista" class="menu-enlace">Ver y Configurar</a></li>
+                            <li><a href="#torneos/crear" class="menu-enlace">Crear Nuevo Torneo</a></li>
+                            <li><a href="#torneos/historial" class="menu-enlace">Historial de Torneos</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="menu-enlace">Participantes y Equipos</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#equipos/lista" class="menu-enlace">Ver Todos</a></li>
+                            <li><a href="#equipos/formulario" class="menu-enlace">Registrar Nuevo P/E</a></li>
+                            <li><a href="#equipos/solicitudes" class="menu-enlace">Solicitudes Pendientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="menu-enlace">Resultados</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#resultados/lista" class="menu-enlace">Ver Todos</a></li>
+                            <li><a href="#resultados/formulario" class="menu-enlace">Registrar Nuevo</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="menu-enlace">Configuración</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#configuracion/general" class="menu-enlace">Sistema y Seguridad</a></li>
+                            <li><a href="#configuracion/auditoria" class="menu-enlace">Auditoría</a></li>
+                            <li><a href="#configuracion/accesos" class="menu-enlace">Registro de Accesos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="area-contenido" id="area-contenido">
+            <!-- El contenido se cargará aquí vía JavaScript -->
+            <div style="padding: 2rem; text-align: center;">Cargando...</div>
+        </main>
+    </div>
+
+    <footer class="pie-pagina">
+        <div class="pie-contenedor">
+            <div class="pie-texto">
+                <p>&copy; 2026 ASCEND. Todos los derechos reservados.</p>
+            </div>
+            <div class="pie-enlaces">
+                <a href="#">Términos de Servicio</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Centro de Ayuda</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contenedor para Notificaciones Toast -->
+    <div class="contenedor-notificaciones" id="contenedorNotificaciones"></div>
+
+    <script src="../../publico/js/admin.js"></script>
+    <!-- Script exclusivo de maquetación (simula el router y el backend) -->
+    <!-- TODO: Eliminar cuando se integre el backend PHP -->
+    <script src="../../publico/js/mockup-router.js"></script>
+</body>
+
+</html>

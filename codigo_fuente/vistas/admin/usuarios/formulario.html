@@ -1,28 +1,32 @@
-<div>
+<section class="modulo-admin">
     <h2 class="titulo-pantalla">Registrar Nuevo Usuario</h2>
     <form action="/admin/usuarios/guardar" method="POST" class="formulario-estandar validacion-activa">
         <fieldset>
             <legend>Datos Personales y de Cuenta</legend>
             <label for="nombre">Nombre Completo:</label>
             <input type="text" id="nombre" name="nombre" class="campo-requerido" required>
-            
+
             <label for="correo">Correo Electrónico:</label>
             <input type="email" id="correo" name="correo" class="campo-requerido" required>
-            
+
             <label for="contrasena">Contraseña Temporal:</label>
             <input type="password" id="contrasena" name="contrasena" class="campo-requerido" required>
-            
+
             <label for="rol">Rol en el Sistema:</label>
             <select id="rol" name="rol" class="campo-requerido">
                 <option value="Administrador General">Administrador General</option>
-                <option value="Organizador">Organizador</option>
-                <option value="Participante">Participante</option>
+                <option value="Administrador de Acceso de Usuarios">Administrador de Acceso de Usuarios</option>
+                <option value="Soporte Tecnico">Soporte Tecnico</option>
+                <option value="Moderador de Contenido">Moderador de Contenido</option>
+                <option value="Editor de Contenido">Editor de Contenido</option>
+                <option value="Organizador de Torneos">Organizador de Torneos</option>
             </select>
         </fieldset>
-        
+
         <div class="grupo-botones">
             <button type="submit" class="boton-accion">Guardar Usuario</button>
-            <a href="index.php?vista=usuarios/lista" class="boton-secundario">Cancelar</a>
+            <a href="#usuarios/lista" class="boton-secundario">Cancelar</a>
         </div>
     </form>
-</div>
+</section>
+

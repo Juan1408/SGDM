@@ -1,15 +1,56 @@
-<div>
+<section class="modulo-admin">
     <h2 class="titulo-pantalla">Crear Nuevo Torneo</h2>
     <form action="/admin/torneos/guardar" method="POST" class="formulario-estandar validacion-activa">
+
+        <fieldset>
+            <legend>Informacion general del responsable</legend>
+            <select id="tipo_responsable" name="tipo_responsable" class="campo-requerido">
+                <option value="administrador">Administrador</option>
+                <option value="organizador">Organizador</option>
+            </select>
+            <div id="datos_organizador" style="display: none;">
+                <label for="nombre_responsable">Nombre:</label>
+                <input type="text" id="nombre_responsable" name="nombre_responsable" class="campo-requerido" required>
+                <label for="apellido_responsable">Apellido:</label>
+                <input type="text" id="apellido_responsable" name="apellido_responsable" class="campo-requerido"
+                    required>
+                <label for="ci_responsable">C.I:</label>
+                <input type="text" id="ci_responsable" name="ci_responsable" class="campo-requerido" required>
+                <label for="email_responsable">Email:</label>
+                <input type="email" id="email_responsable" name="email_responsable" class="campo-requerido" required>
+                <label for="telefono_responsable">Telefono:</label>
+                <input type="tel" id="telefono_responsable" name="telefono_responsable" class="campo-requerido"
+                    required>
+                <label for="localidad_responsable">Localidad:</label>
+                <input type="text" id="localidad_responsable" name="localidad_responsable" class="campo-requerido"
+                    required>
+                <label for="tipo_responsable">Responsable:</label>
+                <button type="button" class="boton-accion" id="asignar_organizador">Asignar Organizador</button>
+            </div>
+
+
+
+        </fieldset>
+
         <fieldset>
             <legend>Información General</legend>
             <label for="nombre">Nombre del Torneo:</label>
             <input type="text" id="nombre" name="nombre" class="campo-requerido" required>
-            
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+
+            <label for="disciplina">Disciplina:</label>
+            <select id="disciplina" name="disciplina" class="campo-requerido">
+                <option value="ajedrez">Ajedrez</option>
+                <option value="tenis">Tenis</option>
+                <option value="futbol7">Futbol 7</option>
+                <option value="futbol11">Futbol 11</option>
+                <option value="natacion">Natacion</option>
+                <option value="voleibol">Voleibol</option>
+                <option value="baloncesto">Baloncesto</option>
+                <option value="handball">Handball</option>
+                <option value="paraciclismo">Paraciclismo</option>
+            </select>
         </fieldset>
-        
+
         <fieldset>
             <legend>Configuración de Formato</legend>
             <label for="tipo_modalidad">Modalidad:</label>
@@ -17,18 +58,54 @@
                 <option value="Individual">Individual</option>
                 <option value="Equipos">Equipos</option>
             </select>
-            
+
             <label for="formato_competicion">Formato de Competición:</label>
             <select id="formato_competicion" name="formato_competicion" class="campo-requerido">
                 <option value="Liga">Liga (Todos contra Todos)</option>
                 <option value="Eliminacion">Eliminación Directa</option>
                 <option value="Suizo">Sistema Suizo</option>
             </select>
+
+            <label for="cantidad_participantes">Cantidad de Participantes:</label>
+            <input type="number" id="cantidad_participantes" name="cantidad_participantes" class="campo-requerido">
+        </fieldset>
+
+        <fieldset>
+            <legend>Fecha de Inscripcion</legend>
+            <label for="fecha_inicio_inscripcion">Fecha de Inicio:</label>
+            <input type="date" id="fecha_inicio_inscripcion" name="fecha_inicio_inscripcion" class="campo-requerido">
+            <label for="fecha_fin_inscripcion">Fecha de Fin:</label>
+            <input type="date" id="fecha_fin_inscripcion" name="fecha_fin_inscripcion" class="campo-requerido">
+        </fieldset>
+
+        <fieldset>
+            <legend>Fecha de Torneo</legend>
+            <label for="fecha_inicio">Fecha de Inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" class="campo-requerido">
+            <label for="fecha_fin">Fecha de Fin:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" class="campo-requerido">
+        </fieldset>
+
+        <fieldset>
+            <legend>Lugar del Evento</legend>
+            <label for="lugar_evento">Lugar:</label>
+            <input type="text" id="lugar_evento" name="lugar_evento" class="campo-requerido">
+            <label for="lugar_evento">Direccion:</label>
+            <input type="text" id="direccion" name="direccion" class="campo-requerido">
+        </fieldset>
+
+        <fieldset>
+            <legend>Descripción y Reglas</legend>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+            <label for="reglas">Reglas del Torneo:</label>
+            <textarea id="reglas" name="reglas" rows="4"></textarea>
         </fieldset>
 
         <div class="grupo-botones">
             <button type="submit" class="boton-accion">Crear Torneo</button>
-            <a href="index.php?vista=torneos/lista" class="boton-secundario">Cancelar</a>
+            <a href="#torneos/lista" class="boton-secundario">Cancelar</a>
         </div>
     </form>
-</div>
+</section>
+

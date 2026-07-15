@@ -1,0 +1,124 @@
+/* =========================================
+   CLASES UTILITARIAS (PROFESIONALES)
+   ========================================= */
+.boton-salir {
+  background-color: #e74c3c;
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.boton-salir:hover {
+  background-color: #c0392b;
+}
+
+.boton-accion {
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-accion:hover {
+  background-color: #2980b9;
+}
+
+.boton-peligro {
+  background-color: #e74c3c;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-peligro:hover {
+  background-color: #c0392b;
+}
+
+.boton-secundario {
+  background-color: #95a5a6;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-secundario:hover {
+  background-color: #7f8c8d;
+}
+
+.boton-exito {
+  background-color: #27ae60;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-exito:hover {
+  background-color: #219653;
+}
+
+.grupo-botones {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* =========================================
+   ESTADOS Y COLORES UNIVERSALES (TABLAS Y TEXTOS)
+   ========================================= */
+.estado-exito {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.estado-fallido, 
+.estado-cancelado {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.estado-pendiente {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.texto-ayuda {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.filtros-tabla {
+  margin-bottom: 1rem;
+}
+
+.campo-filtro-ancho {
+  max-width: 300px;
+}
+
+.margen-superior-1 {
+  margin-top: 1rem;
+}
