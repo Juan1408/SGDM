@@ -12,10 +12,10 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
    
    <!-- CSS -->
-    <link rel="stylesheet" href="../../css/pages/torneo.css">
+    <link rel="stylesheet" href="../../css/publico/torneo.css">
    <link rel="stylesheet" href="../../css/variables.css">
    <link rel="stylesheet" href="../../css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../css/pages/home.css">
+   <link rel="stylesheet" href="../../css/publico/home.css">
    <link rel="stylesheet" href="../../css/layouts/footer.css">
 
    <!-- Font Awesome -->
@@ -33,45 +33,9 @@
 
 <body>
 
-<!-- NAVBAR -->
+<!-- NAVBAR ---------------------------->
 
- <nav class="navbar">
-   <div class="navbar-container">
-      <div class="logo-container">
-         <i class="fa-solid fa-trophy"></i> <h1>SGDM</h1>
-      </div>
-
-      <button class="navbar-toggle" id="menu-toggle">
-         <span class="bar"></span>
-         <span class="bar"></span>
-         <span class="bar"></span>
-      </button>
-
-      <ul class="navbar-menu" id="nav-links">
-         <li><a href="../../roles/publico/index.html">Inicio</a></li>
-         
-         <li class="dropdown">
-            <button class="dropdown-btn" id="tournamentsDropdown">
-               Torneos <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <div class="dropdown-content">
-               <a href="../publico/torneos.html">Todos los Torneos</a>
-               <a href="../publico/detalle-torneo.html">Detalle Torneos</a>
-            </div>
-         </li>
-
-         <li><a href="#">Rankings</a></li>
-         <li><a href="#">Nosotros</a></li>
-         <li><a href="#contacto">Contacto</a></li>
-
-         <li class="auth-links">
-            <a href="../publico/login.html" class="login-link"><i class="fa-solid fa-user"></i></a>
-            <a href="../publico/login.html" class="register-btn">Sign up</a>
-         </li>
-      </ul>
-   </div>
-</nav>
-
+<div id="navbar-publico-placeholder"></div>
 
 <!-------------------------------------->
 <!-- HERO ------------------------------>
@@ -424,71 +388,14 @@
    hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Ver más fechas</a>
    </div>
 
-   
-  
-
-
 </section>
 
+<!-- FOOTER ---------------------------->
 
-<!-- FOOTER -->
-
-<footer class="footer">
-   <div class="footer-content">
-      <div class="footer-brand">
-         <div class="footer-logo">
-            <i class="fa-solid fa-trophy"></i>
-            <h3>SGDM</h3>
-         </div>
-
-         <p>Plataforma de gestión de torneos deportivos,
-            mentales y eSports.</p>
-      </div>
-      <div class="footer-links">
-
-         <h4>Navegación</h4>
-
-         <a href="#">Inicio</a>
-         <a href="#">Torneos</a>
-         <a href="#">Rankings</a>
-         <a href="#contacto">Contacto</a>
-
-      </div>
-      <div class="footer-links">
-
-         <h4>Torneos</h4>
-
-         <a href="#">Liga</a>
-         <a href="#">Eliminación Directa</a>
-         <a href="#">Sistema Suizo</a>
-      </div>
-      <div class="footer-links">
-
-         <h4>Seguinos</h4>
-
-         <div class="footer-social">
-            <a href="#">
-               <i class="fab fa-discord"></i>
-            </a>
-            <a href="#">
-               <i class="fab fa-instagram"></i>
-            </a>
-            <a href="#">
-               <i class="fab fa-x-twitter"></i>
-            </a>
-         </div>
-      </div>
-   </div>
-   <div class="footer-bottom">
-
-      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
-      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
-
-   </div>
-
-</footer>
+<div id="footer-publico-placeholder"></div>
 
 <script src="../../js/navbar.js"></script>
+<script src="../../js/includesPublicos.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>

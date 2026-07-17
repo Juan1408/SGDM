@@ -1,0 +1,15 @@
+/*
+=====================================================
+   HISTORIAL - página simple.
+   El header, el panel y las tarjetas de torneo ya
+   están cubiertos por organizador-layout.css y
+   css/componentes/tarjetas.css (misma tarjeta que
+   usa el Dashboard) - acá solo va el estado vacío.
+=====================================================
+*/
+
+.historial-vacio {
+   padding: 1.5rem;
+   text-align: center;
+   color: var(--texto-secundario);
+}

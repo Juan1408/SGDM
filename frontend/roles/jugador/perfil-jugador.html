@@ -1,120 +1,402 @@
-<!DOCTYPE html>
-<html lang="en">
+ <!DOCTYPE html>
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <link rel="stylesheet" href="css/pages/perfil-jugador.css">
+   <title>SGDM - Perfil Jugador</title>
 
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/pages/perfil-jugador.css">
 
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    
-<main class="player-profile-page">
 
-   <section class="profile-sidebar">
-      <div class="profile-avatar">
-         <img src="img/users/player1.jpg" alt="Jugador">
+   
+<!-------------------------------------->
+<!-- NAVBAR ---------------------------->
+<!-------------------------------------->
+
+ <nav class="navbar">
+   <div class="navbar-contenedor">
+      <div class="logo-contenedor">
+         <i class="fa-solid fa-trophy"></i> <h1>SGDM</h1>
       </div>
 
-      <h2>Michael Barnetto</h2>
-      <p class="player-role">Jugador Competitivo</p>
+      <button class="navbar-toggle" id="menu-toggle">
+         <span class="bar"></span>
+         <span class="bar"></span>
+         <span class="bar"></span>
+      </button>
 
-      <div class="profile-info">
-         <span><i class="fa-solid fa-location-dot"></i> Montevideo, Uruguay</span>
-         <span><i class="fa-solid fa-envelope"></i> jugador@email.com</span>
-         <span><i class="fa-solid fa-calendar"></i> 21 años</span>
-      </div>
+      <ul class="navbar-menu" id="nav-links">
+         <li><a href="#">Inicio</a></li>
+         
+         <li class="desplegable">
+            <button class="boton-desplegable" id="torneo-desplegable">
+               Torneos <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="contenido-desplegable">
+               <a href="../publico/torneos.html">Todos los Torneos</a>
+               <a href="../publico/detalle-torneo.html">Detalle Torneos</a>
+            </div>
+         </li>
 
-      <div class="profile-stats">
-         <div>
-            <strong>12</strong>
-            <span>Nivel</span>
+         <li><a href="#">Rankings</a></li>
+         <li><a href="#">Nosotros</a></li>
+         <li><a href="#contacto">Contacto</a></li>
+
+         <li class="auth-links">
+            <a href="../../roles/publico/login.html" class="login-link"><i class="fa-solid fa-user"></i></a>
+            <a href="../../roles/publico/login.html" class="boton-registro">Sign up</a>
+         </li>
+      </ul>
+   </div>
+</nav>
+
+
+   <main class="perfil-jugador">
+
+      <!-- HEADER PERFIL -->
+
+      <section class="perfil-header">
+
+         <div class="perfil-breadcrumb">
+            home/jugadores/perfil-jugador/juan
          </div>
-         <div>
-            <strong>8</strong>
-            <span>Torneos</span>
+
+         <div class="perfil-avatar-box">
+            <img src="../../img/avatars/a1.png" alt="Avatar jugador">
          </div>
+
+         <div class="perfil-nivel">
+            Nivel 3
+         </div>
+
+      </section>
+
+      <!-- CONTENIDO -->
+
+      <section class="perfil-layout">
+
+         <!-- SIDEBAR -->
+
+         <aside class="perfil-sidebar">
+
+            <div class="perfil-card perfil-datos">
+
+               <h2>Nombre Apellido</h2>
+
+               <p>Montevideo - Uruguay</p>
+               <p>contacto@gmail.com</p>
+               <p>Edad: 20</p>
+
+            </div>
+
+            <div class="perfil-card perfil-sobre-mi">
+
+               <h3>Sobre mí</h3>
+
+               <p>
+                  Jugador competitivo dentro de SGDM. Participa en torneos de eSports,
+                  juegos de mesa y competencias tradicionales.
+               </p>
+
+               <div class="perfil-redes">
+                  <a href="#"><i class="fa-brands fa-discord"></i></a>
+                  <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                  <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+               </div>
+
+            </div>
+
+            <div class="perfil-card perfil-equipos">
+
+               <h3>Equipos</h3>
+
+               <div class="equipo-item">
+                  <img src="../../img/logos/canelones.png" alt="Equipo">
+                  <span>Canelones</span>
+               </div>
+
+               <div class="equipo-item">
+                  <img src="../../img/logos/canelones.png" alt="Equipo">
+                  <span>Canelones</span>
+               </div>
+
+            </div>
+
+         </aside>
+
+         <!-- CONTENIDO PRINCIPAL -->
+
+         <section class="perfil-contenido">
+
+            <div class="perfil-stats">
+
+               <article class="estadisticas-card">
+                  <strong>38</strong>
+                  <span>Partidas</span>
+               </article>
+
+               <article class="estadisticas-card">
+                  <strong>24</strong>
+                  <span>Victorias</span>
+               </article>
+
+               <article class="estadisticas-card">
+                  <strong>3</strong>
+                  <span>Torneos ganados</span>
+               </article>
+
+               <article class="estadisticas-card">
+                  <strong>3,928</strong>
+                  <span>Puntos</span>
+               </article>
+
+            </div>
+
+            <!-- TORNEOS -->
+
+<section class="perfil-section">
+
+   <h3 class="perfil-section-title">Torneos</h3>
+
+   <div class="perfil-torneos-grid">
+
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card1.jpg" alt="Torneo">
+         <div>
+            <h4>Virtual Odyssey Chronicles</h4>
+            <p>Puesto: 3 <span>Puntos: 1.124</span></p>
+         </div>
+      </article>
+
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card2.png" alt="Torneo">
+         <div>
+            <h4>Valorant Champion Series</h4>
+            <p>Puesto: 1 <span>Puntos: 2.300</span></p>
+         </div>
+      </article>
+
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card3.png" alt="Torneo">
+         <div>
+            <h4>Copa Futbol 5</h4>
+            <p>Puesto: 4 <span>Puntos: 980</span></p>
+         </div>
+      </article>
+
+   </div>
+
+</section>
+
+
+<!-- TROFEOS -->
+
+<section class="perfil-section">
+
+   <h3 class="perfil-section-title">Trofeos</h3>
+
+   <div class="trofeos-row">
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-trophy"></i>
+      </article>
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-medal"></i>
+      </article>
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-crown"></i>
+      </article>
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-trophy"></i>
+      </article>
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-medal"></i>
+      </article>
+
+      <article class="trofeo-card">
+         <i class="fa-solid fa-crown"></i>
+      </article>
+
+   </div>
+
+</section>
+
+
+<!-- LOGROS -->
+
+<section class="perfil-section">
+
+   <h3 class="perfil-section-title">Logros</h3>
+
+   <div class="logros-grid">
+
+      <article class="logro-card desbloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Primera batalla</h4>
+            <p>Jugaste tu primer torneo</p>
+         </div>
+         <span>Logrado</span>
+      </article>
+
+      <article class="logro-card desbloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Campeón</h4>
+            <p>Ganaste un torneo oficial</p>
+         </div>
+         <span>Logrado</span>
+      </article>
+
+      <article class="logro-card en-curso">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Veterano</h4>
+            <p>6/10 torneos</p>
+         </div>
+         <span>En curso</span>
+      </article>
+
+      <article class="logro-card bloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>En racha</h4>
+            <p>Ganá 3 partidas distintas</p>
+         </div>
+         <span>Bloqueado</span>
+      </article>
+
+   </div>
+
+</section>
+
+
+<!-- JUEGOS -->
+
+<section class="perfil-section">
+
+   <h3 class="perfil-section-title">Juegos que participa</h3>
+
+   <div class="juegos-row">
+
+      <article class="juego-card">
+         <img src="../../img/juegos/dos.jpg" alt="League of Legends">
+         <div>
+            <h4>League of Legends</h4>
+            <p>4 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/fly.jpg" alt="Apex Legends">
+         <div>
+            <h4>Apex Legends</h4>
+            <p>2 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/odyssey.png" alt="Counter Strike">
+         <div>
+            <h4>Counter Strike</h4>
+            <p>5 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/quantum.png" alt="World of Warcraft">
+         <div>
+            <h4>World of Warcraft</h4>
+            <p>1 torneo</p>
+         </div>
+      </article>
+
+   </div>
+
+</section>
+
+         </section>
+
+      </section>
+
+   </main>
+
+   
+<!-------------------------------------->
+<!-- FOOTER ---------------------------->
+<!-------------------------------------->
+
+<footer class="footer">
+   <div class="footer-content">
+      <div class="footer-brand">
+         <div class="footer-logo">
+            <i class="fa-solid fa-trophy"></i>
+            <h3>SGDM</h3>
+         </div>
+
+         <p>Plataforma de gestión de torneos deportivos,
+            mentales y eSports.</p>
       </div>
-   </section>
+      <div class="footer-links">
 
-   <section class="profile-content">
+         <h4>Navegación</h4>
 
-      <nav class="profile-tabs">
-         <a class="active" href="#">Perfil</a>
-         <a href="#">Sobre mí</a>
+         <a href="#">Inicio</a>
          <a href="#">Torneos</a>
-         <a href="#">Habilidades</a>
-         <a href="#">Contacto</a>
-      </nav>
-
-      <div class="profile-grid">
-
-         <section class="profile-card games-card">
-            <h3><i class="fa-solid fa-gamepad"></i> Juegos que participo</h3>
-
-            <div class="games-profile-grid">
-               <div><i class="fa-solid fa-crosshairs"></i><h4>FPS</h4><p>Disparos y acción.</p></div>
-               <div><i class="fa-solid fa-chess-knight"></i><h4>Ajedrez</h4><p>Estrategia mental.</p></div>
-               <div><i class="fa-solid fa-trophy"></i><h4>MOBA</h4><p>Competencia en equipo.</p></div>
-               <div><i class="fa-solid fa-car"></i><h4>Racing</h4><p>Velocidad y reflejos.</p></div>
-            </div>
-         </section>
-
-         <section class="profile-card">
-            <h3><i class="fa-solid fa-trophy"></i> Logros</h3>
-
-            <div class="achievement">
-               <i class="fa-solid fa-medal"></i>
-               <div>
-                  <h4>Campeón Ajedrez</h4>
-                  <p>Primer puesto en torneo mental.</p>
-               </div>
-            </div>
-
-            <div class="achievement">
-               <i class="fa-solid fa-medal"></i>
-               <div>
-                  <h4>Top 5 eSports</h4>
-                  <p>Ranking destacado de temporada.</p>
-               </div>
-            </div>
-         </section>
-
-         <section class="profile-card">
-            <h3><i class="fa-solid fa-chart-simple"></i> Habilidades</h3>
-
-            <div class="skill">
-               <span>Estrategia <b>95%</b></span>
-               <div><p style="width:95%"></p></div>
-            </div>
-
-            <div class="skill">
-               <span>Trabajo en equipo <b>80%</b></span>
-               <div><p style="width:80%"></p></div>
-            </div>
-
-            <div class="skill">
-               <span>Precisión <b>70%</b></span>
-               <div><p style="width:70%"></p></div>
-            </div>
-         </section>
-
-         <section class="profile-card">
-            <h3><i class="fa-solid fa-user"></i> Sobre mí</h3>
-            <p>
-               Jugador competitivo con interés en torneos de estrategia, eSports
-               y competencias por equipos dentro de SGDM.
-            </p>
-            <a href="#">Ver más</a>
-         </section>
+         <a href="#">Rankings</a>
+         <a href="#contacto">Contacto</a>
 
       </div>
+      <div class="footer-links">
 
-   </section>
+         <h4>Torneos</h4>
 
-</main>
+         <a href="#">Liga</a>
+         <a href="#">Eliminación Directa</a>
+         <a href="#">Sistema Suizo</a>
+      </div>
+      <div class="footer-links">
+
+         <h4>Seguinos</h4>
+
+         <div class="footer-social">
+            <a href="#">
+               <i class="fab fa-discord"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+
+      <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
+      <p> Proyecto de egreso BT Tecnologías de la Información.</p>
+
+   </div>
+
+</footer>
 
 </body>
 </html>

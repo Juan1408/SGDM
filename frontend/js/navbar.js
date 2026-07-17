@@ -1,44 +1,93 @@
-const menuToggle = document.getElementById('menu-toggle');
-const navLinks = document.getElementById('nav-links');
-const dropdown = document.querySelector(".dropdown");
-const dropdownBtn = document.getElementById("tournamentsDropdown");
+"use strict";
 
-// Abrir y cerrar el menú lateral + Animación de la hamburguesa
-menuToggle.addEventListener('click', () => {
-   menuToggle.classList.toggle('active');
-   navLinks.classList.toggle('active');
-});
+document.addEventListener(
+   "navbarPublicoListo",
+   () => {
+      const menuToggle =
+         document.getElementById("menu-toggle");
 
-// Control del Dropdown
-dropdownBtn.addEventListener("click", (e) => {
-   e.stopPropagation();
-   dropdown.classList.toggle("open");
-});
+      const navLinks =
+         document.getElementById("nav-links");
 
-// Cerrar el dropdown al hacer clic en cualquier otra parte
-document.addEventListener("click", (e) => {
-   if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove("open");
+      const desplegable =
+         document.querySelector(".desplegable");
+
+      const desplegableBtn =
+         document.getElementById(
+            "torneo-desplegable"
+         );
+
+      /*
+      ================================================
+         MENÚ HAMBURGUESA
+      ================================================
+      */
+
+      if (menuToggle && navLinks) {
+         menuToggle.addEventListener(
+            "click",
+            () => {
+               const abierto =
+                  navLinks.classList.toggle(
+                     "active"
+                  );
+
+               menuToggle.classList.toggle(
+                  "active",
+                  abierto
+               );
+
+               menuToggle.setAttribute(
+                  "aria-expanded",
+                  String(abierto)
+               );
+            }
+         );
+      }
+
+      /*
+      ================================================
+         DESPLEGABLE DE TORNEOS
+      ================================================
+      */
+
+      if (desplegable && desplegableBtn) {
+         desplegableBtn.addEventListener(
+            "click",
+            (evento) => {
+               evento.stopPropagation();
+
+               const abierto =
+                  desplegable.classList.toggle(
+                     "open"
+                  );
+
+               desplegableBtn.setAttribute(
+                  "aria-expanded",
+                  String(abierto)
+               );
+            }
+         );
+
+         document.addEventListener(
+            "click",
+            (evento) => {
+               if (
+                  !desplegable.contains(
+                     evento.target
+                  )
+               ) {
+                  desplegable.classList.remove(
+                     "open"
+                  );
+
+                  desplegableBtn.setAttribute(
+                     "aria-expanded",
+                     "false"
+                  );
+               }
+            }
+         );
+      }
    }
-});
-
-
-/**HERO TRANSICION* */
-
-const slides = document.querySelectorAll(".hero-slide");
-
-let actual = 0;
-
-setInterval(() => {
-
-   slides[actual].classList.remove("active");
-
-   actual++;
-
-   if (actual >= slides.length) {
-      actual = 0;
-   }
-
-   slides[actual].classList.add("active");
-
-}, 5000);
+);

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM | Mi perfil</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+   <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+   >
+
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+   >
+
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
+   <link rel="stylesheet" href="../../css/componentes/botones.css">
+   <link rel="stylesheet" href="../../css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../css/componentes/chips.css">
+   <link rel="stylesheet" href="../../css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/organizador/perfil.css">
+</head>
+
+<body>
+
+   <div id="navbar-placeholder"></div>
+   <div id="sidebar-placeholder"></div>
+
+   <main class="dashboard-organizador perfil-organizador-pagina">
+
+      <header class="perfil-encabezado">
+         <div>
+            <span class="perfil-etiqueta">
+               Cuenta del organizador
+            </span>
+
+            <h1>Mi perfil</h1>
+
+            <p>
+               Administrá tus datos personales, fotografía y seguridad.
+            </p>
+         </div>
+      </header>
+
+      <div
+         class="perfil-notificacion"
+         id="perfilNotificacion"
+         aria-live="polite"
+      ></div>
+
+      <section class="perfil-grid">
+
+         <!-- RESUMEN -->
+         <article class="perfil-card perfil-card--principal">
+
+            <div class="perfil-avatar-contenedor">
+
+               <div class="perfil-avatar">
+                  <img
+                     id="fotoPerfil"
+                     src="../../img/avatars/a1.png"
+                     alt="Foto de perfil"
+                  >
+               </div>
+
+               <label
+                  class="perfil-cambiar-foto"
+                  for="inputFotoPerfil"
+                  title="Cambiar foto"
+               >
+                  <i class="fa-solid fa-camera"></i>
+
+                  <input
+                     id="inputFotoPerfil"
+                     type="file"
+                     accept="image/jpeg,image/png,image/webp"
+                     hidden
+                  >
+               </label>
+
+            </div>
+
+            <div class="perfil-identidad">
+               <span>Organizador</span>
+               <h2 id="nombreResumen">Valentina</h2>
+               <p id="correoResumen">valentina@email.com</p>
+            </div>
+
+            <div class="perfil-resumen-datos">
+
+               <div>
+                  <strong id="cantidadTorneosPerfil">0</strong>
+                  <span>Torneos</span>
+               </div>
+
+               <div>
+                  <strong id="cantidadActivosPerfil">0</strong>
+                  <span>Activos</span>
+               </div>
+
+               <div>
+                  <strong id="cantidadParticipantesPerfil">0</strong>
+                  <span>Participantes</span>
+               </div>
+
+            </div>
+
+         </article>
+
+         <!-- DATOS PERSONALES -->
+         <article class="perfil-card">
+
+            <div class="perfil-card-encabezado">
+               <div>
+                  <span class="perfil-card-etiqueta">
+                     Información personal
+                  </span>
+
+                  <h2>Datos de la cuenta</h2>
+               </div>
+
+               <button
+                  class="perfil-boton-secundario"
+                  id="editarPerfil"
+                  type="button"
+               >
+                  <i class="fa-solid fa-pen"></i>
+                  Editar
+               </button>
+            </div>
+
+            <div class="perfil-datos-lista">
+
+               <div class="perfil-dato">
+                  <span>Nombre completo</span>
+                  <strong id="nombreDisplay">Valentina</strong>
+               </div>
+
+               <div class="perfil-dato">
+                  <span>Correo electrónico</span>
+                  <strong id="emailDisplay">valentina@email.com</strong>
+               </div>
+
+               <div class="perfil-dato">
+                  <span>Teléfono</span>
+                  <strong id="telefonoDisplay">Sin definir</strong>
+               </div>
+
+               <div class="perfil-dato">
+                  <span>Organización</span>
+                  <strong id="organizacionDisplay">SGDM</strong>
+               </div>
+
+               <div class="perfil-dato">
+                  <span>Localidad</span>
+                  <strong id="localidadDisplay">Montevideo</strong>
+               </div>
+
+            </div>
+
+         </article>
+
+         <!-- BIOGRAFÍA -->
+         <article class="perfil-card perfil-card--ancha">
+
+            <div class="perfil-card-encabezado">
+               <div>
+                  <span class="perfil-card-etiqueta">
+                     Presentación
+                  </span>
+
+                  <h2>Biografía</h2>
+               </div>
+
+               <button
+                  class="perfil-boton-secundario"
+                  id="editarBiografia"
+                  type="button"
+               >
+                  <i class="fa-solid fa-pen"></i>
+                  Editar
+               </button>
+            </div>
+
+            <p class="perfil-biografia" id="biografiaDisplay">
+               Organizadora de torneos y competencias dentro de SGDM.
+            </p>
+
+         </article>
+
+         <!-- SEGURIDAD -->
+         <article class="perfil-card perfil-card--ancha perfil-card--seguridad">
+
+            <div class="perfil-card-encabezado">
+               <div>
+                  <span class="perfil-card-etiqueta">
+                     Seguridad
+                  </span>
+
+                  <h2>Contraseña y cuenta</h2>
+               </div>
+            </div>
+
+            <div class="perfil-seguridad-acciones">
+
+               <button
+                  class="perfil-accion-seguridad"
+                  id="cambiarPassword"
+                  type="button"
+               >
+                  <span class="perfil-accion-icono">
+                     <i class="fa-solid fa-lock"></i>
+                  </span>
+
+                  <span>
+                     <strong>Cambiar contraseña</strong>
+                     <small>Actualizá la contraseña de acceso.</small>
+                  </span>
+
+                  <i class="fa-solid fa-chevron-right"></i>
+               </button>
+
+               <button
+                  class="perfil-accion-seguridad perfil-accion-seguridad--peligro"
+                  id="eliminarCuenta"
+                  type="button"
+               >
+                  <span class="perfil-accion-icono">
+                     <i class="fa-solid fa-trash"></i>
+                  </span>
+
+                  <span>
+                     <strong>Eliminar cuenta</strong>
+                     <small>Esta acción no se puede deshacer.</small>
+                  </span>
+
+                  <i class="fa-solid fa-chevron-right"></i>
+               </button>
+
+            </div>
+
+         </article>
+
+      </section>
+
+   </main>
+
+   <!-- MODAL EDITAR PERFIL -->
+   <div class="perfil-modal" id="modalEditarPerfil">
+
+      <div class="perfil-modal-contenido">
+
+         <header class="perfil-modal-header">
+            <div>
+               <span>Datos personales</span>
+               <h2>Editar perfil</h2>
+            </div>
+
+            <button
+               class="perfil-modal-cerrar"
+               type="button"
+               data-cerrar-modal="modalEditarPerfil"
+            >
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </header>
+
+         <form class="perfil-formulario" id="formEditarPerfil">
+
+            <div class="perfil-form-grid">
+
+               <div class="perfil-campo perfil-campo--ancho">
+                  <label for="inputNombre">Nombre completo</label>
+
+                  <input
+                     id="inputNombre"
+                     type="text"
+                     minlength="3"
+                     maxlength="50"
+                     required
+                  >
+               </div>
+
+               <div class="perfil-campo">
+                  <label for="inputEmail">Correo electrónico</label>
+
+                  <input
+                     id="inputEmail"
+                     type="email"
+                     maxlength="100"
+                     required
+                  >
+               </div>
+
+               <div class="perfil-campo">
+                  <label for="inputTelefono">Teléfono</label>
+
+                  <input
+                     id="inputTelefono"
+                     type="tel"
+                     minlength="7"
+                     maxlength="20"
+                     required
+                  >
+               </div>
+
+               <div class="perfil-campo">
+                  <label for="inputOrganizacion">Organización</label>
+
+                  <input
+                     id="inputOrganizacion"
+                     type="text"
+                     minlength="2"
+                     maxlength="80"
+                     required
+                  >
+               </div>
+
+               <div class="perfil-campo">
+                  <label for="inputLocalidad">Localidad</label>
+
+                  <input
+                     id="inputLocalidad"
+                     type="text"
+                     minlength="2"
+                     maxlength="80"
+                     required
+                  >
+               </div>
+
+            </div>
+
+            <div class="perfil-modal-acciones">
+
+               <button
+                  class="perfil-boton-cancelar"
+                  type="button"
+                  data-cerrar-modal="modalEditarPerfil"
+               >
+                  Cancelar
+               </button>
+
+               <button
+                  class="perfil-boton-principal"
+                  type="submit"
+               >
+                  Guardar cambios
+               </button>
+
+            </div>
+
+         </form>
+
+      </div>
+
+   </div>
+
+   <!-- MODAL BIOGRAFÍA -->
+   <div class="perfil-modal" id="modalBiografia">
+
+      <div class="perfil-modal-contenido">
+
+         <header class="perfil-modal-header">
+            <div>
+               <span>Presentación</span>
+               <h2>Editar biografía</h2>
+            </div>
+
+            <button
+               class="perfil-modal-cerrar"
+               type="button"
+               data-cerrar-modal="modalBiografia"
+            >
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </header>
+
+         <form class="perfil-formulario" id="formBiografia">
+
+            <div class="perfil-campo">
+               <label for="inputBiografia">Biografía</label>
+
+               <textarea
+                  id="inputBiografia"
+                  minlength="10"
+                  maxlength="300"
+                  rows="7"
+                  required
+               ></textarea>
+
+               <small>
+                  Máximo 300 caracteres.
+               </small>
+            </div>
+
+            <div class="perfil-modal-acciones">
+
+               <button
+                  class="perfil-boton-cancelar"
+                  type="button"
+                  data-cerrar-modal="modalBiografia"
+               >
+                  Cancelar
+               </button>
+
+               <button
+                  class="perfil-boton-principal"
+                  type="submit"
+               >
+                  Guardar biografía
+               </button>
+
+            </div>
+
+         </form>
+
+      </div>
+
+   </div>
+
+   <!-- MODAL CONTRASEÑA -->
+   <div class="perfil-modal" id="modalPassword">
+
+      <div class="perfil-modal-contenido">
+
+         <header class="perfil-modal-header">
+            <div>
+               <span>Seguridad</span>
+               <h2>Cambiar contraseña</h2>
+            </div>
+
+            <button
+               class="perfil-modal-cerrar"
+               type="button"
+               data-cerrar-modal="modalPassword"
+            >
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </header>
+
+         <form class="perfil-formulario" id="formPassword">
+
+            <div class="perfil-campo">
+               <label for="passwordActual">Contraseña actual</label>
+
+               <input
+                  id="passwordActual"
+                  type="password"
+                  required
+               >
+            </div>
+
+            <div class="perfil-campo">
+               <label for="passwordNueva">Nueva contraseña</label>
+
+               <input
+                  id="passwordNueva"
+                  type="password"
+                  minlength="6"
+                  required
+               >
+            </div>
+
+            <div class="perfil-campo">
+               <label for="passwordConfirmar">Confirmar contraseña</label>
+
+               <input
+                  id="passwordConfirmar"
+                  type="password"
+                  minlength="6"
+                  required
+               >
+            </div>
+
+            <div class="perfil-modal-acciones">
+
+               <button
+                  class="perfil-boton-cancelar"
+                  type="button"
+                  data-cerrar-modal="modalPassword"
+               >
+                  Cancelar
+               </button>
+
+               <button
+                  class="perfil-boton-principal"
+                  type="submit"
+               >
+                  Cambiar contraseña
+               </button>
+
+            </div>
+
+         </form>
+
+      </div>
+
+   </div>
+
+   <script src="../../js/organizador/includes.js"></script>
+   <script src="../../js/organizador/sidebar.js"></script>
+   <script src="../../js/organizador/utils.js"></script>
+   <script src="../../js/organizador/perfil.js"></script>
+
+</body>
+
+</html>

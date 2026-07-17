@@ -1,0 +1,612 @@
+/*
+=====================================================
+   MI PERFIL - solo contenido específico de esta
+   página. El layout (sidebar/navbar/wrapper) vive en
+   css/layouts/organizador-layout.css.
+
+   NOTA: js/organizador/perfil.js todavía no abre/cierra
+   los modales (#modalEditarPerfil, #modalBiografia,
+   #modalPassword) ni conecta los botones de seguridad.
+   La convención para cuando se implemente: agregar/quitar
+   la clase "abierto" en el <div class="perfil-modal">
+   correspondiente (mismo patrón que .sidebar-item-desplegable.abierto).
+=====================================================
+*/
+
+.perfil-organizador-pagina {
+   display: grid;
+   gap: 1.25rem;
+}
+
+/* ============================
+   HEADER
+============================= */
+
+.perfil-encabezado {
+   display: flex;
+   flex-direction: column;
+   gap: .3rem;
+   min-width: 0;
+
+   padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-left: 4px solid var(--color-primario);
+   border-radius: var(--radio-lg);
+}
+
+.perfil-etiqueta {
+   color: var(--color-primario);
+   font-weight: 700;
+   letter-spacing: 1.5px;
+   font-size: .75rem;
+}
+
+.perfil-encabezado h1 {
+   font-size: clamp(1.3rem, 6vw, 1.9rem);
+   margin: .3rem 0;
+}
+
+.perfil-encabezado p {
+   color: var(--texto-secundario);
+   font-size: .85rem;
+}
+
+/* ============================
+   NOTIFICACIÓN
+============================= */
+
+.perfil-notificacion:empty {
+   display: none;
+}
+
+.perfil-notificacion {
+   padding: .75rem 1rem;
+   border-radius: 10px;
+   font-size: .85rem;
+}
+
+.perfil-notificacion.error {
+   color: #ff4c4c;
+   background: rgba(255, 76, 76, .1);
+   border: 1px solid rgba(255, 76, 76, .3);
+}
+
+.perfil-notificacion.success {
+   color: var(--color-secundario);
+   background: rgba(48, 245, 210, .1);
+   border: 1px solid rgba(48, 245, 210, .3);
+}
+
+/* ============================
+   GRID DE TARJETAS
+============================= */
+
+.perfil-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1.25rem;
+}
+
+.perfil-card {
+   min-width: 0;
+   padding: 1.25rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-lg);
+}
+
+/* ============================
+   TARJETA: RESUMEN (avatar)
+============================= */
+
+.perfil-card--principal {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   gap: 1rem;
+}
+
+.perfil-avatar-contenedor {
+   position: relative;
+   width: 110px;
+   height: 110px;
+}
+
+.perfil-avatar {
+   width: 110px;
+   height: 110px;
+   border-radius: 50%;
+   overflow: hidden;
+   border: 3px solid var(--color-secundario);
+}
+
+.perfil-avatar img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.perfil-cambiar-foto {
+   position: absolute;
+   bottom: 0;
+   right: 0;
+
+   width: 34px;
+   height: 34px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 50%;
+   border: 2px solid var(--fondo-tarjeta);
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   color: #07101c;
+   cursor: pointer;
+}
+
+.perfil-identidad {
+   min-width: 0;
+}
+
+.perfil-identidad span {
+   display: inline-block;
+   padding: .3rem .8rem;
+   margin-bottom: .5rem;
+
+   border-radius: 999px;
+   background: rgba(48, 245, 210, .12);
+   border: 1px solid rgba(48, 245, 210, .3);
+
+   color: var(--color-secundario);
+   font-size: .68rem;
+   font-weight: 700;
+   letter-spacing: .5px;
+   text-transform: uppercase;
+}
+
+.perfil-identidad h2 {
+   font-size: 1.2rem;
+   margin: .3rem 0;
+   overflow-wrap: break-word;
+}
+
+.perfil-identidad p {
+   color: var(--texto-secundario);
+   font-size: .85rem;
+   overflow-wrap: break-word;
+}
+
+.perfil-resumen-datos {
+   width: 100%;
+   display: grid;
+   grid-template-columns: repeat(3, minmax(0, 1fr));
+   gap: .6rem;
+}
+
+.perfil-resumen-datos > div {
+   min-width: 0;
+   padding: .75rem .4rem;
+   text-align: center;
+
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-md);
+}
+
+.perfil-resumen-datos strong {
+   display: block;
+   font-size: 1.25rem;
+   color: var(--color-primario);
+}
+
+.perfil-resumen-datos span {
+   font-size: .68rem;
+   color: var(--texto-secundario);
+}
+
+/* ============================
+   ENCABEZADO DE TARJETA
+   (reutilizado en Datos, Biografía y Seguridad)
+============================= */
+
+.perfil-card-encabezado {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: .75rem;
+   min-width: 0;
+   margin-bottom: 1.1rem;
+}
+
+.perfil-card-encabezado > div {
+   min-width: 0;
+}
+
+.perfil-card-etiqueta {
+   color: var(--color-primario);
+   font-size: .72rem;
+   font-weight: 700;
+   letter-spacing: 1px;
+   text-transform: uppercase;
+}
+
+.perfil-card-encabezado h2 {
+   font-size: 1.05rem;
+   margin-top: .3rem;
+}
+
+.perfil-boton-secundario {
+   flex-shrink: 0;
+
+   display: flex;
+   align-items: center;
+   gap: .4rem;
+
+   padding: .55rem 1rem;
+   border-radius: 999px;
+   border: 1px solid var(--color-primario);
+   background: rgba(255, 0, 200, .1);
+
+   color: #fff;
+   font: inherit;
+   font-size: .8rem;
+   font-weight: 600;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.perfil-boton-secundario:hover {
+   background: rgba(255, 0, 200, .2);
+}
+
+/* ============================
+   TARJETA: DATOS PERSONALES
+============================= */
+
+.perfil-datos-lista {
+   display: flex;
+   flex-direction: column;
+   gap: .85rem;
+}
+
+.perfil-dato {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: .3rem .75rem;
+   min-width: 0;
+
+   padding: .85rem 1rem;
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .08);
+   border-radius: var(--radio-md);
+}
+
+.perfil-dato span {
+   font-size: .8rem;
+   color: var(--texto-secundario);
+}
+
+.perfil-dato strong {
+   font-size: .9rem;
+   overflow-wrap: break-word;
+}
+
+/* ============================
+   TARJETA: BIOGRAFÍA
+============================= */
+
+.perfil-biografia {
+   color: #d8d8e5;
+   font-size: .9rem;
+   line-height: 1.6;
+   overflow-wrap: break-word;
+}
+
+/* ============================
+   TARJETA: SEGURIDAD
+============================= */
+
+.perfil-card--seguridad .perfil-card-etiqueta {
+   color: var(--color-secundario);
+}
+
+.perfil-seguridad-acciones {
+   display: flex;
+   flex-direction: column;
+   gap: .75rem;
+}
+
+.perfil-accion-seguridad {
+   width: 100%;
+   min-width: 0;
+
+   display: flex;
+   align-items: center;
+   gap: .85rem;
+
+   padding: .85rem;
+   border-radius: var(--radio-md);
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .06);
+
+   color: #fff;
+   font: inherit;
+   text-align: left;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.perfil-accion-seguridad:hover {
+   border-color: var(--color-secundario);
+}
+
+.perfil-accion-icono {
+   flex-shrink: 0;
+   width: 40px;
+   height: 40px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 10px;
+   background: rgba(48, 245, 210, .12);
+   color: var(--color-secundario);
+   font-size: 1rem;
+}
+
+.perfil-accion-seguridad > span {
+   flex: 1;
+   min-width: 0;
+   display: flex;
+   flex-direction: column;
+   gap: .15rem;
+}
+
+.perfil-accion-seguridad strong {
+   font-size: .9rem;
+}
+
+.perfil-accion-seguridad small {
+   color: var(--texto-secundario);
+   font-size: .75rem;
+   overflow-wrap: break-word;
+}
+
+.perfil-accion-seguridad > i:last-child {
+   flex-shrink: 0;
+   color: var(--texto-secundario);
+}
+
+.perfil-accion-seguridad--peligro .perfil-accion-icono {
+   background: rgba(255, 76, 76, .12);
+   color: #ff4c4c;
+}
+
+.perfil-accion-seguridad--peligro:hover {
+   border-color: #ff4c4c;
+}
+
+/* ============================
+   MODALES
+============================= */
+
+.perfil-modal {
+   display: none;
+
+   position: fixed;
+   inset: 0;
+   z-index: 2000;
+
+   align-items: center;
+   justify-content: center;
+
+   padding: 1rem;
+   background: rgba(0, 0, 0, .6);
+   backdrop-filter: blur(4px);
+}
+
+.perfil-modal.abierto {
+   display: flex;
+}
+
+.perfil-modal-contenido {
+   width: 100%;
+   max-width: 520px;
+   max-height: 90vh;
+   overflow-y: auto;
+
+   padding: 1.5rem;
+   border-radius: var(--radio-lg);
+   background: var(--fondo-panel);
+   border: 1px solid var(--borde-suave);
+}
+
+.perfil-modal-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 1rem;
+   min-width: 0;
+   margin-bottom: 1.25rem;
+}
+
+.perfil-modal-header > div {
+   min-width: 0;
+}
+
+.perfil-modal-header span {
+   color: var(--color-secundario);
+   font-size: .72rem;
+   font-weight: 700;
+   text-transform: uppercase;
+}
+
+.perfil-modal-header h2 {
+   font-size: 1.15rem;
+   margin-top: .3rem;
+}
+
+.perfil-modal-cerrar {
+   flex-shrink: 0;
+   width: 36px;
+   height: 36px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border: none;
+   border-radius: 50%;
+   background: rgba(255, 255, 255, .06);
+   color: #fff;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.perfil-modal-cerrar:hover {
+   background: rgba(255, 76, 76, .15);
+   color: #ff4c4c;
+}
+
+.perfil-formulario {
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+}
+
+.perfil-form-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+.perfil-campo {
+   display: flex;
+   flex-direction: column;
+   gap: .4rem;
+   min-width: 0;
+}
+
+.perfil-campo--ancho {
+   grid-column: 1 / -1;
+}
+
+.perfil-campo label {
+   font-size: .82rem;
+   font-weight: 600;
+}
+
+.perfil-campo input,
+.perfil-campo textarea {
+   width: 100%;
+   min-width: 0;
+   padding: .7rem .85rem;
+   border-radius: 10px;
+   border: 1px solid var(--borde-suave);
+   background: rgba(255, 255, 255, .04);
+   color: #fff;
+   font: inherit;
+   font-size: .9rem;
+   outline: none;
+}
+
+.perfil-campo input:focus,
+.perfil-campo textarea:focus {
+   border-color: var(--color-secundario);
+}
+
+.perfil-campo textarea {
+   min-height: 120px;
+   resize: vertical;
+}
+
+.perfil-campo small {
+   color: var(--texto-secundario);
+   font-size: .75rem;
+}
+
+.perfil-modal-acciones {
+   display: flex;
+   flex-direction: column;
+   gap: .75rem;
+}
+
+.perfil-boton-cancelar,
+.perfil-boton-principal {
+   width: 100%;
+   min-height: 46px;
+   padding: .75rem 1.25rem;
+   border-radius: 12px;
+   font: inherit;
+   font-size: .88rem;
+   font-weight: 700;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.perfil-boton-cancelar {
+   color: #fff;
+   background: transparent;
+   border: 1px solid var(--borde-suave);
+}
+
+.perfil-boton-cancelar:hover {
+   border-color: var(--color-secundario);
+}
+
+.perfil-boton-principal {
+   color: #07101c;
+   background: linear-gradient(90deg, var(--color-secundario), #20c4ff);
+   border: 0;
+}
+
+.perfil-boton-principal:hover {
+   transform: translateY(-2px);
+}
+
+/*
+=====================================================
+   TABLET (min-width: 700px)
+=====================================================
+*/
+
+@media (min-width: 700px) {
+
+   .perfil-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .perfil-card--ancha {
+      grid-column: 1 / -1;
+   }
+
+   .perfil-form-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .perfil-seguridad-acciones {
+      flex-direction: row;
+   }
+
+   .perfil-accion-seguridad {
+      width: auto;
+      flex: 1;
+   }
+
+   .perfil-modal-acciones {
+      flex-direction: row;
+      justify-content: flex-end;
+   }
+
+   .perfil-boton-cancelar,
+   .perfil-boton-principal {
+      width: auto;
+   }
+}

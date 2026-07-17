@@ -1,24 +1,29 @@
-/* login */
-
 :root {
-   --primary: #7c5cff;
-   --primary-dark: #6b4df1;
-   --dark: #111827;
-   --gray: #6b7280;
-   --light: #f3f4f6;
-   --white: #ffffff;
-   --border: #d1d5db;
-}
+   --color-primario: #ff00c8;
+   --color-secundario: #30f5d2;
+   --color-violeta: #7c3cff;
 
-/* navbar */
+   --fondo-principal: #070812;
+   --fondo-dashboard: #100714;
+   --fondo-panel: #101322;
+   --fondo-tarjeta: #16182c;
 
-:root {
+   --texto-principal: #ffffff;
+   --texto-secundario: #aaaac2;
 
-   --primary: #7c5cff;
-   --primary-dark: #6948f0;
-   --dark: #111827;
-   --light: #f3f4f6;
-   --gray: #6b7280;
-   --white: #ffffff;
+   --borde-suave: rgba(255, 255, 255, 0.12);
 
+   --radio-sm: 0.625rem;
+   --radio-md: 0.875rem;
+   --radio-lg: 1.125rem;
+
+   --espacio-xs: 0.5rem;
+   --espacio-sm: 0.75rem;
+   --espacio-md: 1rem;
+   --espacio-lg: 1.5rem;
+   --espacio-xl: 2rem;
+
+   --transicion: 0.25s ease;
+
+   --alto-navbar: 4.5rem;
 }

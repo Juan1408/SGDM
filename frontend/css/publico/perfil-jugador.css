@@ -1,0 +1,447 @@
+/* =========================
+   RESET / BASE
+========================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'Poppins', sans-serif;
+   background:
+      radial-gradient(circle at 15% 20%, rgba(0, 255, 220, 0.18), transparent 28%),
+      radial-gradient(circle at 85% 40%, rgba(255, 0, 200, 0.16), transparent 30%),
+      #070812;
+   color: #fff;
+}
+
+/* =========================
+   HEADER PERFIL
+========================= */
+
+.perfil-header {
+   position: relative;
+   min-height: 300px;
+   padding: 35px 8%;
+   background:
+      linear-gradient(
+         180deg,
+         rgba(7, 8, 18, 0.15),
+         rgba(7, 8, 18, 0.85)
+      ),
+      url("../../img/bg.jpg");
+   background-size: cover;
+   background-position: center;
+}
+
+.perfil-breadcrumb {
+   color: #30f5d2;
+   font-size: 22px;
+   font-weight: 500;
+   text-shadow: 0 0 18px rgba(48, 245, 210, 0.65);
+}
+
+.perfil-avatar-box {
+   position: absolute;
+   left: 8%;
+   bottom: -65px;
+   width: 165px;
+   height: 165px;
+   border-radius: 50%;
+   background: #ddd;
+   border: 6px solid #30f5d2;
+   box-shadow: 0 0 28px rgba(48, 245, 210, 0.45);
+   overflow: hidden;
+   z-index: 5;
+}
+
+.perfil-avatar-box img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.perfil-nivel {
+   position: absolute;
+   left: calc(8% + 210px);
+   bottom: 18px;
+   color: #fff;
+   font-size: 22px;
+   font-weight: 700;
+}
+
+/* =========================
+   LAYOUT GENERAL
+========================= */
+
+.perfil-layout {
+   width: 86%;
+   margin: 0 auto;
+   display: grid;
+   grid-template-columns: 240px 1fr;
+   gap: 28px;
+   align-items: start;
+}
+
+.perfil-sidebar {
+   padding-top: 85px;
+   display: flex;
+   flex-direction: column;
+   gap: 28px;
+}
+
+.perfil-card {
+   background: #101010;
+   border: 1px solid rgba(255, 0, 200, 0.22);
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+   padding: 28px 24px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.perfil-datos {
+   text-align: center;
+}
+
+.perfil-datos h2 {
+   font-size: 23px;
+   margin-bottom: 18px;
+}
+
+.perfil-datos p {
+   color: #e4e4f0;
+   font-size: 13px;
+   margin-bottom: 16px;
+}
+
+.perfil-sobre-mi h3,
+.perfil-equipos h3 {
+   font-size: 22px;
+   margin-bottom: 18px;
+}
+
+.perfil-sobre-mi p {
+   color: #d2d2df;
+   font-size: 14px;
+   line-height: 1.55;
+}
+
+.perfil-redes {
+   margin-top: 28px;
+   display: flex;
+   justify-content: center;
+   gap: 12px;
+   background: #050505;
+   padding: 12px;
+}
+
+.perfil-redes a {
+   width: 35px;
+   height: 35px;
+   border-radius: 9px;
+   background: #111;
+   color: #fff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   transition: 0.3s ease;
+}
+
+.perfil-redes a:hover {
+   color: #30f5d2;
+   box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
+}
+
+.equipo-item {
+   display: flex;
+   align-items: center;
+   gap: 18px;
+   margin-bottom: 24px;
+}
+
+.equipo-item img {
+   width: 55px;
+   height: 55px;
+   object-fit: contain;
+}
+
+.equipo-item span {
+   font-weight: 700;
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+.perfil-contenido {
+   padding-top: 28px;
+}
+
+.perfil-stats {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 28px;
+}
+
+.estadisticas-card {
+   min-height: 120px;
+   background: linear-gradient(180deg, #42147d, #1c063d);
+   border-radius: 4px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 0 24px rgba(255, 0, 200, 0.15);
+}
+
+.estadisticas-card strong {
+   font-size: 34px;
+   line-height: 1;
+}
+
+.estadisticas-card span {
+   margin-top: 12px;
+   font-weight: 700;
+}
+
+/* =========================
+   SECCIONES PERFIL
+========================= */
+
+.perfil-section {
+   margin-top: 42px;
+
+   margin-bottom: 0;
+}
+
+.perfil-section-title {
+   width: 100%;
+   padding: 8px 18px;
+   margin-bottom: 28px;
+   font-size: 26px;
+   font-weight: 800;
+   background: linear-gradient(90deg, #ff00c8, #2600ff);
+   color: #fff;
+}
+
+/* =========================
+   TORNEOS
+========================= */
+
+.perfil-torneos-grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 28px;
+}
+
+.perfil-torneo-card {
+   position: relative;
+   height: 150px;
+   overflow: hidden;
+   background: #111;
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+}
+
+.perfil-torneo-card img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0.45;
+}
+
+.perfil-torneo-card div {
+   position: absolute;
+   inset: 0;
+   padding: 28px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.perfil-torneo-card h4 {
+   font-size: 15px;
+   margin-bottom: 18px;
+}
+
+.perfil-torneo-card p {
+   font-size: 12px;
+   font-weight: 700;
+}
+
+.perfil-torneo-card span {
+   margin-left: 18px;
+}
+
+/* =========================
+   TROFEOS
+========================= */
+
+.trofeos-row {
+   display: flex;
+   gap: 14px;
+   flex-wrap: wrap;
+}
+
+.trofeo-card {
+   width: 95px;
+   height: 95px;
+   border-radius: 14px;
+   background: linear-gradient(145deg, #42147d, #10103a);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.18);
+}
+
+.trofeo-card i {
+   color: #ffd000;
+   font-size: 44px;
+   text-shadow: 0 0 18px rgba(255, 208, 0, 0.45);
+}
+
+/* =========================
+   LOGROS
+========================= */
+
+.logros-grid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 18px;
+}
+
+.logro-card {
+   min-height: 74px;
+   padding: 14px;
+   display: grid;
+   grid-template-columns: 48px 1fr auto;
+   align-items: center;
+   gap: 14px;
+   background: linear-gradient(90deg, rgba(48,245,210,.25), rgba(255,0,200,.15));
+   box-shadow: 0 0 18px rgba(255, 0, 200, 0.12);
+}
+
+.logro-card.en-curso {
+   background: linear-gradient(90deg, rgba(255,180,80,.35), rgba(255,0,200,.15));
+}
+
+.logro-card.bloqueado {
+   background: linear-gradient(90deg, rgba(150,150,150,.3), rgba(40,40,40,.8));
+}
+
+.logro-icon {
+   width: 42px;
+   height: 42px;
+   border-radius: 12px;
+   background: #ddd;
+}
+
+.logro-card h4 {
+   font-size: 14px;
+}
+
+.logro-card p {
+   font-size: 12px;
+   color: #eee;
+}
+
+.logro-card span {
+   padding: 4px 8px;
+   border-radius: 999px;
+   background: #fff;
+   color: #30f5d2;
+   font-size: 9px;
+   font-weight: 800;
+}
+
+/* =========================
+   JUEGOS
+========================= */
+
+.juegos-row {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 20px;
+}
+
+.juego-card {
+   position: relative;
+   height: 180px;
+   border-radius: 12px;
+   overflow: hidden;
+   background: #111;
+   box-shadow: 0 0 22px rgba(48, 245, 210, 0.12);
+   margin-bottom: 20%;
+}
+
+.juego-card img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.juego-card::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(to top, rgba(0,0,0,.92), transparent);
+}
+
+.juego-card div {
+   position: absolute;
+   left: 16px;
+   right: 16px;
+   bottom: 14px;
+   z-index: 2;
+}
+
+.juego-card h4 {
+   font-size: 15px;
+}
+
+.juego-card p {
+   font-size: 12px;
+   color: #c9c9dc;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+   .perfil-layout {
+      grid-template-columns: 1fr;
+   }
+
+   .perfil-sidebar {
+      padding-top: 100px;
+   }
+
+   .perfil-stats {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (max-width: 500px) {
+   .perfil-header {
+      min-height: 260px;
+   }
+
+   .perfil-avatar-box {
+      width: 135px;
+      height: 135px;
+   }
+
+   .perfil-nivel {
+      left: calc(8% + 160px);
+      font-size: 18px;
+   }
+
+   .perfil-stats {
+      grid-template-columns: 1fr;
+   }
+}

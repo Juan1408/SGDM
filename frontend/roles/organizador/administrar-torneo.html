@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM | Administrar torneo</title>
+
+   <!-- TIPOGRAFÍA -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+   <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+   >
+
+   <!-- ICONOS -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+   >
+
+   <!-- ESTILOS GENERALES -->
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
+   <link rel="stylesheet" href="../../css/componentes/botones.css">
+   <link rel="stylesheet" href="../../css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../css/componentes/chips.css">
+   <link rel="stylesheet" href="../../css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+
+   <!-- ESTILOS DE ESTA PÁGINA -->
+   <link rel="stylesheet" href="../../css/organizador/administrar-torneo.css">
+   <link rel="stylesheet" href="../../css/organizador/administrar-secciones.css">
+   <link rel="stylesheet" href="../../css/organizador/administrar-responsive.css">
+</head>
+
+<body>
+
+   <!-- NAVBAR REUTILIZABLE -->
+   <header id="navbar-placeholder"></header>
+
+   <!-- SIDEBAR REUTILIZABLE -->
+   <aside id="sidebar-placeholder"></aside>
+
+   <!-- CONTENIDO PRINCIPAL -->
+   <main class="dashboard-organizador administrar-torneo-pagina">
+
+      <a class="back-link" href="mis-torneos.html">
+         <i class="fa-solid fa-arrow-left"></i>
+         Volver a Mis torneos
+      </a>
+
+      <!-- ENCABEZADO DEL TORNEO -->
+      <header class="torneo-header">
+
+         <div>
+            <span class="torneo-header__label">
+               Administrar torneo
+            </span>
+
+            <h1 id="nombreTorneo">
+               Cargando torneo...
+            </h1>
+
+            <p id="disciplinaTorneo">
+               Seleccioná una opción para administrar la competencia.
+            </p>
+         </div>
+
+         <span
+            class="estado"
+            id="estadoTorneo"
+         ></span>
+
+      </header>
+
+      <!-- MENÚ INTERNO -->
+    <nav class="torneo-menu">
+
+   <button
+      class="torneo-menu__button active"
+      type="button"
+      data-section="informacion"
+   >
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Información</span>
+   </button>
+
+   <div class="torneo-menu__group">
+
+      <button
+         class="torneo-menu__button torneo-menu__toggle"
+         type="button"
+      >
+         <i class="fa-solid fa-users"></i>
+         <span>Participantes</span>
+         <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div class="torneo-menu__submenu">
+
+         <button
+            type="button"
+            data-section="participantes"
+         >
+            Lista de participantes
+         </button>
+
+         <button
+            type="button"
+            data-section="solicitudes"
+         >
+            Solicitudes
+         </button>
+
+      </div>
+
+   </div>
+
+   <div class="torneo-menu__group">
+
+      <button
+         class="torneo-menu__button torneo-menu__toggle"
+         type="button"
+      >
+         <i class="fa-solid fa-sitemap"></i>
+         <span>Competencia</span>
+         <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div class="torneo-menu__submenu">
+
+         <button
+            type="button"
+            data-section="fixture"
+         >
+            Fixture
+         </button>
+
+         <button
+            type="button"
+            data-section="resultados"
+         >
+            Resultados
+         </button>
+
+         <button
+            type="button"
+            data-section="posiciones"
+         >
+            Posiciones
+         </button>
+
+         <button
+            type="button"
+            data-section="cronograma"
+         >
+            Cronograma
+         </button>
+
+      </div>
+
+   </div>
+
+   <div class="torneo-menu__group">
+
+      <button
+         class="torneo-menu__button torneo-menu__toggle"
+         type="button"
+      >
+         <i class="fa-solid fa-gear"></i>
+         <span>Configuración</span>
+         <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div class="torneo-menu__submenu">
+
+         <button
+            type="button"
+            data-section="editar"
+         >
+            Editar torneo
+         </button>
+
+      </div>
+
+   </div>
+
+</nav>
+
+      <!-- CONTENIDO DINÁMICO -->
+      <section
+         class="torneo-panel" id="contenidoTorneo" aria-live="polite">
+      </section>
+
+   </main>
+
+   <!-- CARGA DEL NAVBAR Y SIDEBAR -->
+   <script src="../../js/organizador/includes.js"></script>
+   <script src="../../js/organizador/sidebar.js"></script>
+
+   <!-- DATOS COMPARTIDOS -->
+   <script src="../../js/organizador/utils.js"></script>
+
+   <!-- DEPENDENCIAS DE ADMINISTRAR TORNEO -->
+   <script src="../../js/organizador/torneoValidaciones.js"></script>
+   <script src="../../js/organizador/torneoVista.js"></script>
+
+   <!-- CONTROLADOR PRINCIPAL: SIEMPRE ÚLTIMO -->
+   <script src="../../js/organizador/torneoCompetencia.js"></script>
+   <script src="../../js/organizador/torneoParticipantes.js"></script>
+   <script src="../../js/organizador/administrarTorneo.js"></script>
+
+</body>
+
+</html>

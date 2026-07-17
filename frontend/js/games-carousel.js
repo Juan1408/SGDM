@@ -104,7 +104,7 @@ function renderTable(data) {
         <span>${item.nombre}</span>
       </div>
       <span class="rk-game">${item.juego}</span>
-      <span class="rk-matches">${item.partidas}</span>
+      <span class="rk-encuentros">${item.partidas}</span>
       <span class="rk-points">${item.puntos.toLocaleString("es-UY")}</span>
     </div>
   `).join("");
