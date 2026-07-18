@@ -182,6 +182,7 @@
    border: none;
    cursor: pointer;
    padding: 5px;
+   position: relative;
    z-index: 1010;
 }
 
