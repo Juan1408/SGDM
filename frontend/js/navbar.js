@@ -1,22 +1,93 @@
-const menuToggle = document.getElementById('menu-toggle');
-const navLinks = document.getElementById('nav-links');
+"use strict";
 
-menuToggle.addEventListener('click', () => {
-   navLinks.classList.toggle('active');
-});
+document.addEventListener(
+   "navbarPublicoListo",
+   () => {
+      const menuToggle =
+         document.getElementById("menu-toggle");
 
-/*  DROPDOWN  */
+      const navLinks =
+         document.getElementById("nav-links");
 
-const dropdown = document.querySelector(".dropdown");
-const dropdownBtn = document.getElementById("tournamentsDropdown");
+      const desplegable =
+         document.querySelector(".desplegable");
 
-dropdownBtn.addEventListener("click", (e) => {
-   e.stopPropagation();
-   dropdown.classList.toggle("open");
-});
+      const desplegableBtn =
+         document.getElementById(
+            "torneo-desplegable"
+         );
 
-document.addEventListener("click", (e) => {
-   if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove("open");
+      /*
+      ================================================
+         MENÚ HAMBURGUESA
+      ================================================
+      */
+
+      if (menuToggle && navLinks) {
+         menuToggle.addEventListener(
+            "click",
+            () => {
+               const abierto =
+                  navLinks.classList.toggle(
+                     "active"
+                  );
+
+               menuToggle.classList.toggle(
+                  "active",
+                  abierto
+               );
+
+               menuToggle.setAttribute(
+                  "aria-expanded",
+                  String(abierto)
+               );
+            }
+         );
+      }
+
+      /*
+      ================================================
+         DESPLEGABLE DE TORNEOS
+      ================================================
+      */
+
+      if (desplegable && desplegableBtn) {
+         desplegableBtn.addEventListener(
+            "click",
+            (evento) => {
+               evento.stopPropagation();
+
+               const abierto =
+                  desplegable.classList.toggle(
+                     "open"
+                  );
+
+               desplegableBtn.setAttribute(
+                  "aria-expanded",
+                  String(abierto)
+               );
+            }
+         );
+
+         document.addEventListener(
+            "click",
+            (evento) => {
+               if (
+                  !desplegable.contains(
+                     evento.target
+                  )
+               ) {
+                  desplegable.classList.remove(
+                     "open"
+                  );
+
+                  desplegableBtn.setAttribute(
+                     "aria-expanded",
+                     "false"
+                  );
+               }
+            }
+         );
+      }
    }
-});
+);

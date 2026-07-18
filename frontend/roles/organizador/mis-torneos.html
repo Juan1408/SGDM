@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>SGDM - Mis Torneos</title>
+
+   <!-- Swiper.js -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+   <!-- CSS base y tokens -->
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
+
+   <!-- Componentes compartidos -->
+   <link rel="stylesheet" href="../../css/componentes/botones.css">
+   <link rel="stylesheet" href="../../css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../css/componentes/chips.css">
+   <link rel="stylesheet" href="../../css/componentes/carruseles.css">
+
+   <!-- Layout compartido de organizador -->
+   <link rel="stylesheet" href="../../css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+
+   <!-- Página específica -->
+   <link rel="stylesheet" href="../../css/organizador/mis-torneos.css">
+
+   <!-- Font Awesome -->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+   />
+
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+   <header id="navbar-placeholder"></header>
+   <aside id="sidebar-placeholder"></aside>
+
+   <main class="dashboard-organizador">
+
+      <header class="dashboard-header">
+
+         <div>
+            <p class="dashboard-tag">PANEL DEL ORGANIZADOR</p>
+            <h2>Mis Torneos</h2>
+         </div>
+
+      </header>
+
+
+      <!------------------------------------------->
+      <!------- MIS TORNEOS ----------------------->
+      <!------------------------------------------->
+
+      <section class="torneos-page">
+
+         <div class="torneos-page__listado">
+
+            <div class="panel-header">
+               <h3>Torneos creados</h3>
+               <a href="crear-torneo.html">Crear torneo</a>
+            </div>
+
+            <div class="torneos-lista" id="torneosLista"></div>
+
+         </div>
+
+         <article class="torneo-seleccionado" id="torneoSeleccionado"></article>
+
+      </section>
+
+   </main>
+
+   <script src="../../js/organizador/includes.js"></script>
+   <script src="../../js/organizador/sidebar.js"></script>
+   <script src="../../js/organizador/utils.js"></script>
+   <script src="../../js/organizador/misTorneos.js"></script>
+
+</body>
+
+</html>

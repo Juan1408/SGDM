@@ -4,7 +4,7 @@ CODIGO VIEJO
 
    <header class="navbar">
 
-      <div class="logo-container">
+      <div class="logo-contenedor">
          <i class="fa-solid fa-trophy"></i>
          <h1>SGDM</h1>
       </div>
@@ -13,16 +13,16 @@ CODIGO VIEJO
 
          <a href="#">Inicio</a>
          
-         <!-- DROPDOWN TORNEOS -->
+         <!-- desplegable TORNEOS -->
 
-<div class="dropdown">
+<div class="desplegable">
 
-   <button class="dropdown-btn">
+   <button class="boton-desplegable">
       Torneos
       <i class="fa-solid fa-chevron-down"></i>
    </button>
 
-   <div class="dropdown-content">
+   <div class="contenido-desplegable">
       <a href="#">Todos los torneos</a>
       <a href="#">Liga</a>
       <a href="#">Eliminación directa</a>
@@ -39,7 +39,7 @@ CODIGO VIEJO
                <i class="fa-solid fa-right-to-bracket"></i>
             </a>
 
-            <a href="login.html" class="register-btn">
+            <a href="login.html" class="boton-registro">
                Registrarse
             </a>
          </div>
@@ -59,9 +59,9 @@ CODIGO VIEJO
 
       <div class="hero-overlay"></div>
 
-      <div class="hero-content">
+      <div class="hero-contenido">
 
-         <p class="hero-subtitle">
+         <p class="hero-subtitulo">
             Sistema de Gestión de Deportes y eSports
          </p>
 
@@ -70,12 +70,12 @@ CODIGO VIEJO
             <span>Torneos Profesionales</span>
          </h2>
 
-         <p class="hero-description">
+         <p class="hero-descripcion">
             Administra competiciones, rankings, participantes y resultados
             desde una sola plataforma moderna.
          </p>
 
-         <div class="hero-buttons">
+         <div class="hero-botones">
 
 
             <a href="#" class="primary-btn">
@@ -137,13 +137,13 @@ CSS---------------------------------
    background: linear-gradient(to bottom, transparent, #070812 95%);
 }
 
-.hero-content {
+.hero-contenido {
    position: relative;
    z-index: 2;
    max-width: 760px;
 }
 
-.hero-subtitle {
+.hero-subtitulo {
    color: #30f5d2;
    font-weight: 600;
    letter-spacing: 2px;
@@ -152,21 +152,21 @@ CSS---------------------------------
    text-shadow: 0 0 18px rgba(48, 245, 210, 0.7);
 }
 
-.hero-content h2 {
+.hero-contenido h2 {
    font-size: clamp(42px, 7vw, 86px);
    line-height: 1.05;
    font-weight: 800;
    margin-bottom: 24px;
 }
 
-.hero-content h2 span {
+.hero-contenido h2 span {
    display: block;
    color: transparent;
    -webkit-text-stroke: 1.5px #fff;
    text-shadow: 0 0 28px rgba(255, 0, 200, 0.55);
 }
 
-.hero-description {
+.hero-descripcion {
    max-width: 580px;
    color: #c9c9dc;
    font-size: 17px;
@@ -174,7 +174,7 @@ CSS---------------------------------
    margin-bottom: 34px;
 }
 
-.hero-buttons {
+.hero-botones {
    display: flex;
    gap: 18px;
    flex-wrap: wrap;
@@ -222,32 +222,32 @@ CSS---------------------------------
       text-align: center;
    }
 
-   .hero-content {
+   .hero-contenido {
       width: 100%;
       max-width: 520px;
       align-items: center;
    }
 
-   .hero-subtitle {
+   .hero-subtitulo {
       font-size: 13px;
       letter-spacing: 2px;
    }
 
-   .hero-content h2 {
+   .hero-contenido h2 {
       font-size: 42px;
       line-height: 1.15;
    }
 
-   .hero-content h2 span {
+   .hero-contenido h2 span {
       display: block;
    }
 
-   .hero-description {
+   .hero-descripcion {
       font-size: 15px;
       line-height: 1.7;
    }
 
-   .hero-buttons {
+   .hero-botones {
       justify-content: center;
       flex-wrap: wrap;
    }
@@ -259,15 +259,15 @@ CSS---------------------------------
       padding: 120px 5% 60px;
    }
 
-   .hero-content h2 {
+   .hero-contenido h2 {
       font-size: 34px;
    }
 
-   .hero-description {
+   .hero-descripcion {
       font-size: 14px;
    }
 
-   .hero-buttons {
+   .hero-botones {
       flex-direction: column;
       width: 100%;
    }
@@ -326,3 +326,91 @@ CSS---------------------------------
    grid-template-columns: repeat(3, 1fr);
    gap: 36px;
 }
+
+NAVBAR 13/07/2026
+
+¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.getElementById('nav-links');
+const desplegable = document.querySelector(".desplegable");
+const desplegableBtn = document.getElementById("torneo-desplegable");
+
+// Abrir y cerrar el menú lateral + Animación de la hamburguesa
+menuToggle.addEventListener('click', () => {
+   menuToggle.classList.toggle('active');
+   navLinks.classList.toggle('active');
+});
+
+// Control del desplegable
+desplegableBtn.addEventListener("click", (e) => {
+   e.stopPropagation();
+   desplegable.classList.toggle("open");
+});
+
+// Cerrar el desplegable al hacer clic en cualquier otra parte
+document.addEventListener("click", (e) => {
+   if (!desplegable.contains(e.target)) {
+      desplegable.classList.remove("open");
+   }
+});
+
+
+/**HERO TRANSICION* */
+
+const slides = document.querySelectorAll(".hero-slide");
+
+let actual = 0;
+
+setInterval(() => {
+
+   slides[actual].classList.remove("active");
+
+   actual++;
+
+   if (actual >= slides.length) {
+      actual = 0;
+   }
+
+   slides[actual].classList.add("active");
+
+}, 5000);
+
+/**SIDEBAR TOGGLE ORGANIZADOR */
+
+document.addEventListener('DOMContentLoaded', () => {
+   /* SUBMENÚS DEL SIDEBAR */
+
+const botonesDesplegables = document.querySelectorAll(
+   ".sidebar-desplegable-btn"
+);
+
+botonesDesplegables.forEach((boton) => {
+   boton.addEventListener("click", () => {
+      const item = boton.closest(".sidebar-item-desplegable");
+
+      if (!item) {
+         return;
+      }
+
+      item.classList.toggle("abierto");
+   });
+});
+   const toggle = document.getElementById('sidebar-toggle');
+   const sidebar = document.querySelector('.dashboard-sidebar');
+
+   if (toggle && sidebar) {
+      toggle.addEventListener('click', (e) => {
+         e.stopPropagation();
+         sidebar.classList.toggle('expanded');
+      });
+
+      // cierra al tocar fuera del sidebar
+      document.addEventListener('click', (e) => {
+         if (sidebar.classList.contains('expanded') && !sidebar.contains(e.target)) {
+            sidebar.classList.remove('expanded');
+         }
+      });
+   }
+});
+

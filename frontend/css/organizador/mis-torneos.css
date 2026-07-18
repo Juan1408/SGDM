@@ -1,0 +1,253 @@
+/*
+=====================================================
+   MIS TORNEOS - solo contenido específico de esta
+   página. El layout (sidebar/navbar/wrapper) vive en
+   css/layouts/organizador-layout.css.
+
+   Las clases .torneo-lista-card, .estado, .categoria
+   son generadas por js/organizador/misTorneos.js -
+   no cambiar sus nombres sin actualizar ese archivo.
+=====================================================
+*/
+
+.torneos-page {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1.25rem;
+   align-items: start;
+}
+
+/* ============================
+   COLUMNA IZQUIERDA - LISTADO
+============================= */
+
+.torneos-page__listado {
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border-radius: var(--radio-lg);
+   border: 1px solid var(--borde-suave);
+}
+
+.torneos-lista {
+   display: flex;
+   flex-direction: column;
+   gap: .75rem;
+   max-height: 420px;
+   overflow-y: auto;
+   padding-right: .25rem;
+}
+
+.torneos-lista::-webkit-scrollbar {
+   width: 6px;
+}
+
+.torneos-lista::-webkit-scrollbar-thumb {
+   background: rgba(48, 245, 210, .35);
+   border-radius: 20px;
+}
+
+.torneo-lista-card {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: .75rem;
+
+   width: 100%;
+   text-align: left;
+
+   padding: .9rem 1rem;
+   border-radius: var(--radio-md);
+
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .07);
+   border-left: 4px solid transparent;
+
+   color: #fff;
+   font-family: inherit;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.torneo-lista-card > div {
+   min-width: 0;
+}
+
+.torneo-lista-card h3 {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.torneo-lista-card:hover {
+   border-color: rgba(48, 245, 210, .4);
+   background: rgba(48, 245, 210, .06);
+}
+
+.torneo-lista-card.seleccionado {
+   border-color: var(--color-secundario);
+   background: linear-gradient(90deg, rgba(48,245,210,.14), rgba(255,0,200,.10));
+}
+
+.torneo-lista-card h3 {
+   font-size: .95rem;
+   margin-bottom: .2rem;
+}
+
+.torneo-lista-card p {
+   font-size: .8rem;
+   color: var(--texto-secundario);
+}
+
+/* franja de color según categoría (deportes/esports/mesa) */
+.torneo-lista-card.deportes { border-left-color: #20c4ff; }
+.torneo-lista-card.esports  { border-left-color: var(--color-primario); }
+.torneo-lista-card.mesa     { border-left-color: #ffb400; }
+
+/* ============================
+   ESTADOS (chips de estado de torneo)
+============================= */
+
+.estado {
+   display: inline-block;
+   padding: .3rem .75rem;
+   border-radius: 999px;
+   font-size: .68rem;
+   font-weight: 800;
+   white-space: nowrap;
+}
+
+.estado.abierta {
+   color: var(--color-secundario);
+   background: rgba(48, 245, 210, .14);
+}
+
+.estado.curso {
+   color: #ffb400;
+   background: rgba(255, 180, 0, .14);
+}
+
+.estado.finalizado {
+   color: #ff4c4c;
+   background: rgba(255, 76, 76, .14);
+}
+
+/* ============================
+   COLUMNA DERECHA - DETALLE
+============================= */
+
+.torneo-seleccionado {
+   padding: 1.25rem;
+   background: var(--fondo-tarjeta);
+   border-radius: var(--radio-lg);
+   border: 1px solid var(--borde-suave);
+   min-height: 220px;
+}
+
+.torneo-seleccionado__header {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: center;
+   gap: .5rem;
+   margin-bottom: 1rem;
+}
+
+.categoria {
+   padding: .35rem .85rem;
+   border-radius: 999px;
+   font-size: .72rem;
+   font-weight: 800;
+   background: rgba(255, 255, 255, .06);
+   color: #d8d8e5;
+}
+
+.categoria.deportes { color: #20c4ff; background: rgba(32,196,255,.14); }
+.categoria.esports  { color: var(--color-primario); background: rgba(255,0,200,.14); }
+.categoria.mesa     { color: #ffb400; background: rgba(255,180,0,.14); }
+
+.torneo-seleccionado h2 {
+   font-size: 1.4rem;
+   margin-bottom: 1.25rem;
+}
+
+.torneo-seleccionado__datos {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: .85rem;
+   margin-bottom: 1.5rem;
+}
+
+.torneo-seleccionado__datos > div {
+   padding: .85rem;
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .06);
+   border-radius: var(--radio-md);
+}
+
+.torneo-seleccionado__datos span {
+   display: block;
+   font-size: .72rem;
+   color: var(--texto-secundario);
+   margin-bottom: .3rem;
+}
+
+.torneo-seleccionado__datos strong {
+   font-size: 1.05rem;
+   color: #fff;
+}
+
+.torneo-seleccionado__acciones a {
+   display: inline-flex;
+   align-items: center;
+   gap: .6rem;
+
+   width: 100%;
+   justify-content: center;
+
+   padding: .85rem 1.4rem;
+   border-radius: var(--radio-md);
+
+   background: linear-gradient(90deg, var(--color-secundario), #20c4ff);
+   color: #07101c;
+   font-weight: 800;
+   text-decoration: none;
+   transition: var(--transicion);
+}
+
+.torneo-seleccionado__acciones a:hover {
+   filter: brightness(1.08);
+}
+
+/*
+=====================================================
+   TABLET (min-width: 700px)
+=====================================================
+*/
+
+@media (min-width: 700px) {
+
+   .torneo-seleccionado__datos {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+
+   .torneo-seleccionado__acciones a {
+      width: auto;
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 1000px)
+=====================================================
+*/
+
+@media (min-width: 1000px) {
+
+   .torneos-page {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+   }
+
+   .torneos-lista {
+      max-height: 560px;
+   }
+}
