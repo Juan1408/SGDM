@@ -296,11 +296,7 @@
 /* =========================================
    DISEÑO RESPONSIVO (ESCRITORIO - TABLET)
    ========================================= */
-/* 
-  AQUÍ ESTÁ LA MAGIA DEL MOBILE-FIRST:
-  Le decimos al navegador: "Si la pantalla tiene al menos 768px de ancho 
-  (tablets grandes y monitores), aplica estas mejoras al diseño".
-*/
+
 @media (min-width: 768px) {
   
   /* 1. Ocultar la barra del menú hamburguesa */
