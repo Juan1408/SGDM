@@ -35,7 +35,7 @@
    justify-content: center;
 
    border-radius: var(--radio-md);
-   background: rgba(48, 245, 210, 0.12);
+   background: rgba(0, 255, 238, 0.12);
    color: var(--color-secundario);
 }
 

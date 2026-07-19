@@ -1,5 +1,8 @@
 /* ==========================================================================
    ESTILOS GENERALES Y CONTENEDOR
+   Mobile first: la base es el menú hamburguesa /
+   panel lateral. Desde 881px se muestra el menú
+   horizontal completo (igual que antes).
    ========================================================================== */
 * {
    margin: 0;
@@ -14,9 +17,11 @@
    top: 0;
    left: 0;
    z-index: 999;
+
    display: flex;
    align-items: center;
    justify-content: center;
+
    background: rgba(5, 5, 12, 0.85);
    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
    backdrop-filter: blur(14px);
@@ -25,7 +30,9 @@
 .navbar-contenedor {
    width: 100%;
    max-width: 1600px;
-   padding: 0 2rem;
+   min-width: 0;
+   padding: 0 1.25rem;
+
    display: flex;
    align-items: center;
    justify-content: space-between;
@@ -36,12 +43,14 @@
    display: flex;
    align-items: center;
    gap: 9px;
+   min-width: 0;
    color: #fff;
+   flex-shrink: 0;
 }
 
 .logo-contenedor i {
-   color: #30f5d2;
-   filter: drop-shadow(0 0 8px rgba(48, 245, 210, 0.6));
+   color: #00FFEE;
+   filter: drop-shadow(0 0 8px rgba(0, 255, 238, 0.6));
 }
 
 .logo-contenedor h1 {
@@ -50,64 +59,132 @@
    letter-spacing: .5px;
 }
 
-/* --- MENÚ DE ENLACES (ESCRITORIO) --- */
-.navbar-menu {
-   display: flex;
-   align-items: center;
-   gap: 1.5rem;
-   list-style: none;
+/* --- BOTÓN HAMBURGUESA (visible por defecto en mobile) --- */
+.navbar-toggle {
+   display: block;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 5px;
+   z-index: 1010;
+   flex-shrink: 0;
 }
 
-.navbar-menu li a {
+.bar {
+   display: block;
+   width: 25px;
+   height: 3px;
+   margin: 5px auto;
+   background-color: #fff;
+   transition: all 0.3s ease-in-out;
+   border-radius: 2px;
+}
+
+/* Transformación de Hamburguesa a "X" */
+.navbar-toggle.active .bar:nth-child(2) {
+   opacity: 0;
+}
+
+.navbar-toggle.active .bar:nth-child(1) {
+   transform: translateY(8px) rotate(45deg);
+   background-color: #00FFEE;
+}
+
+.navbar-toggle.active .bar:nth-child(3) {
+   transform: translateY(-8px) rotate(-45deg);
+   background-color: #00FFEE;
+}
+
+/* --- MENÚ (panel lateral en mobile) --- */
+.navbar-menu {
+   position: fixed;
+   top: 0;
+   right: -100%; /* Escondido por defecto a la derecha */
+
+   width: min(270px, 80vw);
+   height: 100vh;
+   max-width: 100vw;
+
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 1.8rem;
+
+   padding: 100px 2rem 40px;
+   background: rgba(7, 8, 18, 0.96);
+   backdrop-filter: blur(12px);
+   border-left: 1px solid rgba(245, 17, 203, 0.2);
+   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+
+   list-style: none;
+   transition: right 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+   z-index: 1005;
+}
+
+.navbar-menu.active {
+   right: 0;
+}
+
+.navbar-menu li {
+   width: 100%;
+}
+
+.navbar-menu li a,
+.boton-desplegable {
+   display: block;
+   width: 100%;
+   text-align: left;
+
    text-decoration: none;
    color: #fff;
-   font-size: 15px;
-   font-weight: 500;
-   padding: 6px 12px;
+   font-size: 17px;
+   font-weight: 600;
+   padding: 8px 0;
    transition: all 0.3s ease;
 }
 
-.navbar-menu li a:hover {
-   color: #30f5d2;
+.navbar-menu .auth-links a {
+   width: auto;
 }
 
-/* --- desplegable (TORNEOS) --- */
+.navbar-menu li a:hover {
+   color: #00FFEE;
+}
+
+/* --- desplegable (TORNEOS) en mobile: acordeón dentro del panel --- */
 .desplegable {
    position: relative;
+   width: 100%;
 }
 
 .boton-desplegable {
    background: transparent;
    border: none;
-   color: #fff;
    font-family: inherit;
-   font-size: 15px;
-   font-weight: 500;
    cursor: pointer;
    display: flex;
    align-items: center;
    gap: 6px;
-   padding: 6px 12px;
-   transition: 0.3s ease;
 }
 
 .boton-desplegable:hover {
-   color: #30f5d2;
+   color: #00FFEE;
 }
 
 .contenido-desplegable {
-   position: absolute;
-   top: calc(100% + 10px);
-   left: 50%;
-   transform: translateX(-50%);
-   min-width: 220px;
-   padding: 12px;
-   background: rgba(12, 12, 28, 0.98);
-   border: 1px solid rgba(255, 0, 200, 0.35);
-   border-radius: 14px;
-   box-shadow: 0 0 25px rgba(255, 0, 200, 0.25);
+   position: static;
+   width: 100%;
+   transform: none;
+
    display: none;
-   z-index: 1000;
+   margin-top: 5px;
+   padding: 6px;
+
+   background: rgba(255, 255, 255, 0.03);
+   border: 1px solid rgba(245, 17, 203, 0.15);
+   border-radius: 14px;
+   box-shadow: none;
 }
 
 .contenido-desplegable::before {
@@ -130,11 +207,10 @@
 }
 
 .contenido-desplegable a:hover {
-   background: rgba(48, 245, 210, 0.12) !important;
-   color: #30f5d2 !important;
+   background: rgba(0, 255, 238, 0.12) !important;
+   color: #00FFEE !important;
 }
 
-.desplegable:hover .contenido-desplegable,
 .desplegable.open .contenido-desplegable {
    display: block;
 }
@@ -143,137 +219,121 @@
    transform: rotate(180deg);
 }
 
-/* --- BOTONES AUTH --- */
+/* --- BOTONES AUTH (dentro del panel en mobile) --- */
 .auth-links {
+   width: 100%;
    display: flex;
    align-items: center;
-   gap: 12px;
+   gap: 15px;
+
+   padding-top: 20px;
+   border-top: 1px solid rgba(255, 255, 255, 0.08);
+   justify-content: flex-start;
 }
 
 .login-link {
    width: 34px;
    height: 34px;
+   flex-shrink: 0;
+
    display: flex;
    align-items: center;
    justify-content: center;
+
    border-radius: 50%;
-   background: linear-gradient(135deg, #30f5d2, #ff00c8);
-   box-shadow: 0 0 10px rgba(255, 0, 200, 0.3);
+   background: linear-gradient(135deg, #00FFEE, #F511CB);
+   box-shadow: 0 0 10px rgba(245, 17, 203, 0.3);
 }
 
 .boton-registro {
    font-size: 14px;
    font-weight: 600;
-   border: 1px solid rgba(255, 0, 200, 0.4);
-   background: rgba(255, 0, 200, 0.05);
+   border: 1px solid rgba(245, 17, 203, 0.4);
+   background: rgba(245, 17, 203, 0.05);
    border-radius: 6px;
    padding: 8px 16px !important;
 }
 
 .boton-registro:hover {
-   background: #ff00c8;
-   box-shadow: 0 0 15px rgba(255, 0, 200, 0.5);
+   background: #F511CB;
+   box-shadow: 0 0 15px rgba(245, 17, 203, 0.5);
 }
 
-/* --- DISEÑO BOTÓN HAMBURGUESA --- */
-.navbar-toggle {
-   display: none;
-   background: transparent;
-   border: none;
-   cursor: pointer;
-   padding: 5px;
-   z-index: 1010;
-}
-
-.bar {
-   display: block;
-   width: 25px;
-   height: 3px;
-   margin: 5px auto;
-   background-color: #fff;
-   transition: all 0.3s ease-in-out;
-   border-radius: 2px;
-}
 
 /* ==========================================================================
-   MODO RESPONSIVO: ESTILO BARRA LATERAL (880PX)
+   ESCRITORIO (min-width: 881px)
+   Menú horizontal completo, sin panel lateral.
    ========================================================================== */
-@media (max-width: 880px) {
+
+@media (min-width: 881px) {
+
+   .navbar-contenedor {
+      padding: 0 2rem;
+   }
+
    .navbar-toggle {
-      display: block;
+      display: none;
    }
 
-   /* Transformación de Hamburguesa a "X" */
-   .navbar-toggle.active .bar:nth-child(2) {
-      opacity: 0;
-   }
-
-   .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
-      background-color: #30f5d2; /* Cambia a cian activa */
-   }
-
-   .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
-      background-color: #30f5d2;
-   }
-
-   /* Panel Lateral Derecho */
    .navbar-menu {
-      position: fixed;
-      top: 0;
-      right: -100%; /* Escondido por defecto a la derecha */
-      width: 270px;
-      height: 100vh;
-      background: rgba(7, 8, 18, 0.96);
-      backdrop-filter: blur(12px);
-      border-left: 1px solid rgba(255, 0, 200, 0.2);
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: 100px 2rem 40px 2rem; /* El padding top evita que el logo/X tapen los links */
-      gap: 1.8rem;
-      transition: right 0.4s cubic-bezier(0.1, 1, 0.1, 1);
-      z-index: 1005;
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-   }
+      position: static;
+      width: auto;
+      height: auto;
+      max-width: none;
 
-   /* Despliegue del menú */
-   .navbar-menu.active {
-      right: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+
+      padding: 0;
+      background: transparent;
+      backdrop-filter: none;
+      border-left: none;
+      box-shadow: none;
    }
 
    .navbar-menu li {
-      width: 100%;
+      width: auto;
    }
 
-   .navbar-menu li a, 
+   .navbar-menu li a,
    .boton-desplegable {
-      font-size: 17px;
-      font-weight: 600;
-      width: 100%;
+      display: flex;
+      align-items: center;
+      width: auto;
       text-align: left;
-      padding: 8px 0;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 6px 12px;
    }
 
-   /* desplegable adaptado a la barra lateral */
    .contenido-desplegable {
-      position: static;
-      transform: none;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 0, 200, 0.15);
-      box-shadow: none;
-      margin-top: 5px;
-      padding: 6px;
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      display: none;
+      width: auto;
+      min-width: 220px;
+      margin-top: 0;
+      padding: 12px;
+
+      background: rgba(12, 12, 28, 0.98);
+      border: 1px solid rgba(245, 17, 203, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(245, 17, 203, 0.25);
    }
 
-   /* Botones Auth en la parte inferior del menú móvil */
+   .desplegable:hover .contenido-desplegable,
+   .desplegable.open .contenido-desplegable {
+      display: block;
+   }
+
    .auth-links {
-      width: 100%;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      justify-content: flex-start;
-      gap: 15px;
+      width: auto;
+      padding-top: 0;
+      border-top: none;
    }
 }

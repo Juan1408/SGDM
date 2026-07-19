@@ -50,7 +50,7 @@
    width: 96px;
    height: 96px;
    border-radius: 50%;
-   background: linear-gradient(135deg, #30f5d2, #ff00c8);
+   background: linear-gradient(135deg, #00FFEE, #F511CB);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -60,21 +60,21 @@
    z-index: 2;
    flex-shrink: 0;
    box-shadow:
-      0 0 25px rgba(48, 245, 210, 0.45),
-      0 0 45px rgba(255, 0, 200, 0.25);
+      0 0 25px rgba(0, 255, 238, 0.45),
+      0 0 45px rgba(245, 17, 203, 0.25);
 }
 
 .vertical-carousel-body {
    width: 100%;
    min-height: 122px;
    background: rgba(22, 22, 45, 0.92);
-   border: 1px solid rgba(255, 0, 200, 0.35);
+   border: 1px solid rgba(245, 17, 203, 0.35);
    border-radius: 18px;
    padding: 22px 24px 22px 78px;
    color: #fff;
    box-shadow:
-      0 0 26px rgba(255, 0, 200, 0.18),
-      inset 0 0 24px rgba(48, 245, 210, 0.04);
+      0 0 26px rgba(245, 17, 203, 0.18),
+      inset 0 0 24px rgba(0, 255, 238, 0.04);
    backdrop-filter: blur(14px);
 }
 
@@ -82,7 +82,7 @@
    text-transform: uppercase;
    font-size: 20px;
    font-weight: 800;
-   color: #30f5d2;
+   color: #00FFEE;
    margin-bottom: 8px;
    letter-spacing: 1px;
 }
@@ -159,23 +159,26 @@
 /* CARRUSEL INFINITOS EN TORNEOS DESTACADOS */
 /* =========================
    CARRUSEL INFINITO TORNEOS
+   Mobile first: tarjetas más chicas para que
+   entren en la pantalla. Desde 900px, tamaño
+   original (360x410).
 ========================= */
 .torneos-slider {
    width: 100%;
-   overflow: visible;
+   overflow: hidden;
 }
 
 .torneos-carrusel {
    --items: 6;
    --duration: 34s;
-   --card-width: 360px;
-   --card-height: 410px;
-   --gap: 32px;
+   --card-width: 240px;
+   --card-height: 340px;
+   --gap: 20px;
 
    position: relative;
    width: 100%;
-   height: 540px;
-   overflow: visible;
+   height: 380px;
+   overflow: hidden;
    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
@@ -199,6 +202,15 @@
 .torneos-carrusel article:nth-child(4) { --i: 3; }
 .torneos-carrusel article:nth-child(5) { --i: 4; }
 .torneos-carrusel article:nth-child(6) { --i: 5; }
+
+@media (min-width: 900px) {
+   .torneos-carrusel {
+      --card-width: 360px;
+      --card-height: 410px;
+      --gap: 32px;
+      height: 540px;
+   }
+}
 
 @keyframes tournamentsMarquee {
    to {

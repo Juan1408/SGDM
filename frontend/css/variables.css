@@ -1,9 +1,18 @@
 :root {
-   --color-primario: #ff00c8;
-   --color-secundario: #30f5d2;
-   --color-violeta: #7c3cff;
+   --color-primario: #F511CB;
+   --color-secundario: #00FFEE;
+   --color-violeta: #6425A7;
+   --color-azul: #097AEC;
 
-   --fondo-principal: #070812;
+   /* Mismos colores de arriba, como triplete R,G,B
+      (sin "rgb()" alrededor) para poder usarlos
+      dentro de rgba(var(--color-primario-rgb), .35) */
+   --color-primario-rgb: 245, 17, 203;
+   --color-secundario-rgb: 0, 255, 238;
+   --color-violeta-rgb: 100, 37, 167;
+   --color-azul-rgb: 9, 122, 236;
+
+   --fondo-principal: #030205;
    --fondo-dashboard: #100714;
    --fondo-panel: #101322;
    --fondo-tarjeta: #16182c;

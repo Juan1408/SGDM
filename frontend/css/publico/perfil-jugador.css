@@ -12,8 +12,8 @@ body {
    font-family: 'Poppins', sans-serif;
    background:
       radial-gradient(circle at 15% 20%, rgba(0, 255, 220, 0.18), transparent 28%),
-      radial-gradient(circle at 85% 40%, rgba(255, 0, 200, 0.16), transparent 30%),
-      #070812;
+      radial-gradient(circle at 85% 40%, rgba(245, 17, 203, 0.16), transparent 30%),
+      #020038;
    color: #fff;
 }
 
@@ -37,10 +37,10 @@ body {
 }
 
 .perfil-breadcrumb {
-   color: #30f5d2;
+   color: #00FFEE;
    font-size: 22px;
    font-weight: 500;
-   text-shadow: 0 0 18px rgba(48, 245, 210, 0.65);
+   text-shadow: 0 0 18px rgba(0, 255, 238, 0.65);
 }
 
 .perfil-avatar-box {
@@ -51,8 +51,8 @@ body {
    height: 165px;
    border-radius: 50%;
    background: #ddd;
-   border: 6px solid #30f5d2;
-   box-shadow: 0 0 28px rgba(48, 245, 210, 0.45);
+   border: 6px solid #00FFEE;
+   box-shadow: 0 0 28px rgba(0, 255, 238, 0.45);
    overflow: hidden;
    z-index: 5;
 }
@@ -94,8 +94,8 @@ body {
 
 .perfil-card {
    background: #101010;
-   border: 1px solid rgba(255, 0, 200, 0.22);
-   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+   border: 1px solid rgba(245, 17, 203, 0.22);
+   box-shadow: 0 0 22px rgba(245, 17, 203, 0.12);
    padding: 28px 24px;
 }
 
@@ -153,8 +153,8 @@ body {
 }
 
 .perfil-redes a:hover {
-   color: #30f5d2;
-   box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
+   color: #00FFEE;
+   box-shadow: 0 0 18px rgba(0, 255, 238, 0.35);
 }
 
 .equipo-item {
@@ -196,7 +196,7 @@ body {
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   box-shadow: 0 0 24px rgba(255, 0, 200, 0.15);
+   box-shadow: 0 0 24px rgba(245, 17, 203, 0.15);
 }
 
 .estadisticas-card strong {
@@ -225,7 +225,7 @@ body {
    margin-bottom: 28px;
    font-size: 26px;
    font-weight: 800;
-   background: linear-gradient(90deg, #ff00c8, #2600ff);
+   background: linear-gradient(90deg, #F511CB, #2600ff);
    color: #fff;
 }
 
@@ -244,7 +244,7 @@ body {
    height: 150px;
    overflow: hidden;
    background: #111;
-   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+   box-shadow: 0 0 22px rgba(245, 17, 203, 0.12);
 }
 
 .perfil-torneo-card img {
@@ -295,7 +295,7 @@ body {
    display: flex;
    justify-content: center;
    align-items: center;
-   box-shadow: 0 0 22px rgba(255, 0, 200, 0.18);
+   box-shadow: 0 0 22px rgba(245, 17, 203, 0.18);
 }
 
 .trofeo-card i {
@@ -321,12 +321,12 @@ body {
    grid-template-columns: 48px 1fr auto;
    align-items: center;
    gap: 14px;
-   background: linear-gradient(90deg, rgba(48,245,210,.25), rgba(255,0,200,.15));
-   box-shadow: 0 0 18px rgba(255, 0, 200, 0.12);
+   background: linear-gradient(90deg, rgba(0, 255, 238,.25), rgba(245, 17, 203,.15));
+   box-shadow: 0 0 18px rgba(245, 17, 203, 0.12);
 }
 
 .logro-card.en-curso {
-   background: linear-gradient(90deg, rgba(255,180,80,.35), rgba(255,0,200,.15));
+   background: linear-gradient(90deg, rgba(255,180,80,.35), rgba(245, 17, 203,.15));
 }
 
 .logro-card.bloqueado {
@@ -353,7 +353,7 @@ body {
    padding: 4px 8px;
    border-radius: 999px;
    background: #fff;
-   color: #30f5d2;
+   color: #00FFEE;
    font-size: 9px;
    font-weight: 800;
 }
@@ -374,7 +374,7 @@ body {
    border-radius: 12px;
    overflow: hidden;
    background: #111;
-   box-shadow: 0 0 22px rgba(48, 245, 210, 0.12);
+   box-shadow: 0 0 22px rgba(0, 255, 238, 0.12);
    margin-bottom: 20%;
 }
 

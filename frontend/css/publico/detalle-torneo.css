@@ -45,7 +45,7 @@
 }
 
 .td-hero-contenido span {
-   color: #30f5d2;
+   color: #00FFEE;
    font-weight: 700;
 }
 
@@ -93,7 +93,7 @@
 .td-tabs button:hover,
 .td-tabs button.active {
    padding: 12px;
-   background: linear-gradient(90deg, #30f5d2, #ff00c8);
+   background: linear-gradient(90deg, #00FFEE, #F511CB);
    color: #351080;
 }
 
@@ -160,10 +160,10 @@ TABS RESPONSIVE
    width: 100%;
    padding: 35px;
    background: #111;
-   border: 1px solid rgba(48, 245, 210, 0.35);
+   border: 1px solid rgba(0, 255, 238, 0.35);
    box-shadow:
-      0 0 22px rgba(48, 245, 210, 0.16),
-      0 0 32px rgba(255, 0, 200, 0.12);
+      0 0 22px rgba(0, 255, 238, 0.16),
+      0 0 32px rgba(245, 17, 203, 0.12);
 }
 
 .td-meta {
@@ -180,7 +180,7 @@ TABS RESPONSIVE
 .td-comentarios h3,
 .td-formulario-comentarios h3 {
    margin: 26px 0 14px;
-   color: #30f5d2;
+   color: #00FFEE;
 }
 
 .td-info-general p {
@@ -248,7 +248,7 @@ TABS RESPONSIVE
    border: none;
    padding: 10px 24px;
    color: #fff;
-   background: linear-gradient(90deg, #30f5d2, #ff00c8);
+   background: linear-gradient(90deg, #00FFEE, #F511CB);
    border-radius: 6px;
    cursor: pointer;
 }
@@ -301,8 +301,8 @@ TABS RESPONSIVE
    height: auto;
    padding: 50px 8% 0;
    background:
-      radial-gradient(circle at 20% 20%, rgba(255, 0, 200, 0.13), transparent 28%),
-      radial-gradient(circle at 85% 60%, rgba(48, 245, 210, 0.1), transparent 30%),
+      radial-gradient(circle at 20% 20%, rgba(245, 17, 203, 0.13), transparent 28%),
+      radial-gradient(circle at 85% 60%, rgba(0, 255, 238, 0.1), transparent 30%),
       #160b2d;
 }
 
@@ -330,17 +330,17 @@ TABS RESPONSIVE
    background: #000;
    border: 1px solid rgba(255, 255, 255, 0.08);
    box-shadow:
-      0 0 26px rgba(255, 0, 200, 0.16),
-      0 0 40px rgba(48, 245, 210, 0.08);
+      0 0 26px rgba(245, 17, 203, 0.16),
+      0 0 40px rgba(0, 255, 238, 0.08);
    transition: 0.3s ease;
 }
 
 .participant-card:hover {
    transform: translateY(-8px);
-   border-color: #30f5d2;
+   border-color: #00FFEE;
    box-shadow:
-      0 0 30px rgba(48, 245, 210, 0.25),
-      0 0 45px rgba(255, 0, 200, 0.16);
+      0 0 30px rgba(0, 255, 238, 0.25),
+      0 0 45px rgba(245, 17, 203, 0.16);
 }
 
 .participant-card img {
@@ -412,7 +412,7 @@ TABS RESPONSIVE
    font-weight: 700;
    color: #fff;
    text-align: center;
-   background: linear-gradient(90deg,#30f5d2,#ff00c8);
+   background: linear-gradient(90deg,#00FFEE,#F511CB);
    overflow-wrap: break-word;
 }
 
@@ -577,7 +577,7 @@ RANKING DEL EQUIPO
 
 .ranking-row:hover{
    transform:translateY(-3px);
-   box-shadow:0 0 20px rgba(48,245,210,.25);
+   box-shadow:0 0 20px rgba(0, 255, 238,.25);
 }
 
 .ranking-equipo-logo{
@@ -708,8 +708,8 @@ RANKING DEL EQUIPO - RESPONSIVE
     background-image: radial-gradient(circle at 50% 50%, #1a0b36 0%, #05020c 100%);
     padding: 30px 20px;
     text-align: center;
-    border: 1px solid rgba(48, 245, 210, 0.35);
-    box-shadow: 0 0 22px rgba(48, 245, 210, 0.16);
+    border: 1px solid rgba(0, 255, 238, 0.35);
+    box-shadow: 0 0 22px rgba(0, 255, 238, 0.16);
     box-sizing: border-box;
     border-radius: 6px;
     margin-bottom: 30px;
@@ -724,8 +724,8 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .bracket-title span {
-    color: #ff00c8;
-    text-shadow: 0 0 15px rgba(255, 0, 200, 0.6);
+    color: #F511CB;
+    text-shadow: 0 0 15px rgba(245, 17, 203, 0.6);
 }
 
 .bracket-subtitle {
@@ -762,8 +762,8 @@ RANKING DEL EQUIPO - RESPONSIVE
 .group-label-left, .group-label-right {
     font-size: 14px;
     font-weight: 800;
-    color: #30f5d2;
-    text-shadow: 0 0 8px rgba(48, 245, 210, 0.4);
+    color: #00FFEE;
+    text-shadow: 0 0 8px rgba(0, 255, 238, 0.4);
     position: static; /* Volvemos al flujo normal */
     transform: none;
     margin-bottom: 5px;
@@ -774,7 +774,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 .group-label-left span, .group-label-right span { 
     display: inline; /* En línea para que no ocupe tanto espacio vertical */
     font-size: 16px; 
-    color: #ff00c8; 
+    color: #F511CB; 
 }
 
 /* Slots de Equipos compactos para evitar desbordes */
@@ -790,8 +790,8 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 .team-slot {
     background: #190d35;
-    border: 1px solid #ff00c8;
-    box-shadow: 0 0 8px rgba(255, 0, 200, 0.15);
+    border: 1px solid #F511CB;
+    box-shadow: 0 0 8px rgba(245, 17, 203, 0.15);
     color: #bfa6ff;
     padding: 6px 8px; /* Más compacto */
     font-size: 11px;  /* Bajamos un punto para asegurar que no rompa renglón */
@@ -806,14 +806,14 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 /* Variaciones de colores del árbol */
 .text-purple { border-color: #7b2cbf; box-shadow: 0 0 8px rgba(123, 44, 191, 0.3); }
-.text-pink { border-color: #ff00c8; box-shadow: 0 0 8px rgba(255, 0, 200, 0.3); }
+.text-pink { border-color: #F511CB; box-shadow: 0 0 8px rgba(245, 17, 203, 0.3); }
 
 /* Campeón Central */
 .champion-box {
-    background: linear-gradient(135deg, #ff00c8 0%, #30f5d2 100%);
+    background: linear-gradient(135deg, #F511CB 0%, #00FFEE 100%);
     padding: 2px;
     border-radius: 4px;
-    box-shadow: 0 0 20px rgba(255, 0, 200, 0.4);
+    box-shadow: 0 0 20px rgba(245, 17, 203, 0.4);
     animation: pulse 2s infinite alternate;
 }
 
@@ -838,7 +838,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    top: 50%;
    width: 28px;
    height: 1px;
-   background: rgba(255, 0, 200, .7);
+   background: rgba(245, 17, 203, .7);
 }
 
 .bracket-side.right .bracket-matchup::after {
@@ -848,7 +848,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    top: 50%;
    width: 28px;
    height: 1px;
-   background: rgba(255, 0, 200, .7);
+   background: rgba(245, 17, 203, .7);
 }
 
 /* =========================
@@ -865,10 +865,10 @@ RANKING DEL EQUIPO - RESPONSIVE
    padding: 45px 28px;
    overflow-x: auto;
    background:
-      radial-gradient(circle at center, rgba(255, 0, 200, .22), transparent 28%),
-      radial-gradient(circle at top, rgba(48, 245, 210, .12), transparent 25%),
-      linear-gradient(135deg, #160038, #070812 70%);
-   border: 1px solid rgba(255, 0, 200, .25);
+      radial-gradient(circle at center, rgba(245, 17, 203, .22), transparent 28%),
+      radial-gradient(circle at top, rgba(0, 255, 238, .12), transparent 25%),
+      linear-gradient(135deg, #160038, #020038 70%);
+   border: 1px solid rgba(245, 17, 203, .25);
 }
 
 .bracket-round {
@@ -884,7 +884,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 .bracket-round h4,
 .final-match h4 {
-   color: #30f5d2;
+   color: #00FFEE;
    font-size: 12px;
    letter-spacing: 2px;
    text-transform: uppercase;
@@ -896,9 +896,9 @@ RANKING DEL EQUIPO - RESPONSIVE
    position: relative;
    width: 170px;
    background: rgba(13, 10, 27, .95);
-   border: 1px solid rgba(255, 0, 200, .45);
+   border: 1px solid rgba(245, 17, 203, .45);
    border-radius: 6px;
-   box-shadow: 0 0 16px rgba(255, 0, 200, .22);
+   box-shadow: 0 0 16px rgba(245, 17, 203, .22);
    overflow: visible;
 }
 
@@ -926,12 +926,12 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .matchup-team strong {
-   color: #ff00c8;
+   color: #F511CB;
    font-size: 12px;
 }
 
 .matchup-team.winner span {
-   color: #30f5d2;
+   color: #00FFEE;
    font-weight: 800;
 }
 
@@ -944,7 +944,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    top: 50%;
    width: 18px;
    height: 1px;
-   background: rgba(255, 0, 200, .65);
+   background: rgba(245, 17, 203, .65);
 }
 
 .right-side .bracket-matchup::after {
@@ -954,7 +954,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    top: 50%;
    width: 18px;
    height: 1px;
-   background: rgba(255, 0, 200, .65);
+   background: rgba(245, 17, 203, .65);
 }
 
 /* centro */
@@ -974,8 +974,8 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 .final-box {
    width: 190px;
-   border-color: #30f5d2;
-   box-shadow: 0 0 22px rgba(48, 245, 210, .28);
+   border-color: #00FFEE;
+   box-shadow: 0 0 22px rgba(0, 255, 238, .28);
 }
 
 .champion-box {
@@ -983,10 +983,10 @@ RANKING DEL EQUIPO - RESPONSIVE
    padding: 15px;
    text-align: center;
    text-transform: uppercase;
-   background: linear-gradient(90deg, #ff00c8, #30f5d2);
+   background: linear-gradient(90deg, #F511CB, #00FFEE);
    box-shadow:
-      0 0 26px rgba(255, 0, 200, .45),
-      0 0 42px rgba(48, 245, 210, .25);
+      0 0 26px rgba(245, 17, 203, .45),
+      0 0 42px rgba(0, 255, 238, .25);
 }
 
 .champion-box span {
@@ -1036,11 +1036,11 @@ RANKING DEL EQUIPO - RESPONSIVE
    gap: 25px;
    padding: 20px 30px;
    flex: 1;
-   border-bottom: 4px solid #30f5d2;
+   border-bottom: 4px solid #00FFEE;
 }
 
 .card-right {
-   border-bottom-color: #30f5d2;
+   border-bottom-color: #00FFEE;
    justify-content: flex-end;
 }
 
@@ -1060,7 +1060,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 .team-vs-info h4 {
    font-size: 20px;
-   color: #ff00c8;
+   color: #F511CB;
    font-weight: 700;
 }
 
@@ -1074,8 +1074,8 @@ RANKING DEL EQUIPO - RESPONSIVE
    font-size: 46px;
    font-weight: 900;
    font-style: italic;
-   color: #ff00c8;
-   text-shadow: 0 0 15px rgba(255, 0, 200, 0.6);
+   color: #F511CB;
+   text-shadow: 0 0 15px rgba(245, 17, 203, 0.6);
    padding: 0 10px;
 }
 
@@ -1119,9 +1119,9 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .streaming-socials a:hover {
-   background: #ff00c8;
-   border-color: #ff00c8;
-   box-shadow: 0 0 15px rgba(255, 0, 200, 0.5);
+   background: #F511CB;
+   border-color: #F511CB;
+   box-shadow: 0 0 15px rgba(245, 17, 203, 0.5);
    transform: translateY(-3px);
 }
 
@@ -1129,7 +1129,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    position: relative;
    border-radius: 12px;
    overflow: hidden;
-   box-shadow: 0 0 30px rgba(48, 245, 210, 0.15);
+   box-shadow: 0 0 30px rgba(0, 255, 238, 0.15);
 }
 
 .streaming-video-placeholder img {
@@ -1167,7 +1167,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 .newsletter-box {
    background: linear-gradient(90deg, #131129 0%, #0d0a1b 100%);
-   border: 1px solid rgba(48, 245, 210, 0.2);
+   border: 1px solid rgba(0, 255, 238, 0.2);
    padding: 40px 60px;
    display: flex;
    justify-content: space-between;
@@ -1202,7 +1202,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .newsletter-form button {
-   background: #30f5d2;
+   background: #00FFEE;
    color: #000;
    font-weight: 700;
    padding: 0 30px;
@@ -1216,9 +1216,9 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .newsletter-form button:hover {
-   background: #ff00c8;
+   background: #F511CB;
    color: #fff;
-   box-shadow: 0 0 15px rgba(255, 0, 200, 0.4);
+   box-shadow: 0 0 15px rgba(245, 17, 203, 0.4);
 }
 
 /* ==========================================================================
@@ -1247,7 +1247,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .round-column h4 {
-   color: #30f5d2;
+   color: #00FFEE;
    text-transform: uppercase;
    font-size: 13px;
    letter-spacing: 2px;
@@ -1257,7 +1257,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 /* Tarjeta Dinámica de Enfrentamiento (Sólida) */
 .bracket-matchup {
    background-color: #0d0a1b;
-   border: 1px solid rgba(255, 0, 200, 0.3);
+   border: 1px solid rgba(245, 17, 203, 0.3);
    border-radius: 8px;
    width: 100%;
    max-width: 240px;
@@ -1285,15 +1285,15 @@ RANKING DEL EQUIPO - RESPONSIVE
 
 /* Resaltado para el equipo ganador */
 .bracket-matchup.completed .matchup-team.winner span {
-   color: #30f5d2;
+   color: #00FFEE;
    font-weight: 700;
 }
 
 .matchup-score {
    font-size: 12px;
    font-weight: 700;
-   color: #ff00c8;
-   background: rgba(255, 0, 200, 0.08);
+   color: #F511CB;
+   background: rgba(245, 17, 203, 0.08);
    padding: 2px 6px;
    border-radius: 4px;
 }
@@ -1305,7 +1305,7 @@ RANKING DEL EQUIPO - RESPONSIVE
    background-color: #0d0a1b;
    border-radius: 8px;
    overflow: hidden;
-   border: 1px solid rgba(48, 245, 210, 0.2);
+   border: 1px solid rgba(0, 255, 238, 0.2);
 }
 
 .league-table th, .league-table td {
@@ -1315,8 +1315,8 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .league-table th {
-   background-color: rgba(255, 0, 200, 0.08);
-   color: #30f5d2;
+   background-color: rgba(245, 17, 203, 0.08);
+   color: #00FFEE;
    text-transform: uppercase;
    letter-spacing: 1px;
 }
@@ -1326,7 +1326,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 }
 
 .league-table tr:hover {
-   background-color: rgba(48, 245, 210, 0.03);
+   background-color: rgba(0, 255, 238, 0.03);
 }
 
 /* Arreglo responsive para celulares */
@@ -1356,7 +1356,7 @@ RANKING DEL EQUIPO - RESPONSIVE
 .next-tournament h3 {
    padding: 18px;
    text-align: center;
-   background: linear-gradient(90deg, #30f5d2, #ff00c8);
+   background: linear-gradient(90deg, #00FFEE, #F511CB);
 }
 
 .next-tournament img {
@@ -1405,10 +1405,10 @@ RANKING DEL EQUIPO - RESPONSIVE
 .trofeo-card,
 .td-comentarios,
 .td-formulario-comentarios {
-   border: 1px solid rgba(48, 245, 210, 0.35);
+   border: 1px solid rgba(0, 255, 238, 0.35);
    box-shadow:
-      0 0 22px rgba(48, 245, 210, 0.16),
-      0 0 32px rgba(255, 0, 200, 0.12);
+      0 0 22px rgba(0, 255, 238, 0.16),
+      0 0 32px rgba(245, 17, 203, 0.12);
 }
 
 .td-info-general:hover,
@@ -1417,18 +1417,18 @@ RANKING DEL EQUIPO - RESPONSIVE
 .trofeo-card:hover,
 .td-comentarios:hover,
 .td-formulario-comentarios:hover {
-   border-color: #30f5d2;
+   border-color: #00FFEE;
    box-shadow:
-      0 0 28px rgba(48, 245, 210, 0.28),
-      0 0 42px rgba(255, 0, 200, 0.16);
+      0 0 28px rgba(0, 255, 238, 0.28),
+      0 0 42px rgba(245, 17, 203, 0.16);
 }
 
 /* ==========================================
    ANIMACIONES (KEYFRAMES)
    ========================================== */
 @keyframes pulse {
-   0% { box-shadow: 0 0 20px rgba(255, 0, 200, 0.4); }
-   100% { box-shadow: 0 0 35px rgba(48, 245, 210, 0.6); }
+   0% { box-shadow: 0 0 20px rgba(245, 17, 203, 0.4); }
+   100% { box-shadow: 0 0 35px rgba(0, 255, 238, 0.6); }
 }
 
 @keyframes blink {

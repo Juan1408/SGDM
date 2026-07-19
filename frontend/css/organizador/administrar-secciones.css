@@ -31,8 +31,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -123,7 +123,7 @@
         linear-gradient(
             90deg,
             var(--color-primary),
-            #7c3cff
+            #6425A7
         );
 
     border-color: transparent;
@@ -145,7 +145,7 @@
 }
 
 .fixture-card:hover {
-    border-color: rgba(48, 245, 210, 0.5);
+    border-color: rgba(0, 255, 238, 0.5);
     transform: translateY(-2px);
 }
 
@@ -180,8 +180,8 @@
     font-size: 0.78rem;
     font-weight: 700;
 
-    background: rgba(255, 0, 200, 0.1);
-    border: 1px solid rgba(255, 0, 200, 0.25);
+    background: rgba(245, 17, 203, 0.1);
+    border: 1px solid rgba(245, 17, 203, 0.25);
     border-radius: 999px;
 }
 
@@ -226,8 +226,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -285,7 +285,7 @@
 }
 
 .participante-card:hover {
-    border-color: rgba(48, 245, 210, 0.5);
+    border-color: rgba(0, 255, 238, 0.5);
     transform: translateY(-2px);
 }
 
@@ -317,8 +317,8 @@
     font-size: 0.75rem;
     font-weight: 700;
 
-    background: rgba(48, 245, 210, 0.1);
-    border: 1px solid rgba(48, 245, 210, 0.25);
+    background: rgba(0, 255, 238, 0.1);
+    border: 1px solid rgba(0, 255, 238, 0.25);
     border-radius: 999px;
 }
 
@@ -369,12 +369,12 @@
 }
 
 .participante-btn-view {
-    background: rgba(255, 0, 200, 0.12);
-    border: 1px solid rgba(255, 0, 200, 0.3);
+    background: rgba(245, 17, 203, 0.12);
+    border: 1px solid rgba(245, 17, 203, 0.3);
 }
 
 .participante-btn-view:hover {
-    background: rgba(255, 0, 200, 0.2);
+    background: rgba(245, 17, 203, 0.2);
 }
 
 .participante-btn-remove {
@@ -406,8 +406,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -515,8 +515,8 @@
 
 .resultado-estado--finalizado {
     color: var(--color-success);
-    background: rgba(48, 245, 210, 0.1);
-    border: 1px solid rgba(48, 245, 210, 0.3);
+    background: rgba(0, 255, 238, 0.1);
+    border: 1px solid rgba(0, 255, 238, 0.3);
 }
 
 .resultado-card__datos {
@@ -622,7 +622,7 @@
         linear-gradient(
             90deg,
             var(--color-primary),
-            #7c3cff
+            #6425A7
         );
 
     border: 0;
@@ -669,8 +669,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -730,7 +730,7 @@
 }
 
 .posiciones-tabla tbody tr:hover {
-    background: rgba(255, 0, 200, 0.055);
+    background: rgba(245, 17, 203, 0.055);
 }
 
 .posiciones-tabla tbody tr:last-child td {
@@ -838,8 +838,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -879,8 +879,8 @@
     font-weight: 800;
     text-transform: uppercase;
 
-    background: rgba(255, 0, 200, 0.1);
-    border: 1px solid rgba(255, 0, 200, 0.25);
+    background: rgba(245, 17, 203, 0.1);
+    border: 1px solid rgba(245, 17, 203, 0.25);
     border-radius: 10px;
 }
 
@@ -931,7 +931,7 @@
         linear-gradient(
             135deg,
             var(--color-primary),
-            #7c3cff
+            #6425A7
         );
 
     border-radius: 10px;
@@ -1040,8 +1040,8 @@
     background:
         linear-gradient(
             135deg,
-            rgba(48, 245, 210, 0.08),
-            rgba(255, 0, 200, 0.08)
+            rgba(0, 255, 238, 0.08),
+            rgba(245, 17, 203, 0.08)
         );
 
     border: 1px solid var(--border);
@@ -1078,7 +1078,7 @@
 }
 
 .solicitud-card:hover {
-    border-color: rgba(48, 245, 210, 0.45);
+    border-color: rgba(0, 255, 238, 0.45);
     transform: translateY(-2px);
 }
 
@@ -1168,12 +1168,12 @@
 }
 
 .solicitud-boton--aceptar {
-    background: rgba(48, 245, 210, 0.1);
-    border: 1px solid rgba(48, 245, 210, 0.3);
+    background: rgba(0, 255, 238, 0.1);
+    border: 1px solid rgba(0, 255, 238, 0.3);
 }
 
 .solicitud-boton--aceptar:hover {
-    background: rgba(48, 245, 210, 0.2);
+    background: rgba(0, 255, 238, 0.2);
 }
 
 .solicitud-boton--rechazar {
@@ -1225,7 +1225,7 @@
         linear-gradient(
             90deg,
             var(--color-primary),
-            #7c3cff
+            #6425A7
         );
 
     border: 0;
@@ -1268,8 +1268,8 @@
 
 .success-message {
    color: var(--color-success);
-   background: rgba(48, 245, 210, .1);
-   border: 1px solid rgba(48, 245, 210, .3);
+   background: rgba(0, 255, 238, .1);
+   border: 1px solid rgba(0, 255, 238, .3);
 }
 
 .error-message {
@@ -1374,7 +1374,7 @@
 
 .button-primary {
    color: #fff;
-   background: linear-gradient(90deg, var(--color-primary), #7c3cff);
+   background: linear-gradient(90deg, var(--color-primary), #6425A7);
    border: 0;
 }
 

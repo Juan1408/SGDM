@@ -38,10 +38,10 @@
 
 .footer-logo i {
 
-   color: #30f5d2;
+   color: #00FFEE;
    font-size: 26px;
 
-   text-shadow: 0 0 20px rgba(48,245,210,0.6);
+   text-shadow: 0 0 20px rgba(0, 255, 238,0.6);
 }
 
 .footer-logo h3 {
@@ -78,7 +78,7 @@
 
 .footer-links a:hover {
 
-   color: #30f5d2;
+   color: #00FFEE;
 
    transform: translateX(5px);
 }
@@ -111,11 +111,11 @@
 
 .footer-social a:hover {
 
-   color: #30f5d2;
+   color: #00FFEE;
 
-   border-color: #30f5d2;
+   border-color: #00FFEE;
 
-   box-shadow: 0 0 20px rgba(48,245,210,0.25);
+   box-shadow: 0 0 20px rgba(0, 255, 238,0.25);
 }
 
 .footer-bottom {

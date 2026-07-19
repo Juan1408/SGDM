@@ -1,9 +1,9 @@
 .tournaments-page {
-   padding: 90px 8%;
+   padding: 48px 6%;
    background:
-      radial-gradient(circle at top left, rgba(255, 0, 200, 0.18), transparent 28%),
+      radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
       radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
-      #070812;
+      var(--fondo-principal);
    color: #fff;
 }
 
@@ -11,20 +11,18 @@
    width: 100vw;
    position: relative;
    margin-top: 4%;
-   margin-bottom: 0; /* sacá el margin-bottom */
-   padding-bottom: 67px; /* altura del svg del divisor */
-   padding: 35px 8%;
-   
+   margin-bottom: 0;
+   padding: 90px 6% 67px; /* el 67px de abajo es la altura del divisor SVG */
 }
 
 
 .page-header {
    max-width: 780px;
-   margin-bottom: 40px;
+   margin-bottom: 32px;
 }
 
 .page-subtitle {
-   color: #30f5d2;
+   color: var(--color-secundario);
    text-transform: uppercase;
    font-weight: 700;
    letter-spacing: 2px;
@@ -32,8 +30,8 @@
 }
 
 .page-header h2 {
-   font-size: clamp(38px, 6vw, 70px);
-   line-height: 1;
+   font-size: clamp(32px, 6vw, 70px);
+   line-height: 1.05;
    margin-bottom: 18px;
 }
 
@@ -60,37 +58,40 @@
 }
 
 .custom-shape-divider-bottom-1782780458 .shape-fill {
-    fill: #070812;
+    fill: var(--fondo-principal);
 }
 
 /****** PANEL DE FILTROS *********/
+/* Mobile first: todo apilado en 1 columna.
+   Desde 900px, buscador al lado de los chips
+   y los selects en más columnas. */
 
 .filters-panel {
-    width: 100vw;
+   width: 100vw;
    margin-left: calc(50% - 50vw);
    margin-right: calc(50% - 50vw);
-   padding: 35px 8%;
+   padding: 24px 6%;
    display: flex;
    flex-direction: column;
-   gap: 22px;
+   gap: 18px;
    background: #fff;
-   margin-bottom: 0%;
 }
 
-/* fila superior: chips + search juntos */
 .top-row {
    display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: 16px;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 14px;
 }
 
 .search-box {
-   height: 52px;
+   height: 48px;
+   width: 100%;
+   min-width: 0;
    display: flex;
    align-items: center;
    gap: 12px;
-   padding: 0 18px;
+   padding: 0 16px;
    background: #e8e8e8;
 }
 
@@ -100,6 +101,7 @@
 
 .search-box input {
    width: 100%;
+   min-width: 0;
    border: none;
    outline: none;
    background: transparent;
@@ -114,33 +116,36 @@
 .chips-container {
    display: flex;
    flex-wrap: wrap;
-   gap: 10px;
+   gap: 8px;
 }
 
 .chip {
    border: none;
    background: transparent;
    color: #351080;
-   font-size: 17px;
+   font-size: 15px;
    cursor: pointer;
-   padding: 12px;
+   padding: 10px;
+   white-space: nowrap;
 }
 
 .chip.active,
 .chip:hover {
-   background: linear-gradient(90deg, #30f5d2, #ff00c8);
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
    color: #351080;
    box-shadow: none;
 }
 
 .select-filters {
    display: grid;
-   grid-template-columns: repeat(4, 1fr);
-   gap: 14px;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 12px;
 }
 
 .select-filters select {
-   height: 48px;
+   width: 100%;
+   min-width: 0;
+   height: 46px;
    border: none;
    background: #e8e8e8;
    color: #351080;
@@ -149,37 +154,31 @@
    font-family: inherit;
 }
 
-@media (max-width: 900px) {
-   .select-filters {
-      grid-template-columns: repeat(2, 1fr);
-   }
-}
-
-@media (max-width: 600px) {
-   .select-filters {
-      grid-template-columns: 1fr;
-   }
-}
+/* GRID DE TORNEOS - mobile first: 1 columna,
+   protegida con minmax para que no se desborde. */
 
 .tournaments-grid {
    display: grid;
-   grid-template-columns: repeat(3, 1fr);
-   gap: 34px;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 24px;
 }
 
 .torneo-tarjeta {
+   height: auto;
+   min-width: 0;
    background: rgba(18, 18, 42, 0.86);
    border-radius: 24px;
    overflow: hidden;
-   border: 1px solid rgba(255, 0, 200, 0.34);
-   box-shadow: 0 0 28px rgba(255, 0, 200, 0.16);
+   backdrop-filter: none;
+   border: 1px solid rgba(var(--color-primario-rgb), 0.34);
+   box-shadow: 0 0 28px rgba(var(--color-primario-rgb), 0.16);
    transition: 0.3s ease;
 }
 
 .torneo-tarjeta:hover {
    transform: translateY(-8px);
-   border-color: #30f5d2;
-   box-shadow: 0 0 32px rgba(48, 245, 210, 0.28);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 32px rgba(0, 255, 238, 0.28);
 }
 
 .torneo-tarjeta img {
@@ -189,26 +188,28 @@
 }
 
 .tarjeta-contenido {
-   padding: 22px;
+   padding: 20px;
+   min-width: 0;
 }
 
 .tarjeta-contenido h4 {
-   font-size: 22px;
-   margin-bottom: 16px;
+   font-size: 20px;
+   margin-bottom: 14px;
+   overflow-wrap: break-word;
 }
 
 .tarjeta-meta {
    display: flex;
-   justify-content: space-between;
-   gap: 10px;
+   flex-direction: column;
+   gap: 8px;
    font-size: 12px;
    color: #cfd0e6;
-   margin-bottom: 18px;
+   margin-bottom: 16px;
 }
 
 .tarjeta-meta i,
 .tarjeta-tipo i {
-   color: #30f5d2;
+   color: var(--color-secundario);
    margin-right: 5px;
 }
 
@@ -217,13 +218,15 @@
    align-items: center;
    color: #dcdcf0;
    font-size: 14px;
-   margin-bottom: 18px;
+   margin-bottom: 16px;
 }
 
 .card-footer {
    display: flex;
+   flex-wrap: wrap;
    justify-content: space-between;
    align-items: center;
+   gap: 8px;
    padding-top: 14px;
    border-top: 1px solid rgba(255,255,255,0.1);
    font-size: 13px;
@@ -234,54 +237,102 @@
 }
 
 .card-footer a {
-   color: #30f5d2;
+   color: var(--color-secundario);
    text-decoration: none;
    font-weight: 700;
 }
 
-/* BOTON */
-
-   
-/*.agenda-button a {
-display: inline-block;
-    padding: 15px 34px;
-    color: #07101c;
-    background: linear-gradient(90deg, #30f5d2, #20c4ff);
-    text-decoration: none;
-    font-weight: 800;
-    border-radius: 999px;
-    box-shadow: 0 0 25px rgba(48, 245, 210, 0.35);
-    transition: .3s ease;
-    
-}*/
-
 .agenda-button {
-   margin-top: 5%;
+   margin-top: 32px;
    display: flex;
    justify-content: center;
 }
 
 
-/* RESPONSIVE */
-@media (max-width: 1000px) {
-   .select-filters,
-   .tournaments-grid {
-      grid-template-columns: repeat(2, 1fr);
-   }
-}
+/*
+=====================================================
+   TABLET (min-width: 600px)
+===================================================== */
 
-@media (max-width: 650px) {
-   .tournaments-page {
-      padding: 70px 6%;
-   }
+@media (min-width: 600px) {
 
-   .select-filters,
-   .tournaments-grid {
-      grid-template-columns: 1fr;
+   .select-filters {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
    }
 
    .tarjeta-meta {
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
    }
 }
 
+/*
+=====================================================
+   TABLET GRANDE (min-width: 700px)
+===================================================== */
+
+@media (min-width: 700px) {
+
+   .tournaments-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+===================================================== */
+
+@media (min-width: 900px) {
+
+   .tournaments-page {
+      padding: 90px 8%;
+   }
+
+   .seccion-torneos {
+      padding: 90px 8% 67px;
+   }
+
+   .filters-panel {
+      padding: 35px 8%;
+   }
+
+   .top-row {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .search-box {
+      width: auto;
+      min-width: 260px;
+      height: 52px;
+   }
+
+   .chip {
+      font-size: 17px;
+      padding: 12px;
+   }
+
+   .select-filters {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+   }
+
+   .select-filters select {
+      height: 48px;
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO GRANDE (min-width: 1000px)
+===================================================== */
+
+@media (min-width: 1000px) {
+
+   .tournaments-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 34px;
+   }
+}

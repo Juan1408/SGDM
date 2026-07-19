@@ -74,8 +74,8 @@
 
 .perfil-notificacion.success {
    color: var(--color-secundario);
-   background: rgba(48, 245, 210, .1);
-   border: 1px solid rgba(48, 245, 210, .3);
+   background: rgba(0, 255, 238, .1);
+   border: 1px solid rgba(0, 255, 238, .3);
 }
 
 /* ============================
@@ -158,8 +158,8 @@
    margin-bottom: .5rem;
 
    border-radius: 999px;
-   background: rgba(48, 245, 210, .12);
-   border: 1px solid rgba(48, 245, 210, .3);
+   background: rgba(0, 255, 238, .12);
+   border: 1px solid rgba(0, 255, 238, .3);
 
    color: var(--color-secundario);
    font-size: .68rem;
@@ -249,7 +249,7 @@
    padding: .55rem 1rem;
    border-radius: 999px;
    border: 1px solid var(--color-primario);
-   background: rgba(255, 0, 200, .1);
+   background: rgba(245, 17, 203, .1);
 
    color: #fff;
    font: inherit;
@@ -260,7 +260,7 @@
 }
 
 .perfil-boton-secundario:hover {
-   background: rgba(255, 0, 200, .2);
+   background: rgba(245, 17, 203, .2);
 }
 
 /* ============================
@@ -356,7 +356,7 @@
    justify-content: center;
 
    border-radius: 10px;
-   background: rgba(48, 245, 210, .12);
+   background: rgba(0, 255, 238, .12);
    color: var(--color-secundario);
    font-size: 1rem;
 }
@@ -563,7 +563,7 @@
 
 .perfil-boton-principal {
    color: #07101c;
-   background: linear-gradient(90deg, var(--color-secundario), #20c4ff);
+   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
    border: 0;
 }
 

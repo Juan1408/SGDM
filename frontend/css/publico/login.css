@@ -25,7 +25,7 @@ body {
    grid-template-columns: 1.05fr 1fr;
    background: rgba(15, 15, 35, 0.95);
    border: 1px solid rgba(255, 255, 255, 0.08);
-   box-shadow: 0 0 45px rgba(255, 0, 200, 0.18);
+   box-shadow: 0 0 45px rgba(245, 17, 203, 0.18);
    overflow: hidden;
    position: relative;
 }
@@ -45,7 +45,7 @@ body {
   inset: 0;
   background:
     linear-gradient(135deg, rgba(0,255,220,0.18), transparent 45%),
-    linear-gradient(315deg, rgba(255,0,200,0.25), transparent 50%);
+    linear-gradient(315deg, rgba(245, 17, 203,0.25), transparent 50%);
 }
 
 
@@ -57,7 +57,7 @@ body {
    height: 280px;
    left: -80px;
    bottom: -80px;
-   background: rgba(255, 0, 200, 0.25);
+   background: rgba(245, 17, 203, 0.25);
    filter: blur(60px);
 }
 
@@ -68,16 +68,16 @@ body {
 
 .banner-content i {
    font-size: 42px;
-   color: #30f5d2;
+   color: #00FFEE;
    margin-bottom: 18px;
-   text-shadow: 0 0 18px rgba(48, 245, 210, 0.8);
+   text-shadow: 0 0 18px rgba(0, 255, 238, 0.8);
 }
 
 .banner-content h1 {
    font-size: 54px;
    letter-spacing: 5px;
    font-weight: 700;
-   text-shadow: 0 0 20px rgba(255, 0, 200, 0.7);
+   text-shadow: 0 0 20px rgba(245, 17, 203, 0.7);
 }
 
 /* PANEL DERECHO */
@@ -98,7 +98,7 @@ body {
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, #ff00c8, #30f5d2);
+  background: linear-gradient(to bottom, #F511CB, #00FFEE);
   opacity: 0.8;
 }
 
@@ -117,7 +117,7 @@ body {
    align-items: center;
    gap: 10px;
    margin-bottom: 25px;
-   color: #30f5d2;
+   color: #00FFEE;
    font-weight: 700;
    letter-spacing: 2px;
 }
@@ -164,15 +164,15 @@ body {
 }
 
 .input-group input:focus {
-   border-color: #30f5d2;
-   box-shadow: 0 0 0 3px rgba(48, 245, 210, 0.12);
+   border-color: #00FFEE;
+   box-shadow: 0 0 0 3px rgba(0, 255, 238, 0.12);
 }
 
 .input-group input:focus + label,
 .input-group input:valid + label {
    top: 3px;
    transform: translateY(0);
-   color: #30f5d2;
+   color: #00FFEE;
    font-size: 10px;
    background: #292844;
 }
@@ -202,7 +202,7 @@ body {
 
 .forgot-password a,
 .switch-text span {
-   color: #30f5d2;
+   color: #00FFEE;
    text-decoration: none;
    cursor: pointer;
    font-weight: 500;
@@ -210,7 +210,7 @@ body {
 
 .forgot-password a:hover,
 .switch-text span:hover {
-   color: #ff00c8;
+   color: #F511CB;
 }
 
 /* BOTÓN */
@@ -218,19 +218,19 @@ body {
    width: 100%;
    height: 48px;
    border: none;
-   background: linear-gradient(90deg, #30f5d2, #20c4ff);
+   background: linear-gradient(90deg, #00FFEE, #097AEC);
    color: #08101c;
    font-weight: 700;
    text-transform: uppercase;
    letter-spacing: 1px;
    cursor: pointer;
    transition: 0.3s ease;
-   box-shadow: 0 0 22px rgba(48, 245, 210, 0.35);
+   box-shadow: 0 0 22px rgba(0, 255, 238, 0.35);
 }
 
 .auth-btn:hover {
    transform: translateY(-2px);
-   box-shadow: 0 0 30px rgba(48, 245, 210, 0.65);
+   box-shadow: 0 0 30px rgba(0, 255, 238, 0.65);
 }
 
 /* CAMBIO LOGIN / REGISTER */
@@ -270,8 +270,8 @@ body {
 }
 
 .code-box input:focus {
-   border-color: #30f5d2;
-   box-shadow: 0 0 0 3px rgba(48, 245, 210, 0.12);
+   border-color: #00FFEE;
+   box-shadow: 0 0 0 3px rgba(0, 255, 238, 0.12);
 }
 
 /* RESPONSIVE */
@@ -334,8 +334,8 @@ body {
 
 .role-options input:checked + label {
    color: #08101c;
-   background: linear-gradient(90deg, #30f5d2, #20c4ff);
-   box-shadow: 0 0 20px rgba(48, 245, 210, 0.35);
+   background: linear-gradient(90deg, #00FFEE, #097AEC);
+   box-shadow: 0 0 20px rgba(0, 255, 238, 0.35);
    font-weight: 700;
 }
 
