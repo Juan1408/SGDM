@@ -44,6 +44,9 @@ DROP TABLE IF EXISTS tokens_verificacion_email;
 DROP TABLE IF EXISTS usuarios;
 DROP TABLE IF EXISTS sistemas_puntuacion;
 DROP TABLE IF EXISTS modalidades;
+DROP TABLE IF EXISTS rol_permisos;
+DROP TABLE IF EXISTS permisos;
+DROP TABLE IF EXISTS juegos;
 DROP TABLE IF EXISTS roles;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -52,12 +55,46 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. TABLAS MAESTRAS (Catálogos)
 -- =============================================================================
 
+-- 0.1 permisos (Catálogo de acciones permitidas en el sistema)
+CREATE TABLE permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_permiso VARCHAR(50) UNIQUE NOT NULL,
+    descripcion TEXT
+);
+
+-- 0.2 juegos (Catálogo de disciplinas disponibles)
+CREATE TABLE juegos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    categoria VARCHAR(50) NOT NULL COMMENT 'esport-shooter, esport-moba, deporte-fisico',
+    formato_equipo_defecto INT DEFAULT 1 COMMENT 'Cantidad de jugadores por equipo',
+    puntos_victoria DECIMAL(5,2) DEFAULT 3,
+    puntos_empate DECIMAL(5,2) DEFAULT 1,
+    puntos_derrota DECIMAL(5,2) DEFAULT 0,
+    activo BOOLEAN DEFAULT TRUE,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 1. roles
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_rol VARCHAR(50) UNIQUE NOT NULL,
     descripcion TEXT,
     nivel_permiso INT DEFAULT 0
+);
+
+-- 1.1 rol_permisos (Relación muchos a muchos entre roles y permisos)
+CREATE TABLE rol_permisos (
+    rol_id INT NOT NULL,
+    permiso_id INT NOT NULL,
+    asignado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (rol_id, permiso_id),
+    CONSTRAINT fk_rolpermiso_rol FOREIGN KEY (rol_id) REFERENCES roles(id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_rolpermiso_permiso FOREIGN KEY (permiso_id) REFERENCES permisos(id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
 );
 
 -- 2. modalidades (individual / equipos)
@@ -242,6 +279,7 @@ CREATE TABLE solicitudes_equipo (
 CREATE TABLE torneos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
+    juego_id INT NOT NULL,
     descripcion TEXT,
     formato VARCHAR(50) NOT NULL CHECK (formato IN ('liga', 'eliminacion_directa', 'suizo')),
     estado VARCHAR(50) NOT NULL DEFAULT 'borrador' CHECK (estado IN ('borrador', 'inscripciones_abiertas', 'en_curso', 'finalizado', 'cancelado')),
@@ -265,6 +303,9 @@ CREATE TABLE torneos (
     tipo_resultado ENUM('goles', 'puntos', 'rondas', 'booleano') DEFAULT 'goles',
     mejor_de INT DEFAULT 1 COMMENT 'Número de mapas/partidas para ganar la llave (eliminación directa)',
     CONSTRAINT fk_torneo_organizador FOREIGN KEY (organizador_id) REFERENCES usuarios(id) 
+        ON DELETE RESTRICT 
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_torneo_juego FOREIGN KEY (juego_id) REFERENCES juegos(id) 
         ON DELETE RESTRICT 
         ON UPDATE CASCADE,
     CONSTRAINT fk_torneo_modalidad FOREIGN KEY (modalidad_id) REFERENCES modalidades(id) 
@@ -529,12 +570,32 @@ CREATE INDEX idx_auditoria_fecha ON auditoria_cambios(fecha_hora);
 -- 8. DATOS INICIALES (SEEDERS)
 -- =============================================================================
 
+-- Insertar permisos
+INSERT INTO permisos (nombre_permiso, descripcion) VALUES 
+('crear_torneos', 'Puede crear nuevos torneos'),
+('editar_torneos', 'Puede modificar torneos existentes'),
+('borrar_torneos', 'Puede eliminar torneos del sistema'),
+('crear_usuarios', 'Puede crear usuarios administrativos'),
+('enviar_mensajes', 'Puede enviar comunicados masivos'),
+('descargar_reportes', 'Puede descargar reportes del sistema'),
+('ver_auditoria', 'Puede ver los registros de acciones');
+
 -- Insertar roles
 INSERT INTO roles (nombre_rol, descripcion, nivel_permiso) VALUES 
 ('Administrador General', 'Control total del sistema', 3),
 ('Organizador', 'Puede crear y administrar torneos', 2),
 ('Participante', 'Puede unirse a equipos y participar', 1),
 ('Usuario Publico', 'Solo visualización', 0);
+
+-- Asignar todos los permisos al Administrador General (rol_id = 1)
+INSERT INTO rol_permisos (rol_id, permiso_id)
+SELECT 1, id FROM permisos;
+
+-- Insertar juegos base
+INSERT INTO juegos (nombre, categoria, formato_equipo_defecto, puntos_victoria, puntos_empate, puntos_derrota) VALUES 
+('Valorant', 'esport-shooter', 5, 3, 1, 0),
+('League of Legends', 'esport-moba', 5, 3, 0, 0),
+('Rugby 7s', 'deporte-fisico', 7, 4, 2, 0);
 
 -- Insertar modalidades
 INSERT INTO modalidades (nombre, descripcion) VALUES 

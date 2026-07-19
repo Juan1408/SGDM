@@ -2,81 +2,91 @@
    CLASES UTILITARIAS (PROFESIONALES)
    ========================================= */
 .boton-salir {
-  background-color: #e74c3c;
+  background-color: var(--color-peligro);
   color: white;
   text-decoration: none;
   padding: 8px 15px;
-  border-radius: 5px;
+  border-radius: var(--radio-borde);
   font-size: 0.9rem;
-  transition: 0.3s;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .boton-salir:hover {
-  background-color: #c0392b;
+  background-color: var(--color-peligro-hover);
 }
 
 .boton-accion {
-  background-color: #3498db;
+  background-color: var(--color-primario);
   color: white;
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--radio-borde);
   font-size: 0.85rem;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .boton-accion:hover {
-  background-color: #2980b9;
+  background-color: var(--color-primario-hover);
+  box-shadow: var(--sombra-suave);
 }
 
 .boton-peligro {
-  background-color: #e74c3c;
-  color: white;
+  background-color: transparent;
+  color: var(--color-peligro);
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--radio-borde);
   font-size: 0.85rem;
-  border: none;
+  border: 1px solid var(--color-peligro);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .boton-peligro:hover {
-  background-color: #c0392b;
+  background-color: var(--color-peligro);
+  color: white;
 }
 
 .boton-secundario {
-  background-color: #95a5a6;
-  color: white;
+  background-color: var(--color-fondo-panel);
+  color: var(--color-texto-secundario);
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--radio-borde);
   font-size: 0.85rem;
-  border: none;
+  border: 1px solid var(--color-borde);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .boton-secundario:hover {
-  background-color: #7f8c8d;
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-principal);
 }
 
 .boton-exito {
-  background-color: #27ae60;
+  background-color: var(--color-exito);
   color: white;
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--radio-borde);
   font-size: 0.85rem;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .boton-exito:hover {
-  background-color: #219653;
+  background-color: var(--color-exito-hover);
+  box-shadow: var(--sombra-suave);
 }
 
 .grupo-botones {
@@ -89,19 +99,31 @@
    ESTADOS Y COLORES UNIVERSALES (TABLAS Y TEXTOS)
    ========================================= */
 .estado-exito {
-  color: #27ae60;
-  font-weight: bold;
+  color: var(--color-exito);
+  font-weight: 600;
+  background-color: rgba(69, 182, 118, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
 }
 
 .estado-fallido, 
 .estado-cancelado {
-  color: #e74c3c;
-  font-weight: bold;
+  color: var(--color-peligro);
+  font-weight: 600;
+  background-color: rgba(224, 93, 93, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
 }
 
 .estado-pendiente {
-  color: #f39c12;
-  font-weight: bold;
+  color: var(--color-advertencia);
+  font-weight: 600;
+  background-color: rgba(238, 176, 65, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
 }
 
 .texto-ayuda {

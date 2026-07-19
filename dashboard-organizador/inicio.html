@@ -1,0 +1,379 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ascend | Dashboard Organizador</title>
+
+    <!-- Tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Iconos -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Barra superior -->
+        <header class="navbar">
+
+            <div class="navbar__logo">
+                ASCEND
+            </div>
+
+            <div class="navbar__user">
+
+                <button
+                    class="navbar__notification"
+                    type="button"
+                    aria-label="Ver notificaciones"
+                >
+                    <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                </button>
+
+                <div class="user">
+                    <img
+                        src="https://placehold.co/40x40"
+                        alt="Foto de perfil de Mauricio"
+                    >
+
+                    <span>Mauricio</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+
+            <div class="sidebar__profile">
+
+                <img
+                    src="https://placehold.co/90x90"
+                    alt="Foto de perfil de Mauricio"
+                >
+
+                <h2>Mauricio</h2>
+                <span>Organizador</span>
+
+            </div>
+
+            <nav aria-label="Navegación del organizador">
+
+                <a class="active" href="inicio.html" aria-current="page">
+                    <i class="fa-solid fa-house" aria-hidden="true"></i>
+                    <span>Inicio</span>
+                </a>
+
+                <a href="mis-torneos.html">
+                    <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                    <span>Mis torneos</span>
+                </a>
+
+                <a href="crear-torneo.html">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                    <span>Crear torneo</span>
+                </a>
+
+                <a href="perfil.html">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    <span>Mi perfil</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar__bottom">
+
+                <a href="#">
+                    <i
+                        class="fa-solid fa-right-from-bracket"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Cerrar sesión</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="content">
+
+            <header class="content__header">
+
+                <h1>Bienvenido nuevamente, Mauricio 👋</h1>
+
+                <p class="subtitle">
+                    Administra tus torneos desde un único lugar. Consulta
+                    estadísticas, revisa la actividad reciente y accede
+                    rápidamente a las funciones más utilizadas.
+                </p>
+
+            </header>
+
+            <!-- Resumen de actividad -->
+            <section class="cards" aria-label="Resumen de actividad">
+
+                <article class="card">
+
+                    <div class="card__icon">
+                        <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="card__content">
+                        <h2>Torneos activos</h2>
+                        <span>3</span>
+                    </div>
+
+                </article>
+
+                <article class="card">
+
+                    <div class="card__icon">
+                        <i class="fa-solid fa-users" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="card__content">
+                        <h2>Participantes registrados</h2>
+                        <span>18</span>
+                    </div>
+
+                </article>
+
+                <article class="card">
+
+                    <div class="card__icon">
+                        <i
+                            class="fa-solid fa-calendar-check"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+
+                    <div class="card__content">
+                        <h2>Partidos pendientes</h2>
+                        <span>8</span>
+                    </div>
+
+                </article>
+
+                <article class="card">
+
+                    <div class="card__icon">
+                        <i
+                            class="fa-solid fa-envelope-open-text"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+
+                    <div class="card__content">
+                        <h2>Solicitudes pendientes</h2>
+                        <span>6</span>
+                    </div>
+
+                </article>
+
+            </section>
+
+            <!-- Torneos y actividad reciente -->
+            <section class="dashboard-grid">
+
+                <section class="mis-torneos" aria-labelledby="misTorneosTitle">
+
+                    <div class="section-header">
+
+                        <h2 id="misTorneosTitle">Mis torneos</h2>
+
+                        <a href="mis-torneos.html">
+                            Ver todos
+                        </a>
+
+                    </div>
+
+                    <!-- Los torneos se generan desde dashboard.js -->
+                    <div
+                        class="torneos-grid"
+                        id="torneosGrid"
+                        aria-live="polite"
+                    ></div>
+
+                </section>
+
+                <aside
+                    class="activity-panel"
+                    aria-labelledby="actividadTitle"
+                >
+
+                    <h2 id="actividadTitle">Actividad reciente</h2>
+
+                    <div class="activity-list">
+
+                        <article class="activity-item activity-item--sports">
+
+                            <i
+                                class="fa-solid fa-user-check"
+                                aria-hidden="true"
+                            ></i>
+
+                            <div>
+                                <h3>Solicitud aceptada</h3>
+                                <p>Equipo Titanes · Copa Primavera</p>
+                                <span>Hace 4 minutos</span>
+                            </div>
+
+                        </article>
+
+                        <article class="activity-item activity-item--esports">
+
+                            <i
+                                class="fa-solid fa-flag-checkered"
+                                aria-hidden="true"
+                            ></i>
+
+                            <div>
+                                <h3>Resultado registrado</h3>
+                                <p>LoL Summer Cup</p>
+                                <span>Hace 20 minutos</span>
+                            </div>
+
+                        </article>
+
+                        <article
+                            class="activity-item activity-item--boardgames"
+                        >
+
+                            <i
+                                class="fa-solid fa-diagram-project"
+                                aria-hidden="true"
+                            ></i>
+
+                            <div>
+                                <h3>Fixture generado</h3>
+                                <p>Torneo Nacional de Ajedrez</p>
+                                <span>Hace 1 hora</span>
+                            </div>
+
+                        </article>
+
+                        <article class="activity-item">
+
+                            <i
+                                class="fa-solid fa-plus"
+                                aria-hidden="true"
+                            ></i>
+
+                            <div>
+                                <h3>Nuevo torneo creado</h3>
+                                <p>CS2 Winter Cup</p>
+                                <span>Hace 2 días</span>
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </aside>
+
+            </section>
+
+            <!-- Acciones rápidas -->
+            <section
+                class="quick-actions"
+                aria-labelledby="quickActionsTitle"
+            >
+
+                <h2 id="quickActionsTitle">Acciones rápidas</h2>
+
+                <div class="quick-actions__grid">
+
+                    <a class="quick-action" href="crear-torneo.html">
+
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+
+                        <span>
+                            <strong>Crear torneo</strong>
+                            <small>Configurar una nueva competencia</small>
+                        </span>
+
+                    </a>
+
+                    <a class="quick-action" href="mis-torneos.html">
+
+                        <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+
+                        <span>
+                            <strong>Mis torneos</strong>
+                            <small>Ver y administrar competencias</small>
+                        </span>
+
+                    </a>
+
+                    <a
+                        class="quick-action"
+                        href="administrar-torneo.html"
+                    >
+
+                        <i
+                            class="fa-solid fa-clipboard-list"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            <strong>Registrar resultado</strong>
+                            <small>Cargar resultados pendientes</small>
+                        </span>
+
+                    </a>
+
+                    <a
+                        class="quick-action"
+                        href="administrar-torneo.html"
+                    >
+
+                        <i
+                            class="fa-solid fa-user-group"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            <strong>Revisar solicitudes</strong>
+                            <small>Aceptar o rechazar inscripciones</small>
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
+

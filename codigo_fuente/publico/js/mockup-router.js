@@ -137,6 +137,9 @@ document.addEventListener('submit', function(e) {
             // Lógica de redirección según de dónde venimos
             const rutaActual = window.location.hash;
             if (rutaActual.includes('usuarios/formulario')) window.location.hash = '#usuarios/lista';
+            else if (rutaActual.includes('juegos/formulario')) window.location.hash = '#juegos/lista';
+            else if (rutaActual.includes('roles/formulario')) window.location.hash = '#roles/lista';
+            else if (rutaActual.includes('comunicaciones/enviar')) window.location.hash = '#dashboard';
             else if (rutaActual.includes('torneos/crear') || rutaActual.includes('torneos/configurar')) window.location.hash = '#torneos/lista';
             else if (rutaActual.includes('equipos/formulario')) window.location.hash = '#equipos/lista';
             else if (rutaActual.includes('resultados/formulario')) window.location.hash = '#resultados/lista';

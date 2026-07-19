@@ -1,0 +1,418 @@
+/* =====================================================
+   Texto introductorio
+===================================================== */
+
+.subtitle {
+    max-width: 850px;
+    margin-top: 10px;
+    margin-bottom: 35px;
+
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   Tarjetas de resumen
+===================================================== */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+
+    margin-bottom: 35px;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 18px;
+
+    min-height: 125px;
+    padding: 22px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow);
+}
+
+.card__icon {
+    display: grid;
+    place-items: center;
+
+    width: 52px;
+    height: 52px;
+
+    color: var(--color-primary);
+    font-size: 1.25rem;
+
+    background: rgba(255, 60, 172, 0.15);
+    border-radius: 14px;
+}
+
+.card__content {
+    display: grid;
+    gap: 6px;
+}
+
+.card__content h2 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.card__content span {
+    color: var(--text);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   Distribución principal
+===================================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+    gap: 25px;
+
+    margin-bottom: 35px;
+}
+
+
+/* =====================================================
+   Encabezados de sección
+===================================================== */
+
+.section-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+}
+
+.section-header a {
+    color: var(--color-primary);
+    text-decoration: none;
+
+    transition: var(--transition);
+}
+
+.section-header a:hover {
+    color: var(--color-primary-hover);
+}
+
+
+/* =====================================================
+   Mis torneos
+===================================================== */
+
+.mis-torneos {
+    min-width: 0;
+}
+
+.torneos-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.torneo-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 20px;
+
+    padding: 25px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--color-primary);
+    border-radius: var(--radius);
+
+    transition: var(--transition);
+}
+
+.torneo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.torneo-card.esports {
+    border-left-color: var(--color-esports);
+}
+
+.torneo-card.deportes {
+    border-left-color: var(--color-sports);
+}
+
+.torneo-card.mesa {
+    border-left-color: var(--color-boardgames);
+}
+
+.torneo-info {
+    min-width: 0;
+}
+
+.torneo-info h3 {
+    overflow-wrap: anywhere;
+}
+
+.torneo-info > p {
+    margin: 8px 0;
+
+    color: var(--text-secondary);
+}
+
+.estado {
+    display: inline-block;
+
+    margin-top: 8px;
+    padding: 6px 12px;
+
+    font-size: 0.85rem;
+
+    border-radius: 20px;
+}
+
+.estado.abierta {
+    color: var(--color-primary);
+    background: rgba(255, 60, 172, 0.15);
+}
+
+.estado.curso {
+    color: var(--color-sports);
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.estado.finalizado {
+    color: var(--color-boardgames);
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.torneo-detalles {
+    display: grid;
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+.torneo-detalles span {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+}
+
+.torneo-detalles i {
+    width: 18px;
+    margin-right: 4px;
+
+    color: var(--color-primary);
+}
+
+.torneo-card__action {
+    padding: 12px 20px;
+
+    color: var(--text);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+
+    background: var(--color-primary);
+    border-radius: 10px;
+
+    transition: var(--transition);
+}
+
+.torneo-card__action:hover {
+    background: var(--color-primary-hover);
+}
+
+.torneo-card__action:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+}
+
+
+/* =====================================================
+   Actividad reciente
+===================================================== */
+
+.activity-panel {
+    padding: 25px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.activity-panel > h2 {
+    margin-bottom: 20px;
+
+    font-size: 1.25rem;
+}
+
+.activity-list {
+    display: grid;
+    gap: 18px;
+}
+
+.activity-item {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    align-items: start;
+    gap: 15px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.activity-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.activity-item > i {
+    display: grid;
+    place-items: center;
+
+    width: 40px;
+    height: 40px;
+
+    color: var(--color-primary);
+
+    background: rgba(255, 60, 172, 0.15);
+    border-radius: 50%;
+}
+
+.activity-item h3 {
+    margin-bottom: 4px;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.activity-item p {
+    margin-bottom: 4px;
+
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+}
+
+.activity-item span {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.activity-item--sports > i {
+    color: var(--color-sports);
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.activity-item--esports > i {
+    color: var(--color-esports);
+    background: rgba(139, 92, 246, 0.15);
+}
+
+.activity-item--boardgames > i {
+    color: var(--color-boardgames);
+    background: rgba(59, 130, 246, 0.15);
+}
+
+
+/* =====================================================
+   Acciones rápidas
+===================================================== */
+
+.quick-actions {
+    display: grid;
+    gap: 18px;
+
+    margin-top: 35px;
+}
+
+.quick-actions > h2 {
+    font-size: 1.25rem;
+}
+
+.quick-actions__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.quick-action {
+    display: grid;
+    grid-template-columns: 45px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+
+    padding: 18px;
+
+    color: var(--text);
+    text-decoration: none;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    transition: var(--transition);
+}
+
+.quick-action:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+}
+
+.quick-action:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+.quick-action > i {
+    display: grid;
+    place-items: center;
+
+    width: 45px;
+    height: 45px;
+
+    color: var(--color-primary);
+
+    background: rgba(255, 60, 172, 0.15);
+    border-radius: 12px;
+}
+
+.quick-action span {
+    display: grid;
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.quick-action strong {
+    font-size: 0.92rem;
+}
+
+.quick-action small {
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+    line-height: 1.4;
+}

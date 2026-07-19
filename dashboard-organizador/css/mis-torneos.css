@@ -1,0 +1,190 @@
+/* =====================================================
+   Distribución de Mis torneos
+===================================================== */
+
+.torneos-page {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(400px, 2fr);
+    align-items: start;
+    gap: 25px;
+}
+
+.torneos-page__listado,
+.torneo-seleccionado {
+    padding: 25px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+
+/* =====================================================
+   Lista izquierda
+===================================================== */
+
+.torneos-lista {
+    display: grid;
+    gap: 12px;
+}
+
+.torneo-lista-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 15px;
+
+    width: 100%;
+    padding: 18px;
+
+    color: var(--text);
+    text-align: left;
+    font-family: inherit;
+
+    background: var(--background-card);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--color-primary);
+    border-radius: 12px;
+
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.torneo-lista-card:hover,
+.torneo-lista-card.seleccionado {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+}
+
+.torneo-lista-card.esports {
+    border-left-color: var(--color-esports);
+}
+
+.torneo-lista-card.deportes {
+    border-left-color: var(--color-sports);
+}
+
+.torneo-lista-card.mesa {
+    border-left-color: var(--color-boardgames);
+}
+
+.torneo-lista-card h3 {
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.torneo-lista-card p {
+    color: var(--text-secondary);
+}
+
+
+/* =====================================================
+   Detalles del torneo
+===================================================== */
+
+.torneo-seleccionado {
+    display: grid;
+    gap: 25px;
+    min-height: 370px;
+}
+
+.torneo-seleccionado__header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.torneo-seleccionado > h2 {
+    font-size: 1.8rem;
+}
+
+.categoria {
+    font-weight: 600;
+}
+
+.categoria.esports {
+    color: var(--color-esports);
+}
+
+.categoria.deportes {
+    color: var(--color-sports);
+}
+
+.categoria.mesa {
+    color: var(--color-boardgames);
+}
+
+.torneo-seleccionado__datos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.torneo-seleccionado__datos div {
+    display: grid;
+    gap: 7px;
+
+    padding: 18px;
+
+    background: var(--background-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.torneo-seleccionado__datos span {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.torneo-seleccionado__acciones {
+    display: grid;
+    justify-items: end;
+    align-items: end;
+}
+
+.torneo-seleccionado__acciones a {
+    padding: 13px 20px;
+
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+
+    background: var(--color-primary);
+    border-radius: 10px;
+
+    transition: var(--transition);
+}
+
+.torneo-seleccionado__acciones a:hover {
+    background: var(--color-primary-hover);
+}
+
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width: 1000px) {
+    .torneos-page {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .torneo-lista-card,
+    .torneo-seleccionado__header {
+        grid-template-columns: 1fr;
+    }
+
+    .torneo-seleccionado__datos {
+        grid-template-columns: 1fr;
+    }
+
+    .torneo-seleccionado__acciones {
+        justify-items: stretch;
+    }
+
+    .torneo-seleccionado__acciones a {
+        text-align: center;
+    }
+}

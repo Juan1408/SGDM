@@ -2,18 +2,55 @@
    ESTILOS GENERALES DEL ADMINISTRADOR
    ENFOQUE MOBILE-FIRST
    ========================================= */
+/*Estilo Poppins
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');*/
+/*Estilo Motserrat*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* 
-  Clase: .tema-admin
-  Ubicación: Se aplica a la etiqueta <body>.
-  Función: Define los colores base y la fuente de todo el sistema.
-*/
-.tema-admin {
+:root {
+
+  --color-fondo-principal: #f8f9fa;
+  --color-fondo-panel: #ffffff;
+  --color-texto-principal: #343a40;
+  --color-texto-secundario: #6c757d;
+
+  /* Colores de marca suaves */
+  --color-primario: #4b6584;
+  --color-primario-hover: #384e68;
+
+  /* Estados (Colores apagados para evitar fatiga visual) */
+  --color-exito: #45b676;
+  --color-exito-hover: #389661;
+  --color-peligro: #e05d5d;
+  --color-peligro-hover: #c44d4d;
+  --color-advertencia: #eeb041;
+
+  /* Bordes y Sombras funcionales */
+  --color-borde: #dee2e6;
+  --sombra-suave: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+
+  /* Geometría */
+  --radio-borde: 6px;
+}
+
+body.tema-admin {
+  /* POPPINS
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7f6; /* Gris muy claro para el fondo */
-  color: #333;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-principal);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  /*MONTSERRAT*/
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-principal);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+
 }

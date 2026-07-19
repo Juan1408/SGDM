@@ -1,0 +1,44 @@
+/*=====================================================
+=            VARIABLES GLOBALES DE ASCEND             =
+=====================================================*/
+
+:root {
+    /* Colores de identidad */
+    --color-primary: #ff3cac;
+    --color-primary-hover: #ff5db8;
+
+    /* Colores por categoría */
+    --color-esports: #8b5cf6;
+    --color-sports: #22c55e;
+    --color-boardgames: #3b82f6;
+
+    /* Colores de estado */
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+
+    /* Fondos */
+    --background: #0f172a;
+    --background-light: #1e293b;
+    --background-card: #273549;
+
+    /* Texto */
+    --text: #f8fafc;
+    --text-secondary: #94a3b8;
+
+    /* Bordes */
+    --border: #334155;
+
+    /* Sombras */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+    /* Bordes redondeados */
+    --radius: 16px;
+
+    /* Dimensiones del layout */
+    --sidebar-width: 260px;
+    --navbar-height: 75px;
+
+    /* Transiciones */
+    --transition: 0.25s ease;
+}

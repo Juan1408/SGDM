@@ -1,0 +1,50 @@
+<section class="encabezado-seccion">
+    <h2 class="titulo-pantalla">Crear o Editar Rol</h2>
+    <a href="#roles/lista" class="boton-secundario">← Volver a Roles</a>
+</section>
+
+<section class="contenido-seccion">
+    <form class="formulario-estandar">
+        <fieldset>
+            <legend>Datos Básicos del Rol</legend>
+            <label for="nombre-rol">Nombre del Rol:</label>
+            <input type="text" id="nombre-rol" placeholder="Ej. Moderador de Torneos" required>
+
+            <label for="desc-rol">Descripción:</label>
+            <textarea id="desc-rol" rows="2" placeholder="Describe brevemente qué hace este rol..."></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>Asignación de Permisos</legend>
+            <p class="texto-ayuda">Selecciona las acciones que los usuarios con este rol podrán realizar en el sistema.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div>
+                    <h4>Gestión de Torneos</h4>
+                    <label><input type="checkbox" name="permiso" value="crear_torneos"> Puede crear torneos</label><br>
+                    <label><input type="checkbox" name="permiso" value="editar_torneos"> Puede editar torneos de otros</label><br>
+                    <label><input type="checkbox" name="permiso" value="borrar_torneos"> Puede eliminar torneos</label>
+                </div>
+                <div>
+                    <h4>Gestión de Usuarios</h4>
+                    <label><input type="checkbox" name="permiso" value="crear_usuarios"> Puede crear usuarios admin</label><br>
+                    <label><input type="checkbox" name="permiso" value="bloquear_usuarios"> Puede bloquear participantes</label>
+                </div>
+                <div>
+                    <h4>Comunicaciones y Reportes</h4>
+                    <label><input type="checkbox" name="permiso" value="enviar_mensajes"> Puede enviar comunicados masivos</label><br>
+                    <label><input type="checkbox" name="permiso" value="descargar_reportes"> Puede descargar reportes del sistema</label>
+                </div>
+                <div>
+                    <h4>Configuración del Sistema</h4>
+                    <label><input type="checkbox" name="permiso" value="ver_auditoria"> Puede ver registros de auditoría</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Rol</button>
+            <a href="#roles/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>

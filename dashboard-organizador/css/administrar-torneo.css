@@ -1,0 +1,364 @@
+/* =====================================================
+   Navegación y encabezado
+===================================================== */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+.tournament-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 25px;
+
+    margin-bottom: 30px;
+    padding: 28px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--color-primary);
+    border-radius: var(--radius);
+}
+
+.tournament-header__label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.tournament-header h1 {
+    margin-bottom: 8px;
+}
+
+.tournament-header p {
+    color: var(--text-secondary);
+}
+
+
+/* =====================================================
+   Menú interno
+===================================================== */
+
+.tournament-menu {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.tournament-menu__button {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+
+    padding: 15px 18px;
+
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    text-align: left;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tournament-menu__button i {
+    color: var(--color-primary);
+}
+
+.tournament-menu__button:hover,
+.tournament-menu__button.active {
+    background: rgba(255, 60, 172, 0.15);
+    border-color: var(--color-primary);
+}
+
+.tournament-menu__button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   Panel principal
+===================================================== */
+
+.tournament-panel {
+    min-height: 350px;
+    padding: 28px;
+
+    background: var(--background-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.panel-title {
+    margin-bottom: 8px;
+    font-size: 1.35rem;
+}
+
+.panel-description {
+    margin-bottom: 25px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   Información general
+===================================================== */
+
+.information-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.information-card,
+.tournament-description {
+    background: var(--background-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.information-card {
+    display: grid;
+    gap: 7px;
+    padding: 18px;
+}
+
+.information-card span {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.information-card strong {
+    overflow-wrap: anywhere;
+}
+
+.tournament-description {
+    margin-top: 25px;
+    padding: 20px;
+
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.tournament-description strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+
+/* =====================================================
+   Secciones pendientes
+===================================================== */
+
+.section-placeholder {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 15px;
+
+    min-height: 260px;
+
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.section-placeholder i {
+    color: var(--color-primary);
+    font-size: 2.5rem;
+}
+
+.section-placeholder h2 {
+    color: var(--text);
+}
+
+
+/* =====================================================
+   Formulario
+===================================================== */
+
+.edit-form {
+    display: grid;
+    gap: 20px;
+}
+
+.edit-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-group {
+    display: grid;
+    gap: 8px;
+}
+
+.form-group--full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 15px;
+
+    color: var(--text);
+    font: inherit;
+
+    background: var(--background-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 115px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--color-primary);
+}
+
+.form-group input[readonly],
+.form-group input:disabled,
+.form-group select:disabled {
+    color: var(--text-secondary);
+    background: rgba(39, 53, 73, 0.55);
+    cursor: not-allowed;
+}
+
+.form-help {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   Botones
+===================================================== */
+
+.form-actions {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: end;
+    gap: 12px;
+
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.button-primary,
+.button-secondary {
+    padding: 12px 20px;
+
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.button-primary {
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.button-primary:hover {
+    background: var(--color-primary-hover);
+}
+
+.button-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+}
+
+.button-secondary:hover {
+    border-color: var(--text-secondary);
+}
+
+
+/* =====================================================
+   Mensajes
+===================================================== */
+
+.success-message,
+.error-message {
+    padding: 14px 18px;
+    border-radius: 10px;
+}
+
+.success-message {
+    color: var(--color-success);
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.error-message {
+    color: var(--color-error);
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width: 1100px) {
+    .tournament-menu,
+    .information-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .tournament-header,
+    .tournament-menu,
+    .information-grid,
+    .edit-form__grid,
+    .form-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group--full {
+        grid-column: auto;
+    }
+}

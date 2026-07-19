@@ -1,0 +1,44 @@
+<section class="encabezado-seccion">
+    <h2 class="titulo-pantalla">Registrar Juego o Disciplina</h2>
+    <a href="#juegos/lista" class="boton-secundario">← Volver al Directorio</a>
+</section>
+
+<section class="contenido-seccion">
+    <form class="formulario-estandar">
+        <fieldset>
+            <legend>Información Principal</legend>
+            <label for="nombre-juego">Nombre del Juego / Disciplina:</label>
+            <input type="text" id="nombre-juego" placeholder="Ej. Valorant" required>
+
+            <label for="categoria-juego">Categoría:</label>
+            <select id="categoria-juego" required>
+                <option value="">Seleccione una categoría...</option>
+                <option value="esport-shooter">eSport (Shooter)</option>
+                <option value="esport-moba">eSport (MOBA)</option>
+                <option value="esport-fgc">eSport (FGC/Peleas)</option>
+                <option value="deporte-fisico">Deporte Físico</option>
+                <option value="otro">Otro</option>
+            </select>
+
+            <label for="formato-equipo">Formato por Defecto (Jugadores por equipo):</label>
+            <input type="number" id="formato-equipo" min="1" max="50" placeholder="Ej. 5" required>
+        </fieldset>
+
+        <fieldset>
+            <legend>Reglas y Sistema de Puntuación (Opcional)</legend>
+            <label for="puntos-victoria">Puntos por Victoria:</label>
+            <input type="number" id="puntos-victoria" value="3" min="0">
+
+            <label for="puntos-empate">Puntos por Empate:</label>
+            <input type="number" id="puntos-empate" value="1" min="0">
+
+            <label for="puntos-derrota">Puntos por Derrota:</label>
+            <input type="number" id="puntos-derrota" value="0" min="0">
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Registrar Juego</button>
+            <a href="#juegos/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>

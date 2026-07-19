@@ -1,0 +1,19 @@
+/* =====================================================
+   Contenido principal
+===================================================== */
+
+.content {
+    grid-area: content;
+
+    min-width: 0;
+    padding: 40px;
+
+    overflow-y: auto;
+}
+
+.content h1 {
+    margin-bottom: 10px;
+
+    font-size: 2.2rem;
+    line-height: 1.2;
+}

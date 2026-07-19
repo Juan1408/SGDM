@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ascend | Administrar torneo</title>
+
+    <!-- Tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Iconos -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- Estilos reutilizados -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <!-- Estilos exclusivos de esta página -->
+    <link rel="stylesheet" href="css/administrar-torneo.css">
+
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Barra superior -->
+        <header class="navbar">
+
+            <div class="navbar__logo">
+                ASCEND
+            </div>
+
+            <div class="navbar__user">
+
+                <button
+                    class="navbar__notification"
+                    type="button"
+                    aria-label="Ver notificaciones"
+                >
+                    <i
+                        class="fa-solid fa-bell"
+                        aria-hidden="true"
+                    ></i>
+                </button>
+
+                <div class="user">
+
+                    <img
+                        src="https://placehold.co/40x40"
+                        alt="Foto de perfil de Mauricio"
+                    >
+
+                    <span>Mauricio</span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- Menú lateral principal -->
+        <aside class="sidebar">
+
+            <div class="sidebar__profile">
+
+                <img
+                    src="https://placehold.co/90x90"
+                    alt="Foto de perfil de Mauricio"
+                >
+
+                <h2>Mauricio</h2>
+                <span>Organizador</span>
+
+            </div>
+
+            <nav aria-label="Navegación del organizador">
+
+                <a href="inicio.html">
+
+                    <i
+                        class="fa-solid fa-house"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Inicio</span>
+
+                </a>
+
+                <a
+                    class="active"
+                    href="mis-torneos.html"
+                    aria-current="page"
+                >
+
+                    <i
+                        class="fa-solid fa-trophy"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Mis torneos</span>
+
+                </a>
+
+                <a href="crear-torneo.html">
+
+                    <i
+                        class="fa-solid fa-plus"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Crear torneo</span>
+
+                </a>
+
+                <a href="perfil.html">
+
+                    <i
+                        class="fa-solid fa-user"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Mi perfil</span>
+
+                </a>
+
+            </nav>
+
+            <div class="sidebar__bottom">
+
+                <a href="#">
+
+                    <i
+                        class="fa-solid fa-right-from-bracket"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>Cerrar sesión</span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="content">
+
+            <a
+                class="back-link"
+                href="mis-torneos.html"
+            >
+                <i
+                    class="fa-solid fa-arrow-left"
+                    aria-hidden="true"
+                ></i>
+
+                Volver a Mis torneos
+            </a>
+
+            <!-- Encabezado del torneo -->
+            <header class="tournament-header">
+
+                <div>
+
+                    <span class="tournament-header__label">
+                        Administrar torneo
+                    </span>
+
+                    <h1 id="nombreTorneo">
+                        Cargando torneo...
+                    </h1>
+
+                    <p id="disciplinaTorneo">
+                        Selecciona una opción para administrar la competencia.
+                    </p>
+
+                </div>
+
+                <span
+                    class="estado"
+                    id="estadoTorneo"
+                ></span>
+
+            </header>
+
+            <!-- Menú interno del torneo -->
+            <nav
+                class="tournament-menu"
+                aria-label="Opciones de administración del torneo"
+            >
+
+                <button
+                    class="tournament-menu__button active"
+                    type="button"
+                    data-section="informacion"
+                >
+                    <i class="fa-solid fa-circle-info"></i>
+                    Información
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="fixture"
+                >
+                    <i class="fa-solid fa-sitemap"></i>
+                    Fixture
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="cronograma"
+                >
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Cronograma
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="solicitudes"
+                >
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    Solicitudes
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="resultados"
+                >
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    Resultados
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="editar"
+                >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Editar torneo
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="participantes"
+                >
+                    <i class="fa-solid fa-users"></i>
+                    Participantes
+                </button>
+
+                <button
+                    class="tournament-menu__button"
+                    type="button"
+                    data-section="posiciones"
+                >
+                    <i class="fa-solid fa-ranking-star"></i>
+                    Posiciones
+                </button>
+
+            </nav>
+
+            <!-- Panel dinámico -->
+            <section
+                class="tournament-panel"
+                id="contenidoTorneo"
+                aria-live="polite"
+            ></section>
+
+        </main>
+
+    </div>
+
+<!-- Datos compartidos -->
+    <script src="js/utils.js"></script>
+
+    <!-- Reglas de validación -->
+    <script src="js/torneoValidaciones.js"></script>
+
+    <!-- Generación de la interfaz -->
+    <script src="js/torneoVista.js"></script>
+
+    <!-- Controlador principal -->
+    <script src="js/administrarTorneo.js"></script>
+
+
+</body>
+
+</html>

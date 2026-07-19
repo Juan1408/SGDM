@@ -14,49 +14,74 @@
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
-  background-color: white;
+  background-color: var(--color-fondo-panel);
   border-collapse: collapse;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
+  box-shadow: var(--sombra-suave);
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
 }
 
 .tabla-estandar th {
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-secundario);
   text-align: left;
-  padding: 12px 15px;
-  border-bottom: 2px solid #dee2e6;
+  padding: 14px 15px;
+  border-bottom: 2px solid var(--color-borde);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
 }
 
 .tabla-estandar td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ecf0f1;
+  padding: 14px 15px;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-texto-principal);
+  font-size: 0.9rem;
 }
 
+.tabla-estandar tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+
 .formulario-estandar fieldset {
-  background-color: white;
-  border: 1px solid #ddd;
-  padding: 20px;
+  background-color: var(--color-fondo-panel);
+  border: 1px solid var(--color-borde);
+  padding: 24px;
   margin-bottom: 20px;
-  border-radius: 5px;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
 }
 
 .formulario-estandar label {
   display: block;
-  margin-top: 10px;
-  font-weight: bold;
-  color: #555;
+  margin-top: 15px;
+  font-weight: 500;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
 }
 
 .formulario-estandar input,
 .formulario-estandar select,
 .formulario-estandar textarea {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-borde);
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: var(--color-fondo-panel);
+  color: var(--color-texto-principal);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formulario-estandar input:focus,
+.formulario-estandar select:focus,
+.formulario-estandar textarea:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(75, 101, 132, 0.15);
 }
 
 .encabezado-seccion {
@@ -119,25 +144,34 @@
 }
 
 .tarjeta-estadistica {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
+  background: var(--color-fondo-panel);
+  padding: 24px;
+  border-radius: var(--radio-borde);
   flex: 1;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-estadistica:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
 }
 
 .tarjeta-estadistica h3 {
   margin: 0;
-  color: #7f8c8d;
-  font-size: 1rem;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .tarjeta-estadistica p {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.2rem;
+  font-weight: 600;
   margin: 10px 0 0;
-  color: #2c3e50;
+  color: var(--color-primario);
 }
 
 /* =========================================
@@ -173,6 +207,26 @@
 }
 
 /* =========================================
+   ANIMACIÓN DEL DESPLEGABLE
+   ========================================= */
+details[open].acciones-desplegables .acciones-lista {
+  animation: desplegarSuave 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  transform-origin: top right;
+}
+
+@keyframes desplegarSuave {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.90);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
    NOTIFICACIONES (TOAST)
    ========================================= */
 .contenedor-notificaciones {
@@ -191,7 +245,7 @@
   color: white;
   padding: 15px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -203,7 +257,10 @@
 }
 
 @keyframes deslizarArriba {
-  to { opacity: 1; transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .notificacion-toast.ocultar {
@@ -211,7 +268,10 @@
 }
 
 @keyframes desvanecer {
-  to { opacity: 0; transform: translateY(-10px); }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 @media (min-width: 768px) {
@@ -221,6 +281,6 @@
     top: 100%;
     z-index: 10;
     min-width: 200px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
