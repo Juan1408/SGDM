@@ -1,41 +1,41 @@
 <section class="encabezado-seccion">
     <h2 class="titulo-pantalla">Exportación de Reportes</h2>
-    <p class="texto-ayuda" style="margin-top:-10px;">Genera y descarga reportes estadísticos del sistema en formato PDF o Excel.</p>
+    <p class="texto-ayuda encabezado-descripcion">Genera y descarga reportes estadísticos del sistema en formato PDF o Excel.</p>
 </section>
 
 <section class="contenido-seccion">
     <div class="contenedor-tarjetas">
         <!-- Reporte 1 -->
-        <div class="tarjeta-estadistica" style="text-align: left;">
-            <h3 style="color: var(--color-texto-principal); font-size: 1.1rem;">Inscripciones de Torneos</h3>
-            <p style="font-size: 0.9rem; color: var(--color-texto-secundario); font-weight: normal; margin-top: 5px; margin-bottom: 15px;">Listado de todos los equipos y jugadores registrados agrupados por torneo.</p>
+        <div class="tarjeta-reporte">
+            <h3 class="tarjeta-reporte-titulo">Inscripciones de Torneos</h3>
+            <p class="tarjeta-reporte-descripcion">Listado de todos los equipos y jugadores registrados agrupados por torneo.</p>
             
-            <form class="formulario-estandar" style="margin: 0; box-shadow: none; border: none; padding: 0;">
-                <select style="margin-bottom: 10px;">
+            <form class="formulario-reporte">
+                <select class="entrada-reporte">
                     <option value="">Seleccione el torneo...</option>
                     <option value="1">Copa Nacional Valorant 2026</option>
                     <option value="2">Torneo Relámpago LoL</option>
                 </select>
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" class="boton-accion" style="flex: 1;" onclick="mostrarNotificacionToast('Generando PDF...', 'info')">Descargar PDF</button>
-                    <button type="button" class="boton-exito" style="flex: 1;" onclick="mostrarNotificacionToast('Generando Excel...', 'info')">Descargar Excel</button>
+                <div class="grupo-botones-reporte">
+                    <button type="button" class="boton-accion boton-expandido" onclick="mostrarNotificacionToast('Generando PDF...', 'info')">Descargar PDF</button>
+                    <button type="button" class="boton-exito boton-expandido" onclick="mostrarNotificacionToast('Generando Excel...', 'info')">Descargar Excel</button>
                 </div>
             </form>
         </div>
 
         <!-- Reporte 2 -->
-        <div class="tarjeta-estadistica" style="text-align: left;">
-            <h3 style="color: var(--color-texto-principal); font-size: 1.1rem;">Auditoría de Accesos</h3>
-            <p style="font-size: 0.9rem; color: var(--color-texto-secundario); font-weight: normal; margin-top: 5px; margin-bottom: 15px;">Registro de inicios de sesión y acciones críticas en el panel administrativo.</p>
+        <div class="tarjeta-reporte">
+            <h3 class="tarjeta-reporte-titulo">Auditoría de Accesos</h3>
+            <p class="tarjeta-reporte-descripcion">Registro de inicios de sesión y acciones críticas en el panel administrativo.</p>
             
-            <form class="formulario-estandar" style="margin: 0; box-shadow: none; border: none; padding: 0;">
-                <select style="margin-bottom: 10px;">
+            <form class="formulario-reporte">
+                <select class="entrada-reporte">
                     <option value="hoy">Últimas 24 horas</option>
                     <option value="semana">Últimos 7 días</option>
                     <option value="mes">Último Mes</option>
                 </select>
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" class="boton-secundario" style="flex: 1;" onclick="mostrarNotificacionToast('Generando Reporte CSV...', 'info')">Descargar CSV</button>
+                <div class="grupo-botones-reporte">
+                    <button type="button" class="boton-secundario boton-expandido" onclick="mostrarNotificacionToast('Generando Reporte CSV...', 'info')">Descargar CSV</button>
                 </div>
             </form>
         </div>

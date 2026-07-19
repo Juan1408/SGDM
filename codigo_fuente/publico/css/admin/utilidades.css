@@ -1,5 +1,5 @@
 /* =========================================
-   CLASES UTILITARIAS (PROFESIONALES)
+   CLASES UTILITARIAS 
    ========================================= */
 .boton-salir {
   background-color: var(--color-peligro);
@@ -107,7 +107,7 @@
   font-size: 0.8rem;
 }
 
-.estado-fallido, 
+.estado-fallido,
 .estado-cancelado {
   color: var(--color-peligro);
   font-weight: 600;

@@ -11,16 +11,11 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-   <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-   >
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
 
    <!-- ICONOS -->
-   <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-   >
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
    <!-- ESTILOS GENERALES -->
    <link rel="stylesheet" href="../../css/variables.css">
@@ -70,130 +65,92 @@
             </p>
          </div>
 
-         <span
-            class="estado"
-            id="estadoTorneo"
-         ></span>
+         <span class="estado" id="estadoTorneo"></span>
 
       </header>
 
       <!-- MENÚ INTERNO -->
-    <nav class="torneo-menu">
+      <nav class="torneo-menu">
 
-   <button
-      class="torneo-menu__button active"
-      type="button"
-      data-section="informacion"
-   >
-      <i class="fa-solid fa-circle-info"></i>
-      <span>Información</span>
-   </button>
-
-   <div class="torneo-menu__group">
-
-      <button
-         class="torneo-menu__button torneo-menu__toggle"
-         type="button"
-      >
-         <i class="fa-solid fa-users"></i>
-         <span>Participantes</span>
-         <i class="fa-solid fa-chevron-down"></i>
-      </button>
-
-      <div class="torneo-menu__submenu">
-
-         <button
-            type="button"
-            data-section="participantes"
-         >
-            Lista de participantes
+         <button class="torneo-menu__button active" type="button" data-section="informacion">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Información</span>
          </button>
 
-         <button
-            type="button"
-            data-section="solicitudes"
-         >
-            Solicitudes
-         </button>
+         <div class="torneo-menu__group">
 
-      </div>
+            <button class="torneo-menu__button torneo-menu__toggle" type="button">
+               <i class="fa-solid fa-users"></i>
+               <span>Participantes</span>
+               <i class="fa-solid fa-chevron-down"></i>
+            </button>
 
-   </div>
+            <div class="torneo-menu__submenu">
 
-   <div class="torneo-menu__group">
+               <button type="button" data-section="participantes">
+                  Lista de participantes
+               </button>
 
-      <button
-         class="torneo-menu__button torneo-menu__toggle"
-         type="button"
-      >
-         <i class="fa-solid fa-sitemap"></i>
-         <span>Competencia</span>
-         <i class="fa-solid fa-chevron-down"></i>
-      </button>
+               <button type="button" data-section="solicitudes">
+                  Solicitudes
+               </button>
 
-      <div class="torneo-menu__submenu">
+            </div>
 
-         <button
-            type="button"
-            data-section="fixture"
-         >
-            Fixture
-         </button>
+         </div>
 
-         <button
-            type="button"
-            data-section="resultados"
-         >
-            Resultados
-         </button>
+         <div class="torneo-menu__group">
 
-         <button
-            type="button"
-            data-section="posiciones"
-         >
-            Posiciones
-         </button>
+            <button class="torneo-menu__button torneo-menu__toggle" type="button">
+               <i class="fa-solid fa-sitemap"></i>
+               <span>Competencia</span>
+               <i class="fa-solid fa-chevron-down"></i>
+            </button>
 
-         <button
-            type="button"
-            data-section="cronograma"
-         >
-            Cronograma
-         </button>
+            <div class="torneo-menu__submenu">
 
-      </div>
+               <button type="button" data-section="fixture">
+                  Fixture
+               </button>
 
-   </div>
+               <button type="button" data-section="resultados">
+                  Resultados
+               </button>
 
-   <div class="torneo-menu__group">
+               <button type="button" data-section="posiciones">
+                  Posiciones
+               </button>
 
-      <button
-         class="torneo-menu__button torneo-menu__toggle"
-         type="button"
-      >
-         <i class="fa-solid fa-gear"></i>
-         <span>Configuración</span>
-         <i class="fa-solid fa-chevron-down"></i>
-      </button>
+               <button type="button" data-section="cronograma">
+                  Cronograma
+               </button>
 
-      <div class="torneo-menu__submenu">
+            </div>
 
-         <button
-            type="button"
-            data-section="editar"
-         >
-            Editar torneo
-         </button>
+         </div>
 
-      </div>
+         <div class="torneo-menu__group">
 
-   </div>
+            <button class="torneo-menu__button torneo-menu__toggle" type="button">
+               <i class="fa-solid fa-gear"></i>
+               <span>Configuración</span>
+               <i class="fa-solid fa-chevron-down"></i>
+            </button>
 
-</nav>
+            <div class="torneo-menu__submenu">
+
+               <button type="button" data-section="editar">
+                  Editar torneo
+               </button>
+
+            </div>
+
+         </div>
+
+      </nav>
 
       <!-- CONTENIDO DINÁMICO -->
-      <section
-         class="torneo-panel" id="contenidoTorneo" aria-live="polite">
+      <section class="torneo-panel" id="contenidoTorneo" aria-live="polite">
       </section>
 
    </main>

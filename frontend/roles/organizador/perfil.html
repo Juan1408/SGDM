@@ -10,15 +10,10 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-   <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-   >
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
 
-   <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-   >
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
    <link rel="stylesheet" href="../../css/variables.css">
    <link rel="stylesheet" href="../../css/base.css">
@@ -51,11 +46,7 @@
          </div>
       </header>
 
-      <div
-         class="perfil-notificacion"
-         id="perfilNotificacion"
-         aria-live="polite"
-      ></div>
+      <div class="perfil-notificacion" id="perfilNotificacion" aria-live="polite"></div>
 
       <section class="perfil-grid">
 
@@ -65,26 +56,13 @@
             <div class="perfil-avatar-contenedor">
 
                <div class="perfil-avatar">
-                  <img
-                     id="fotoPerfil"
-                     src="../../img/avatars/a1.png"
-                     alt="Foto de perfil"
-                  >
+                  <img id="fotoPerfil" src="../../img/avatars/a1.png" alt="Foto de perfil">
                </div>
 
-               <label
-                  class="perfil-cambiar-foto"
-                  for="inputFotoPerfil"
-                  title="Cambiar foto"
-               >
+               <label class="perfil-cambiar-foto" for="inputFotoPerfil" title="Cambiar foto">
                   <i class="fa-solid fa-camera"></i>
 
-                  <input
-                     id="inputFotoPerfil"
-                     type="file"
-                     accept="image/jpeg,image/png,image/webp"
-                     hidden
-                  >
+                  <input id="inputFotoPerfil" type="file" accept="image/jpeg,image/png,image/webp" hidden>
                </label>
 
             </div>
@@ -128,11 +106,7 @@
                   <h2>Datos de la cuenta</h2>
                </div>
 
-               <button
-                  class="perfil-boton-secundario"
-                  id="editarPerfil"
-                  type="button"
-               >
+               <button class="perfil-boton-secundario" id="editarPerfil" type="button">
                   <i class="fa-solid fa-pen"></i>
                   Editar
                </button>
@@ -181,11 +155,7 @@
                   <h2>Biografía</h2>
                </div>
 
-               <button
-                  class="perfil-boton-secundario"
-                  id="editarBiografia"
-                  type="button"
-               >
+               <button class="perfil-boton-secundario" id="editarBiografia" type="button">
                   <i class="fa-solid fa-pen"></i>
                   Editar
                </button>
@@ -212,11 +182,7 @@
 
             <div class="perfil-seguridad-acciones">
 
-               <button
-                  class="perfil-accion-seguridad"
-                  id="cambiarPassword"
-                  type="button"
-               >
+               <button class="perfil-accion-seguridad" id="cambiarPassword" type="button">
                   <span class="perfil-accion-icono">
                      <i class="fa-solid fa-lock"></i>
                   </span>
@@ -229,11 +195,8 @@
                   <i class="fa-solid fa-chevron-right"></i>
                </button>
 
-               <button
-                  class="perfil-accion-seguridad perfil-accion-seguridad--peligro"
-                  id="eliminarCuenta"
-                  type="button"
-               >
+               <button class="perfil-accion-seguridad perfil-accion-seguridad--peligro" id="eliminarCuenta"
+                  type="button">
                   <span class="perfil-accion-icono">
                      <i class="fa-solid fa-trash"></i>
                   </span>
@@ -265,11 +228,7 @@
                <h2>Editar perfil</h2>
             </div>
 
-            <button
-               class="perfil-modal-cerrar"
-               type="button"
-               data-cerrar-modal="modalEditarPerfil"
-            >
+            <button class="perfil-modal-cerrar" type="button" data-cerrar-modal="modalEditarPerfil">
                <i class="fa-solid fa-xmark"></i>
             </button>
          </header>
@@ -281,78 +240,42 @@
                <div class="perfil-campo perfil-campo--ancho">
                   <label for="inputNombre">Nombre completo</label>
 
-                  <input
-                     id="inputNombre"
-                     type="text"
-                     minlength="3"
-                     maxlength="50"
-                     required
-                  >
+                  <input id="inputNombre" type="text" minlength="3" maxlength="50" required>
                </div>
 
                <div class="perfil-campo">
                   <label for="inputEmail">Correo electrónico</label>
 
-                  <input
-                     id="inputEmail"
-                     type="email"
-                     maxlength="100"
-                     required
-                  >
+                  <input id="inputEmail" type="email" maxlength="100" required>
                </div>
 
                <div class="perfil-campo">
                   <label for="inputTelefono">Teléfono</label>
 
-                  <input
-                     id="inputTelefono"
-                     type="tel"
-                     minlength="7"
-                     maxlength="20"
-                     required
-                  >
+                  <input id="inputTelefono" type="tel" minlength="7" maxlength="20" required>
                </div>
 
                <div class="perfil-campo">
                   <label for="inputOrganizacion">Organización</label>
 
-                  <input
-                     id="inputOrganizacion"
-                     type="text"
-                     minlength="2"
-                     maxlength="80"
-                     required
-                  >
+                  <input id="inputOrganizacion" type="text" minlength="2" maxlength="80" required>
                </div>
 
                <div class="perfil-campo">
                   <label for="inputLocalidad">Localidad</label>
 
-                  <input
-                     id="inputLocalidad"
-                     type="text"
-                     minlength="2"
-                     maxlength="80"
-                     required
-                  >
+                  <input id="inputLocalidad" type="text" minlength="2" maxlength="80" required>
                </div>
 
             </div>
 
             <div class="perfil-modal-acciones">
 
-               <button
-                  class="perfil-boton-cancelar"
-                  type="button"
-                  data-cerrar-modal="modalEditarPerfil"
-               >
+               <button class="perfil-boton-cancelar" type="button" data-cerrar-modal="modalEditarPerfil">
                   Cancelar
                </button>
 
-               <button
-                  class="perfil-boton-principal"
-                  type="submit"
-               >
+               <button class="perfil-boton-principal" type="submit">
                   Guardar cambios
                </button>
 
@@ -375,11 +298,7 @@
                <h2>Editar biografía</h2>
             </div>
 
-            <button
-               class="perfil-modal-cerrar"
-               type="button"
-               data-cerrar-modal="modalBiografia"
-            >
+            <button class="perfil-modal-cerrar" type="button" data-cerrar-modal="modalBiografia">
                <i class="fa-solid fa-xmark"></i>
             </button>
          </header>
@@ -389,13 +308,7 @@
             <div class="perfil-campo">
                <label for="inputBiografia">Biografía</label>
 
-               <textarea
-                  id="inputBiografia"
-                  minlength="10"
-                  maxlength="300"
-                  rows="7"
-                  required
-               ></textarea>
+               <textarea id="inputBiografia" minlength="10" maxlength="300" rows="7" required></textarea>
 
                <small>
                   Máximo 300 caracteres.
@@ -404,18 +317,11 @@
 
             <div class="perfil-modal-acciones">
 
-               <button
-                  class="perfil-boton-cancelar"
-                  type="button"
-                  data-cerrar-modal="modalBiografia"
-               >
+               <button class="perfil-boton-cancelar" type="button" data-cerrar-modal="modalBiografia">
                   Cancelar
                </button>
 
-               <button
-                  class="perfil-boton-principal"
-                  type="submit"
-               >
+               <button class="perfil-boton-principal" type="submit">
                   Guardar biografía
                </button>
 
@@ -438,11 +344,7 @@
                <h2>Cambiar contraseña</h2>
             </div>
 
-            <button
-               class="perfil-modal-cerrar"
-               type="button"
-               data-cerrar-modal="modalPassword"
-            >
+            <button class="perfil-modal-cerrar" type="button" data-cerrar-modal="modalPassword">
                <i class="fa-solid fa-xmark"></i>
             </button>
          </header>
@@ -452,49 +354,28 @@
             <div class="perfil-campo">
                <label for="passwordActual">Contraseña actual</label>
 
-               <input
-                  id="passwordActual"
-                  type="password"
-                  required
-               >
+               <input id="passwordActual" type="password" required>
             </div>
 
             <div class="perfil-campo">
                <label for="passwordNueva">Nueva contraseña</label>
 
-               <input
-                  id="passwordNueva"
-                  type="password"
-                  minlength="6"
-                  required
-               >
+               <input id="passwordNueva" type="password" minlength="6" required>
             </div>
 
             <div class="perfil-campo">
                <label for="passwordConfirmar">Confirmar contraseña</label>
 
-               <input
-                  id="passwordConfirmar"
-                  type="password"
-                  minlength="6"
-                  required
-               >
+               <input id="passwordConfirmar" type="password" minlength="6" required>
             </div>
 
             <div class="perfil-modal-acciones">
 
-               <button
-                  class="perfil-boton-cancelar"
-                  type="button"
-                  data-cerrar-modal="modalPassword"
-               >
+               <button class="perfil-boton-cancelar" type="button" data-cerrar-modal="modalPassword">
                   Cancelar
                </button>
 
-               <button
-                  class="perfil-boton-principal"
-                  type="submit"
-               >
+               <button class="perfil-boton-principal" type="submit">
                   Cambiar contraseña
                </button>
 

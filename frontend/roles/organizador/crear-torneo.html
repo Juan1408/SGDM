@@ -10,15 +10,10 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-   <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-   >
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
 
-   <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-   >
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
    <link rel="stylesheet" href="../../css/variables.css">
    <link rel="stylesheet" href="../../css/base.css">
@@ -28,10 +23,7 @@
    <link rel="stylesheet" href="../../css/layouts/organizador-layout.css">
    <link rel="stylesheet" href="../../css/layouts/footer.css">
 
-   <link
-      rel="stylesheet"
-      href="../../css/organizador/crear-torneo.css"
-   >
+   <link rel="stylesheet" href="../../css/organizador/crear-torneo.css">
 </head>
 
 <body>
@@ -61,19 +53,11 @@
          </a>
       </header>
 
-      <div
-         id="crear-torneo-notificacion"
-         class="crear-torneo-notificacion"
-         aria-live="polite"
-      ></div>
+      <div id="crear-torneo-notificacion" class="crear-torneo-notificacion" aria-live="polite"></div>
 
-      <form
-         id="crear-torneo-form"
-         class="crear-torneo-grid"
-         novalidate
-      >
+      <form id="crear-torneo-form" class="crear-torneo-grid" novalidate>
 
-      
+
          <!-- COLUMNA 1 -->
          <section class="crear-torneo-bloque">
 
@@ -84,15 +68,8 @@
                   Nombre del torneo
                </label>
 
-               <input
-                  id="tournamentName"
-                  name="nombre"
-                  type="text"
-                  minlength="3"
-                  maxlength="100"
-                  placeholder="Ej.: Copa SGDM 2026"
-                  required
-               >
+               <input id="tournamentName" name="nombre" type="text" minlength="3" maxlength="100"
+                  placeholder="Ej.: Copa SGDM 2026" required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -100,11 +77,7 @@
                   Disciplina
                </label>
 
-               <select
-                  id="discipline"
-                  name="disciplina"
-                  required
-               >
+               <select id="discipline" name="disciplina" required>
                   <option value="">
                      Seleccionar disciplina
                   </option>
@@ -116,13 +89,7 @@
                   Modalidad
                </label>
 
-               <input
-                  id="modality"
-                  name="modalidad"
-                  type="text"
-                  placeholder="Se completa automáticamente"
-                  readonly
-               >
+               <input id="modality" name="modalidad" type="text" placeholder="Se completa automáticamente" readonly>
             </div>
 
             <div class="crear-torneo-campo">
@@ -130,12 +97,7 @@
                   Sistema de competencia
                </label>
 
-               <select
-                  id="competitionSystem"
-                  name="sistema"
-                  required
-                  disabled
-               >
+               <select id="competitionSystem" name="sistema" required disabled>
                   <option value="">
                      Seleccioná primero una disciplina
                   </option>
@@ -147,16 +109,8 @@
                   Cupos máximos
                </label>
 
-               <input
-                  id="participants"
-                  name="cupos"
-                  type="number"
-                  min="2"
-                  max="64"
-                  step="1"
-                  placeholder="Cantidad de participantes"
-                  required
-               >
+               <input id="participants" name="cupos" type="number" min="2" max="64" step="1"
+                  placeholder="Cantidad de participantes" required>
 
                <small id="ayudaCupos">
                   Indicá la cantidad máxima de equipos o jugadores.
@@ -168,15 +122,8 @@
                   Comunidad u organización
                </label>
 
-               <input
-                  id="community"
-                  name="comunidad"
-                  type="text"
-                  minlength="2"
-                  maxlength="80"
-                  placeholder="Ej.: Club SGDM"
-                  required
-               >
+               <input id="community" name="comunidad" type="text" minlength="2" maxlength="80"
+                  placeholder="Ej.: Club SGDM" required>
             </div>
 
          </section>
@@ -191,12 +138,7 @@
                   Inicio de inscripciones
                </label>
 
-               <input
-                  id="inscriptionStart"
-                  name="fechaInicioInscripcion"
-                  type="date"
-                  required
-               >
+               <input id="inscriptionStart" name="fechaInicioInscripcion" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -204,12 +146,7 @@
                   Cierre de inscripciones
                </label>
 
-               <input
-                  id="inscriptionEnd"
-                  name="fechaCierre"
-                  type="date"
-                  required
-               >
+               <input id="inscriptionEnd" name="fechaCierre" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -217,12 +154,7 @@
                   Inicio del torneo
                </label>
 
-               <input
-                  id="tournamentStart"
-                  name="fechaInicio"
-                  type="date"
-                  required
-               >
+               <input id="tournamentStart" name="fechaInicio" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -230,12 +162,7 @@
                   Fin estimado del torneo
                </label>
 
-               <input
-                  id="tournamentEnd"
-                  name="fechaFin"
-                  type="date"
-                  required
-               >
+               <input id="tournamentEnd" name="fechaFin" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -243,15 +170,8 @@
                   Lugar de los encuentros
                </label>
 
-               <input
-                  id="venue"
-                  name="ubicacion"
-                  type="text"
-                  minlength="2"
-                  maxlength="100"
-                  placeholder="Online, estadio, club..."
-                  required
-               >
+               <input id="venue" name="ubicacion" type="text" minlength="2" maxlength="100"
+                  placeholder="Online, estadio, club..." required>
             </div>
 
             <div class="crear-torneo-campo">
@@ -259,15 +179,8 @@
                   Localidad
                </label>
 
-               <input
-                  id="locality"
-                  name="localidad"
-                  type="text"
-                  minlength="2"
-                  maxlength="80"
-                  placeholder="Ciudad o departamento"
-                  required
-               >
+               <input id="locality" name="localidad" type="text" minlength="2" maxlength="80"
+                  placeholder="Ciudad o departamento" required>
             </div>
 
          </section>
@@ -282,14 +195,8 @@
                   Descripción
                </label>
 
-               <textarea
-                  id="description"
-                  name="descripcion"
-                  minlength="10"
-                  maxlength="500"
-                  placeholder="Describí la competencia..."
-                  required
-               ></textarea>
+               <textarea id="description" name="descripcion" minlength="10" maxlength="500"
+                  placeholder="Describí la competencia..." required></textarea>
             </div>
 
             <div class="crear-torneo-campo">
@@ -297,65 +204,50 @@
                   Reglamento
                </label>
 
-               <textarea
-                  id="rules"
-                  name="reglamento"
-                  minlength="10"
-                  maxlength="1500"
-                  placeholder="Indicá las reglas principales..."
-                  required
-               ></textarea>
+               <textarea id="rules" name="reglamento" minlength="10" maxlength="1500"
+                  placeholder="Indicá las reglas principales..." required></textarea>
             </div>
 
          </section>
 
- <section class="crear-banner-card">
+         <section class="crear-banner-card">
 
-   <h2 id="titulo-banner">Identidad visual</h2>
+            <h2 id="titulo-banner">Identidad visual</h2>
 
-   <p>
-      Elegí un banner predeterminado o subí
-      una imagen personalizada.
-   </p>
+            <p>
+               Elegí un banner predeterminado o subí
+               una imagen personalizada.
+            </p>
 
-   <figure class="banner-preview">
+            <figure class="banner-preview">
 
-      <img
-         id="previewBanner"
-         src="../../img/banners/default.jpg"
-         alt="Banner del torneo"
-      >
+               <img id="previewBanner" src="../../img/banners/default.jpg" alt="Banner del torneo">
 
-   </figure>
+            </figure>
 
-   <h3>Banners predeterminados</h3>
+            <h3>Banners predeterminados</h3>
 
-   <div class="banner-selector">
+            <div class="banner-selector">
 
-      <!-- tarjetas -->
+               <!-- tarjetas -->
 
-   </div>
+            </div>
 
-   <div class="banner-divider">
-      <span>o</span>
-   </div>
+            <div class="banner-divider">
+               <span>o</span>
+            </div>
 
-   <label class="banner-upload">
+            <label class="banner-upload">
 
-      <i class="fa-solid fa-image"></i>
+               <i class="fa-solid fa-image"></i>
 
-      Subir imagen personalizada
+               Subir imagen personalizada
 
-      <input
-         type="file"
-         id="bannerFile"
-         accept="image/*"
-         hidden
-      >
+               <input type="file" id="bannerFile" accept="image/*" hidden>
 
-   </label>
+            </label>
 
-</section>
+         </section>
 
          <!-- EVENTOS -->
          <aside class="crear-torneo-panel">
@@ -376,12 +268,7 @@
                      Título
                   </label>
 
-                  <input
-                     id="eventTitle"
-                     type="text"
-                     maxlength="100"
-                     placeholder="Ej.: Reunión de capitanes"
-                  >
+                  <input id="eventTitle" type="text" maxlength="100" placeholder="Ej.: Reunión de capitanes">
                </div>
 
                <div class="crear-evento-fila">
@@ -415,10 +302,7 @@
                         Fecha
                      </label>
 
-                     <input
-                        id="eventDate"
-                        type="date"
-                     >
+                     <input id="eventDate" type="date">
                   </div>
 
                   <div class="crear-torneo-campo">
@@ -426,19 +310,12 @@
                         Hora
                      </label>
 
-                     <input
-                        id="eventTime"
-                        type="time"
-                     >
+                     <input id="eventTime" type="time">
                   </div>
 
                </div>
 
-               <button
-                  id="add-event-button"
-                  class="crear-evento-boton"
-                  type="button"
-               >
+               <button id="add-event-button" class="crear-evento-boton" type="button">
                   <i class="fa-solid fa-plus"></i>
                   Agregar actividad
                </button>
@@ -452,19 +329,13 @@
                   Actividades agregadas
                </div>
 
-               <div
-                  id="dates-list"
-                  class="crear-fechas-lista"
-               >
+               <div id="dates-list" class="crear-fechas-lista">
                   Aún no se agregaron actividades.
                </div>
 
             </section>
 
-            <button
-               class="crear-torneo-submit"
-               type="submit"
-            >
+            <button class="crear-torneo-submit" type="submit">
                <i class="fa-solid fa-trophy"></i>
                Crear torneo
             </button>
