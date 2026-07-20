@@ -12,11 +12,12 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
    
    <!-- CSS -->
-    <link rel="stylesheet" href="../../css/publico/torneo.css">
    <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
    <link rel="stylesheet" href="../../css/layouts/navbar.css">
    <link rel="stylesheet" href="../../css/publico/home.css">
    <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/publico/torneo.css">
 
    <!-- Font Awesome -->
    <link
@@ -28,6 +29,9 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+   <!-- Tailwind: solo se usa para el botón "Ver más fechas" -->
+   <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
@@ -115,9 +119,7 @@
 <!-- PANEL DE FILTRO ------------------->
 <!-------------------------------------->
 
- <section class="filters-panel">
-
-   <div class="filters-panel">
+<section class="filters-panel">
 
    <div class="top-row">
 
@@ -133,42 +135,42 @@
          <input type="text" placeholder="Buscar torneo...">
       </div>
 
-
-</div>
-
-      <div class="select-filters">
-
-         <select>
-            <option>Juego</option>
-            <option>Valorant</option>
-            <option>League of Legends</option>
-            <option>Ajedrez</option>
-            <option>Truco</option>
-         </select>
-
-         <select>
-            <option>Tipo de eliminación</option>
-            <option>Liga</option>
-            <option>Eliminación directa</option>
-            <option>Sistema suizo</option>
-         </select>
-
-         <select>
-            <option>Región</option>
-            <option>Uruguay</option>
-            <option>Latam</option>
-            <option>Online</option>
-         </select>
-
-         <select>
-            <option>Estado</option>
-            <option>Inscripciones abiertas</option>
-            <option>En curso</option>
-            <option>Finalizado</option>
-            <option>Proximos</option>
-         </select>
-      </div>
    </div>
+
+   <div class="select-filters">
+
+      <select>
+         <option>Juego</option>
+         <option>Valorant</option>
+         <option>League of Legends</option>
+         <option>Ajedrez</option>
+         <option>Truco</option>
+      </select>
+
+      <select>
+         <option>Tipo de eliminación</option>
+         <option>Liga</option>
+         <option>Eliminación directa</option>
+         <option>Sistema suizo</option>
+      </select>
+
+      <select>
+         <option>Región</option>
+         <option>Uruguay</option>
+         <option>Latam</option>
+         <option>Online</option>
+      </select>
+
+      <select>
+         <option>Estado</option>
+         <option>Inscripciones abiertas</option>
+         <option>En curso</option>
+         <option>Finalizado</option>
+         <option>Proximos</option>
+      </select>
+
+   </div>
+
 </section>
 
 <!-------------------------------------->
@@ -394,8 +396,8 @@
 
 <div id="footer-publico-placeholder"></div>
 
-<script src="../../js/navbar.js"></script>
 <script src="../../js/includesPublicos.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="../../js/navbar.js"></script>
+<script src="../../js/hero-slider.js"></script>
 </body>
 </html>

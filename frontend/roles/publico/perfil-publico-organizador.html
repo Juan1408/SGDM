@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>SGDM - Perfil Organizador</title>
+
+   <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
+   <link rel="stylesheet" href="../../css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../css/layouts/footer.css">
+   <link rel="stylesheet" href="../../css/publico/perfil-publico-organizador.css">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR ---------------------------->
+
+<div id="navbar-publico-placeholder"></div>
+
+   <main class="organizer-page">
+      <section class="organizer-hero organizer-hero--card">
+         <div class="organizer-hero-card">
+            <div class="organizer-avatar organizer-avatar--big" style="background-image:url('../../img/avatars/a1.png');"></div>
+            <div class="organizer-hero-content">
+               <span class="organizer-label">Organizadora</span>
+               <h1>Valentina Torres</h1>
+               <p>Organizadora de torneos eSports y deportes mixtos, comprometida con la experiencia del participante y la gestión profesional de cada evento.</p>
+               <div class="organizer-hero-buttons">
+                  <button class="perfil-boton-primario">Seguir</button>
+                  <a href="#organizer-events" class="perfil-boton-secundario" class="perfil-boton-secundario">Ver torneosa></a>
+               </div>
+            </div>
+            <div class="organizer-hero-metrics">
+               <div class="hero-metric">
+                  <strong>12</strong>
+                  <span>Torneos</span>
+               </div>
+               <div class="hero-metric">
+                  <strong>4.9/5</strong>
+                  <span>Rating</span>
+               </div>
+               <div class="hero-metric">
+                  <strong>86</strong>
+                  <span>Opiniones</span>
+               </div>
+               <div class="hero-metric hero-metric--location">
+                  <strong>Montevideo</strong>
+                  <span>Ubicación</span>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="organizer-events" id="organizer-events">
+         <div class="section-heading">
+            <h3>Torneos organizados</h3>
+         </div>
+         <div class="event-grid">
+            <article class="event-card">
+               <img src="../../img/torneos/card1.jpg" alt="Virtual Odyssey Chronicles">
+               <div>
+                  <h4>Virtual Odyssey Chronicles</h4>
+                  <span>eSports / 26 mayo 2026</span>
+               </div>
+            </article>
+            <article class="event-card">
+               <img src="../../img/torneos/card2.png" alt="Valorant Champion Series">
+               <div>
+                  <h4>Valorant Champion Series</h4>
+                  <span>Competencia regional / 18 junio 2026</span>
+               </div>
+            </article>
+            <article class="event-card">
+               <img src="../../img/torneos/card3.png" alt="Copa Futbol 5">
+               <div>
+                  <h4>Copa Futbol 5</h4>
+                  <span>Deportes mixtos / 08 julio 2026</span>
+               </div>
+            </article>
+         </div>
+      </section>
+
+      <section class="organizer-reviews" id="organizer-reviews">
+         <div class="section-heading">
+            <div>
+               <h3>Opiniones</h3>
+               <p>Lo que dicen los participantes sobre la organización y el ambiente de los torneos.</p>
+            </div>
+         </div>
+         <div class="review-grid">
+            <article class="review-card">
+               <div class="review-head">
+                  <div class="review-avatar"></div>
+                  <div>
+                     <h4>Mateo R.</h4>
+                     <span>5.0</span>
+                  </div>
+               </div>
+               <p>Excelente comunicación y eventos bien organizados. Cada detalle estuvo cuidado y el ambiente fue muy profesional.</p>
+            </article>
+            <article class="review-card">
+               <div class="review-head">
+                  <div class="review-avatar"></div>
+                  <div>
+                     <h4>Ana G.</h4>
+                     <span>4.8</span>
+                  </div>
+               </div>
+               <p>Los horarios fueron claros y la logística del torneo fue impecable. Recomendable para equipos nuevos y competitivos.</p>
+            </article>
+            <article class="review-card">
+               <div class="review-head">
+                  <div class="review-avatar"></div>
+                  <div>
+                     <h4>Lucas M.</h4>
+                     <span>4.9</span>
+                  </div>
+               </div>
+               <p>Ambiente inclusivo y muy buena gestión de resultados. Los participantes siempre se sintieron escuchados.</p>
+            </article>
+            <article class="review-card review-card--form">
+               <h4>Deja tu opinión</h4>
+               <textarea placeholder="¿Qué te pareció la organización del torneo?" rows="5"></textarea>
+               <button class="perfil-boton-primario">Enviar opinión</button>
+            </article>
+         </div>
+      </section>
+   </main>
+
+ <!-- FOOTER ---------------------------->
+
+<div id="footer-publico-placeholder"></div>
+
+<script src="../../js/includesPublicos.js"></script>
+<script src="../../js/navbar.js"></script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -10,61 +10,20 @@
    <link rel="stylesheet" href="../../css/layouts/footer.css">
    <link rel="stylesheet" href="../../css/variables.css">
    <link rel="stylesheet" href="../../css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../css/pages/perfil-jugador.css">
+   <link rel="stylesheet" href="../../css/jugador/perfil-jugador.css">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
+<!-- NAVBAR ---------------------------->
 
-   <!-------------------------------------->
-   <!-- NAVBAR ---------------------------->
-   <!-------------------------------------->
-
-   <nav class="navbar">
-      <div class="navbar-contenedor">
-         <div class="logo-contenedor">
-            <i class="fa-solid fa-trophy"></i>
-            <h1>SGDM</h1>
-         </div>
-
-         <button class="navbar-toggle" id="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-         </button>
-
-         <ul class="navbar-menu" id="nav-links">
-            <li><a href="#">Inicio</a></li>
-
-            <li class="desplegable">
-               <button class="boton-desplegable" id="torneo-desplegable">
-                  Torneos <i class="fa-solid fa-chevron-down"></i>
-               </button>
-               <div class="contenido-desplegable">
-                  <a href="../publico/torneos.html">Todos los Torneos</a>
-                  <a href="../publico/detalle-torneo.html">Detalle Torneos</a>
-               </div>
-            </li>
-
-            <li><a href="#">Rankings</a></li>
-            <li><a href="#">Nosotros</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-
-            <li class="auth-links">
-               <a href="../../roles/publico/login.html" class="login-link"><i class="fa-solid fa-user"></i></a>
-               <a href="../../roles/publico/login.html" class="boton-registro">Sign up</a>
-            </li>
-         </ul>
-      </div>
-   </nav>
-
+<div id="navbar-publico-placeholder"></div>
 
    <main class="perfil-jugador">
 
@@ -72,10 +31,7 @@
 
       <section class="perfil-header">
 
-         <div class="perfil-breadcrumb">
-            home/jugadores/perfil-jugador/juan
-         </div>
-
+         
          <div class="perfil-avatar-box">
             <img src="../../img/avatars/a1.png" alt="Avatar jugador">
          </div>
@@ -169,170 +125,170 @@
 
             <!-- TORNEOS -->
 
-            <section class="perfil-section">
+<section class="perfil-section">
 
-               <h3 class="perfil-section-title">Torneos</h3>
+   <h3 class="perfil-section-title">Torneos</h3>
 
-               <div class="perfil-torneos-grid">
+   <div class="perfil-torneos-grid">
 
-                  <article class="perfil-torneo-card">
-                     <img src="../../img/torneos/card1.jpg" alt="Torneo">
-                     <div>
-                        <h4>Virtual Odyssey Chronicles</h4>
-                        <p>Puesto: 3 <span>Puntos: 1.124</span></p>
-                     </div>
-                  </article>
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card1.jpg" alt="Torneo">
+         <div>
+            <h4>Virtual Odyssey Chronicles</h4>
+            <p>Puesto: 3 <span>Puntos: 1.124</span></p>
+         </div>
+      </article>
 
-                  <article class="perfil-torneo-card">
-                     <img src="../../img/torneos/card2.png" alt="Torneo">
-                     <div>
-                        <h4>Valorant Champion Series</h4>
-                        <p>Puesto: 1 <span>Puntos: 2.300</span></p>
-                     </div>
-                  </article>
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card2.png" alt="Torneo">
+         <div>
+            <h4>Valorant Champion Series</h4>
+            <p>Puesto: 1 <span>Puntos: 2.300</span></p>
+         </div>
+      </article>
 
-                  <article class="perfil-torneo-card">
-                     <img src="../../img/torneos/card3.png" alt="Torneo">
-                     <div>
-                        <h4>Copa Futbol 5</h4>
-                        <p>Puesto: 4 <span>Puntos: 980</span></p>
-                     </div>
-                  </article>
+      <article class="perfil-torneo-card">
+         <img src="../../img/torneos/card3.png" alt="Torneo">
+         <div>
+            <h4>Copa Futbol 5</h4>
+            <p>Puesto: 4 <span>Puntos: 980</span></p>
+         </div>
+      </article>
 
-               </div>
+   </div>
 
-            </section>
-
-
-            <!-- TROFEOS -->
-
-            <section class="perfil-section">
-
-               <h3 class="perfil-section-title">Trofeos</h3>
-
-               <div class="trofeos-row">
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-trophy"></i>
-                  </article>
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-medal"></i>
-                  </article>
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-crown"></i>
-                  </article>
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-trophy"></i>
-                  </article>
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-medal"></i>
-                  </article>
-
-                  <article class="trofeo-card">
-                     <i class="fa-solid fa-crown"></i>
-                  </article>
-
-               </div>
-
-            </section>
+</section>
 
 
-            <!-- LOGROS -->
+<!-- TROFEOS -->
 
-            <section class="perfil-section">
+<section class="perfil-section">
 
-               <h3 class="perfil-section-title">Logros</h3>
+   <h3 class="perfil-section-title">Trofeos</h3>
 
-               <div class="logros-grid">
+   <div class="trofeos-row">
 
-                  <article class="logro-card desbloqueado">
-                     <div class="logro-icon"></div>
-                     <div>
-                        <h4>Primera batalla</h4>
-                        <p>Jugaste tu primer torneo</p>
-                     </div>
-                     <span>Logrado</span>
-                  </article>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-trophy"></i>
+      </article>
 
-                  <article class="logro-card desbloqueado">
-                     <div class="logro-icon"></div>
-                     <div>
-                        <h4>Campeón</h4>
-                        <p>Ganaste un torneo oficial</p>
-                     </div>
-                     <span>Logrado</span>
-                  </article>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-medal"></i>
+      </article>
 
-                  <article class="logro-card en-curso">
-                     <div class="logro-icon"></div>
-                     <div>
-                        <h4>Veterano</h4>
-                        <p>6/10 torneos</p>
-                     </div>
-                     <span>En curso</span>
-                  </article>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-crown"></i>
+      </article>
 
-                  <article class="logro-card bloqueado">
-                     <div class="logro-icon"></div>
-                     <div>
-                        <h4>En racha</h4>
-                        <p>Ganá 3 partidas distintas</p>
-                     </div>
-                     <span>Bloqueado</span>
-                  </article>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-trophy"></i>
+      </article>
 
-               </div>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-medal"></i>
+      </article>
 
-            </section>
+      <article class="trofeo-card">
+         <i class="fa-solid fa-crown"></i>
+      </article>
+
+   </div>
+
+</section>
 
 
-            <!-- JUEGOS -->
+<!-- LOGROS -->
 
-            <section class="perfil-section">
+<section class="perfil-section">
 
-               <h3 class="perfil-section-title">Juegos que participa</h3>
+   <h3 class="perfil-section-title">Logros</h3>
 
-               <div class="juegos-row">
+   <div class="logros-grid">
 
-                  <article class="juego-card">
-                     <img src="../../img/juegos/dos.jpg" alt="League of Legends">
-                     <div>
-                        <h4>League of Legends</h4>
-                        <p>4 torneos</p>
-                     </div>
-                  </article>
+      <article class="logro-card desbloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Primera batalla</h4>
+            <p>Jugaste tu primer torneo</p>
+         </div>
+         <span>Logrado</span>
+      </article>
 
-                  <article class="juego-card">
-                     <img src="../../img/juegos/fly.jpg" alt="Apex Legends">
-                     <div>
-                        <h4>Apex Legends</h4>
-                        <p>2 torneos</p>
-                     </div>
-                  </article>
+      <article class="logro-card desbloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Campeón</h4>
+            <p>Ganaste un torneo oficial</p>
+         </div>
+         <span>Logrado</span>
+      </article>
 
-                  <article class="juego-card">
-                     <img src="../../img/juegos/odyssey.png" alt="Counter Strike">
-                     <div>
-                        <h4>Counter Strike</h4>
-                        <p>5 torneos</p>
-                     </div>
-                  </article>
+      <article class="logro-card en-curso">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>Veterano</h4>
+            <p>6/10 torneos</p>
+         </div>
+         <span>En curso</span>
+      </article>
 
-                  <article class="juego-card">
-                     <img src="../../img/juegos/quantum.png" alt="World of Warcraft">
-                     <div>
-                        <h4>World of Warcraft</h4>
-                        <p>1 torneo</p>
-                     </div>
-                  </article>
+      <article class="logro-card bloqueado">
+         <div class="logro-icon"></div>
+         <div>
+            <h4>En racha</h4>
+            <p>Ganá 3 partidas distintas</p>
+         </div>
+         <span>Bloqueado</span>
+      </article>
 
-               </div>
+   </div>
 
-            </section>
+</section>
+
+
+<!-- JUEGOS -->
+
+<section class="perfil-section">
+
+   <h3 class="perfil-section-title">Juegos que participa</h3>
+
+   <div class="juegos-row">
+
+      <article class="juego-card">
+         <img src="../../img/juegos/dos.jpg" alt="League of Legends">
+         <div>
+            <h4>League of Legends</h4>
+            <p>4 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/fly.jpg" alt="Apex Legends">
+         <div>
+            <h4>Apex Legends</h4>
+            <p>2 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/odyssey.png" alt="Counter Strike">
+         <div>
+            <h4>Counter Strike</h4>
+            <p>5 torneos</p>
+         </div>
+      </article>
+
+      <article class="juego-card">
+         <img src="../../img/juegos/quantum.png" alt="World of Warcraft">
+         <div>
+            <h4>World of Warcraft</h4>
+            <p>1 torneo</p>
+         </div>
+      </article>
+
+   </div>
+
+</section>
 
          </section>
 
@@ -340,66 +296,12 @@
 
    </main>
 
+<!-- FOOTER ---------------------------->
 
-   <!-------------------------------------->
-   <!-- FOOTER ---------------------------->
-   <!-------------------------------------->
+<div id="footer-publico-placeholder"></div>
 
-   <footer class="footer">
-      <div class="footer-content">
-         <div class="footer-brand">
-            <div class="footer-logo">
-               <i class="fa-solid fa-trophy"></i>
-               <h3>SGDM</h3>
-            </div>
-
-            <p>Plataforma de gestión de torneos deportivos,
-               mentales y eSports.</p>
-         </div>
-         <div class="footer-links">
-
-            <h4>Navegación</h4>
-
-            <a href="#">Inicio</a>
-            <a href="#">Torneos</a>
-            <a href="#">Rankings</a>
-            <a href="#contacto">Contacto</a>
-
-         </div>
-         <div class="footer-links">
-
-            <h4>Torneos</h4>
-
-            <a href="#">Liga</a>
-            <a href="#">Eliminación Directa</a>
-            <a href="#">Sistema Suizo</a>
-         </div>
-         <div class="footer-links">
-
-            <h4>Seguinos</h4>
-
-            <div class="footer-social">
-               <a href="#">
-                  <i class="fab fa-discord"></i>
-               </a>
-               <a href="#">
-                  <i class="fab fa-instagram"></i>
-               </a>
-               <a href="#">
-                  <i class="fab fa-x-twitter"></i>
-               </a>
-            </div>
-         </div>
-      </div>
-      <div class="footer-bottom">
-
-         <p> © 2026 SGDM - Sistema de Gestión Deportiva Modular.</p>
-         <p> Proyecto de egreso BT Tecnologías de la Información.</p>
-
-      </div>
-
-   </footer>
+<script src="../../js/includesPublicos.js"></script>
+<script src="../../js/navbar.js"></script>
 
 </body>
-
 </html>

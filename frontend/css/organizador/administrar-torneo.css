@@ -172,7 +172,7 @@
 
 .torneo-menu__button.active {
    color: #fff;
-   background: rgba(255, 0, 200, .1);
+   background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
 }
 
@@ -241,12 +241,12 @@
 
 .torneo-menu__submenu button:hover {
    color: #fff;
-   background: rgba(48, 245, 210, .08);
+   background: rgba(0, 255, 238, .08);
 }
 
 .torneo-menu__submenu button.active {
    color: #fff;
-   background: rgba(255, 0, 200, .1);
+   background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
 }
 

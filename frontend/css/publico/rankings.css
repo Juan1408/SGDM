@@ -1,12 +1,12 @@
 .juegos-destacados {
-  padding: 80px 8%;
-  background: #070812;
+  padding: 48px 6%;
+  background: var(--fondo-principal);
 }
 
 .juegos-header { margin-bottom: 48px; }
 
 .juegos-subtitle {
-  color: #30f5d2;
+  color: var(--color-secundario);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -53,7 +53,8 @@
    display: flex;
    align-items: center;
   overflow: hidden;
-  width: calc(4 * 190px + 3 * 28px); /* 4 cards + 3 gaps */
+  width: 100%;
+  max-width: 100%;
 }
 
 .games-grid {
@@ -99,6 +100,8 @@
   transition: 0.6s;
 }
 
+
+
 .card-info {
   background: #1f1a1d;
   width: 100%;
@@ -140,20 +143,21 @@
 
 .winners-section {
   background:
-    radial-gradient(circle at top left, rgba(255, 0, 200, 0.18), transparent 28%),
+    radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
     radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
-    #070812;
-  padding: 70px 6%;
+    var(--fondo-principal);
+  padding: 48px 6%;
   display: flex;
+  flex-direction: column;
+  text-align: center;
   align-items: center;
-  gap: 60px;
-  flex-wrap: wrap;
+  gap: 40px;
 }
 
 .winners-left { flex: 1; min-width: 260px; }
 
 .winners-left .tag {
-  color: #30f5d2;
+  color: var(--color-secundario);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -163,30 +167,32 @@
 
 .winners-left h2 {
   color: #fff;
-  font-size: 44px;
+  font-size: 30px;
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 22px;
 }
 
-.winners-left h2 span { color: #30f5d2; }
+.winners-left h2 span { color: var(--color-secundario); }
 
 .winners-left .trophy {
-  font-size: 90px;
+  font-size: 70px;
   margin-top: 10px;
 }
 
 .winners-right {
   flex: 1.2;
-  min-width: 320px;
+  width: 100%;
+  min-width: 0;
   position: relative;
 }
 
 .winners-badge {
   position: absolute;
   top: -18px;
-  right: 30px;
-  background: linear-gradient(90deg, #30f5d2, #ff00c8);
+  right: 50%;
+  transform: translateX(50%);
+  background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
   color: #0a0a18;
   font-weight: 700;
   font-size: 12px;
@@ -194,6 +200,7 @@
   padding: 8px 22px;
   border-radius: 999px;
   z-index: 2;
+  white-space: nowrap;
 }
 
 .winners-list {
@@ -239,13 +246,13 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #30f5d2, #ff00c8);
+  background: linear-gradient(135deg, var(--color-secundario), var(--color-primario));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   font-weight: 700;
-  color: #070812;
+  color: var(--fondo-principal);
   flex-shrink: 0;
 }
 
@@ -257,31 +264,45 @@
 }
 
 .winner-amount {
-  background: rgba(48,245,210,0.12);
-  color: #30f5d2;
+  background: rgba(0, 255, 238,0.12);
+  color: var(--color-secundario);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 14px;
   border-radius: 999px;
 }
 
-@media (max-width: 700px) {
-  .winners-section { flex-direction: column; text-align: center; }
-  .winners-left h2 { font-size: 34px; }
-  .winners-badge { right: 50%; transform: translateX(50%); }
+@media (min-width: 700px) {
+  .winners-section {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 60px;
+  }
+
+  .winners-left h2 { font-size: 44px; }
+  .winners-left .trophy { font-size: 90px; }
+  .winners-right { min-width: 320px; }
+  .winners-badge { right: 30px; transform: none; }
 }
 
 
 /**RANKINGS**/
 .ranking-section {
-  background: #070812;
-  padding: 70px 6%;
+  background: var(--fondo-principal);
+  padding: 48px 6%;
 }
 
 .ranking-header { margin-bottom: 36px; }
 
+.ranking-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .ranking-header p {
-  color: #30f5d2;
+  color: var(--color-secundario);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -304,7 +325,7 @@
 
 .ranking-row {
   display: grid;
-  grid-template-columns: 60px 1fr 160px 110px 130px;
+  grid-template-columns: 40px minmax(0, 1fr) 90px;
   align-items: center;
   padding: 16px 24px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -343,16 +364,16 @@
 .rk-avatar {
   width: 36px; height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #30f5d2, #ff00c8);
+  background: linear-gradient(135deg, var(--color-secundario), var(--color-primario));
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; color: #070812;
+  font-size: 12px; font-weight: 700; color: var(--fondo-principal);
   flex-shrink: 0;
 }
 .rk-player span { color: #fff; font-size: 14px; font-weight: 600; }
 
-.rk-game { color: #a0a0c0; font-size: 13px; }
-.rk-encuentros { color: #a0a0c0; font-size: 13px; text-align: center; }
-.rk-points { color: #30f5d2; font-weight: 700; font-size: 14px; text-align: right; }
+.rk-game { display: none; color: #a0a0c0; font-size: 13px; }
+.rk-encuentros { display: none; color: #a0a0c0; font-size: 13px; text-align: center; }
+.rk-points { color: var(--color-secundario); font-weight: 700; font-size: 14px; text-align: right; }
 
 /* From Uiverse.io by Navarog21 */ 
 .rk-tab {
@@ -378,7 +399,7 @@
   left: 3%;
   width: 95%;
   height: 40%;
-  background-color: #070812;
+  background-color: var(--fondo-principal);
   transition: 0.5s;
   transform-origin: center;
 }
@@ -391,7 +412,7 @@
   left: 3%;
   width: 95%;
   height: 40%;
-  background-color: #070812;
+  background-color: var(--fondo-principal);
   transition: 0.5s;
 }
 
@@ -406,8 +427,10 @@
 
 
 
-@media (max-width: 700px) {
-  .ranking-row { grid-template-columns: 40px 1fr 90px; }
-  .rk-game, .rk-encuentros { display: none; }
-}
+@media (min-width: 700px) {
+  .ranking-row {
+    grid-template-columns: 60px minmax(0, 1fr) 160px 110px 130px;
+  }
 
+  .rk-game, .rk-encuentros { display: block; }
+}
