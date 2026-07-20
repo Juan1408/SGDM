@@ -1,0 +1,717 @@
+/* =========================
+   RESET / BASE
+========================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'Poppins', sans-serif;
+   background:
+      radial-gradient(circle at 15% 20%, rgba(0, 255, 220, 0.18), transparent 28%),
+      radial-gradient(circle at 85% 40%, rgba(255, 0, 200, 0.16), transparent 30%),
+      #070812;
+   color: #fff;
+}
+
+/* =========================
+   HEADER PERFIL
+========================= */
+
+.perfil-header {
+   position: relative;
+   min-height: 300px;
+   padding: 35px 8%;
+   background:
+      linear-gradient(
+         180deg,
+         rgba(7, 8, 18, 0.15),
+         rgba(7, 8, 18, 0.85)
+      ),
+      url("../../img/bg.jpg");
+   background-size: cover;
+   background-position: center;
+}
+
+.perfil-breadcrumb {
+   color: #30f5d2;
+   font-size: 22px;
+   font-weight: 500;
+   text-shadow: 0 0 18px rgba(48, 245, 210, 0.65);
+}
+
+.perfil-avatar-box {
+   position: absolute;
+   left: 8%;
+   bottom: -65px;
+   width: 165px;
+   height: 165px;
+   border-radius: 50%;
+   background: #ddd;
+   border: 6px solid #30f5d2;
+   box-shadow: 0 0 28px rgba(48, 245, 210, 0.45);
+   overflow: hidden;
+   z-index: 5;
+}
+
+.perfil-avatar-box img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.perfil-nivel {
+   position: absolute;
+   left: calc(8% + 210px);
+   bottom: 18px;
+   color: #fff;
+   font-size: 22px;
+   font-weight: 700;
+}
+
+/* =========================
+   LAYOUT GENERAL
+========================= */
+
+.perfil-layout {
+   width: 86%;
+   margin: 0 auto;
+   display: grid;
+   grid-template-columns: 240px 1fr;
+   gap: 28px;
+   align-items: start;
+}
+
+.perfil-sidebar {
+   padding-top: 85px;
+   display: flex;
+   flex-direction: column;
+   gap: 28px;
+}
+
+.perfil-card {
+   background: #101010;
+   border: 1px solid rgba(255, 0, 200, 0.22);
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+   padding: 28px 24px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.perfil-datos {
+   text-align: center;
+}
+
+.perfil-datos h2 {
+   font-size: 23px;
+   margin-bottom: 18px;
+}
+
+.perfil-datos p {
+   color: #e4e4f0;
+   font-size: 13px;
+   margin-bottom: 16px;
+}
+
+.perfil-sobre-mi h3,
+.perfil-equipos h3 {
+   font-size: 22px;
+   margin-bottom: 18px;
+}
+
+.perfil-sobre-mi p {
+   color: #d2d2df;
+   font-size: 14px;
+   line-height: 1.55;
+}
+
+.perfil-redes {
+   margin-top: 28px;
+   display: flex;
+   justify-content: center;
+   gap: 12px;
+   background: #050505;
+   padding: 12px;
+}
+
+.perfil-redes a {
+   width: 35px;
+   height: 35px;
+   border-radius: 9px;
+   background: #111;
+   color: #fff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   transition: 0.3s ease;
+}
+
+.perfil-redes a:hover {
+   color: #30f5d2;
+   box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
+}
+
+.equipo-item {
+   display: flex;
+   align-items: center;
+   gap: 18px;
+   margin-bottom: 24px;
+}
+
+.equipo-item img {
+   width: 55px;
+   height: 55px;
+   object-fit: contain;
+}
+
+.equipo-item span {
+   font-weight: 700;
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+.perfil-contenido {
+   padding-top: 28px;
+}
+
+.perfil-stats {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 28px;
+}
+
+.estadisticas-card {
+   min-height: 120px;
+   background: linear-gradient(180deg, #42147d, #1c063d);
+   border-radius: 4px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 0 24px rgba(255, 0, 200, 0.15);
+}
+
+.estadisticas-card strong {
+   font-size: 34px;
+   line-height: 1;
+}
+
+.estadisticas-card span {
+   margin-top: 12px;
+   font-weight: 700;
+}
+
+/* =========================
+   SECCIONES PERFIL
+========================= */
+
+.perfil-section {
+   margin-top: 42px;
+
+   margin-bottom: 0;
+}
+
+.perfil-section-title {
+   width: 100%;
+   padding: 8px 18px;
+   margin-bottom: 28px;
+   font-size: 26px;
+   font-weight: 800;
+   background: linear-gradient(90deg, #ff00c8, #2600ff);
+   color: #fff;
+}
+
+/* =========================
+   TORNEOS
+========================= */
+
+.perfil-torneos-grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 28px;
+}
+
+.perfil-torneo-card {
+   position: relative;
+   height: 150px;
+   overflow: hidden;
+   background: #111;
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.12);
+}
+
+.perfil-torneo-card img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0.45;
+}
+
+.perfil-torneo-card div {
+   position: absolute;
+   inset: 0;
+   padding: 28px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.perfil-torneo-card h4 {
+   font-size: 15px;
+   margin-bottom: 18px;
+}
+
+.perfil-torneo-card p {
+   font-size: 12px;
+   font-weight: 700;
+}
+
+.perfil-torneo-card span {
+   margin-left: 18px;
+}
+
+/* =========================
+   TROFEOS
+========================= */
+
+.trofeos-row {
+   display: flex;
+   gap: 14px;
+   flex-wrap: wrap;
+}
+
+.trofeo-card {
+   width: 95px;
+   height: 95px;
+   border-radius: 14px;
+   background: linear-gradient(145deg, #42147d, #10103a);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 0 22px rgba(255, 0, 200, 0.18);
+}
+
+.trofeo-card i {
+   color: #ffd000;
+   font-size: 44px;
+   text-shadow: 0 0 18px rgba(255, 208, 0, 0.45);
+}
+
+/* =========================
+   LOGROS
+========================= */
+
+.logros-grid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 18px;
+}
+
+.logro-card {
+   min-height: 74px;
+   padding: 14px;
+   display: grid;
+   grid-template-columns: 48px 1fr auto;
+   align-items: center;
+   gap: 14px;
+   background: linear-gradient(90deg, rgba(48,245,210,.25), rgba(255,0,200,.15));
+   box-shadow: 0 0 18px rgba(255, 0, 200, 0.12);
+}
+
+.logro-card.en-curso {
+   background: linear-gradient(90deg, rgba(255,180,80,.35), rgba(255,0,200,.15));
+}
+
+.logro-card.bloqueado {
+   background: linear-gradient(90deg, rgba(150,150,150,.3), rgba(40,40,40,.8));
+}
+
+.logro-icon {
+   width: 42px;
+   height: 42px;
+   border-radius: 12px;
+   background: #ddd;
+}
+
+.logro-card h4 {
+   font-size: 14px;
+}
+
+.logro-card p {
+   font-size: 12px;
+   color: #eee;
+}
+
+.logro-card span {
+   padding: 4px 8px;
+   border-radius: 999px;
+   background: #fff;
+   color: #30f5d2;
+   font-size: 9px;
+   font-weight: 800;
+}
+
+/* =========================
+   JUEGOS
+========================= */
+
+.juegos-row {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 20px;
+}
+
+.juego-card {
+   position: relative;
+   height: 180px;
+   border-radius: 12px;
+   overflow: hidden;
+   background: #111;
+   box-shadow: 0 0 22px rgba(48, 245, 210, 0.12);
+   margin-bottom: 20%;
+}
+
+.juego-card img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.juego-card::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(to top, rgba(0,0,0,.92), transparent);
+}
+
+.juego-card div {
+   position: absolute;
+   left: 16px;
+   right: 16px;
+   bottom: 14px;
+   z-index: 2;
+}
+
+ */
+.perfil-header{
+   border-radius:28px;
+   padding:36px 8%;
+   margin: 18px auto;
+   width:86%;
+   box-shadow: 0 12px 60px rgba(3,3,6,0.6);
+   border:1px solid rgba(255,255,255,0.02);
+   background: linear-gradient(180deg, rgba(7,8,18,0.15), rgba(7,8,18,0.85)), url("../../img/bg.jpg");
+   background-size: cover;
+}
+
+.perfil-breadcrumb{
+   display:inline-block;
+   background:#0d3b34;
+   color:#c8fff0;
+   padding:8px 16px;
+   border-radius:999px;
+   font-weight:700;
+   font-size:14px;
+   margin-bottom:14px;
+}
+
+.perfil-avatar-box{ left:8%; bottom:auto; position:relative; width:150px; height:150px; border-radius:18px; border:6px solid #30f5d2; box-shadow:0 0 28px rgba(48,245,210,0.25); overflow:hidden }
+.perfil-avatar-box img{ width:100%; height:100%; object-fit:cover }
+
+.perfil-nivel{ position:relative; left:auto; bottom:auto; margin-top:8px; font-size:18px }
+
+.perfil-layout{ width:86%; margin: 0 auto; display:block }
+
+/* EQUIPOS STATS */
+.perfil-stats{ display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-top:18px }
+.estadisticas-card{ min-height:110px; background: linear-gradient(180deg,#0b0611,#12101a); border-radius:14px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 8px 30px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03) }
+.estadisticas-card strong{ font-size:28px }
+.estadisticas-card span{ margin-top:8px; color:#cfcfe1; font-weight:700 }
+
+/* ESTILOS DE CARDS TORNEOS IGUALES */
+.perfil-torneos-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:20px; margin-top:18px }
+.perfil-torneo-card{ background:#0b0b0d; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.03); box-shadow:0 8px 30px rgba(0,0,0,0.5) }
+.perfil-torneo-card img{ width:100%; height:160px; object-fit:cover }
+
+/* PANEL Y SOBRE MI */
+.perfil-card{ background:#0f0f14; border-radius:16px; padding:22px; border:1px solid rgba(255,0,200,0.04); box-shadow:0 8px 30px rgba(255,0,200,0.03) }
+
+/* ESTILOS MIEMBROS */
+.perfil-section-title{ background: linear-gradient(90deg,#1b0133,#2b0066); border-radius:12px; padding:8px 12px }
+.perfil-sobre-mi, .perfil-datos p{ color:#d2d2df }
+
+@media(max-width:767px){
+   .perfil-header{ padding:22px 6% }
+   .perfil-avatar-box{ width:110px; height:110px; border-radius:12px }
+   .perfil-stats{ grid-template-columns: repeat(2, 1fr) }
+   .perfil-torneos-grid{ grid-template-columns: 1fr }
+}
+
+@media(min-width:768px){
+   .perfil-layout{ display:grid; grid-template-columns: 240px 1fr; gap:28px }
+   .perfil-stats{ grid-template-columns: repeat(3,1fr) }
+   .perfil-torneos-grid{ grid-template-columns: repeat(3,1fr) }
+}
+
+/* Botones */
+.perfil-boton-primario,
+.perfil-boton-secundario{
+   border: none;
+   padding: 8px 12px;
+   border-radius: 8px;
+   cursor: pointer;
+   font-weight: 700;
+}
+.perfil-boton-primario{
+   background: linear-gradient(90deg,#ff00c8,#2600ff);
+   color: #fff;
+}
+.perfil-boton-secundario{
+   background: transparent;
+   color: #fff;
+   border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Modal editar perfil */
+.perfil-modal{
+   position: fixed;
+   inset: 0;
+   display: none;
+   align-items: center;
+   justify-content: center;
+   background: rgba(0,0,0,0.6);
+   z-index: 9999;
+   padding: 24px;
+}
+.perfil-modal.abierto{ display: flex; }
+.perfil-modal-contenido{
+   width: 100%;
+   max-width: 520px;
+   background: #0f0f14;
+   border-radius: 12px;
+   padding: 18px;
+   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+   border: 1px solid rgba(255,0,200,0.08);
+}
+.perfil-modal-contenido header{
+   display:flex;
+   align-items:center;
+   justify-content:space-between;
+   margin-bottom:12px;
+}
+.perfil-modal-contenido h3{ margin:0; font-size:18px; }
+.perfil-modal-contenido header button{
+   background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer;
+}
+.perfil-modal-contenido form label{
+   display:block; margin-bottom:10px; font-size:13px; color:#ddd;
+}
+.perfil-modal-contenido input[type="text"],
+.perfil-modal-contenido input[type="email"],
+.perfil-modal-contenido input[type="number"],
+.perfil-modal-contenido textarea{
+   width:100%; padding:8px 10px; margin-top:6px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#09090b; color:#fff;
+}
+.modal-acciones{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+
+
+/* =========================
+   RESPONSIVE / MOBILE-FIRST
+   Mobile overrides (max-width: 767px)
+========================= */
+
+@media (max-width: 767px) {
+   .perfil-header {
+      min-height: 220px;
+      padding: 24px 6%;
+      background-position: center top;
+   }
+
+   .perfil-breadcrumb {
+      font-size: 16px;
+   }
+
+   .perfil-avatar-box {
+      position: static;
+      margin: 0 auto;
+      transform: translateY(0);
+      width: 120px;
+      height: 120px;
+      border-width: 4px;
+      bottom: auto;
+      left: auto;
+   }
+
+   .perfil-nivel {
+      position: static;
+      margin: 12px auto 0;
+      text-align: center;
+      font-size: 18px;
+      left: auto;
+      bottom: auto;
+   }
+
+   .perfil-layout {
+      width: 92%;
+      display: block;
+      margin-top: 18px;
+   }
+
+   .perfil-sidebar {
+      padding-top: 14px;
+      margin-bottom: 18px;
+   }
+
+   .perfil-card {
+      padding: 18px 14px;
+   }
+
+   .perfil-datos h2 {
+      font-size: 20px;
+   }
+
+   .perfil-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+   }
+
+   .estadisticas-card {
+      min-height: 90px;
+   }
+
+   .perfil-section-title {
+      font-size: 20px;
+      padding: 8px 12px;
+   }
+
+   .perfil-torneos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+   }
+
+   .perfil-torneo-card {
+      height: 140px;
+   }
+
+   .trofeos-row {
+      gap: 10px;
+   }
+
+   .trofeo-card {
+      width: 72px;
+      height: 72px;
+   }
+
+   .logros-grid {
+      grid-template-columns: 1fr;
+   }
+
+   .juegos-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+   }
+
+   .juego-card {
+      height: 140px;
+      margin-bottom: 8%;
+   }
+
+   .perfil-contenido {
+      padding-top: 12px;
+   }
+
+   .perfil-redes {
+      padding: 8px;
+   }
+}
+
+@media (min-width: 768px) {
+   /* GRID PARA PANTALLAS MAS GRANDES */
+   .perfil-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 28px;
+      width: 86%;
+      margin: 0 auto;
+   }
+
+   .perfil-avatar-box {
+      position: absolute;
+      left: 8%;
+      bottom: -65px;
+      width: 165px;
+      height: 165px;
+   }
+
+   .perfil-stats {
+      grid-template-columns: repeat(4, 1fr);
+   }
+
+   .perfil-torneos-grid {
+      grid-template-columns: repeat(3, 1fr);
+   }
+
+   .logros-grid {
+      grid-template-columns: repeat(2, 1fr);
+   }
+
+   .juegos-row {
+      grid-template-columns: repeat(4, 1fr);
+   }
+}
+
+.juego-card h4 {
+   font-size: 15px;
+}
+
+.juego-card p {
+   font-size: 12px;
+   color: #c9c9dc;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+   .perfil-layout {
+      grid-template-columns: 1fr;
+   }
+
+   .perfil-sidebar {
+      padding-top: 100px;
+   }
+
+   .perfil-stats {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (max-width: 500px) {
+   .perfil-header {
+      min-height: 260px;
+   }
+
+   .perfil-avatar-box {
+      width: 135px;
+      height: 135px;
+   }
+
+   .perfil-nivel {
+      left: calc(8% + 160px);
+      font-size: 18px;
+   }
+
+   .perfil-stats {
+      grid-template-columns: 1fr;
+   }
+}

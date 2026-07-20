@@ -9,6 +9,7 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
    
    <link rel="stylesheet" href="../../css/variables.css">
+   <link rel="stylesheet" href="../../css/base.css">
    <link rel="stylesheet" href="../../css/layouts/navbar.css">
    <link rel="stylesheet" href="../../css/layouts/footer.css">
    <link rel="stylesheet" href="../../css/publico/detalle-torneo.css">
@@ -18,6 +19,9 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+   <!-- Tailwind: solo se usa para el botón "Ver más miembros" -->
+   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -171,13 +175,18 @@
             <h4>Virtual Odyssey Chronicles</h4>
          </div>
 
-         <div class="organizer-card">
-            <div class="organizer-avatar"></div>
+          <div class="organizer-profile" id="organizerProfile">
+            <div class="organizer-profile-header">
+               <div class="organizer-avatar" id="organizerAvatar">
 
-            <div class="organizado-por">
-               <p>Organizado por:</p>
-               <h4>Nombre Organizador</h4>
-               <a href="#">Ver Perfil</a>
+                  <img id="foto-organizador" src="../../img/avatars/a1.png">
+               </div>
+               
+            </div>
+            <div class="organizer-profile-label">Organizador</div>
+            <div class="organizer-profile-actions organizer-profile-actions--centered">
+               <button class="perfil-boton-primario">Seguir</button>
+               <a href="../../roles/publico/perfil-publico-organizador.html">Ver perfil</a>
             </div>
          </div>
 
@@ -592,7 +601,6 @@
 <script src="../../js/navbar.js"></script>
 <script src="../../js/llaves.js"></script>
 <script src="../../js/torneo-tabs.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
 
 
 </body>
