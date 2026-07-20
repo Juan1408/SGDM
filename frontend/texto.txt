@@ -6,7 +6,7 @@ CODIGO VIEJO
 
       <div class="logo-contenedor">
          <i class="fa-solid fa-trophy"></i>
-         <h1>SGDM</h1>
+         <h1>ASCEND</h1>
       </div>
 
       <nav class="nav-links" id="nav-links">

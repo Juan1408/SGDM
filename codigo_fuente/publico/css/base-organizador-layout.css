@@ -1,0 +1,7 @@
+﻿@import 'variables.css';
+@import 'base.css';
+@import 'componentes/botones.css';
+@import 'componentes/tarjetas.css';
+@import 'componentes/chips.css';
+@import 'layouts/organizador-layout.css';
+@import 'layouts/footer.css';

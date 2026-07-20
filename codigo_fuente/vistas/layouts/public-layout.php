@@ -6,10 +6,10 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <title><?= $titulo ?? 'SGDM'; ?></title>
+   <title><?= $titulo ?? 'ASCEND'; ?></title>
 
    <!-- CSS -->
-   <link rel="stylesheet" href="/sgdm/publico/css/main.css">
+   <link rel="stylesheet" href="/ascend/publico/css/main.css">
 
    <!-- Font Awesome -->
    <link

@@ -10,7 +10,7 @@
 
             <label for="email_contacto">Email de Contacto (Público):</label>
             <input type="email" id="email_contacto" name="email_contacto" class="campo-requerido"
-                value="contacto@sgdm.com">
+                value="contacto@ascend.com">
         </fieldset>
 
 
@@ -32,10 +32,11 @@
         <fieldset>
             <legend>Políticas de Seguridad y Contraseñas</legend>
             <p class="texto-ayuda">Define los requisitos de seguridad para las cuentas de usuario.</p>
-            
+
             <label for="longitud_minima">Longitud mínima de contraseña (caracteres):</label>
-            <input type="number" id="longitud_minima" name="longitud_minima" value="8" min="6" max="32" class="campo-requerido">
-            
+            <input type="number" id="longitud_minima" name="longitud_minima" value="8" min="6" max="32"
+                class="campo-requerido">
+
             <label>
                 <input type="checkbox" name="requiere_mayuscula" checked> Requerir al menos una letra mayúscula
             </label>
@@ -43,10 +44,12 @@
                 <input type="checkbox" name="requiere_numero" checked> Requerir al menos un número
             </label>
             <label>
-                <input type="checkbox" name="requiere_caracter_especial" checked> Requerir al menos un carácter especial (!, @, #, $, etc.)
+                <input type="checkbox" name="requiere_caracter_especial" checked> Requerir al menos un carácter especial
+                (!, @, #, $, etc.)
             </label>
-            
-            <label for="expiracion_dias" class="margen-superior-1">Días para expiración de contraseña (0 = nunca):</label>
+
+            <label for="expiracion_dias" class="margen-superior-1">Días para expiración de contraseña (0 =
+                nunca):</label>
             <input type="number" id="expiracion_dias" name="expiracion_dias" value="90" min="0">
         </fieldset>
 
@@ -55,4 +58,3 @@
         </div>
     </form>
 </section>
-

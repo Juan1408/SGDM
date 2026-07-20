@@ -1,198 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>SGDM - Perfil Equipo</title>
+  <title>ASCEND - Perfil Equipo</title>
   <link rel="stylesheet" href="../../css/layouts/footer.css">
   <link rel="stylesheet" href="../../css/variables.css">
   <link rel="stylesheet" href="../../css/layouts/navbar.css">
   <link rel="stylesheet" href="../../css/jugador/perfil-equipo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
 
-<!-- NAVBAR ---------------------------->
+  <!-- NAVBAR ---------------------------->
 
-<div id="navbar-publico-placeholder"></div>
+  <div id="navbar-publico-placeholder"></div>
 
-<main class="perfil-equipo">
+  <main class="perfil-equipo">
 
-  <header class="equipo-header">
-    <div class="equipo-bg"></div>
-    <div class="equipo-header-inner">
-      <div class="equipo-hero-panel">
-        <div class="hero-pill">Equipo destacado</div>
+    <header class="equipo-header">
+      <div class="equipo-bg"></div>
+      <div class="equipo-header-inner">
+        <div class="equipo-hero-panel">
+          <div class="hero-pill">Equipo destacado</div>
 
-        <div class="hero-row">
-          <div class="hero-left">
-            <div class="equipo-logo">
-              <img src="../../img/logos/canelones.png" alt="Logo equipo">
-            </div>
-          </div>
-
-          <div class="hero-center">
-            <div class="equipo-titulo">
-              <h1>Black Ferns</h1>
-              <p class="equipo-sub">Equipo competitivo de eSports y deportes mixtos. Ganadores de múltiples torneos y con perfil internacional.</p>
+          <div class="hero-row">
+            <div class="hero-left">
+              <div class="equipo-logo">
+                <img src="../../img/logos/canelones.png" alt="Logo equipo">
+              </div>
             </div>
 
-            <div class="equipo-stats hero-stats">
-              <div class="stat"><strong>18</strong><span>MIEMBROS</span></div>
-              <div class="stat"><strong>24</strong><span>VICTORIAS</span></div>
-              <div class="stat"><strong>3,928</strong><span>PUNTOS</span></div>
-            </div>
-          </div>
+            <div class="hero-center">
+              <div class="equipo-titulo">
+                <h1>Black Ferns</h1>
+                <p class="equipo-sub">Equipo competitivo de eSports y deportes mixtos. Ganadores de múltiples torneos y
+                  con perfil internacional.</p>
+              </div>
 
-          <div class="hero-actions">
-            <button id="btnVerEquipo" class="perfil-boton-primario">Ver equipo</button>
-            <button id="btnVerTorneos" class="perfil-boton-secundario">Ver torneos</button>
-            <button id="btnAdministrar" class="perfil-boton-secundario">Administrar equipo</button>
+              <div class="equipo-stats hero-stats">
+                <div class="stat"><strong>18</strong><span>MIEMBROS</span></div>
+                <div class="stat"><strong>24</strong><span>VICTORIAS</span></div>
+                <div class="stat"><strong>3,928</strong><span>PUNTOS</span></div>
+              </div>
+            </div>
+
+            <div class="hero-actions">
+              <button id="btnVerEquipo" class="perfil-boton-primario">Ver equipo</button>
+              <button id="btnVerTorneos" class="perfil-boton-secundario">Ver torneos</button>
+              <button id="btnAdministrar" class="perfil-boton-secundario">Administrar equipo</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <section class="equipo-content">
-    <div class="equipo-grid">
-      <!-- aside removed: info moved into 'Sobre el equipo' panel -->
+    <section class="equipo-content">
+      <div class="equipo-grid">
+        <!-- aside removed: info moved into 'Sobre el equipo' panel -->
 
-      <div class="equipo-main">
-        <!-- Panels row: Sobre el equipo + Ubicación -->
-        <div class="panels-row">
-          <div class="panel panel-large">
-            <h4>Sobre el equipo</h4>
-              <p>Black Ferns es un conjunto de talento diverso que compite en eSports, torneos de estrategia y ligas deportivas. Enfocado en trabajo en equipo y crecimiento continuo.</p>
-              <p>Equipo competitivo con participación en torneos regionales y online. Enfocados en coordinación y entrenamiento.</p>
+        <div class="equipo-main">
+          <!-- Panels row: Sobre el equipo + Ubicación -->
+          <div class="panels-row">
+            <div class="panel panel-large">
+              <h4>Sobre el equipo</h4>
+              <p>Black Ferns es un conjunto de talento diverso que compite en eSports, torneos de estrategia y ligas
+                deportivas. Enfocado en trabajo en equipo y crecimiento continuo.</p>
+              <p>Equipo competitivo con participación en torneos regionales y online. Enfocados en coordinación y
+                entrenamiento.</p>
               <h4>Capitanes / Líderes</h4>
               <div class="equipo-leaders">
                 <div class="lider-item"><img src="../../img/avatars/a1.png" alt=""> <span>Marcos Aguila</span></div>
                 <div class="lider-item"><img src="../../img/avatars/a2.png" alt=""> <span>Andrea Aguirre</span></div>
               </div>
+            </div>
+
+            <div class="panel panel-large">
+              <h4>Ubicación</h4>
+              <p><strong>Montevideo - Uruguay</strong></p>
+              <p><strong>Deporte</strong><br>eSports / Rugby virtual</p>
+              <p><strong>Fundación</strong><br>2019</p>
+            </div>
           </div>
 
-          <div class="panel panel-large">
-            <h4>Ubicación</h4>
-            <p><strong>Montevideo - Uruguay</strong></p>
-            <p><strong>Deporte</strong><br>eSports / Rugby virtual</p>
-            <p><strong>Fundación</strong><br>2019</p>
+          <!-- Small stats row -->
+          <div class="panels-row small-row">
+            <div class="small-stats">
+              <div class="small-stat"><span class="num">38</span><span class="label">Partidos</span></div>
+              <div class="small-stat"><span class="num">24</span><span class="label">Triunfos</span></div>
+              <div class="small-stat"><span class="num">12</span><span class="label">Torneos</span></div>
+              <div class="small-stat"><span class="num">1º</span><span class="label">Ranking</span></div>
+            </div>
           </div>
-        </div>
 
-        <!-- Small stats row -->
-        <div class="panels-row small-row">
-          <div class="small-stats">
-            <div class="small-stat"><span class="num">38</span><span class="label">Partidos</span></div>
-            <div class="small-stat"><span class="num">24</span><span class="label">Triunfos</span></div>
-            <div class="small-stat"><span class="num">12</span><span class="label">Torneos</span></div>
-            <div class="small-stat"><span class="num">1º</span><span class="label">Ranking</span></div>
+          <h3 class="section-title">Torneos</h3>
+          <div class="torneos-row">
+            <article class="torneo-card" data-team="black-ferns">
+              <img src="../../img/torneos/card1.jpg" alt="">
+              <div class="torneo-info">
+                <h4>Valorant Champion Series</h4>
+                <p>2° puesto · 1.980 pts</p>
+              </div>
+            </article>
+
+            <article class="torneo-card" data-team="black-ferns">
+              <img src="../../img/torneos/card2.png" alt="">
+              <div class="torneo-info">
+                <h4>Copa Futbol 5</h4>
+                <p>2° puesto · 1.980 pts</p>
+              </div>
+            </article>
+
+            <article class="torneo-card" data-team="other-team">
+              <img src="../../img/torneos/card3.png" alt="">
+              <div class="torneo-info">
+                <h4>Battle Arena</h4>
+                <p>3° puesto · 1.120 pts</p>
+              </div>
+            </article>
           </div>
-        </div>
 
-        <h3 class="section-title">Torneos</h3>
-        <div class="torneos-row">
-          <article class="torneo-card" data-team="black-ferns">
-            <img src="../../img/torneos/card1.jpg" alt="">
-            <div class="torneo-info">
-              <h4>Valorant Champion Series</h4>
-              <p>2° puesto · 1.980 pts</p>
-            </div>
-          </article>
+          <h3 class="section-title">Miembros del equipo</h3>
+          <div class="miembros-grid">
+            <div class="miembro"><img src="../../img/avatars/a1.png" alt=""><span>Jugador 1</span></div>
+            <div class="miembro"><img src="../../img/avatars/a2.png" alt=""><span>Jugador 2</span></div>
+            <div class="miembro"><img src="../../img/avatars/a3.png" alt=""><span>Jugador 3</span></div>
+            <div class="miembro"><img src="../../img/avatars/a4.png" alt=""><span>Jugador 4</span></div>
+            <div class="miembro"><img src="../../img/avatars/a5.png" alt=""><span>Jugador 5</span></div>
+          </div>
 
-          <article class="torneo-card" data-team="black-ferns">
-            <img src="../../img/torneos/card2.png" alt="">
-            <div class="torneo-info">
-              <h4>Copa Futbol 5</h4>
-              <p>2° puesto · 1.980 pts</p>
-            </div>
-          </article>
+          <h3 class="section-title">Juegos que participa</h3>
+          <div class="juegos-row">
+            <div class="juego-card"><img src="../../img/juegos/dos.jpg" alt=""><span>League of Legends</span></div>
+            <div class="juego-card"><img src="../../img/juegos/fly.jpg" alt=""><span>Apex Legends</span></div>
+            <div class="juego-card"><img src="../../img/juegos/odyssey.png" alt=""><span>Counter Strike</span></div>
+            <div class="juego-card"><img src="../../img/juegos/quantum.png" alt=""><span>World of Warcraft</span></div>
+          </div>
 
-          <article class="torneo-card" data-team="other-team">
-            <img src="../../img/torneos/card3.png" alt="">
-            <div class="torneo-info">
-              <h4>Battle Arena</h4>
-              <p>3° puesto · 1.120 pts</p>
-            </div>
-          </article>
-        </div>
-
-        <h3 class="section-title">Miembros del equipo</h3>
-        <div class="miembros-grid">
-          <div class="miembro"><img src="../../img/avatars/a1.png" alt=""><span>Jugador 1</span></div>
-          <div class="miembro"><img src="../../img/avatars/a2.png" alt=""><span>Jugador 2</span></div>
-          <div class="miembro"><img src="../../img/avatars/a3.png" alt=""><span>Jugador 3</span></div>
-          <div class="miembro"><img src="../../img/avatars/a4.png" alt=""><span>Jugador 4</span></div>
-          <div class="miembro"><img src="../../img/avatars/a5.png" alt=""><span>Jugador 5</span></div>
-        </div>
-
-        <h3 class="section-title">Juegos que participa</h3>
-        <div class="juegos-row">
-          <div class="juego-card"><img src="../../img/juegos/dos.jpg" alt=""><span>League of Legends</span></div>
-          <div class="juego-card"><img src="../../img/juegos/fly.jpg" alt=""><span>Apex Legends</span></div>
-          <div class="juego-card"><img src="../../img/juegos/odyssey.png" alt=""><span>Counter Strike</span></div>
-          <div class="juego-card"><img src="../../img/juegos/quantum.png" alt=""><span>World of Warcraft</span></div>
         </div>
 
       </div>
+    </section>
 
+  </main>
+
+  <!-- FOOTER ---------------------------->
+
+  <div id="footer-publico-placeholder"></div>
+
+  <!-- Modal editar/administrar equipo -->
+  <div class="equipo-modal" id="modalAdminEquipo" aria-hidden="true">
+    <div class="equipo-modal-contenido">
+      <header>
+        <h3>Administrar equipo</h3>
+        <button id="cerrarModalEquipo" aria-label="Cerrar">&times;</button>
+      </header>
+
+      <form id="formAdminEquipo">
+        <label>Nombre del equipo
+          <input type="text" id="inputTeamName">
+        </label>
+
+        <label>Descripción
+          <textarea id="inputTeamDesc" rows="4"></textarea>
+        </label>
+
+        <label>Ubicación
+          <input type="text" id="inputTeamLocation">
+        </label>
+
+        <label>Logo (imagen)
+          <input type="file" id="inputTeamLogo" accept="image/*">
+        </label>
+
+        <label>Banner (imagen)
+          <input type="file" id="inputTeamBanner" accept="image/*">
+        </label>
+
+        <div class="miembros-admin">
+          <h4>Miembros</h4>
+          <div class="grupo-inputs-fila">
+            <input type="text" id="inputNuevoMiembro" placeholder="Nombre miembro">
+            <button type="button" id="btnAgregarMiembro" class="perfil-boton-secundario">Agregar</button>
+          </div>
+          <ul id="listaMiembros"></ul>
+        </div>
+
+        <div class="grupo-botones-fin">
+          <button type="button" id="cancelarAdmin" class="perfil-boton-secundario">Cancelar</button>
+          <button type="submit" class="perfil-boton-primario">Guardar cambios</button>
+        </div>
+      </form>
     </div>
-  </section>
-
-</main>
-
-<!-- FOOTER ---------------------------->
-
-<div id="footer-publico-placeholder"></div>
-
-<!-- Modal editar/administrar equipo -->
-<div class="equipo-modal" id="modalAdminEquipo" aria-hidden="true">
-  <div class="equipo-modal-contenido">
-    <header>
-      <h3>Administrar equipo</h3>
-      <button id="cerrarModalEquipo" aria-label="Cerrar">&times;</button>
-    </header>
-
-    <form id="formAdminEquipo">
-      <label>Nombre del equipo
-        <input type="text" id="inputTeamName">
-      </label>
-
-      <label>Descripción
-        <textarea id="inputTeamDesc" rows="4"></textarea>
-      </label>
-
-      <label>Ubicación
-        <input type="text" id="inputTeamLocation">
-      </label>
-
-      <label>Logo (imagen)
-        <input type="file" id="inputTeamLogo" accept="image/*">
-      </label>
-
-      <label>Banner (imagen)
-        <input type="file" id="inputTeamBanner" accept="image/*">
-      </label>
-
-      <div class="miembros-admin">
-        <h4>Miembros</h4>
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <input type="text" id="inputNuevoMiembro" placeholder="Nombre miembro">
-          <button type="button" id="btnAgregarMiembro" class="perfil-boton-secundario">Agregar</button>
-        </div>
-        <ul id="listaMiembros"></ul>
-      </div>
-
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-        <button type="button" id="cancelarAdmin" class="perfil-boton-secundario">Cancelar</button>
-        <button type="submit" class="perfil-boton-primario">Guardar cambios</button>
-      </div>
-    </form>
   </div>
-</div>
 
-<script src="../../js/includesPublicos.js"></script>
-<script src="../../js/navbar.js"></script>
-<script src="../../js/perfil-equipo.js"></script>
+  <script src="../../js/includesPublicos.js"></script>
+  <script src="../../js/navbar.js"></script>
+  <script src="../../js/perfil-equipo.js"></script>
 </body>
+
 </html>

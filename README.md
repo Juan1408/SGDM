@@ -1,7 +1,7 @@
-# SGDM — Instrucciones para levantar con Docker
+# ASCEND — Instrucciones para levantar con Docker
 
 Resumen
-- Proyecto SGDM: gestor de torneos con capas MVC.
+- Proyecto ASCEND: gestor de torneos con capas MVC.
 
 Requisitos
 - Docker y Docker Compose instalados.
@@ -26,30 +26,30 @@ Importar Base de Datos Multideportiva (Recomendado)
 - Para importar este script completo:
 
 ```bash
-docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/sgdm_multideporte.sql
+docker-compose exec -T db mysql -u root -proot123 ascend < base_de_datos/ascend_multideporte.sql
 ```
 
 Importar migraciones heredadas (crear las tablas paso a paso)
 - Usando `docker-compose exec -T` para redirigir los .sql hacia MySQL (funciona en Linux/macOS y PowerShell):
 
 ```bash
-docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/migraciones/001_crear_tabla_usuarios.sql
+docker-compose exec -T db mysql -u root -proot123 ascend < base_de_datos/migraciones/001_crear_tabla_usuarios.sql
 # Para importar todas las migraciones (Linux/macOS):
-for f in base_de_datos/migraciones/*.sql; do docker-compose exec -T db mysql -u root -proot123 sgdm < "$f"; done
+for f in base_de_datos/migraciones/*.sql; do docker-compose exec -T db mysql -u root -proot123 ascend < "$f"; done
 ```
 
 Notas para PowerShell (Windows)
 - Si usás PowerShell, el primer comando sigue funcionando; para un batch en PowerShell podés ejecutar:
 
 ```powershell
-Get-ChildItem base_de_datos/migraciones\*.sql | ForEach-Object { docker-compose exec -T db mysql -u root -proot123 sgdm < $_.FullName }
+Get-ChildItem base_de_datos/migraciones\*.sql | ForEach-Object { docker-compose exec -T db mysql -u root -proot123 ascend < $_.FullName }
 ```
 
 Semillas heredadas (datos de ejemplo)
 - Si usás el esquema de migraciones heredadas, podés importar el archivo de semillas adicional:
 
 ```bash
-docker-compose exec -T db mysql -u root -proot123 sgdm < base_de_datos/semillas/datos_ejemplo.sql
+docker-compose exec -T db mysql -u root -proot123 ascend < base_de_datos/semillas/datos_ejemplo.sql
 ```
 
 Configuración
@@ -82,5 +82,5 @@ Seguridad y buenas prácticas
 
 Solución de problemas
 - Si el contenedor `db` no está listo, ver los logs con `docker-compose logs db` y esperar a que MySQL inicialice.
-- Si las migraciones fallan, comprobar que la base de datos `sgdm` exista y que las credenciales coincidan.
+- Si las migraciones fallan, comprobar que la base de datos `ascend` exista y que las credenciales coincidan.
 

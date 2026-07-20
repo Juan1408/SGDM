@@ -1,5 +1,5 @@
 {
-  "name": "SGDM Project",
+  "name": "ASCEND Project",
   "dockerComposeFile": "docker-compose.yml",
   "service": "web",
   "workspaceFolder": "/var/www/html",

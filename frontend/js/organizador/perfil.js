@@ -17,12 +17,12 @@ const PERFIL_PREDETERMINADO = {
 
     telefono: "",
 
-    organizacion: "SGDM",
+    organizacion: "ASCEND",
 
     localidad: "Montevideo",
 
     biografia:
-        "Organizadora de torneos y competencias dentro de SGDM.",
+        "Organizadora de torneos y competencias dentro de ASCEND.",
 
     foto:
         "../../img/avatar.png",
@@ -126,9 +126,9 @@ const cantidadParticipantes =
         "cantidadParticipantesPerfil"
     );
 
-    /*
+/*
 =====================================================
-    ACTUALIZAR INTERFAZ
+ACTUALIZAR INTERFAZ
 =====================================================
 */
 

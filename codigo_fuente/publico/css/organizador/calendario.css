@@ -1,0 +1,496 @@
+/*
+=====================================================
+   CALENDARIO - solo contenido específico de esta
+   página. El layout vive en organizador-layout.css.
+
+   Las clases .calendario-* son generadas por
+   js/organizador/calendario.js - no renombrar sin
+   actualizar ese archivo.
+=====================================================
+*/
+
+.calendario-pagina {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1.25rem;
+}
+
+/* ============================
+   ENCABEZADO
+============================= */
+
+.calendario-header {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   min-width: 0;
+}
+
+.calendario-header > div {
+   min-width: 0;
+}
+
+.calendario-etiqueta {
+   color: var(--color-secundario);
+   font-weight: 700;
+   letter-spacing: 1.5px;
+   font-size: .8rem;
+}
+
+.calendario-header h1 {
+   font-size: clamp(1.4rem, 6vw, 2rem);
+   margin: .4rem 0;
+   overflow-wrap: break-word;
+   word-break: break-word;
+}
+
+.calendario-header p {
+   color: var(--texto-secundario);
+   font-size: .9rem;
+   overflow-wrap: break-word;
+}
+
+.calendario-crear-enlace {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: .6rem;
+
+   width: 100%;
+   padding: .85rem 1.4rem;
+   border-radius: var(--radio-md);
+
+   background: linear-gradient(90deg, var(--color-primario), var(--color-violeta));
+   color: #fff;
+   font-weight: 700;
+   text-decoration: none;
+   white-space: nowrap;
+}
+
+/* ============================
+   RESUMEN
+============================= */
+
+.calendario-resumen {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+.calendario-resumen-card {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-lg);
+}
+
+.calendario-resumen-icono {
+   width: 48px;
+   height: 48px;
+   flex-shrink: 0;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: var(--radio-md);
+   background: rgba(0, 255, 238, .15);
+   color: var(--color-secundario);
+   font-size: 1.2rem;
+}
+
+.calendario-resumen-card strong {
+   display: block;
+   font-size: 1.5rem;
+}
+
+.calendario-resumen-card span:last-child {
+   font-size: .8rem;
+   color: var(--texto-secundario);
+}
+
+/* ============================
+   FILTROS
+============================= */
+
+.calendario-filtros {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-lg);
+}
+
+.calendario-filtro label {
+   display: block;
+   margin-bottom: .4rem;
+   font-size: .8rem;
+   color: var(--texto-secundario);
+}
+
+.calendario-filtro input,
+.calendario-filtro select {
+   width: 100%;
+   padding: .7rem .9rem;
+   border-radius: var(--radio-md);
+   border: 1px solid var(--borde-suave);
+   background: rgba(255, 255, 255, .04);
+   color: #fff;
+}
+
+.calendario-input-icono {
+   position: relative;
+   display: flex;
+   align-items: center;
+}
+
+.calendario-input-icono i {
+   position: absolute;
+   left: .9rem;
+   color: var(--texto-secundario);
+}
+
+.calendario-input-icono input {
+   padding-left: 2.4rem;
+}
+
+.calendario-limpiar {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: .5rem;
+
+   padding: .7rem 1rem;
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-md);
+
+   background: transparent;
+   color: var(--texto-secundario);
+   cursor: pointer;
+}
+
+.calendario-limpiar:hover {
+   color: #fff;
+   border-color: var(--color-secundario);
+}
+
+/* ============================
+   RESULTADOS
+============================= */
+
+.calendario-contenido {
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-lg);
+}
+
+.calendario-contenido-header {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: center;
+   gap: .5rem;
+   margin-bottom: 1.25rem;
+}
+
+.calendario-contenido-header span {
+   color: var(--color-secundario);
+   font-size: .75rem;
+   font-weight: 700;
+   letter-spacing: 1px;
+}
+
+.calendario-contenido-header h2 {
+   font-size: 1.15rem;
+   margin-top: .2rem;
+}
+
+.calendario-contenido-header > strong {
+   font-size: .85rem;
+   color: var(--texto-secundario);
+}
+
+.calendario-lista {
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+}
+
+.calendario-dia {
+   display: flex;
+   flex-direction: column;
+   gap: .85rem;
+}
+
+.calendario-fecha {
+   display: flex;
+   align-items: center;
+   gap: .85rem;
+}
+
+.calendario-fecha-caja {
+   width: 52px;
+   height: 52px;
+   flex-shrink: 0;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: var(--radio-md);
+   background: rgba(0, 255, 238, .12);
+   color: var(--color-secundario);
+}
+
+.calendario-fecha-caja strong {
+   font-size: 1.2rem;
+   line-height: 1;
+}
+
+.calendario-fecha-caja span {
+   font-size: .65rem;
+   font-weight: 800;
+   text-transform: uppercase;
+}
+
+.calendario-fecha p {
+   font-size: .85rem;
+   color: var(--texto-secundario);
+   text-transform: capitalize;
+}
+
+.calendario-dia-partidos {
+   display: flex;
+   flex-direction: column;
+   gap: .85rem;
+}
+
+.calendario-partido {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+
+   padding: 1rem;
+   border-radius: var(--radio-md);
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .07);
+}
+
+.calendario-partido-etiquetas {
+   display: flex;
+   flex-wrap: wrap;
+   gap: .6rem;
+   font-size: .78rem;
+}
+
+.calendario-torneo {
+   font-weight: 700;
+   color: #fff;
+}
+
+.calendario-ronda {
+   color: var(--texto-secundario);
+}
+
+.calendario-enfrentamiento {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: .6rem;
+   min-width: 0;
+}
+
+.calendario-equipo {
+   display: flex;
+   align-items: center;
+   gap: .5rem;
+   flex: 1;
+   min-width: 0;
+   font-size: .8rem;
+}
+
+.calendario-equipo strong {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.calendario-equipo--derecha {
+   flex-direction: row-reverse;
+   text-align: right;
+}
+
+.calendario-equipo-icono {
+   width: 32px;
+   height: 32px;
+   flex-shrink: 0;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 50%;
+   background: rgba(255, 255, 255, .06);
+   color: var(--texto-secundario);
+   font-size: .8rem;
+}
+
+.calendario-versus {
+   flex-shrink: 0;
+   color: var(--color-primario);
+   font-weight: 800;
+   font-size: .9rem;
+}
+
+.calendario-marcador {
+   flex-shrink: 0;
+   display: flex;
+   align-items: center;
+   gap: .4rem;
+   font-size: 1.1rem;
+   font-weight: 800;
+}
+
+.calendario-marcador span {
+   color: var(--texto-secundario);
+}
+
+.calendario-partido-datos {
+   display: flex;
+   flex-wrap: wrap;
+   gap: .5rem 1rem;
+   font-size: .78rem;
+   color: var(--texto-secundario);
+}
+
+.calendario-partido-datos i {
+   color: var(--color-secundario);
+   margin-right: .3rem;
+}
+
+.calendario-partido-acciones {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   justify-content: space-between;
+   gap: .75rem;
+}
+
+.calendario-estado {
+   padding: .3rem .75rem;
+   border-radius: 999px;
+   font-size: .68rem;
+   font-weight: 800;
+}
+
+.calendario-estado--pendiente {
+   color: #ffb400;
+   background: rgba(255, 180, 0, .14);
+}
+
+.calendario-estado--finalizado {
+   color: var(--color-secundario);
+   background: rgba(0, 255, 238, .14);
+}
+
+.calendario-partido-acciones a {
+   display: inline-flex;
+   align-items: center;
+   gap: .4rem;
+   color: var(--color-secundario);
+   text-decoration: none;
+   font-size: .82rem;
+   font-weight: 700;
+}
+
+.calendario-vacio {
+   text-align: center;
+   padding: 3rem 1rem;
+   color: var(--texto-secundario);
+}
+
+.calendario-vacio i {
+   font-size: 2.2rem;
+   color: var(--color-secundario);
+   margin-bottom: 1rem;
+}
+
+.calendario-vacio h2 {
+   color: #fff;
+   font-size: 1.2rem;
+   margin-bottom: .5rem;
+}
+
+/*
+=====================================================
+   TABLET (min-width: 600px)
+=====================================================
+*/
+
+@media (min-width: 600px) {
+
+   .calendario-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+   }
+
+   .calendario-crear-enlace {
+      width: auto;
+      flex-shrink: 0;
+   }
+
+   .calendario-resumen {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .calendario-filtros {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+=====================================================
+*/
+
+@media (min-width: 900px) {
+
+   .calendario-resumen {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+
+   .calendario-filtros {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+      align-items: end;
+   }
+
+   .calendario-partido {
+      flex-direction: row;
+      align-items: center;
+   }
+
+   .calendario-partido-info {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 1rem;
+   }
+
+   .calendario-partido-acciones {
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+   }
+}

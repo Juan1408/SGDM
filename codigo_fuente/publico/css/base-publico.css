@@ -1,0 +1,10 @@
+@import 'variables.css';
+@import 'layouts/navbar.css';
+@import 'layouts/footer.css';
+@import 'componentes/carruseles.css';
+@import 'publico/home.css';
+
+.pantalla-construccion { min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.pantalla-construccion i { font-size: 5rem; color: var(--color-primario); margin-bottom: 20px; }
+.pantalla-construccion .hero-buttons { margin-top: 30px; }
+

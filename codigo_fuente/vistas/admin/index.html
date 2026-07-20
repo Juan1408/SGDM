@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -12,7 +12,7 @@
     <header class="cabecera-principal">
         <div class="contenedor-logo">
             <a href="#dashboard" class="enlace-logo">
-                <img src="../../publico/img/logos/logoAscend.jpg" alt="Logotipo del Sistema">
+                <img src="../../publico/img/logos/ascend-logo.png" alt="Logotipo del Sistema">
             </a>
             <h1 class="titulo-cabecera">ASCEND</h1>
         </div>
@@ -25,9 +25,9 @@
             <div class="dropdown-content" id="menuPerfilAdmin">
                 <a href="#perfil/editar-perfil">Editar Perfil</a>
                 <a href="#configuracion/general">Configuración</a>
-                <a href="../../vistas/organizador/index.html" class="enlace-destacado">Mis Torneos (Modo
+                <a href="../organizador/dashboard.html" class="enlace-destacado">Mis Torneos (Modo
                     Organizador)</a>
-                <a href="#" class="enlace-salir">Cerrar Sesión</a>
+                <a href="../auth/login.html" class="enlace-salir">Cerrar Sesión</a>
             </div>
         </div>
     </header>
@@ -71,11 +71,18 @@
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Participantes y Equipos</a>
+                    <li><a href="#" class="menu-enlace">Equipos y Participantes</a>
                         <ul class="menu-sublista">
-                            <li><a href="#equipos/lista" class="menu-enlace">Ver Todos</a></li>
-                            <li><a href="#equipos/formulario" class="menu-enlace">Registrar Nuevo P/E</a></li>
+                            <li><a href="#equipos/lista" class="menu-enlace">Lista de Equipos</a></li>
+                            <li><a href="#jugadores/lista" class="menu-enlace">Lista de Jugadores</a></li>
                             <li><a href="#equipos/solicitudes" class="menu-enlace">Solicitudes Pendientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="menu-enlace">Organizadores</a>
+                        <ul class="menu-sublista">
+                            <li><a href="#organizadores/lista" class="menu-enlace">Directorio Organizadores</a></li>
+                            <li><a href="#organizadores/solicitudes" class="menu-enlace">Revisar Solicitudes</a></li>
                         </ul>
                     </li>
 
@@ -139,3 +146,4 @@
 </body>
 
 </html>
+

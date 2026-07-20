@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap');
 
 /* =============================================================================
-   SISTEMA DE DISEÑO DE SGDM v2.0
+   SISTEMA DE DISEÑO DE ASCEND v2.0
    ============================================================================= */
 
 :root {
@@ -13,10 +13,10 @@
     --color-tarjeta: rgba(20, 26, 42, 0.65);
     --color-borde: rgba(255, 255, 255, 0.08);
     --color-borde-enfocado: #3b82f6;
-    
+
     --color-texto-principal: #f3f4f6;
     --color-texto-secundario: #9ca3af;
-    
+
     /* Degradados dinámicos */
     --degradado-primario: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     --degradado-exito: linear-gradient(135deg, #10b981 0%, #047857 100%);
@@ -215,6 +215,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -222,9 +223,19 @@ body {
 }
 
 @keyframes sacudir {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
 }
 
 /* =============================================================================
@@ -234,7 +245,7 @@ body {
     .tarjeta-autenticacion {
         padding: 30px 20px;
     }
-    
+
     .cabecera-autenticacion h1 {
         font-size: 1.8rem;
     }
