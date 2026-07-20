@@ -39,3 +39,32 @@ function showRecoveryPassword() {
    document.getElementById('recuperacion-paso-2').style.display = 'none';
    document.getElementById('recuperacion-paso-3').style.display = 'block';
 }
+
+
+// =========================================================
+// SIMULACIÓN DE LOGIN MULTI-ROL (MOCKUP)
+// =========================================================
+document.addEventListener("DOMContentLoaded", function() {
+   const formLogin = document.querySelector("#login-form form");
+   
+   if (formLogin) {
+      formLogin.addEventListener("submit", function(e) {
+         e.preventDefault();
+         
+         const email = this.querySelector("input[type=\"email\"]").value.toLowerCase();
+         // No validamos la contraseña en la simulación, solo el email
+         
+         if (email === "jugador@sgdm.com") {
+            window.location.href = "../jugador/perfil-jugador.html";
+         } else if (email === "organizador@sgdm.com") {
+            window.location.href = "../organizador/dashboard.html";
+         } else if (email === "admin@sgdm.com") {
+            // El admin ya está estructurado en codigo_fuente
+            window.location.href = "../../../codigo_fuente/vistas/admin/index.html";
+         } else {
+            alert("Credenciales incorrectas.\n\nUsuarios de prueba:\n- jugador@sgdm.com\n- organizador@sgdm.com\n- admin@sgdm.com");
+         }
+      });
+   }
+});
+

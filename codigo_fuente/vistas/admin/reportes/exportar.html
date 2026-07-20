@@ -17,8 +17,8 @@
                     <option value="2">Torneo Relámpago LoL</option>
                 </select>
                 <div class="grupo-botones-reporte">
-                    <button type="button" class="boton-accion boton-expandido" onclick="mostrarNotificacionToast('Generando PDF...', 'info')">Descargar PDF</button>
-                    <button type="button" class="boton-exito boton-expandido" onclick="mostrarNotificacionToast('Generando Excel...', 'info')">Descargar Excel</button>
+                    <button type="button" id="btn-exportar-pdf" class="boton-accion boton-expandido">Descargar PDF</button>
+                    <button type="button" id="btn-exportar-excel" class="boton-exito boton-expandido">Descargar Excel</button>
                 </div>
             </form>
         </div>
@@ -35,7 +35,7 @@
                     <option value="mes">Último Mes</option>
                 </select>
                 <div class="grupo-botones-reporte">
-                    <button type="button" class="boton-secundario boton-expandido" onclick="mostrarNotificacionToast('Generando Reporte CSV...', 'info')">Descargar CSV</button>
+                    <button type="button" id="btn-exportar-csv" class="boton-secundario boton-expandido">Descargar CSV</button>
                 </div>
             </form>
         </div>
