@@ -1,0 +1,33 @@
+.boton {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: var(--espacio-sm);
+
+   min-height: 2.75rem;
+   padding: 0.75rem 1rem;
+
+   border-radius: var(--radio-md);
+   text-decoration: none;
+   font-weight: 700;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.boton--primario {
+   color: #fff;
+   background:
+      linear-gradient(
+         90deg,
+         var(--color-primario),
+         var(--color-violeta)
+      );
+   border: 0;
+}
+
+.boton--gestion {
+   color: #07101c;
+   font-weight: 800;
+   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
+   border: 0;
+}

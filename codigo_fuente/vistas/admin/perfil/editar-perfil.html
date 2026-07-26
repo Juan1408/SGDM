@@ -1,0 +1,44 @@
+<section class="modulo-admin">
+    <h2 class="titulo-pantalla">Mi Perfil</h2>
+    <p>Actualiza tu información personal y de seguridad.</p>
+
+    <form action="#" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <legend>Datos Personales</legend>
+            <div class="contenedor-avatar-perfil">
+                <div class="avatar-perfil">
+                    A
+                </div>
+            </div>
+
+            <label for="nombre_completo">Nombre Completo:</label>
+            <input type="text" id="nombre_completo" name="nombre_completo" class="campo-requerido" value="Administrador General">
+
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" class="campo-requerido" value="admin@ascend.com" disabled title="Contacta a soporte para cambiar el correo">
+
+            <label for="telefono">Teléfono (Opcional):</label>
+            <input type="tel" id="telefono" name="telefono" value="+123456789">
+        </fieldset>
+
+        <fieldset>
+            <legend>Cambiar Contraseña</legend>
+            <p class="texto-ayuda">Deja los campos en blanco si no deseas cambiar tu contraseña actual.</p>
+            
+            <label for="contrasena_actual">Contraseña Actual:</label>
+            <input type="password" id="contrasena_actual" name="contrasena_actual">
+
+            <label for="nueva_contrasena">Nueva Contraseña:</label>
+            <input type="password" id="nueva_contrasena" name="nueva_contrasena">
+
+            <label for="repetir_contrasena">Confirmar Nueva Contraseña:</label>
+            <input type="password" id="repetir_contrasena" name="repetir_contrasena">
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Cambios</button>
+            <a href="#dashboard" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>
+

@@ -1,0 +1,75 @@
+<section class="encabezado-seccion">
+    <h2 class="titulo-pantalla">Directorio de Juegos y Disciplinas</h2>
+    <div class="grupo-acciones-encabezado">
+        <form class="formulario-busqueda">
+            <input type="text" placeholder="Buscar juego..." class="campo-busqueda">
+            <button type="submit" class="boton-accion">Buscar</button>
+        </form>
+        <a href="#juegos/formulario" class="boton-exito">+ Registrar Nuevo Juego</a>
+    </div>
+</section>
+
+<section class="contenido-seccion">
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Nombre del Juego</th>
+                <th>Categoría</th>
+                <th>Formato de Equipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="avatar-placeholder avatar-rojo">V</span></td>
+                <td>Valorant</td>
+                <td>eSport (Shooter)</td>
+                <td>5v5</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#juegos/formulario?id=1" class="boton-accion">Editar</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Desactivar</a>
+                        </div>
+                    </details>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="avatar-placeholder avatar-celeste">L</span></td>
+                <td>League of Legends</td>
+                <td>eSport (MOBA)</td>
+                <td>5v5</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#juegos/formulario?id=2" class="boton-accion">Editar</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Desactivar</a>
+                        </div>
+                    </details>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="avatar-placeholder avatar-verde">R</span></td>
+                <td>Rugby 7s</td>
+                <td>Deporte Físico</td>
+                <td>7v7</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#juegos/formulario?id=3" class="boton-accion">Editar</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Desactivar</a>
+                        </div>
+                    </details>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

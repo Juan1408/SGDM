@@ -1,0 +1,60 @@
+<section class="modulo-admin">
+    <h2 class="titulo-pantalla">Configuración General del Sistema</h2>
+    <form action="/admin/configuracion/guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <!-- Que queremos configurar de nuestro sistema? -->
+            <legend>Datos de la Plataforma</legend>
+            <label for="nombre_sitio">Nombre del Sitio:</label>
+            <input type="text" id="nombre_sitio" name="nombre_sitio" class="campo-requerido"
+                value="Sistema de Gestión Deportiva Modular">
+
+            <label for="email_contacto">Email de Contacto (Público):</label>
+            <input type="email" id="email_contacto" name="email_contacto" class="campo-requerido"
+                value="contacto@ascend.com">
+        </fieldset>
+
+
+        <fieldset>
+            <legend>Módulos Habilitados</legend>
+            <p class="texto-ayuda">Selecciona qué formatos de torneo están disponibles en el sistema.</p>
+
+            <label>
+                <input type="checkbox" name="modulos[]" value="liga" checked> Formato de Liga
+            </label>
+            <label>
+                <input type="checkbox" name="modulos[]" value="eliminacion" checked> Eliminación Directa
+            </label>
+            <label>
+                <input type="checkbox" name="modulos[]" value="suizo"> Sistema Suizo
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Políticas de Seguridad y Contraseñas</legend>
+            <p class="texto-ayuda">Define los requisitos de seguridad para las cuentas de usuario.</p>
+
+            <label for="longitud_minima">Longitud mínima de contraseña (caracteres):</label>
+            <input type="number" id="longitud_minima" name="longitud_minima" value="8" min="6" max="32"
+                class="campo-requerido">
+
+            <label>
+                <input type="checkbox" name="requiere_mayuscula" checked> Requerir al menos una letra mayúscula
+            </label>
+            <label>
+                <input type="checkbox" name="requiere_numero" checked> Requerir al menos un número
+            </label>
+            <label>
+                <input type="checkbox" name="requiere_caracter_especial" checked> Requerir al menos un carácter especial
+                (!, @, #, $, etc.)
+            </label>
+
+            <label for="expiracion_dias" class="margen-superior-1">Días para expiración de contraseña (0 =
+                nunca):</label>
+            <input type="number" id="expiracion_dias" name="expiracion_dias" value="90" min="0">
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Cambios</button>
+        </div>
+    </form>
+</section>

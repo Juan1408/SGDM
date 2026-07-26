@@ -1,0 +1,38 @@
+:root {
+   --color-primario: #F511CB;
+   --color-secundario: #00FFEE;
+   --color-violeta: #6425A7;
+   --color-azul: #097AEC;
+
+   /* Mismos colores de arriba, como triplete R,G,B
+      (sin "rgb()" alrededor) para poder usarlos
+      dentro de rgba(var(--color-primario-rgb), .35) */
+   --color-primario-rgb: 245, 17, 203;
+   --color-secundario-rgb: 0, 255, 238;
+   --color-violeta-rgb: 100, 37, 167;
+   --color-azul-rgb: 9, 122, 236;
+
+   --fondo-principal: #030205;
+   --fondo-dashboard: #100714;
+   --fondo-panel: #101322;
+   --fondo-tarjeta: #16182c;
+
+   --texto-principal: #ffffff;
+   --texto-secundario: #aaaac2;
+
+   --borde-suave: rgba(255, 255, 255, 0.12);
+
+   --radio-sm: 0.625rem;
+   --radio-md: 0.875rem;
+   --radio-lg: 1.125rem;
+
+   --espacio-xs: 0.5rem;
+   --espacio-sm: 0.75rem;
+   --espacio-md: 1rem;
+   --espacio-lg: 1.5rem;
+   --espacio-xl: 2rem;
+
+   --transicion: 0.25s ease;
+
+   --alto-navbar: 4.5rem;
+}

@@ -1,0 +1,64 @@
+<section class="encabezado-seccion">
+    <h2 class="titulo-pantalla">Gestión de Roles y Permisos</h2>
+    <div class="grupo-acciones-encabezado">
+        <form class="formulario-busqueda">
+            <input type="text" placeholder="Buscar rol..." class="campo-busqueda">
+            <button type="submit" class="boton-accion">Buscar</button>
+        </form>
+        <a href="#roles/formulario" class="boton-exito">+ Crear Nuevo Rol</a>
+    </div>
+</section>
+
+<section class="contenido-seccion">
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Nombre del Rol</th>
+                <th>Descripción</th>
+                <th>Usuarios Activos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Administrador General</strong></td>
+                <td>Acceso total al sistema y configuraciones.</td>
+                <td>1</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <span class="texto-ayuda">Rol del Sistema</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Organizador de Torneos</strong></td>
+                <td>Puede crear y gestionar torneos y participantes.</td>
+                <td>4</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#roles/formulario?id=2" class="boton-accion">Editar Permisos</a>
+                        </div>
+                    </details>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Soporte Técnico</strong></td>
+                <td>Puede ver auditorías y restablecer contraseñas.</td>
+                <td>2</td>
+                <td><span class="estado-exito">Activo</span></td>
+                <td>
+                    <details class="acciones-desplegables">
+                        <summary class="boton-secundario">Acciones ▾</summary>
+                        <div class="acciones-lista">
+                            <a href="#roles/formulario?id=3" class="boton-accion">Editar Permisos</a>
+                            <a href="#" class="boton-peligro accion-eliminar">Eliminar Rol</a>
+                        </div>
+                    </details>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

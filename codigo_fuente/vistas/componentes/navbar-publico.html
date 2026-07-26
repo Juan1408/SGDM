@@ -1,0 +1,141 @@
+﻿<!-------------------------------------->
+<!-- NAVBAR PÚBLICO -------------------->
+<!-------------------------------------->
+
+<nav class="navbar">
+   <div class="navbar-contenedor">
+
+    <a class="logo-contenedor" href="../publico/index.html">
+   <img src="../../publico/img/logos/ascend-logo01.png" alt="Logo de ASCEND" class="logo-navbar">
+   
+</a>
+
+      <button class="navbar-toggle" id="menu-toggle" type="button" aria-label="Abrir menú de navegación"
+         aria-expanded="false">
+         <span class="bar"></span>
+         <span class="bar"></span>
+         <span class="bar"></span>
+      </button>
+
+      <ul class="navbar-menu" id="nav-links">
+
+         <li>
+            <a href="../publico/index.html">
+               Inicio
+            </a>
+         </li>
+
+         <li class="desplegable">
+
+            <button class="boton-desplegable" id="torneo-desplegable" type="button" aria-expanded="false">
+               Torneos
+               <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="contenido-desplegable">
+
+               <a href="../publico/torneos.html">
+                  Todos los Torneos
+               </a>
+
+               <a href="../publico/detalle-torneo.html">
+                  Detalle Torneos
+               </a>
+
+               <a href="../publico/en-construccion.html">
+                  Juegos
+               </a>
+
+            </div>
+
+         </li>
+
+         <li>
+            <a href="../publico/rankings.html">
+               Rankings
+            </a>
+         </li>
+
+         <li>
+            <a href="../publico/en-construccion.html">
+               Nosotros
+            </a>
+         </li>
+
+         <li>
+            <a href="../publico/index.html#contacto">
+               Contacto
+            </a>
+         </li>
+
+         <li class="auth-links">
+
+            <a href="../auth/login.html" class="boton-login">Iniciar Sesión</a>
+
+            <a href="../auth/registro.html" class="boton-registro">
+               Registrarse
+            </a>
+         </li>
+
+         <li class="auth-links auth-links--jugador oculto" id="auth-links-jugador">
+
+   <div class="notificaciones-jugador">
+      <button type="button" class="boton-campana" id="campana-toggle" aria-label="Notificaciones" aria-expanded="false">
+         <i class="fa-solid fa-bell"></i>
+         <span class="badge-notificaciones">3</span>
+      </button>
+      <div class="panel-notificaciones" id="panel-notificaciones">
+         <p class="notificaciones-vacio">No tenés notificaciones nuevas.</p>
+      </div>
+   </div>
+
+   <div class="perfil-jugador-menu">
+      <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">
+         <i class="fa-solid fa-circle-user"></i>
+         Mi Perfil
+         <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div class="dropdown-mi-perfil" id="dropdown-mi-perfil">
+         <a href="../jugador/perfil-jugador.html"><i class="fa-solid fa-user"></i> Ver Perfil</a>
+         <a href="../jugador/perfil-jugador.html"><i class="fa-solid fa-gear"></i> Configuración</a>
+         <button type="button" id="cerrar-sesion-btn"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+      </div>
+   </div>
+
+</li>
+
+      </ul>
+
+   </div>
+
+</nav>
+
+
+<aside class="sidebar-jugador-flotante oculto" id="sidebar-jugador-flotante">
+
+   <a href="../jugador/perfil-jugador.html#mis-torneos" class="sidebar-flotante-item" title="Mis Torneos">
+      <i class="fa-solid fa-bookmark"></i>
+      <span>Guardados</span>
+   </a>
+
+   <a href="../jugador/perfil-equipo.html" class="sidebar-flotante-item" title="Equipos/Clubes">
+      <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+      <span>Equipos</span>
+   </a>
+
+   <a href="../publico/rankings.html" class="sidebar-flotante-item" title="Rankings">
+      <i class="fa-regular fa-star"></i>
+      <span>Favoritos</span>
+   </a>
+
+   <a href="../jugador/perfil-jugador.html#historial" class="sidebar-flotante-item" title="Historial">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>Historial</span>
+   </a>
+
+   <a href="../jugador/perfil-jugador.html#estadisticas" class="sidebar-flotante-item" title="Estadísticas">
+      <i class="fa-solid fa-chart-simple"></i>
+      <span>Stats</span>
+   </a>
+
+</aside>

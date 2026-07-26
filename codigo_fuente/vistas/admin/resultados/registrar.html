@@ -1,0 +1,49 @@
+<section class="modulo-admin">
+    <h2 class="titulo-pantalla">Registro de Resultado</h2>
+    
+    <nav>
+        <a href="lista.html" class="boton-accion">Volver a los Enfrentamientos</a>
+    </nav>
+    
+    <section>
+        <h3>Detalles del Enfrentamiento</h3>
+        <p><strong>Torneo:</strong> Liga de Fútbol Regional</p>
+        <p><strong>Ronda:</strong> Ronda 1</p>
+    </section>
+    
+    <section>
+        <form action="/resultados/guardar" method="POST">
+            <input type="hidden" name="enfrentamiento_id" value="102">
+            
+            <fieldset>
+                <legend>Cargar Resultado</legend>
+                
+                <table class="tabla-estandar">
+                    <thead>
+                        <tr>
+                            <th>Participante A</th>
+                            <th>Puntaje A</th>
+                            <th>Puntaje B</th>
+                            <th>Participante B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Deportivo Sur</strong></td>
+                            <td><input type="number" name="puntaje_a" min="0" required></td>
+                            <td><input type="number" name="puntaje_b" min="0" required></td>
+                            <td><strong>Estrella Roja</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <label for="observaciones">Observaciones adicionales (Opcional):</label>
+                <textarea name="observaciones" rows="3"></textarea>
+            </fieldset>
+            
+            <button type="submit" class="boton-accion">Guardar Resultado</button>
+            <button type="reset" class="boton-accion">Limpiar Formulario</button>
+        </form>
+    </section>
+</section>
+
