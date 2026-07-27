@@ -37,13 +37,13 @@
 
       <section class="td-hero">
          <div class="td-team-logo">
-            <img src="../../publico/img/bf.png" alt="Soldier">
+            <img id="hero-logo-1" src="../../publico/img/bf.png" alt="Equipo 1">
          </div>
 
          <div class="td-hero-contenido">
-            <p>Torneo de Rugby</p>
-            <h2> BLACK FERNS <br>vs<br> WOMAN'S EAGLES</h2>
-            <span>26 Mayo 2026 - 08 Diciembre 2026</span>
+            <p id="hero-subtitulo" >Torneo de Rugby</p>
+              <h2><span id="hero-equipo-1">BLACK FERNS</span> <br>vs<br> <span id="hero-equipo-2">WOMAN'S EAGLES</span></h2>
+            <span id="hero-fechas">26 Mayo 2026 - 08 Diciembre 2026</span>
 
             <div class="td-actions">
                <p>Inscripciones abiertas</p><br>
@@ -52,7 +52,7 @@
          </div>
 
          <div class="td-team-logo">
-            <img src="../../publico/img/eagles.png" alt="Roosgum">
+            <img id="hero-logo-2" src="../../publico/img/eagles.png" alt="Equipo 2">
          </div>
       </section>
 
@@ -89,20 +89,20 @@
 
                   <section class="td-info-general">
                      <div class="td-meta">
-                        <span>Eliminación directa</span>
-                        <span>32 Equipos</span>
-                        <span>En curso</span>
+                        <span id="meta-formato">Eliminación directa</span>
+                        <span id="meta-equipo">32 Equipos</span>
+                        <span id="meta-estado">En curso</span>
                      </div>
 
                      <h3>Información</h3>
-                     <p>
+                     <p id="info-descripcion">
                         Torneo competitivo de rugby entre equipos destacados. Los participantes
                         competirán en una estructura organizada con fechas, encuentros, resultados
                         y seguimiento dentro de ASCEND.
                      </p>
 
                      <h3>Reglas</h3>
-                     <p>
+                     <p id="info-reglas">
                         Los equipos deberán respetar los horarios establecidos, el formato del
                         torneo y las indicaciones del organizador. Los resultados serán cargados
                         y validados dentro del sistema.
@@ -113,19 +113,19 @@
                      <div class="trofeo-card">
                         <i class="fa-solid fa-trophy"></i>
                         <h4>Prize pool</h4>
-                        <p>+ $200</p>
+                        <p id="premio-primero">+ $200</p>
                      </div>
 
                      <div class="trofeo-card">
                         <i class="fa-solid fa-medal"></i>
                         <h4>Segundo lugar</h4>
-                        <p>+ $100</p>
+                        <p id="premio-segundo">+ $100</p>
                      </div>
 
                      <div class="trofeo-card">
                         <i class="fa-solid fa-award"></i>
                         <h4>Tercer lugar</h4>
-                        <p>+ $50</p>
+                        <p id="premio-tercero">+ $50</p>
                      </div>
                   </section>
 
@@ -205,8 +205,8 @@
 
          <div class="tab-panel" id="participantes">
             <section class="participants-section">
-               <h3>Equipos que participan</h3>
-               <div class="participants-grid">
+               <h3 id="titulo-participantes">Equipos que participan</h3>
+               <div class="participants-grid" id="participantes-grid">
 
                   <article class="participant-card">
                      <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Black Ferns Team">
@@ -254,93 +254,6 @@
 
                <div class="members-grid" id="members-grid">
 
-                  <!-- Esta sección muestra dinámicamente los integrantes del equipo seleccionado. 
- Los datos provienen del registro realizado por el organizador al crear o editar un equipo. -->
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/ayesha-leti.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/alana-borland.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/portia-woodman.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-
-                  </article>
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/sylvia-brunt.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/kate-henwood.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/maiakawanak.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/jorja-miller.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/kennedy-tukuafu.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/tanya-kalounivale.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <article class="member-card">
-                     <div class="member-photo">
-                        <div class="member-bg"></div>
-                        <img src="../../publico/img/black ferns/braxton-sorensen.png" alt="Jugador">
-                     </div>
-                     <h4>Usuario</h4>
-                  </article>
-
-                  <!-- php: foreach($jugadores as $jugador){
-    // imprimir la card
-} -->
-
                </div>
                <div class="ver-mas-miembros">
                   <a href="calendario.html" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
@@ -355,10 +268,10 @@
             <section class="ranking-equipo">
 
                <div class="ranking-header">
-                  <h3>Rankings del Equipo</h3>
+                  <h3 id="titulo-ranking">Rankings del Equipo</h3>
                </div>
 
-               <div class="ranking-tabla">
+               <div class="ranking-tabla" id="ranking-tabla-container">
 
                   <div class="ranking-head">
 
@@ -372,115 +285,9 @@
                   </div>
 
                   <!-------------------- FILA ---------------------------------->
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
-                  <article class="ranking-row">
-                     <div class="ranking-equipo-logo">
-                        <img src="../../publico/img/logos/BF.png">
-                     </div>
-
-                     <div>1</div>
-                     <div class="ranking-jugador">
-                        <img src="../../publico/img/black ferns/ayesha-leti.png">
-                        <span>Ayesha Leti</span>
-                     </div>
-
-                     <div>Rugby</div>
-                     <div>7</div>
-                     <div class="ranking-puntos">
-                        3.000
-                     </div>
-                  </article>
-
+<div id="ranking-filas">
+   
+</div>
 
                   <!-- foreach($jugadores as $jugador){
            Crear una fila con:
@@ -539,28 +346,6 @@
                <div class="brackets-dynamic-wrapper" id="brackets-render-box"></div>
             </div>
 
-            <!-- <div class="bracket-visual" id="brackets-render-box"></div> 
-            <div class="next-match-section">
-               <h2 class="section-title-neon">Próximo Encuentro</h2>
-               <div class="vs-container">
-                  <div class="team-vs-card card-left">
-                     <div class="team-vs-avatar"></div>
-                     <div class="team-vs-info">
-                        <h4>FIRE WOLVES</h4>
-                        <p>Eliminación directa</p>
-                     </div>
-                  </div>
-                  <div class="vs-divider">Vs</div>
-                  <div class="team-vs-card card-right">
-                     <div class="team-vs-info">
-                        <h4>FIRE WOLVES</h4>
-                        <p>Eliminación directa</p>
-                     </div>
-                     <div class="team-vs-avatar"></div>
-                  </div>
-               </div>
-
-            </div>-->
 
 <section class="calendario-vs reveal">
 
@@ -571,16 +356,38 @@
 
       <div class="vs-lista">
 
-       <a href="detalle-torneo.html" class="enfrentamiento-card">
+         <a href="detalle-torneo.html" class="enfrentamiento-card">
 
             <div class="enfrentamiento-equipo">
-               <img src="../../publico/img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Fire Wolves</span>
+               <img src="../../publico/img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
+               <span class="enfrentamiento-nombre">Black Ferns</span>
             </div>
 
             <div class="enfrentamiento-centro">
                <span class="enfrentamiento-vs">Vs</span>
-               <span class="enfrentamiento-fecha">15 Ago 2026</span>
+               <span class="enfrentamiento-fecha">26 Ago 2026</span>
+               <span class="enfrentamiento-canal">
+                  <i class="fa-brands fa-discord"></i> Discord
+               </span>
+            </div>
+
+            <div class="enfrentamiento-equipo">
+               <img src="../../publico/img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
+               <span class="enfrentamiento-nombre">Woman's Eagles</span>
+            </div>
+
+         </a>
+
+       <a href="detalle-torneo.html?id=futbol-5" class="enfrentamiento-card">
+
+            <div class="enfrentamiento-equipo">
+               <img src="../../publico/img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
+               <span class="enfrentamiento-nombre">Durazno</span>
+            </div>
+
+            <div class="enfrentamiento-centro">
+               <span class="enfrentamiento-vs">Vs</span>
+               <span class="enfrentamiento-fecha">16 Mayo 2026</span>
                <span class="enfrentamiento-canal">
                   <i class="fa-brands fa-twitch"></i> Twitch
                </span>
@@ -588,7 +395,7 @@
 
             <div class="enfrentamiento-equipo">
                <img src="../../publico/img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Cyber Titans</span>
+               <span class="enfrentamiento-nombre">Flores</span>
             </div>
 
          </a>
@@ -637,8 +444,10 @@
    <script src="../../publico/js/includesPublicos.js"></script>
    <script src="../../publico/js/hero-slider.js"></script>
    <script src="../../publico/js/navbar.js"></script>
+   <script src="../../publico/js/torneos-data.js"></script>
    <script src="../../publico/js/llaves.js"></script>
    <script src="../../publico/js/torneo-tabs.js"></script>
+   <script src="../../publico/js/scroll-reveal.js"></script>
 
 
 </body>

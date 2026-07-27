@@ -1,62 +1,151 @@
-// SIMULACIÓN DE DATOS DINÁMICOS DESDE LA BD
-const torneoActivo = {
-   nombre: "Copa ASCEND",
-   formato: "eliminacion_directa",
-   totalJugadoresPorEquipo: 5,
-   campeon: "Por definir",
+"use strict";
 
-   rondas: [
-      {
-         nombreRonda: "Octavos",
-         partidos: [
-            { id: 1, equipo1: "Fire Wolves", score1: 3, equipo2: "Cyber Titans", score2: 1, ganador: "Fire Wolves" },
-            { id: 2, equipo1: "Nova Chess", score1: 0, equipo2: "Mental Squad", score2: 2, ganador: "Mental Squad" },
-            { id: 3, equipo1: "Dragon Crew", score1: 2, equipo2: "Shadow Team", score2: 0, ganador: "Dragon Crew" },
-            { id: 4, equipo1: "Neon Knights", score1: 1, equipo2: "Omega Squad", score2: 2, ganador: "Omega Squad" },
-            { id: 5, equipo1: "Pixel Fox", score1: 2, equipo2: "Dark Lions", score2: 1, ganador: "Pixel Fox" },
-            { id: 6, equipo1: "Aqua Team", score1: 0, equipo2: "Red Hawks", score2: 3, ganador: "Red Hawks" },
-            { id: 7, equipo1: "Blue Core", score1: 1, equipo2: "Venom Club", score2: 2, ganador: "Venom Club" },
-            { id: 8, equipo1: "Solar Rush", score1: 2, equipo2: "Iron Squad", score2: 0, ganador: "Solar Rush" }
-         ]
-      },
-      {
-         nombreRonda: "Cuartos",
-         partidos: [
-            { id: 9, equipo1: "Fire Wolves", score1: null, equipo2: "Mental Squad", score2: null, ganador: null },
-            { id: 10, equipo1: "Dragon Crew", score1: null, equipo2: "Omega Squad", score2: null, ganador: null },
-            { id: 11, equipo1: "Pixel Fox", score1: null, equipo2: "Red Hawks", score2: null, ganador: null },
-            { id: 12, equipo1: "Venom Club", score1: null, equipo2: "Solar Rush", score2: null, ganador: null }
-         ]
-      },
-      {
-         nombreRonda: "Semifinales",
-         partidos: [
-            { id: 13, equipo1: "Por definir", score1: null, equipo2: "Por definir", score2: null, ganador: null },
-            { id: 14, equipo1: "Por definir", score1: null, equipo2: "Por definir", score2: null, ganador: null }
-         ]
-      },
-      {
-         nombreRonda: "Gran Final",
-         partidos: [
-            { id: 15, equipo1: "Por definir", score1: null, equipo2: "Por definir", score2: null, ganador: null }
-         ]
+// Lee el ?id= de la URL. Si no hay ninguno, usa "copa-ascend" por defecto.
+function obtenerIdTorneoDesdeURL() {
+   const params = new URLSearchParams(window.location.search);
+   return params.get("id") || "copa-ascend";
+}
+
+// Rellena el header, meta, info, premios, participantes, miembros y ranking
+function poblarDetallesTorneo(torneo) {
+   const esEquipo = torneo.tipoParticipacion === "equipos";
+
+   const setTexto = (id, valor) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = valor;
+   };
+
+   const setImagen = (id, src) => {
+      const el = document.getElementById(id);
+      if (el) el.src = src;
+   };
+
+   setImagen("hero-logo-1", torneo.equipo1.logo);
+   setImagen("hero-logo-2", torneo.equipo2.logo);
+   setTexto("hero-equipo-1", torneo.equipo1.nombre);
+   setTexto("hero-equipo-2", torneo.equipo2.nombre);
+   setTexto("hero-subtitulo", torneo.subtitulo);
+   setTexto("hero-fechas", torneo.fechas);
+
+   setTexto("meta-formato", torneo.meta.formato);
+   setTexto("meta-equipo", torneo.meta.equipos);
+   setTexto("meta-estado", torneo.meta.estado);
+
+   setTexto("info-descripcion", torneo.descripcion);
+   setTexto("info-reglas", torneo.reglas);
+
+   setTexto("premio-primero", torneo.premios.primero);
+   setTexto("premio-segundo", torneo.premios.segundo);
+   setTexto("premio-tercero", torneo.premios.tercero);
+
+   // --- Equipos/Participantes que participan ---
+   const gridParticipantes = document.getElementById("participantes-grid");
+   if (gridParticipantes) {
+      gridParticipantes.innerHTML = torneo.participantes.map((p) => `
+         <article class="participant-card">
+            <img src="${p.imagen}" alt="${p.nombre}">
+            <div class="participant-info">
+               <h4>${p.nombre}</h4>
+               <p>${p.deporte}</p>
+               <p>${p.cantidad}</p>
+               <p>${p.puntos}</p>
+            </div>
+         </article>
+      `).join("");
+   }
+
+   // --- Miembros del equipo (solo si es de equipos) ---
+   const gridMiembros = document.getElementById("members-grid");
+   if (gridMiembros && torneo.miembros) {
+      gridMiembros.innerHTML = torneo.miembros.map((m) => `
+         <article class="member-card">
+            <div class="member-photo">
+               <div class="member-bg"></div>
+               <img src="${m.foto}" alt="${m.nombre}">
+            </div>
+            <h4>${m.nombre}</h4>
+         </article>
+      `).join("");
+   }
+
+   // --- Rankings del equipo / individual ---
+   const filasRanking = document.getElementById("ranking-filas");
+   if (filasRanking && torneo.rankingEquipo) {
+      filasRanking.innerHTML = torneo.rankingEquipo.filas.map((fila, indice) => {
+         const columnaLogo = esEquipo ? `
+            <div class="ranking-equipo-logo">
+               <img src="${torneo.rankingEquipo.logoEquipo}">
+            </div>
+         ` : "";
+
+         return `
+            <article class="ranking-row">
+               ${columnaLogo}
+               <div>${indice + 1}</div>
+               <div class="ranking-jugador">
+                  <img src="${fila.jugadorFoto}">
+                  <span>${fila.jugadorNombre}</span>
+               </div>
+               <div>${fila.juego}</div>
+               <div>${fila.partidas}</div>
+               <div class="ranking-puntos">${fila.puntos}</div>
+            </article>
+         `;
+      }).join("");
+   }
+
+   // --- Ajustar textos y layout según sea de equipos o individual ---
+   const tituloParticipantes = document.getElementById("titulo-participantes");
+   if (tituloParticipantes) {
+      tituloParticipantes.textContent = esEquipo ? "Equipos que participan" : "Participantes";
+   }
+
+   const tituloRanking = document.getElementById("titulo-ranking");   // <-- NUEVO
+   if (tituloRanking) {                                                // <-- NUEVO
+      tituloRanking.textContent = esEquipo ? "Rankings del Equipo" : "Ranking de Jugadores";   // <-- NUEVO
+   } 
+
+   const seccionMiembros = document.querySelector(".team-members");
+   if (seccionMiembros) {
+      seccionMiembros.style.display = esEquipo ? "" : "none";
+   }
+
+   const rankingTablaContainer = document.getElementById("ranking-tabla-container");
+   const rankingHead = document.querySelector(".ranking-head");
+   if (rankingTablaContainer && rankingHead) {
+      if (esEquipo) {
+         rankingTablaContainer.classList.remove("ranking-individual");
+         rankingHead.innerHTML = `
+            <span>Equipo</span>
+            <span>Pos</span>
+            <span>Jugador</span>
+            <span>Juego</span>
+            <span>Partidas</span>
+            <span>Puntos</span>
+         `;
+      } else {
+         rankingTablaContainer.classList.add("ranking-individual");
+         rankingHead.innerHTML = `
+            <span>Pos</span>
+            <span>Jugador</span>
+            <span>Juego</span>
+            <span>Partidas</span>
+            <span>Puntos</span>
+         `;
       }
-   ],
+   }
+}
 
-   tablaPosiciones: []
-};
-
-// Función Principal que renderiza dinámicamente según el formato elegido
+// Función que renderiza dinámicamente el bracket o la tabla, según el formato
 function renderTournament(torneo) {
-   const container = document.getElementById('brackets-render-box'); const title = document.getElementById('tournament-title');
+   const container = document.getElementById('brackets-render-box');
+   const title = document.getElementById('tournament-title');
    const metaInfo = document.getElementById('tournament-info-meta');
 
-   // Seteamos textos principales
    title.textContent = torneo.nombre;
    metaInfo.textContent = `Formato: ${torneo.formato.replace('_', ' ')} | Modo: ${torneo.totalJugadoresPorEquipo}v${torneo.totalJugadoresPorEquipo}`;
-   container.innerHTML = ""; // Limpiamos contenedor
+   container.innerHTML = "";
 
-   // CASO 1: ELIMINACIÓN DIRECTA
    if (torneo.formato === "eliminacion_directa") {
 
       container.className = "bracket-visual";
@@ -137,14 +226,15 @@ function renderTournament(torneo) {
       container.appendChild(octavosDer);
    }
 
-   // CASO 2: LIGA O SISTEMA SUIZO (Estructura de Tabla de Posiciones)
-   else if (torneo.formato === "liga" || torneo.formato === "suizo") {
+else if (torneo.formato === "liga" || torneo.formato === "suizo") {
+      const esEquipoTabla = torneo.tipoParticipacion === "equipos";   // <-- NUEVA línea
+
       let tableHTML = `
          <table class="league-table">
             <thead>
                <tr>
                   <th>Pos</th>
-                  <th>Equipo</th>
+                  <th>${esEquipoTabla ? "Equipo" : "Participante"}</th>   
                   <th>PJ</th>
                   <th>G</th>
                   <th>P</th>
@@ -174,5 +264,14 @@ function renderTournament(torneo) {
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-   renderTournament(torneoActivo);
+   const idTorneo = obtenerIdTorneoDesdeURL();
+   const torneo = TORNEOS_DB[idTorneo];
+
+   if (!torneo) {
+      console.warn(`No se encontró el torneo con id "${idTorneo}"`);
+      return;
+   }
+
+   poblarDetallesTorneo(torneo);
+   renderTournament(torneo);
 });
