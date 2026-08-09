@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - ASCEND</title>
-    <link rel="stylesheet" href="../../publico/css/admin/admin.css">
+    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/admin.css">
 </head>
 
 <body class="tema-admin en-inicio">
     <header class="cabecera-principal">
         <div class="contenedor-logo">
             <a href="#dashboard" class="enlace-logo">
-                <img src="../../publico/img/logos/ascend-logo01.png" alt="Logotipo del Sistema">
+                <img src="<?php echo URL_BASE; ?>img/logos/ascend-logo01.png" alt="Logotipo del Sistema">
             </a>
            
         </div>
@@ -27,7 +27,7 @@
                 <a href="#configuracion/general">Configuración</a>
                 <a href="../organizador/dashboard.html" class="enlace-destacado">Mis Torneos (Modo
                     Organizador)</a>
-                <a href="../auth/login.html" class="enlace-salir">Cerrar Sesión</a>
+                <a href="<?php echo URL_BASE; ?>auth/login.html" class="enlace-salir">Cerrar Sesión</a>
             </div>
         </div>
     </header>
@@ -117,8 +117,14 @@
         </aside>
 
         <main class="area-contenido" id="area-contenido">
-            <!-- El contenido se cargará aquí vía JavaScript -->
-            <div class="mensaje-carga">Cargando...</div>
+<!--Aca le vamos a dar la bienvenida al administrador con el nombre que traiga de la base de datos-->
+           <h1 class="titulo-pantalla">
+                Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?>!
+           </h1>
+
+           <div class="tarjeta-resumen" style="margin-top: 20px;">
+            <p>ID del Usuario: <strong><?php echo $_SESSION['usuario_id']; ?></strong></p>
+           </div>
         </main>
     </div>
 
@@ -138,11 +144,11 @@
     <!-- Contenedor para Notificaciones Toast -->
     <div class="contenedor-notificaciones" id="contenedorNotificaciones"></div>
 
-    <script src="../../publico/js/admin/reportes.js"></script>
-    <script src="../../publico/js/admin/admin.js"></script>
+    <script src="<?php echo URL_BASE; ?>js/admin/reportes.js"></script>
+    <script src="<?php echo URL_BASE; ?>js/admin/admin.js"></script>
     <!-- Script exclusivo de maquetación (simula el router y el backend) -->
     <!-- TODO: Eliminar cuando se integre el backend PHP -->
-    <script src="../../publico/js/admin/mockup-router.js"></script>
+    <script src="<?php echo URL_BASE; ?>js/admin/mockup-router.js"></script>
 </body>
 
 </html>

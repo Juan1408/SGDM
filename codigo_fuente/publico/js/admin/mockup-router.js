@@ -8,11 +8,11 @@
 function cargarVista() {
     let rutaCompleta = window.location.hash.substring(1) || 'dashboard';
     let rutaBase = rutaCompleta.split('?')[0]; // ignorar variables como ?id=1 para buscar el archivo
-    
+
     // Actualizar clase del body dependiendo de la pantalla
     document.body.className = 'tema-admin ' + (rutaBase === 'dashboard' ? 'en-inicio' : 'en-interna');
-    
-    fetch(rutaBase + '.html')
+
+    /*fetch(rutaBase + '.html')
         .then(respuesta => {
             if (!respuesta.ok) throw new Error('No encontrado');
             return respuesta.text();
@@ -34,28 +34,28 @@ function cargarVista() {
                     <a href="#dashboard" class="boton-secundario">Volver al Inicio</a>
                 </div>
             `;
-        });
+        });*/
 }
 
 function ejecutarLogicaFormularioUsuario(rutaCompleta) {
     const partesRuta = rutaCompleta.split('?');
-    
+
     if (partesRuta.length > 1) {
         // urlParams lee las variables como id=1
         const parametrosUrl = new URLSearchParams(partesRuta[1]);
         const identificador = parametrosUrl.get('id');
-        
+
         if (identificador) {
             // 1. Cambiar los textos
             const tituloPantalla = document.querySelector('.titulo-pantalla');
-            if(tituloPantalla) tituloPantalla.textContent = 'Editar Usuario';
-            
+            if (tituloPantalla) tituloPantalla.textContent = 'Editar Usuario';
+
             const botonGuardar = document.querySelector('button[type="submit"]');
-            if(botonGuardar) {
+            if (botonGuardar) {
                 botonGuardar.textContent = 'Actualizar Cambios';
                 botonGuardar.style.backgroundColor = '#27ae60'; // Un tono verde para resaltar
             }
-            
+
             // 2. Ocultar la contraseña temporal (se edita aparte)
             const campoContrasena = document.getElementById('contrasena');
             const etiquetaContrasena = document.querySelector('label[for="contrasena"]');
@@ -117,14 +117,14 @@ function mostrarNotificacionToast(mensaje, tipo = 'exito') {
 }
 
 // Interceptar envíos de formularios para simular el guardado
-document.addEventListener('submit', function(e) {
+document.addEventListener('submit', function (e) {
     // Si estamos en una vista de admin y el formulario es estándar
     if (e.target.classList.contains('formulario-estandar')) {
         e.preventDefault(); // Evita recargar la página
 
         const boton = e.target.querySelector('button[type="submit"]');
         const textoOriginal = boton ? boton.textContent : 'Guardando...';
-        
+
         if (boton) {
             boton.textContent = 'Guardando...';
             boton.disabled = true;
@@ -133,7 +133,7 @@ document.addEventListener('submit', function(e) {
         // Simulamos retardo de red
         setTimeout(() => {
             mostrarNotificacionToast('¡Operación realizada con éxito!');
-            
+
             // Lógica de redirección según de dónde venimos
             const rutaActual = window.location.hash;
             if (rutaActual.includes('usuarios/formulario')) window.location.hash = '#usuarios/lista';
@@ -144,7 +144,7 @@ document.addEventListener('submit', function(e) {
             else if (rutaActual.includes('equipos/formulario')) window.location.hash = '#equipos/lista';
             else if (rutaActual.includes('resultados/formulario')) window.location.hash = '#resultados/lista';
             else if (rutaActual.includes('perfil/editar-perfil')) window.location.hash = '#dashboard';
-            
+
             // Si es configuración general, no redirigir, solo mostrar el toast y resetear botón
             if (boton) {
                 boton.textContent = textoOriginal;
@@ -155,13 +155,13 @@ document.addEventListener('submit', function(e) {
 });
 
 // Interceptar clics en botones de eliminar/rechazar
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     // Buscamos si hizo clic en un boton-peligro o si es hijo de uno
     const boton = e.target.closest('.boton-peligro');
-    
+
     if (boton) {
         e.preventDefault();
-        
+
         // Simular confirmación nativa
         if (confirm("¿Estás seguro de que deseas realizar esta acción? Esta operación no se puede deshacer.")) {
             // Si es parte de una tabla, eliminamos la fila visualmente

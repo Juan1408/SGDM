@@ -9,7 +9,7 @@
    <title>ASCEND - Login</title>
 
    <!-- CSS -->
-   <link rel="stylesheet" href="../../publico/css/base-auth.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base-auth.css">
 
    <!-- Font Awesome -->
    <link
@@ -34,20 +34,27 @@
     <!-- LOGIN -->
     <div class="formulario-contenido active" id="login-form">
       
-      <a href="../publico/index.html" class="btn-volver-inicio"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+      <a href="<?php echo URL_BASE; ?>index.html" class="btn-volver-inicio"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
       <div class="formulario-logo">
-        <a href="../publico/index.html">
-          <img src="../../publico/img/logos/ascend-png.png" alt="Logo de ASCEND">
+        <a href="<?php echo URL_BASE; ?>index.html">
+          <img src="<?php echo URL_BASE; ?>img/logos/ascend-png.png" alt="Logo de ASCEND">
         </a>
       </div>
       <h2>Iniciar Sesión</h2>
-      <form>
+
+      <!--Muestra el error de login si existe-->
+      <?php if (isset($error)): ?>
+        <?php echo $error; ?>
+        <?php endif; ?>
+      
+      <!--Formulario de login-->
+      <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarLogin" method="POST">
         <div class="input-group">
-          <input type="email" required>
+          <input name="email" type="email" required>
           <label>Correo electrónico</label>
         </div>
         <div class="input-group password-group">
-          <input type="password" required>
+          <input name="contrasena" type="password" required>
           <label>Contraseña</label>
           <i class="fa-regular fa-eye-slash"></i>
         </div>
@@ -63,8 +70,8 @@
 </div>
 
 
-   <script src="../../publico/js/login.js"></script>
-   <script src="../../publico/js/mensaje.js"></script>
+   <!--<script src="<?php echo URL_BASE; ?>js/login.js"></script>-->
+   <!--<script src="<?php echo URL_BASE; ?>js/mensaje.js"></script>-->
 
 </body>
 
