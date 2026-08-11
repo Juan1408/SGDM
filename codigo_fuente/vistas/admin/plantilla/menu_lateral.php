@@ -1,3 +1,4 @@
+<?php if(false): /* ARCHIVO DESHABILITADO TEMPORALMENTE (Para programar desde cero) */ ?>
 <?php
 /**
  * ============================================================================
@@ -17,7 +18,7 @@
                 </a>
             </li>
             <li>
-                <a href="index.php?c=usuario&a=index">
+                <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="nav-link">
                     👥 <span>Usuarios</span>
                 </a>
             </li>
@@ -45,3 +46,5 @@
     </nav>
 </aside>
 <main class="area-trabajo">
+
+<?php endif; ?>

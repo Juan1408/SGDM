@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿<?php
+/** @var String $vistaInyectada */
+?>
+
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -42,76 +46,54 @@
                 <ul class="menu-lista">
                     <li><a href="#dashboard" class="menu-enlace">Inicio</a></li>
 
-                    <li><a href="#" class="menu-enlace">Usuarios Administrativos</a>
+                                        <!-- 1. GESTIÓN HUMANA -->
+                    <li><a href="#" class="menu-enlace">Gestión de Usuarios</a>
                         <ul class="menu-sublista">
-                            <li><a href="#usuarios/lista" class="menu-enlace">Ver Usuarios</a></li>
-                            <li><a href="#usuarios/formulario" class="menu-enlace">Nuevo Usuario</a></li>
+                            <li><a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="menu-enlace">Usuarios Administrativos</a></li>
+                            <li><a href="#organizadores/lista" class="menu-enlace">Organizadores (Directorio)</a></li>
+                            <li><a href="#jugadores/lista" class="menu-enlace">Jugadores Registrados</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Roles y Permisos</a>
+                    <li><a href="#" class="menu-enlace">Equipos y Solicitudes</a>
                         <ul class="menu-sublista">
-                            <li><a href="#roles/lista" class="menu-enlace">Ver Roles</a></li>
-                            <li><a href="#roles/formulario" class="menu-enlace">Crear Rol</a></li>
+                            <li><a href="#equipos/lista" class="menu-enlace">Directorio de Equipos</a></li>
+                            <li><a href="#equipos/solicitudes" class="menu-enlace">Aprobar Solicitudes</a></li>
                         </ul>
                     </li>
 
+                    <!-- 2. GESTIÓN DE COMPETENCIAS (Rol Omnipotente) -->
                     <li><a href="#" class="menu-enlace">Juegos y Disciplinas</a>
                         <ul class="menu-sublista">
-                            <li><a href="#juegos/lista" class="menu-enlace">Directorio de Juegos</a></li>
-                            <li><a href="#juegos/formulario" class="menu-enlace">Registrar Juego</a></li>
+                            <li><a href="#juegos/lista" class="menu-enlace">Ver Catálogo</a></li>
+                            <li><a href="#juegos/formulario" class="menu-enlace">Registrar Nuevo Juego</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Torneos</a>
+                    <li><a href="#" class="menu-enlace">Administrar Torneos</a>
                         <ul class="menu-sublista">
                             <li><a href="#torneos/lista" class="menu-enlace">Ver y Configurar</a></li>
-                            <li><a href="#torneos/crear" class="menu-enlace">Crear Nuevo Torneo</a></li>
+                            <li><a href="#torneos/crear" class="menu-enlace">Crear Torneo Oficial</a></li>
                             <li><a href="#torneos/historial" class="menu-enlace">Historial de Torneos</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Equipos y Participantes</a>
-                        <ul class="menu-sublista">
-                            <li><a href="#equipos/lista" class="menu-enlace">Lista de Equipos</a></li>
-                            <li><a href="#jugadores/lista" class="menu-enlace">Lista de Jugadores</a></li>
-                            <li><a href="#equipos/solicitudes" class="menu-enlace">Solicitudes Pendientes</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#" class="menu-enlace">Organizadores</a>
-                        <ul class="menu-sublista">
-                            <li><a href="#organizadores/lista" class="menu-enlace">Directorio Organizadores</a></li>
-                            <li><a href="#organizadores/solicitudes" class="menu-enlace">Revisar Solicitudes</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#" class="menu-enlace">Resultados</a>
+                    <li><a href="#" class="menu-enlace">Resultados Globales</a>
                         <ul class="menu-sublista">
                             <li><a href="#resultados/lista" class="menu-enlace">Ver Todos</a></li>
-                            <li><a href="#resultados/formulario" class="menu-enlace">Registrar Nuevo</a></li>
+                            <li><a href="#resultados/formulario" class="menu-enlace">Registrar o Corregir</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Comunicaciones</a>
+                    <!-- 3. CONFIGURACIÓN DEL SISTEMA -->
+                    <li><a href="#" class="menu-enlace">Configuración del Sistema</a>
                         <ul class="menu-sublista">
-                            <li><a href="#comunicaciones/enviar" class="menu-enlace">Enviar Notificación</a></li>
+                            <li><a href="#roles/lista" class="menu-enlace">Roles y Permisos</a></li>
+                            <li><a href="#comunicaciones/enviar" class="menu-enlace">Enviar Alertas Globales</a></li>
+                            <li><a href="#auditoria/logs" class="menu-enlace">Logs de Auditoría</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#" class="menu-enlace">Reportes</a>
-                        <ul class="menu-sublista">
-                            <li><a href="#reportes/exportar" class="menu-enlace">Exportar Datos</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#" class="menu-enlace">Configuración</a>
-                        <ul class="menu-sublista">
-                            <li><a href="#configuracion/general" class="menu-enlace">Sistema y Seguridad</a></li>
-                            <li><a href="#configuracion/auditoria" class="menu-enlace">Auditoría</a></li>
-                            <li><a href="#configuracion/accesos" class="menu-enlace">Registro de Accesos</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </nav>
         </aside>
@@ -122,9 +104,8 @@
                 Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?>!
            </h1>
 
-           <div class="tarjeta-resumen" style="margin-top: 20px;">
-            <p>ID del Usuario: <strong><?php echo $_SESSION['usuario_id']; ?></strong></p>
-           </div>
+           <!-- Aca inyectamos las tarjetas y tablas de la vista inicio.php-->
+           <?php require_once __DIR__ . '/' . $vistaInyectada; ?>
         </main>
     </div>
 

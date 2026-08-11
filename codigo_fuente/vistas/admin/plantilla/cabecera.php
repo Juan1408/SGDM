@@ -1,3 +1,4 @@
+<?php if(false): /* ARCHIVO DESHABILITADO TEMPORALMENTE (Para programar desde cero) */ ?>
 <?php
 /**
  * ============================================================================
@@ -35,3 +36,5 @@
             </div>
         </header>
         <div class="cuerpo-principal">
+
+<?php endif; ?>

@@ -55,6 +55,19 @@ class Sesion {
         }
     }
 
+    //Verifica que el usuario sea administrador
+    public static function validarAdmin(){
+        //primero verifica que este logueado
+        self::requerirLogin();
+
+        //Consultamos que el rol sea de administrador
+        if ($_SESSION['rol_id'] !== 1) {
+            //si no es el administrador lo mandamos al inicio
+            header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
+            exit;
+        }
+    }
+
     //cerrar sesión
     public static function destruir(){
         self::iniciarSesion();

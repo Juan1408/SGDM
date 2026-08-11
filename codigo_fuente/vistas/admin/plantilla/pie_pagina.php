@@ -1,3 +1,4 @@
+<?php if(false): /* ARCHIVO DESHABILITADO TEMPORALMENTE (Para programar desde cero) */ ?>
 <?php
 /**
  * ============================================================================
@@ -19,3 +20,5 @@
 <script src="js/admin/admin.js"></script>
 </body>
 </html>
+
+<?php endif; ?>
