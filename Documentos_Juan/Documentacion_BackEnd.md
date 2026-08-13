@@ -159,3 +159,21 @@ Objetivo: Garantizar que durante todo el ciclo de ejecuciÃ³n de la aplicaciÃ³n, 
 ImplementaciÃ³n en Conexion.php: Se privatizÃ³ el mÃ©todo constructor (__construct()) para bloquear la instanciaciÃ³n externa (new Conexion()). 
 Controlador de Instancia: Se centralizÃ³ el acceso a travÃ©s del mÃ©todo estÃ¡tico getInstance(). Este mÃ©todo verifica la existencia previa de la conexiÃ³n; si no existe, la crea, y si ya existe, retorna la referencia activa.
 Beneficio Operativo: OptimizaciÃ³n de recursos y mitigaciÃ³n del riesgo de colapso de MySQL ante solicitudes simultÃ¡neas concurrentes.
+
+
+23. Centralización de Controladores y Redirección Dinámica (Gestión de Usuarios)
+Objetivo: Evitar la duplicación de código en operaciones comunes (editar perfiles, cambiar estado) manteniendo interfaces especializadas por rol.
+
+Patrón de Controlador Multipropósito: Se refactorizó UsuarioControlador.php para actuar como manejador central de operaciones CRUD. Aunque las vistas y listados estén divididos por sub-controladores (JugadorControlador, OrganizadorControlador), todas las acciones de guardado y edición convergen en un único punto.
+Redirección Dinámica basada en Roles: Para mantener un flujo de UX transparente, el método actualizarUsuario() inspecciona la variable $datosActualizar['rol_id'] y utiliza esta información para redirigir (con header) al administrador de vuelta a la tabla específica (Jugadores u Organizadores) desde la cual se originó la petición.
+
+24. Suplantación de Identidad (Impersonation)
+Objetivo: Otorgar al Administrador la capacidad temporal de operar bajo los permisos y la vista de otro usuario registrado para facilitar soporte técnico y auditoría.
+
+Gestión Avanzada de Sesiones: Se diseñó el método verComo() dentro de UsuarioControlador. Este método respalda el ID original del administrador en $_SESSION['admin_antes_suplantar'] antes de sobreescribir las variables críticas de sesión con los datos del usuario objetivo.
+Responsabilidad Arquitectónica: Al ubicar esta función en UsuarioControlador en lugar de un sub-controlador específico, se respeta el Principio de Responsabilidad Única (SRP), permitiendo su reutilización universal para cualquier rol del sistema sin generar acoplamiento.
+
+25. Patrón Flash Messages (Notificaciones Toast Híbridas)
+Objetivo: Proveer retroalimentación visual no bloqueante (Toast Notifications) al usuario tras completar operaciones de backend, prescindiendo de AJAX.
+
+Interconexión PHP-Javascript: Se implementó un flujo híbrido. El Controlador define $_SESSION['mensaje'] y ordena una redirección. La vista maestra (dashboard.php) actúa como listener: si detecta la variable en memoria, inyecta dinámicamente un bloque <script> que dispara la función frontend mostrarNotificacionToast(), procediendo inmediatamente a destruir la variable (unset) para garantizar que el mensaje sea efímero (Flash Message).
