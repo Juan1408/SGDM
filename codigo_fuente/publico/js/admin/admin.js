@@ -151,3 +151,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+
+function mostrarNotificacionToast(mensaje, tipo = 'exito') {
+    const contenedor = document.getElementById('contenedorNotificaciones');
+    if (!contenedor) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'notificacion-toast';
+    if (tipo === 'error') toast.style.backgroundColor = '#e74c3c';
+    if (tipo === 'info') toast.style.backgroundColor = '#3498db';
+
+    toast.innerHTML = `<span style="font-size: 1.2rem;">${tipo === 'exito' ? '✓' : (tipo === 'error' ? '⚠' : 'ℹ')}</span> <span>${mensaje}</span>`;
+    contenedor.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('ocultar');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}

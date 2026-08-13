@@ -1,6 +1,6 @@
 <?php 
     /**
-     * @var Array $datos
+     * @var array $datos
      */
 ?>
 <section class="modulo-admin">
@@ -35,8 +35,10 @@
                         <td><?php echo $usuario['fecha_registro']; ?></td>
 
                         <td>
-                            <a href="#" class="boton-accion">Editar</a>
-                            <a href="#" class="boton-accion">Bloquear</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $usuario['id']; ?>" class="boton-accion">Editar</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $usuario['id']; ?>" class="boton-accion">
+                                <?php echo $usuario['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>    

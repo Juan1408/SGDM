@@ -11,7 +11,7 @@ require_once __DIR__ . '/../ayudantes/Sesion.php';
 
 class AuthControlador {
 
-    private $modeloUsuario;
+    private Usuario $modeloUsuario;
 
     //Cuando se llame al controlador preparamos el modelo Usuario
     public function __construct() {

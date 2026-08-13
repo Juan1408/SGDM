@@ -17,7 +17,7 @@ require_once __DIR__ . '/../modelos/Conexion.php';
 
 class Usuario {
     //Propiedades: nos aseguramos de que la conexion sea privada para que solo se pueda acceder desde aqui
-    private $bd;
+    private PDO $bd;
     
     //Constructor: inicializamos la conexion a la base de datos al crear un objeto de esta clase
     public function __construct() {
@@ -96,7 +96,7 @@ class Usuario {
     }
 
     //Metodo para obtener todos los usuarios registrados junto con el rol
-    public function obtenerTodosUsuariosConRoles(){
+    public function obtenerTodosUsuariosConRoles(int $rolFiltro = null){
         $sql = "SELECT 
         u.id,
         u.nombre_completo,
@@ -105,12 +105,96 @@ class Usuario {
         u.fecha_registro,
         r.nombre_rol
         FROM usuarios u
-        INNER JOIN roles r ON u.rol_id = r.id
-        ORDER BY u.id DESC";
+        INNER JOIN roles r ON u.rol_id = r.id";
+
+        if ($rolFiltro){
+            $sql .= " WHERE u.rol_id = :rolFiltro";
+        }
+
+        $sql .= " ORDER BY u.id DESC";
+
+        $stmt = $this->bd->prepare($sql);
+
+        if ($rolFiltro){
+            $stmt->execute([':rolFiltro' => $rolFiltro]);
+        } else {
+            $stmt->execute();
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Metodo para cambiar el estado (Activo/Bloqueado) de un usuario
+    public function cambiarEstadoUsuario(int $usuarioId){
+        $sql = "SELECT esta_activo FROM usuarios WHERE id = :id LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        $estadoActual = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($estadoActual === false) {
+            return false;
+        }
+
+        if ($estadoActual){
+            $nuevoEstado = $estadoActual['esta_activo'] ? 0 : 1; 
+
+            //Escribimos la consulta SQL para actualizar el estado
+            $sqlUpdate = "UPDATE usuarios SET esta_activo = :estado WHERE id =:id";
+            $stmtUpdate = $this->bd->prepare($sqlUpdate);
+
+            //Ejecutamos la actualizacion pasando el nuevo estado
+            return $stmtUpdate->execute([
+                ':estado' => $nuevoEstado,
+                ':id' => $usuarioId
+            ]);
+        }
+        
+        //Devolvemos el nuevo estado del usuario
+        return false;
+    }
+
+    //Metodo para obtener datos de un usuario por su ID para poder editarlo
+    public function obtenerUsuarioPorId(int $usuarioId){
+        $sql = "SELECT id, nombre_completo, email, rol_id, esta_activo 
+        FROM usuarios 
+        WHERE id = :id 
+        LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        //Si no encuentra el usuario devuelve false, si lo encuentra devuelve el usuario
+        return $usuario ?: false;
+    }
+
+    //Metodo para obtener todos los roles del sistema, con esto llenamos el <select> del formulario
+    public function obtenerTodosLosRoles(){
+        $sql = "SELECT id, nombre_rol FROM roles ORDER BY id ASC";
 
         $stmt = $this->bd->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    //Metodo para actualizar los datos de un usuario
+    public function actualizarUsuario(int $usuarioId, array $datos) {
+        $sql = "UPDATE usuarios
+            SET nombre_completo = :nombre_completo,
+                email = :email,
+                rol_id = :rol
+            WHERE id = :id";
+
+        $stmt = $this->bd->prepare($sql);
+
+        return $stmt->execute([
+            'nombre_completo' => $datos['nombre_completo'],
+            'email' => $datos['email'],
+            'rol' => $datos['rol_id'],
+            'id' => $usuarioId
+        ]);
+    }
+
+        
 }
