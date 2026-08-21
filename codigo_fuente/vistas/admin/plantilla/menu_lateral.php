@@ -35,7 +35,7 @@
             <!-- 2. GESTIÓN DE COMPETENCIAS (Rol Omnipotente) -->
             <li><a href="#" class="menu-enlace">Juegos y Disciplinas</a>
                 <ul class="menu-sublista">
-                    <li><a href="#juegos/lista" class="menu-enlace">Ver Catálogo</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index" class="menu-enlace">Ver Catálogo</a></li>
                     <li><a href="#juegos/formulario" class="menu-enlace">Registrar Nuevo Juego</a></li>
                 </ul>
             </li>

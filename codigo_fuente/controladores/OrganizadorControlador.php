@@ -24,7 +24,7 @@ class OrganizadorControlador {
             'organizadores' => $listaOrganizador
         ];
 
-        $vistaInyectada = 'organizador/organizador_index.php';
+        $vistaInyectada = 'organizadores/organizador_index.php';
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }
 

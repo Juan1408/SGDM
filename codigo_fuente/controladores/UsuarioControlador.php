@@ -126,6 +126,7 @@ class UsuarioControlador {
                 exit();
             }
         }
+
     }
 
     //Metodo para recibir los datos del formulario POST y guardarlos en la base de datos
@@ -166,6 +167,31 @@ class UsuarioControlador {
                 header("Location: " . URL_BASE . "index.php?c=usuario&a=index");
                 exit();
             }
+        }
+    }
+
+    //Metodo para eliminar el usuario (baja fisica)
+    public function eliminarUsuario() {
+        //Validamos que el usuario este logueado y sea admin
+        Sesion::validarAdmin();
+        //Recibimos el ID
+        $usuarioId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        //Capturamos el rol para redirigir despues de eliminar
+        $rolId = isset($_GET['rol_id']) ? (int)$_GET['rol_id'] : 0;
+        //Ejecutamos la funcion eliminarUsuario del modelo
+        $this->modeloUsuario->eliminarUsuario($usuarioId);
+        //Mandamos un mensaje de feedback
+        $_SESSION['mensaje'] = "Usuario eliminado correctamente";
+        //Redirigimos al usuario
+        if ($rolId == 3){
+            header("Location: " . URL_BASE . "index.php?c=jugador&a=index");
+            exit();
+        } else if ($rolId == 2){
+            header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
+            exit();
+        } else {
+            header("Location: " . URL_BASE . "index.php?c=usuario&a=index");
+            exit();
         }
     }
 }

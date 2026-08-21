@@ -82,7 +82,7 @@ class AdminControlador {
     private function obtenerEquipos(){
         //Instanciamos el modelo
         
-        $modeloEquipo = new Equipo();
+        $modeloEquipo = Equipo::obtenerInstancia();
 
         //Le pedimos que cuente todos los equipos
         $totalEquipos = $modeloEquipo->contarTotalEquipos();
@@ -95,7 +95,7 @@ class AdminControlador {
     private function ultimosEquipos(int $limite = 5){
         //Instanciamos el modelo
         
-        $modeloEquipo = new Equipo();
+        $modeloEquipo = Equipo::obtenerInstancia();
 
         //Le pedimos que nos devuelva los ultimos equipos
         $ultimosEquipos = $modeloEquipo->obtenerUltimosEquiposCreados($limite);

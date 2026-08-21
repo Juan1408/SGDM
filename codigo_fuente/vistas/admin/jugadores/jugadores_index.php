@@ -42,7 +42,7 @@
                                 <?php echo $jugador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
                             </a>
                             <!--Añadir un modal confirmando si desea eliminar la cuenta-->
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario$a=eliminarUsuario&id=<?php echo $jugador['id']; ?>" class="boton-eliminar">Eliminar Cuenta</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario&id=<?php echo $jugador['id']; ?>&rol_id=<?php echo $jugador['rol_id']; ?>" class="boton-peligro">Eliminar Cuenta</a>
                             <!--En caso de eliminar cuenta, hay que validar que no tenga ningun evento registrado con suelta de ficha. Si tiene, mostramos un error y no le dejamos eliminarla-->
                             <!--FUNCION PENDIENTE A PROGRAMAR-->
                         </td>

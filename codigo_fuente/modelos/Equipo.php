@@ -13,9 +13,13 @@ require_once __DIR__ . '/Conexion.php';
 class Equipo {
     private $bd;
 
-    public function __construct(){
+    private function __construct(){
         //Usamos el patron Singleton para obtener la instancia única de la base de datos
         $this->bd = Conexion::getInstance()->getBD();
+    }
+
+    public static function obtenerInstancia(){
+        return new self();
     }
     
     //Metodo para buscar un equipo por su nombre

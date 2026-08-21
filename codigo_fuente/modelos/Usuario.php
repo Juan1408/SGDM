@@ -101,8 +101,10 @@ class Usuario {
         u.id,
         u.nombre_completo,
         u.email,
+        u.telefono,
         u.esta_activo,
         u.fecha_registro,
+        u.rol_id,
         r.nombre_rol
         FROM usuarios u
         INNER JOIN roles r ON u.rol_id = r.id";
@@ -155,7 +157,7 @@ class Usuario {
 
     //Metodo para obtener datos de un usuario por su ID para poder editarlo
     public function obtenerUsuarioPorId(int $usuarioId){
-        $sql = "SELECT id, nombre_completo, email, rol_id, esta_activo 
+        $sql = "SELECT id, nombre_completo, email, rol_id, telefono, esta_activo 
         FROM usuarios 
         WHERE id = :id 
         LIMIT 1";
@@ -183,6 +185,7 @@ class Usuario {
         $sql = "UPDATE usuarios
             SET nombre_completo = :nombre_completo,
                 email = :email,
+                telefono = :telefono,
                 rol_id = :rol
             WHERE id = :id";
 
@@ -191,10 +194,17 @@ class Usuario {
         return $stmt->execute([
             'nombre_completo' => $datos['nombre_completo'],
             'email' => $datos['email'],
+            'telefono' => $datos['telefono'],
             'rol' => $datos['rol_id'],
             'id' => $usuarioId
         ]);
     }
 
-        
+    //Metodo para eliminar un usuario (Baja fisica)
+    public function eliminarUsuario(int $usuarioId){
+        $sql = "DELETE FROM usuarios WHERE id = :id";
+        $stmt = $this->bd->prepare($sql);
+        return $stmt->execute([':id' => $usuarioId]);
+    }
+    
 }
