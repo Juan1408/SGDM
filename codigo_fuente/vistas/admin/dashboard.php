@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/componentes.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/utilidades.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="tema-admin en-inicio">

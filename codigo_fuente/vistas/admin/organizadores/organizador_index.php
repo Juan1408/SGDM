@@ -29,13 +29,13 @@
                         <td><?php echo $organizador['telefono']; ?></td>
                         <td><?php echo $organizador['esta_activo']; ?></td>
                         <td>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" class="enlace-estandar">Ver Como</a>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="enlace-estandar">Editar</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" class="boton-accion">Ver Como</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $organizador['id']; ?>" class="boton-secundario">
                                 <?php echo $organizador['esta_activo'] ? 'Activar' : 'Bloquear'; ?>
                             </a>
                             <!--Añadir un modal confirmando si desea eliminar la cuenta-->
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-eliminar">Eliminar Cuenta</a>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-peligro">Eliminar Cuenta</a>
                             <!--En caso de eliminar cuenta, hay que validar que no tenga ningun evento registrado con suelta de ficha. Si tiene, mostramos un error y no le dejamos eliminarla-->
                             <!--FUNCION PENDIENTE A PROGRAMAR-->
                         </td>

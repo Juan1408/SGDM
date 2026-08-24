@@ -22,8 +22,7 @@ class AuthControlador {
     public function mostrarLogin() {
         //Si el usuario ya esta logueado lo mandamos directo al Home para que no vea el login otra vez
         if (Sesion::estaLogueado()) {
-            header("Location: " . URL_BASE . "index.php?c=admin&a=dashboard");
-            exit;
+            $this->redirigirPorRol($_SESSION['rol_id']);
         }
         //si no esta logueado cargamos el archivo login.php
         require __DIR__ . '/../vistas/auth/login.php';
@@ -61,8 +60,7 @@ class AuthControlador {
             Sesion::iniciarLogin($usuarioEncontrado);
 
             //Lo enviamos a la pantalla correspondiente
-            header("Location: " . URL_BASE . "index.php?c=admin&a=dashboard");
-            exit;
+            $this->redirigirPorRol($usuarioEncontrado['rol_id']);
         } else {
             // Si algo falla recargamos la vista de login con un mensaje de error
             $error = "Credenciales incorrectas. Verifique su email y contraseña.";
@@ -72,9 +70,27 @@ class AuthControlador {
     }   
 }
 
-public function logout(){
-    Sesion::destruir();
-    header("Location: " . URL_BASE . "index.php?c=auth&a=mostrarLogin");
-    exit;
-}
+    public function logout(){
+        Sesion::destruir();
+        header("Location: " . URL_BASE . "index.php?c=auth&a=mostrarLogin");
+        exit;
+    }
+
+    //Metodo privado para redirigir segun el rol del usuario
+    private function redirigirPorRol(int $rol_id){
+        if ($rol_id == 1){
+            header("Location: " . URL_BASE . "index.php?c=admin&a=dashboard");
+            exit;
+        } elseif ($rol_id == 2){
+            header("Location: " . URL_BASE . "index.php?c=panelOrganizador&a=dashboard");
+            exit;
+        } elseif ($rol_id == 3){
+            header("Location: " . URL_BASE . "index.php?c=panelJugador&a=dashboard");
+            exit;
+        } else {
+            Sesion::destruir();
+            header("Location: " . URL_BASE . "index.php?c=auth&a=mostrarLogin&error=rol_invalido");
+        }
+        exit;
+    }
 }

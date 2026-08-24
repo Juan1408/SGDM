@@ -1,12 +1,12 @@
-<div class="encabezado-dashboard">
-    <h2>Registrar Nuevo Juego</h2>
-    <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index" class="boton-secundario">Volver al Catalogo</a>
-</div>
+<section class="modulo-admin">
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla"><i class="fas fa-plus-circle"></i> Registrar Nuevo Juego</h2>
+        <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index" class="boton-secundario">Volver al Catálogo</a>
+    </div>
 
-<div class="tarjeta-datos">
-    <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=guardar" method="POST" class="formulario-admin validacion-activa">
-
-    <div class="grupo-formulario">
+    <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <div class="grupo-formulario">
         <label for="nombre">Nombre del Juego / Disciplina <span class="requerido">*</span></label>
         <input type="text" id="nombre" name="nombre" class="campo-requerido" placeholder="Ej: League of Legends, Fútbol 5..." required>
     </div>
@@ -27,9 +27,10 @@
         </div>
 
         <div class="acciones-formulario">
-            <button type="submit" class="boton-primario">
-                Guardar en el Catalogo
+            <button type="submit" class="boton-accion">
+                Guardar en el Catálogo
             </button>
         </div>
+        </fieldset>
     </form>
-</div>
+</section>

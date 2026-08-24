@@ -9,10 +9,12 @@ $esAdmin = $datos['es_admin'];
 ?>
 
 <section class="modulo-admin">
-    <h2 class="titulo-pantalla">Editar usuario: <?php echo $usuario['nombre_completo']; ?></h2>
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla"><i class="fas fa-user-edit"></i> Editar usuario: <?php echo $usuario['nombre_completo']; ?></h2>
+    </div>
 
     <form action="<?php echo URL_BASE; ?>index.php?c=usuario&a=actualizarUsuario" method="POST" class="formulario-estandar">
-
+        <fieldset>
     <!-- Campos ocultos-->
     <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
 
@@ -53,5 +55,6 @@ $esAdmin = $datos['es_admin'];
         <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="boton-secundario">Cancelar</a>
         <button type="submit" class="boton-accion">Guardar Cambios</button>
     </div>
+        </fieldset>
     </form>
 </section>

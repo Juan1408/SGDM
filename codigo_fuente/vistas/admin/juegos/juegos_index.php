@@ -1,14 +1,15 @@
 
-<div class="encabezado-dashboard">
-    <h2><i class="fas fa-gamepad"></i>Catalogo de Juegos</h2>
-    <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=crear" class="boton-primario">
-        Añadir Nuevo Juego
-    </a>
-</div>
+<section class="modulo-admin">
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla"><i class="fas fa-gamepad"></i> Catálogo de Juegos</h2>
+        <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=crear" class="boton-accion">
+            Añadir Nuevo Juego
+        </a>
+    </div>
 
-<div class="tarjeta-datos">
-    <table class="tabla-admin">
-        <thead>
+    <section>
+        <table class="tabla-estandar">
+            <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre del Juego</th>
@@ -49,4 +50,5 @@
             <?php endif; ?>
         </tbody>
     </table>
-</div>
+    </section>
+</section>

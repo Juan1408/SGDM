@@ -41,39 +41,73 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ELIMINACIÓN DE TABLAS EN ORDEN INVERSO DE DEPENDENCIAS
 -- -----------------------------------------------------------------------------
 DROP TABLE IF EXISTS newsletter_subscriptores;
+
 DROP TABLE IF EXISTS torneo_comentarios;
+
 DROP TABLE IF EXISTS torneo_actividades;
+
 DROP TABLE IF EXISTS usuario_logros;
+
 DROP TABLE IF EXISTS logros;
+
 DROP TABLE IF EXISTS perfiles_organizadores;
+
 DROP TABLE IF EXISTS perfiles_jugadores;
+
 DROP TABLE IF EXISTS logs_actividad;
+
 DROP TABLE IF EXISTS historial_contrasenas;
+
 DROP TABLE IF EXISTS politicas_contrasenas;
+
 DROP TABLE IF EXISTS auditoria_cambios;
+
 DROP TABLE IF EXISTS notificaciones;
+
 DROP TABLE IF EXISTS torneo_config;
+
 DROP TABLE IF EXISTS resultados_detalle;
+
 DROP TABLE IF EXISTS torneo_suizo_parejas;
+
 DROP TABLE IF EXISTS torneo_posiciones;
+
 DROP TABLE IF EXISTS torneo_encuentros;
+
 DROP TABLE IF EXISTS participantes_torneo;
+
 DROP TABLE IF EXISTS torneo_cambio_estado;
+
 DROP TABLE IF EXISTS torneos;
+
 DROP TABLE IF EXISTS solicitudes_equipo;
+
 DROP TABLE IF EXISTS equipo_capitanes;
+
 DROP TABLE IF EXISTS equipo_miembros;
+
 DROP TABLE IF EXISTS equipos;
+
 DROP TABLE IF EXISTS logs_acceso;
+
 DROP TABLE IF EXISTS sesiones_activas;
+
 DROP TABLE IF EXISTS tokens_recuperacion;
+
 DROP TABLE IF EXISTS tokens_verificacion_email;
+
 DROP TABLE IF EXISTS usuarios;
+
 DROP TABLE IF EXISTS sistemas_puntuacion;
+
 DROP TABLE IF EXISTS modalidades;
+
 DROP TABLE IF EXISTS rol_permisos;
+
 DROP TABLE IF EXISTS permisos;
+
 DROP TABLE IF EXISTS juegos;
+
 DROP TABLE IF EXISTS roles;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -87,7 +121,7 @@ CREATE TABLE permisos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_permiso VARCHAR(50) UNIQUE NOT NULL,
     descripcion TEXT
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 1.2 roles: Catálogo de perfiles de acceso (Admin, Organizador, Participante, Público)
 CREATE TABLE roles (
@@ -95,7 +129,7 @@ CREATE TABLE roles (
     nombre_rol VARCHAR(50) UNIQUE NOT NULL,
     descripcion TEXT,
     nivel_permiso INT DEFAULT 0
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 1.3 rol_permisos: Relación muchos a muchos (N:M) entre Roles y Permisos
 CREATE TABLE rol_permisos (
@@ -105,14 +139,14 @@ CREATE TABLE rol_permisos (
     PRIMARY KEY (rol_id, permiso_id),
     CONSTRAINT fk_rolpermiso_rol FOREIGN KEY (rol_id) REFERENCES roles (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_rolpermiso_permiso FOREIGN KEY (permiso_id) REFERENCES permisos (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 1.4 modalidades: Catálogo de modalidades de competencia (Individual vs Equipos)
 CREATE TABLE modalidades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) UNIQUE NOT NULL,
     descripcion TEXT
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 1.5 sistemas_puntuacion: Reglas de asignación de puntos por victoria, empate y derrota
 CREATE TABLE sistemas_puntuacion (
@@ -122,7 +156,7 @@ CREATE TABLE sistemas_puntuacion (
     puntos_empate DECIMAL(5, 2) NOT NULL,
     puntos_derrota DECIMAL(5, 2) NOT NULL,
     descripcion TEXT
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 1.6 juegos: Catálogo de disciplinas deportivas físicas y digitales (eSports)
 CREATE TABLE juegos (
@@ -135,7 +169,7 @@ CREATE TABLE juegos (
     puntos_derrota DECIMAL(5, 2) DEFAULT 0.00,
     activo BOOLEAN DEFAULT TRUE,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 2. USUARIOS, AUTENTICACIÓN Y HERENCIA DE PERFILES (1:1 en 3FN)
@@ -155,7 +189,7 @@ CREATE TABLE usuarios (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ultimo_acceso TIMESTAMP NULL,
     CONSTRAINT fk_usuarios_rol FOREIGN KEY (rol_id) REFERENCES roles (id) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.2 perfiles_jugadores: TABLA HIJA (Especialización para Jugadores y Competidores)
 -- Relación 1 a 1 estricta: usuario_id es PRIMARY KEY y FOREIGN KEY simultáneamente.
@@ -174,7 +208,7 @@ CREATE TABLE perfiles_jugadores (
     twitter_url VARCHAR(255),
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_perfil_jugador_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.3 perfiles_organizadores: TABLA HIJA (Especialización para Organizadores de Torneos)
 -- Relación 1 a 1 estricta: usuario_id es PRIMARY KEY y FOREIGN KEY simultáneamente.
@@ -188,29 +222,33 @@ CREATE TABLE perfiles_organizadores (
     verificado_oficial BOOLEAN DEFAULT FALSE,
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_perfil_organizador_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.4 tokens_verificacion_email: Tokens de activación de cuenta por correo electrónico
 CREATE TABLE tokens_verificacion_email (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     token VARCHAR(255) UNIQUE NOT NULL,
-    expira_en TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 24 HOUR),
+    expira_en TIMESTAMP NOT NULL DEFAULT(
+        CURRENT_TIMESTAMP + INTERVAL 24 HOUR
+    ),
     usado BOOLEAN DEFAULT FALSE,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_token_verif_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.5 tokens_recuperacion: Tokens temporales para restablecimiento de contraseña olvidada
 CREATE TABLE tokens_recuperacion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     token VARCHAR(255) UNIQUE NOT NULL,
-    expira_en TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 1 HOUR),
+    expira_en TIMESTAMP NOT NULL DEFAULT(
+        CURRENT_TIMESTAMP + INTERVAL 1 HOUR
+    ),
     usado BOOLEAN DEFAULT FALSE,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_token_recup_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.6 sesiones_activas: Control de sesiones concurrentes e información de dispositivos
 CREATE TABLE sesiones_activas (
@@ -221,10 +259,12 @@ CREATE TABLE sesiones_activas (
     user_agent TEXT,
     ultima_actividad TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expira_en TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 7 DAY),
+    expira_en TIMESTAMP NOT NULL DEFAULT(
+        CURRENT_TIMESTAMP + INTERVAL 7 DAY
+    ),
     activa BOOLEAN DEFAULT TRUE,
     CONSTRAINT fk_sesion_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 2.7 logs_acceso: Registro inmutable de intentos de inicio de sesión (Auditoría de Seguridad)
 CREATE TABLE logs_acceso (
@@ -237,7 +277,7 @@ CREATE TABLE logs_acceso (
     mensaje_error TEXT,
     fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_log_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 3. GESTIÓN DE EQUIPOS Y MEMBRESÍAS
@@ -257,7 +297,7 @@ CREATE TABLE equipos (
     activo BOOLEAN DEFAULT TRUE,
     codigo_invitacion VARCHAR(20) UNIQUE,
     CONSTRAINT fk_equipo_creador FOREIGN KEY (creado_por) REFERENCES usuarios (id) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 3.2 equipo_miembros: Relación muchos a muchos (N:M) entre Equipos y Jugadores
 CREATE TABLE equipo_miembros (
@@ -270,7 +310,7 @@ CREATE TABLE equipo_miembros (
     PRIMARY KEY (equipo_id, usuario_id),
     CONSTRAINT fk_miembro_equipo FOREIGN KEY (equipo_id) REFERENCES equipos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_miembro_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 3.3 equipo_capitanes: Asignación de líderes y capitanes a un equipo
 CREATE TABLE equipo_capitanes (
@@ -283,7 +323,7 @@ CREATE TABLE equipo_capitanes (
     CONSTRAINT fk_capitan_equipo FOREIGN KEY (equipo_id) REFERENCES equipos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_capitan_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_capitan_asignador FOREIGN KEY (asignado_por) REFERENCES usuarios (id) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 3.4 solicitudes_equipo: Solicitudes de ingreso a escuadras con flujo de aprobación
 CREATE TABLE solicitudes_equipo (
@@ -291,7 +331,14 @@ CREATE TABLE solicitudes_equipo (
     equipo_id INT NOT NULL,
     usuario_id INT NOT NULL,
     mensaje TEXT,
-    estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'aprobado', 'rechazado', 'cancelado')),
+    estado VARCHAR(20) DEFAULT 'pendiente' CHECK (
+        estado IN (
+            'pendiente',
+            'aprobado',
+            'rechazado',
+            'cancelado'
+        )
+    ),
     fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_respuesta TIMESTAMP NULL,
     respondido_por INT NULL,
@@ -299,7 +346,7 @@ CREATE TABLE solicitudes_equipo (
     CONSTRAINT fk_solicitud_equipo FOREIGN KEY (equipo_id) REFERENCES equipos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_solicitud_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_solicitud_respondido FOREIGN KEY (respondido_por) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 4. NÚCLEO DE TORNEOS Y COMPETICIONES
@@ -311,8 +358,22 @@ CREATE TABLE torneos (
     nombre VARCHAR(255) NOT NULL,
     juego_id INT NOT NULL,
     descripcion TEXT,
-    formato VARCHAR(50) NOT NULL CHECK (formato IN ('liga', 'eliminacion_directa', 'suizo')),
-    estado VARCHAR(50) NOT NULL DEFAULT 'borrador' CHECK (estado IN ('borrador', 'inscripciones_abiertas', 'en_curso', 'finalizado', 'cancelado')),
+    formato VARCHAR(50) NOT NULL CHECK (
+        formato IN (
+            'liga',
+            'eliminacion_directa',
+            'suizo'
+        )
+    ),
+    estado VARCHAR(50) NOT NULL DEFAULT 'borrador' CHECK (
+        estado IN (
+            'borrador',
+            'inscripciones_abiertas',
+            'en_curso',
+            'finalizado',
+            'cancelado'
+        )
+    ),
     cupo_max_equipos INT NOT NULL CHECK (cupo_max_equipos >= 2),
     cupo_min_equipos INT DEFAULT 2 CHECK (cupo_min_equipos >= 2),
     fecha_inicio_inscripcion DATE,
@@ -335,14 +396,23 @@ CREATE TABLE torneos (
     puntos_victoria DECIMAL(5, 2) DEFAULT 3.00,
     puntos_empate DECIMAL(5, 2) DEFAULT 1.00,
     puntos_derrota DECIMAL(5, 2) DEFAULT 0.00,
-    tipo_resultado ENUM('goles', 'puntos', 'rondas', 'booleano') DEFAULT 'goles',
+    tipo_resultado ENUM(
+        'goles',
+        'puntos',
+        'rondas',
+        'booleano'
+    ) DEFAULT 'goles',
     mejor_de INT DEFAULT 1 COMMENT 'Número de mapas o partidas para ganar la serie (BO1, BO3, BO5)',
     CONSTRAINT fk_torneo_organizador FOREIGN KEY (organizador_id) REFERENCES usuarios (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_torneo_juego FOREIGN KEY (juego_id) REFERENCES juegos (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_torneo_modalidad FOREIGN KEY (modalidad_id) REFERENCES modalidades (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_torneo_sistema_puntuacion FOREIGN KEY (sistema_puntuacion_id) REFERENCES sistemas_puntuacion (id) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT fechas_validas CHECK (fecha_inicio IS NULL OR fecha_fin IS NULL OR fecha_inicio <= fecha_fin)
-) ENGINE=InnoDB;
+    CONSTRAINT fechas_validas CHECK (
+        fecha_inicio IS NULL
+        OR fecha_fin IS NULL
+        OR fecha_inicio <= fecha_fin
+    )
+) ENGINE = InnoDB;
 
 -- 4.2 torneo_cambio_estado: Historial inmutable de transiciones de estado de un torneo
 CREATE TABLE torneo_cambio_estado (
@@ -355,7 +425,7 @@ CREATE TABLE torneo_cambio_estado (
     fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_cambio_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_cambio_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.3 participantes_torneo: Abstracción polimórfica de competidores (Equipos o Jugadores individuales)
 CREATE TABLE participantes_torneo (
@@ -364,14 +434,25 @@ CREATE TABLE participantes_torneo (
     tipo ENUM('equipo', 'usuario') NOT NULL,
     referencia_id INT NOT NULL COMMENT 'ID de la tabla equipos o usuarios según el tipo',
     nombre VARCHAR(255) NOT NULL COMMENT 'Nombre denormalizado para rendimiento visual rápido',
-    estado VARCHAR(50) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'confirmado', 'rechazado', 'cancelado')),
+    estado VARCHAR(50) DEFAULT 'pendiente' CHECK (
+        estado IN (
+            'pendiente',
+            'confirmado',
+            'rechazado',
+            'cancelado'
+        )
+    ),
     fecha_inscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     confirmado_por INT NULL,
     fecha_confirmacion TIMESTAMP NULL,
-    UNIQUE KEY unico_participante (torneo_id, tipo, referencia_id),
+    UNIQUE KEY unico_participante (
+        torneo_id,
+        tipo,
+        referencia_id
+    ),
     CONSTRAINT fk_participante_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_participante_confirmador FOREIGN KEY (confirmado_por) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.4 torneo_encuentros: Fixture, partidos y llaves de eliminación
 CREATE TABLE torneo_encuentros (
@@ -384,7 +465,15 @@ CREATE TABLE torneo_encuentros (
     cancha VARCHAR(100),
     resultado_local DECIMAL(10, 2) DEFAULT NULL,
     resultado_visitante DECIMAL(10, 2) DEFAULT NULL,
-    estado VARCHAR(50) DEFAULT 'programado' CHECK (estado IN ('programado', 'en_curso', 'finalizado', 'cancelado', 'aplazado')),
+    estado VARCHAR(50) DEFAULT 'programado' CHECK (
+        estado IN (
+            'programado',
+            'en_curso',
+            'finalizado',
+            'cancelado',
+            'aplazado'
+        )
+    ),
     participante_ganador_id INT NULL,
     siguiente_encuentro_id INT NULL,
     canal_transmision VARCHAR(100),
@@ -397,7 +486,7 @@ CREATE TABLE torneo_encuentros (
     CONSTRAINT fk_encuentro_ganador FOREIGN KEY (participante_ganador_id) REFERENCES participantes_torneo (id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_encuentro_siguiente FOREIGN KEY (siguiente_encuentro_id) REFERENCES torneo_encuentros (id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_encuentro_modificador FOREIGN KEY (modificado_por_usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.5 torneo_posiciones: Tabla de clasificación y estadísticas actualizadas en tiempo real
 CREATE TABLE torneo_posiciones (
@@ -416,7 +505,7 @@ CREATE TABLE torneo_posiciones (
     PRIMARY KEY (torneo_id, participante_id),
     CONSTRAINT fk_posiciones_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_posiciones_participante FOREIGN KEY (participante_id) REFERENCES participantes_torneo (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.6 torneo_suizo_parejas: Historial de emparejamientos para formato de Sistema Suizo
 CREATE TABLE torneo_suizo_parejas (
@@ -426,12 +515,18 @@ CREATE TABLE torneo_suizo_parejas (
     ronda INT NOT NULL,
     ya_se_enfrentaron BOOLEAN DEFAULT TRUE,
     fecha_encuentro TIMESTAMP NULL,
-    PRIMARY KEY (torneo_id, participante_a_id, participante_b_id),
+    PRIMARY KEY (
+        torneo_id,
+        participante_a_id,
+        participante_b_id
+    ),
     CONSTRAINT fk_suizo_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_suizo_participanteA FOREIGN KEY (participante_a_id) REFERENCES participantes_torneo (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_suizo_participanteB FOREIGN KEY (participante_b_id) REFERENCES participantes_torneo (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT distintos CHECK (participante_a_id != participante_b_id)
-) ENGINE=InnoDB;
+    CONSTRAINT distintos CHECK (
+        participante_a_id != participante_b_id
+    )
+) ENGINE = InnoDB;
 
 -- 4.7 resultados_detalle: Métricas específicas del encuentro (Kills, MVP, tiempo, faltas)
 CREATE TABLE resultados_detalle (
@@ -440,7 +535,7 @@ CREATE TABLE resultados_detalle (
     tipo_dato VARCHAR(50) NOT NULL COMMENT 'kills_local, kills_visitante, motivo_victoria, duracion_minutos',
     valor VARCHAR(255) NOT NULL,
     CONSTRAINT fk_detalle_encuentro FOREIGN KEY (encuentro_id) REFERENCES torneo_encuentros (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.8 torneo_config: Pares clave-valor para configuraciones dinámicas y personalizadas
 CREATE TABLE torneo_config (
@@ -449,19 +544,24 @@ CREATE TABLE torneo_config (
     valor TEXT NOT NULL,
     PRIMARY KEY (torneo_id, clave),
     CONSTRAINT fk_config_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.9 torneo_actividades: Agenda inicial de actividades del torneo (Reuniones, Premiaciones)
 CREATE TABLE torneo_actividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     torneo_id INT NOT NULL,
     titulo VARCHAR(150) NOT NULL,
-    tipo ENUM('administrativo', 'reunion', 'competencia', 'premiacion') DEFAULT 'competencia',
+    tipo ENUM(
+        'administrativo',
+        'reunion',
+        'competencia',
+        'premiacion'
+    ) DEFAULT 'competencia',
     fecha DATE NOT NULL,
     hora TIME NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_actividades_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 4.10 torneo_comentarios: Interacción comunitaria y consultas públicas en el torneo
 CREATE TABLE torneo_comentarios (
@@ -475,7 +575,7 @@ CREATE TABLE torneo_comentarios (
     fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_comentario_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_comentario_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 5. GAMIFICACIÓN: TROFEOS Y LOGROS DE JUGADORES
@@ -490,20 +590,24 @@ CREATE TABLE logros (
     icono VARCHAR(100) DEFAULT 'fa-trophy',
     puntos_recompensa INT DEFAULT 50,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 5.2 usuario_logros: Relación muchos a muchos (N:M) de logros conseguidos por jugadores
 CREATE TABLE usuario_logros (
     usuario_id INT NOT NULL,
     logro_id INT NOT NULL,
-    estado ENUM('bloqueado', 'en_curso', 'desbloqueado') DEFAULT 'desbloqueado',
+    estado ENUM(
+        'bloqueado',
+        'en_curso',
+        'desbloqueado'
+    ) DEFAULT 'desbloqueado',
     progreso_actual INT DEFAULT 1,
     progreso_objetivo INT DEFAULT 1,
     fecha_desbloqueo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (usuario_id, logro_id),
     CONSTRAINT fk_usuariologro_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_usuariologro_logro FOREIGN KEY (logro_id) REFERENCES logros (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 6. COMUNICACIONES Y MARKETING
@@ -513,7 +617,17 @@ CREATE TABLE usuario_logros (
 CREATE TABLE notificaciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
-    tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('info', 'exito', 'advertencia', 'error', 'partido', 'resultado', 'inscripcion')),
+    tipo VARCHAR(50) NOT NULL CHECK (
+        tipo IN (
+            'info',
+            'exito',
+            'advertencia',
+            'error',
+            'partido',
+            'resultado',
+            'inscripcion'
+        )
+    ),
     titulo VARCHAR(255) NOT NULL,
     mensaje TEXT NOT NULL,
     enlace_relacionado VARCHAR(500),
@@ -521,7 +635,7 @@ CREATE TABLE notificaciones (
     fecha_lectura TIMESTAMP NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_notificacion_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 6.2 newsletter_subscriptores: Boletín de noticias público
 CREATE TABLE newsletter_subscriptores (
@@ -529,7 +643,7 @@ CREATE TABLE newsletter_subscriptores (
     email VARCHAR(255) UNIQUE NOT NULL,
     activo BOOLEAN DEFAULT TRUE,
     fecha_suscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 7. SEGURIDAD Y AUDITORÍA
@@ -540,7 +654,9 @@ CREATE TABLE auditoria_cambios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tabla_afectada VARCHAR(100) NOT NULL,
     registro_id INT NOT NULL,
-    accion VARCHAR(20) NOT NULL CHECK (accion IN ('INSERT', 'UPDATE', 'DELETE')),
+    accion VARCHAR(20) NOT NULL CHECK (
+        accion IN ('INSERT', 'UPDATE', 'DELETE')
+    ),
     usuario_id INT NULL,
     datos_viejos JSON,
     datos_nuevos JSON,
@@ -548,7 +664,7 @@ CREATE TABLE auditoria_cambios (
     user_agent TEXT,
     fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_auditoria_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 7.2 politicas_contrasenas: Parámetros de seguridad de claves del sistema
 CREATE TABLE politicas_contrasenas (
@@ -563,7 +679,7 @@ CREATE TABLE politicas_contrasenas (
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     actualizado_por INT NULL,
     CONSTRAINT fk_politicas_actualizador FOREIGN KEY (actualizado_por) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 7.3 historial_contrasenas: Histórico para impedir reutilización de contraseñas
 CREATE TABLE historial_contrasenas (
@@ -572,7 +688,7 @@ CREATE TABLE historial_contrasenas (
     hash_anterior TEXT NOT NULL,
     fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_historial_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- 7.4 logs_actividad: Registro de operaciones del usuario en la plataforma
 CREATE TABLE logs_actividad (
@@ -584,24 +700,39 @@ CREATE TABLE logs_actividad (
     user_agent TEXT,
     fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_logact_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE = InnoDB;
 
 -- =============================================================================
 -- 8. ÍNDICES ESTRATÉGICOS PARA RENDIMIENTO (Performance Tuning)
 -- =============================================================================
 
 CREATE INDEX idx_usuarios_rol ON usuarios (rol_id);
+
 CREATE INDEX idx_usuarios_email ON usuarios (email);
+
 CREATE INDEX idx_torneos_organizador ON torneos (organizador_id);
+
 CREATE INDEX idx_torneos_estado ON torneos (estado);
+
 CREATE INDEX idx_torneos_fechas ON torneos (fecha_inicio, fecha_fin);
+
 CREATE INDEX idx_encuentros_torneo ON torneo_encuentros (torneo_id);
+
 CREATE INDEX idx_encuentros_ronda ON torneo_encuentros (ronda);
+
 CREATE INDEX idx_encuentros_fecha ON torneo_encuentros (fecha_hora_programada);
-CREATE INDEX idx_posiciones_puntos ON torneo_posiciones (puntos DESC, diferencia_goles DESC);
+
+CREATE INDEX idx_posiciones_puntos ON torneo_posiciones (
+    puntos DESC,
+    diferencia_goles DESC
+);
+
 CREATE INDEX idx_participantes_torneo ON participantes_torneo (torneo_id);
+
 CREATE INDEX idx_participantes_referencia ON participantes_torneo (tipo, referencia_id);
+
 CREATE INDEX idx_auditoria_tabla ON auditoria_cambios (tabla_afectada, registro_id);
+
 CREATE INDEX idx_auditoria_fecha ON auditoria_cambios (fecha_hora);
 
 -- =============================================================================
@@ -609,74 +740,360 @@ CREATE INDEX idx_auditoria_fecha ON auditoria_cambios (fecha_hora);
 -- =============================================================================
 
 -- Permisos
-INSERT INTO permisos (nombre_permiso, descripcion) VALUES 
-('crear_torneos', 'Permite crear nuevas competencias'),
-('editar_torneos', 'Permite modificar configuraciones y reglamentos'),
-('borrar_torneos', 'Permite eliminar torneos'),
-('cargar_resultados', 'Permite asentar scores y ganadores'),
-('crear_usuarios', 'Permite dar de alta cuentas administrativas'),
-('enviar_mensajes', 'Permite emitir comunicados masivos'),
-('descargar_reportes', 'Permite exportar datos en PDF, Excel y CSV'),
-('ver_auditoria', 'Permite auditar accesos y cambios críticos');
+INSERT INTO
+    permisos (nombre_permiso, descripcion)
+VALUES (
+        'crear_torneos',
+        'Permite crear nuevas competencias'
+    ),
+    (
+        'editar_torneos',
+        'Permite modificar configuraciones y reglamentos'
+    ),
+    (
+        'borrar_torneos',
+        'Permite eliminar torneos'
+    ),
+    (
+        'cargar_resultados',
+        'Permite asentar scores y ganadores'
+    ),
+    (
+        'crear_usuarios',
+        'Permite dar de alta cuentas administrativas'
+    ),
+    (
+        'enviar_mensajes',
+        'Permite emitir comunicados masivos'
+    ),
+    (
+        'descargar_reportes',
+        'Permite exportar datos en PDF, Excel y CSV'
+    ),
+    (
+        'ver_auditoria',
+        'Permite auditar accesos y cambios críticos'
+    );
 
 -- Roles
-INSERT INTO roles (id, nombre_rol, descripcion, nivel_permiso) VALUES 
-(1, 'Administrador General', 'Superusuario con acceso irrestricto', 3),
-(2, 'Organizador', 'Gestor de competencias, fixtures y resultados', 2),
-(3, 'Participante / Jugador', 'Competidor en torneos y miembro de equipos', 1),
-(4, 'Usuario Publico', 'Espectador con permisos de solo lectura', 0);
+INSERT INTO
+    roles (
+        id,
+        nombre_rol,
+        descripcion,
+        nivel_permiso
+    )
+VALUES (
+        1,
+        'Administrador General',
+        'Superusuario con acceso irrestricto',
+        3
+    ),
+    (
+        2,
+        'Organizador',
+        'Gestor de competencias, fixtures y resultados',
+        2
+    ),
+    (
+        3,
+        'Participante / Jugador',
+        'Competidor en torneos y miembro de equipos',
+        1
+    ),
+    (
+        4,
+        'Usuario Publico',
+        'Espectador con permisos de solo lectura',
+        0
+    );
 
 -- Asignar todos los permisos al Administrador General (rol_id = 1)
-INSERT INTO rol_permisos (rol_id, permiso_id)
-SELECT 1, id FROM permisos;
+INSERT INTO
+    rol_permisos (rol_id, permiso_id)
+SELECT 1, id
+FROM permisos;
 
 -- Modalidades
-INSERT INTO modalidades (id, nombre, descripcion) VALUES 
-(1, 'individual', 'Competencia de 1 contra 1'),
-(2, 'equipos', 'Competencia colectiva por escuadras');
+INSERT INTO
+    modalidades (id, nombre, descripcion)
+VALUES (
+        1,
+        'individual',
+        'Competencia de 1 contra 1'
+    ),
+    (
+        2,
+        'equipos',
+        'Competencia colectiva por escuadras'
+    );
 
 -- Sistemas de Puntuación
-INSERT INTO sistemas_puntuacion (id, nombre, puntos_victoria, puntos_empate, puntos_derrota, descripcion) VALUES 
-(1, 'estandar_3_1_0', 3.00, 1.00, 0.00, '3 pts Victoria, 1 pt Empate, 0 pts Derrota (Fútbol/Rugby estándar)'),
-(2, 'ajedrez_1_0.5_0', 1.00, 0.50, 0.00, '1 pt Victoria, 0.5 pt Tablas, 0 pts Derrota'),
-(3, 'esports_mapas_2_1_0', 2.00, 1.00, 0.00, '2 pts Victoria por mapa, 1 pt Empate, 0 pts Derrota');
+INSERT INTO
+    sistemas_puntuacion (
+        id,
+        nombre,
+        puntos_victoria,
+        puntos_empate,
+        puntos_derrota,
+        descripcion
+    )
+VALUES (
+        1,
+        'estandar_3_1_0',
+        3.00,
+        1.00,
+        0.00,
+        '3 pts Victoria, 1 pt Empate, 0 pts Derrota (Fútbol/Rugby estándar)'
+    ),
+    (
+        2,
+        'ajedrez_1_0.5_0',
+        1.00,
+        0.50,
+        0.00,
+        '1 pt Victoria, 0.5 pt Tablas, 0 pts Derrota'
+    ),
+    (
+        3,
+        'esports_mapas_2_1_0',
+        2.00,
+        1.00,
+        0.00,
+        '2 pts Victoria por mapa, 1 pt Empate, 0 pts Derrota'
+    );
 
 -- Disciplinas / Juegos
-INSERT INTO juegos (id, nombre, categoria, formato_equipo_defecto, puntos_victoria, puntos_empate, puntos_derrota) VALUES 
-(1, 'Valorant', 'esport-shooter', 5, 3.00, 1.00, 0.00),
-(2, 'League of Legends', 'esport-moba', 5, 3.00, 0.00, 0.00),
-(3, 'Rugby 7s', 'deporte-fisico', 7, 4.00, 2.00, 0.00),
-(4, 'Fútbol 5', 'deporte-fisico', 5, 3.00, 1.00, 0.00),
-(5, 'Ajedrez', 'juego-mesa', 1, 1.00, 0.50, 0.00);
+INSERT INTO
+    juegos (
+        id,
+        nombre,
+        categoria,
+        formato_equipo_defecto,
+        puntos_victoria,
+        puntos_empate,
+        puntos_derrota
+    )
+VALUES (
+        1,
+        'Valorant',
+        'esport-shooter',
+        5,
+        3.00,
+        1.00,
+        0.00
+    ),
+    (
+        2,
+        'League of Legends',
+        'esport-moba',
+        5,
+        3.00,
+        0.00,
+        0.00
+    ),
+    (
+        3,
+        'Rugby 7s',
+        'deporte-fisico',
+        7,
+        4.00,
+        2.00,
+        0.00
+    ),
+    (
+        4,
+        'Fútbol 5',
+        'deporte-fisico',
+        5,
+        3.00,
+        1.00,
+        0.00
+    ),
+    (
+        5,
+        'Ajedrez',
+        'juego-mesa',
+        1,
+        1.00,
+        0.50,
+        0.00
+    );
 
 -- Políticas de Contraseñas por Defecto
-INSERT INTO politicas_contrasenas (id, longitud_minima, requiere_mayuscula, requiere_minuscula, requiere_numero, requiere_caracter_especial, expiracion_dias, historial_cantidad) 
+INSERT INTO
+    politicas_contrasenas (
+        id,
+        longitud_minima,
+        requiere_mayuscula,
+        requiere_minuscula,
+        requiere_numero,
+        requiere_caracter_especial,
+        expiracion_dias,
+        historial_cantidad
+    )
 VALUES (1, 8, 1, 1, 1, 1, 90, 5);
 
 -- Logros Iniciales del Sistema
-INSERT INTO logros (id, codigo, nombre, descripcion, icono, puntos_recompensa) VALUES 
-(1, 'primera_batalla', 'Primera Batalla', 'Jugaste tu primer torneo en la plataforma', 'fa-shield-halved', 100),
-(2, 'campeon', 'Campeón', 'Ganaste un torneo oficial dentro de ASCEND', 'fa-trophy', 500),
-(3, 'veterano', 'Veterano', 'Completaste más de 10 torneos oficiales', 'fa-award', 300),
-(4, 'en_racha', 'En Racha', 'Ganaste 3 partidos consecutivos', 'fa-fire', 200);
+INSERT INTO
+    logros (
+        id,
+        codigo,
+        nombre,
+        descripcion,
+        icono,
+        puntos_recompensa
+    )
+VALUES (
+        1,
+        'primera_batalla',
+        'Primera Batalla',
+        'Jugaste tu primer torneo en la plataforma',
+        'fa-shield-halved',
+        100
+    ),
+    (
+        2,
+        'campeon',
+        'Campeón',
+        'Ganaste un torneo oficial dentro de ASCEND',
+        'fa-trophy',
+        500
+    ),
+    (
+        3,
+        'veterano',
+        'Veterano',
+        'Completaste más de 10 torneos oficiales',
+        'fa-award',
+        300
+    ),
+    (
+        4,
+        'en_racha',
+        'En Racha',
+        'Ganaste 3 partidos consecutivos',
+        'fa-fire',
+        200
+    );
 
 -- Usuario Administrador Inicial (Contraseña de prueba: Admin123!)
-INSERT INTO usuarios (id, email, contrasena_hash, nombre_completo, telefono, rol_id, esta_activo, email_verificado) 
-VALUES (1, 'admin@ascend.com', '$2y$10$e8wYVjFw6rNKGZqfD7h.TeuXG8o0i1bH2s8pQ.b7zG4vYwR6M9Veq', 'Administrador General', '+59899123456', 1, 1, 1);
+INSERT INTO
+    usuarios (
+        id,
+        email,
+        contrasena_hash,
+        nombre_completo,
+        telefono,
+        rol_id,
+        esta_activo,
+        email_verificado
+    )
+VALUES (
+        1,
+        'admin@ascend.com',
+        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        'Administrador General',
+        '+59899123456',
+        1,
+        1,
+        1
+    );
 
 -- Usuario Organizador Inicial
-INSERT INTO usuarios (id, email, contrasena_hash, nombre_completo, telefono, rol_id, esta_activo, email_verificado) 
-VALUES (2, 'organizador@ascend.com', '$2y$10$e8wYVjFw6rNKGZqfD7h.TeuXG8o0i1bH2s8pQ.b7zG4vYwR6M9Veq', 'Valentina Organizadora', '+59899654321', 2, 1, 1);
+INSERT INTO
+    usuarios (
+        id,
+        email,
+        contrasena_hash,
+        nombre_completo,
+        telefono,
+        rol_id,
+        esta_activo,
+        email_verificado
+    )
+VALUES (
+        2,
+        'organizador@ascend.com',
+        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        'Valentina Organizadora',
+        '+59899654321',
+        2,
+        1,
+        1
+    );
 
-INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, bio_organizacion, localidad, telefono_contacto, verificado_oficial)
-VALUES (2, 'Club Deportivo ASCEND', 'Organizadora oficial de competencias regionales de eSports y Rugby', 'Montevideo', '+59899654321', 1);
+INSERT INTO
+    perfiles_organizadores (
+        usuario_id,
+        nombre_organizacion,
+        bio_organizacion,
+        localidad,
+        telefono_contacto,
+        verificado_oficial
+    )
+VALUES (
+        2,
+        'Club Deportivo ASCEND',
+        'Organizadora oficial de competencias regionales de eSports y Rugby',
+        'Montevideo',
+        '+59899654321',
+        1
+    );
 
 -- Usuario Jugador Inicial
-INSERT INTO usuarios (id, email, contrasena_hash, nombre_completo, telefono, rol_id, esta_activo, email_verificado) 
-VALUES (3, 'jugador@ascend.com', '$2y$10$e8wYVjFw6rNKGZqfD7h.TeuXG8o0i1bH2s8pQ.b7zG4vYwR6M9Veq', 'Marcos Competidor', '+59899777888', 3, 1, 1);
+INSERT INTO
+    usuarios (
+        id,
+        email,
+        contrasena_hash,
+        nombre_completo,
+        telefono,
+        rol_id,
+        esta_activo,
+        email_verificado
+    )
+VALUES (
+        3,
+        'jugador@ascend.com',
+        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        'Marcos Competidor',
+        '+59899777888',
+        3,
+        1,
+        1
+    );
 
-INSERT INTO perfiles_jugadores (usuario_id, apodo_gamertag, bio, nivel, experiencia_puntos, pais, ciudad, discord_tag)
-VALUES (3, 'ShadowStriker', 'Jugador competitivo de Valorant y Rugby virtual', 3, 3928, 'Uruguay', 'Montevideo', 'Shadow#1234');
+INSERT INTO
+    perfiles_jugadores (
+        usuario_id,
+        apodo_gamertag,
+        bio,
+        nivel,
+        experiencia_puntos,
+        pais,
+        ciudad,
+        discord_tag
+    )
+VALUES (
+        3,
+        'ShadowStriker',
+        'Jugador competitivo de Valorant y Rugby virtual',
+        3,
+        3928,
+        'Uruguay',
+        'Montevideo',
+        'Shadow#1234'
+    );
 
-INSERT INTO usuario_logros (usuario_id, logro_id, estado, progreso_actual, progreso_objetivo) 
-VALUES (3, 1, 'desbloqueado', 1, 1), (3, 2, 'desbloqueado', 1, 1), (3, 3, 'en_curso', 6, 10);
+INSERT INTO
+    usuario_logros (
+        usuario_id,
+        logro_id,
+        estado,
+        progreso_actual,
+        progreso_objetivo
+    )
+VALUES (3, 1, 'desbloqueado', 1, 1),
+    (3, 2, 'desbloqueado', 1, 1),
+    (3, 3, 'en_curso', 6, 10);
