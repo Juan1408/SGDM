@@ -7,7 +7,7 @@
 */
 
 const formularioCrearTorneo = document.getElementById(
-   "crear-torneo-form"
+   "crear-torneo-formulario"
 );
 
 const notificacionCrearTorneo =
@@ -16,40 +16,40 @@ const notificacionCrearTorneo =
    );
 
 const disciplinaSelect =
-   document.getElementById("discipline");
+   document.getElementById("diciplina");
 
 const modalidadInput =
    document.getElementById("modality");
 
 const sistemaSelect =
    document.getElementById(
-      "competitionSystem"
+      "sistema-competicion"
    );
 
 const cuposInput =
-   document.getElementById("participants");
+   document.getElementById("participantes");
 
-const ayudaCupos =
-   document.getElementById("ayudaCupos");
+const ayuda-cupos =
+   document.getElementById("ayuda-cupos");
 
 const fechaInicioInscripcionInput =
    document.getElementById(
-      "inscriptionStart"
+      "comienzo-inscripcion"
    );
 
 const fechaCierreInput =
    document.getElementById(
-      "inscriptionEnd"
+      "final-inscripcion"
    );
 
 const fechaInicioInput =
    document.getElementById(
-      "tournamentStart"
+      "comienzo-torneo"
    );
 
 const fechaFinInput =
    document.getElementById(
-      "tournamentEnd"
+      "final-torneo"
    );
 
 const botonAgregarEvento =
@@ -58,16 +58,16 @@ const botonAgregarEvento =
    );
 
 const tituloEventoInput =
-   document.getElementById("eventTitle");
+   document.getElementById("titulo-evento");
 
 const tipoEventoSelect =
-   document.getElementById("eventType");
+   document.getElementById("evento-tipo");
 
 const fechaEventoInput =
-   document.getElementById("eventDate");
+   document.getElementById("evento-fecha");
 
 const horaEventoInput =
-   document.getElementById("eventTime");
+   document.getElementById("evento-horario");
 
 const listaFechas =
    document.getElementById("dates-list");
@@ -175,13 +175,13 @@ function actualizarDisciplina() {
    );
 }
 
-function actualizarAyudaCupos() {
+function actualizarayuda-cupos() {
    const sistema = sistemaSelect.value;
 
    if (
       sistema === "Eliminación directa"
    ) {
-      ayudaCupos.textContent =
+      ayuda-cupos.textContent =
          "Debe ser 2, 4, 8, 16, 32 o 64.";
 
       cuposInput.min = "2";
@@ -191,7 +191,7 @@ function actualizarAyudaCupos() {
    }
 
    if (sistema === "Liga") {
-      ayudaCupos.textContent =
+      ayuda-cupos.textContent =
          "La liga admite entre 2 y 40 participantes.";
 
       cuposInput.min = "2";
@@ -201,7 +201,7 @@ function actualizarAyudaCupos() {
    }
 
    if (sistema === "Sistema Suizo") {
-      ayudaCupos.textContent =
+      ayuda-cupos.textContent =
          "El sistema suizo admite entre 4 y 64 participantes.";
 
       cuposInput.min = "4";
@@ -210,7 +210,7 @@ function actualizarAyudaCupos() {
       return;
    }
 
-   ayudaCupos.textContent =
+   ayuda-cupos.textContent =
       "Indicá la cantidad máxima de equipos o jugadores.";
 }
 
@@ -407,7 +407,7 @@ function agregarEvento() {
       hora,
       ubicacion:
          document
-            .getElementById("venue")
+            .getElementById("evento")
             .value
             .trim() || "A definir",
       estado: "Pendiente"
@@ -671,7 +671,7 @@ disciplinaSelect.addEventListener(
 
 sistemaSelect.addEventListener(
    "change",
-   actualizarAyudaCupos
+   actualizarayuda-cupos
 );
 
 botonAgregarEvento.addEventListener(

@@ -34,63 +34,67 @@ function poblarDetallesTorneo(torneo) {
    setTexto("info-descripcion", torneo.descripcion);
    setTexto("info-reglas", torneo.reglas);
 
-   setTexto("premio-primero", torneo.premios.primero);
-   setTexto("premio-segundo", torneo.premios.segundo);
-   setTexto("premio-tercero", torneo.premios.tercero);
+   setTexto("primer-premio", torneo.premios.primero);
+   setTexto("segundo-premio", torneo.premios.segundo);
+   setTexto("tercer-premio", torneo.premios.tercero);
 
    // --- Equipos/Participantes que participan ---
    const gridParticipantes = document.getElementById("participantes-grid");
    if (gridParticipantes) {
       gridParticipantes.innerHTML = torneo.participantes.map((p) => `
-         <article class="participant-card">
-            <img src="${p.imagen}" alt="${p.nombre}">
-            <div class="participant-info">
-               <h4>${p.nombre}</h4>
-               <p>${p.deporte}</p>
-               <p>${p.cantidad}</p>
-               <p>${p.puntos}</p>
-            </div>
-         </article>
-      `).join("");
+   <li>
+      <article class="participantes-tarjeta">
+         <img src="${p.imagen}" alt="${p.nombre}">
+         <div class="participantes-info">
+            <h3>${p.nombre}</h3>
+            <p>${p.deporte}</p>
+            <p>${p.cantidad}</p>
+            <p>${p.puntos}</p>
+         </div>
+      </article>
+   </li>
+`).join("");
    }
 
    // --- Miembros del equipo (solo si es de equipos) ---
-   const gridMiembros = document.getElementById("members-grid");
+   const gridMiembros = document.getElementById("miembros-grilla");
    if (gridMiembros && torneo.miembros) {
-      gridMiembros.innerHTML = torneo.miembros.map((m) => `
-         <article class="member-card">
-            <div class="member-photo">
-               <div class="member-bg"></div>
-               <img src="${m.foto}" alt="${m.nombre}">
-            </div>
-            <h4>${m.nombre}</h4>
-         </article>
-      `).join("");
+   gridMiembros.innerHTML = torneo.miembros.map((m) => `
+   <li>
+      <article class="miembro-tarjeta">
+         <div class="miembro-foto">
+            <div class="miembro-fondo"></div>
+            <img src="${m.foto}" alt="${m.nombre}">
+         </div>
+         <h3>${m.nombre}</h3>
+      </article>
+   </li>
+`).join("");
    }
 
    // --- Rankings del equipo / individual ---
    const filasRanking = document.getElementById("ranking-filas");
    if (filasRanking && torneo.rankingEquipo) {
-      filasRanking.innerHTML = torneo.rankingEquipo.filas.map((fila, indice) => {
-         const columnaLogo = esEquipo ? `
-            <div class="ranking-equipo-logo">
-               <img src="${torneo.rankingEquipo.logoEquipo}">
-            </div>
-         ` : "";
+         filasRanking.innerHTML = torneo.rankingEquipo.filas.map((fila, indice) => {
+          const columnaLogo = esEquipo ? `
+          <td class="ranking-equipo-logo">
+         <img src="${torneo.rankingEquipo.logoEquipo}">
+         </td>
+       ` : "";
 
-         return `
-            <article class="ranking-row">
-               ${columnaLogo}
-               <div>${indice + 1}</div>
-               <div class="ranking-jugador">
-                  <img src="${fila.jugadorFoto}">
-                  <span>${fila.jugadorNombre}</span>
-               </div>
-               <div>${fila.juego}</div>
-               <div>${fila.partidas}</div>
-               <div class="ranking-puntos">${fila.puntos}</div>
-            </article>
-         `;
+   return `
+      <tr class="ranking-row">
+         ${columnaLogo}
+         <td>${indice + 1}</td>
+         <td class="ranking-jugador">
+            <img src="${fila.jugadorFoto}">
+            <span>${fila.jugadorNombre}</span>
+         </td>
+         <td>${fila.juego}</td>
+         <td>${fila.partidas}</td>
+         <td class="ranking-puntos">${fila.puntos}</td>
+      </tr>
+   `;
       }).join("");
    }
 
@@ -105,34 +109,92 @@ function poblarDetallesTorneo(torneo) {
       tituloRanking.textContent = esEquipo ? "Rankings del Equipo" : "Ranking de Jugadores";   // <-- NUEVO
    } 
 
-   const seccionMiembros = document.querySelector(".team-members");
+   const seccionMiembros = document.querySelector(".equipo-miembros");
    if (seccionMiembros) {
       seccionMiembros.style.display = esEquipo ? "" : "none";
    }
 
-   const rankingTablaContainer = document.getElementById("ranking-tabla-container");
+   const rankingTablaContainer = document.getElementById("ranking-tabla-contenedor");
    const rankingHead = document.querySelector(".ranking-head");
    if (rankingTablaContainer && rankingHead) {
       if (esEquipo) {
-         rankingTablaContainer.classList.remove("ranking-individual");
-         rankingHead.innerHTML = `
-            <span>Equipo</span>
-            <span>Pos</span>
-            <span>Jugador</span>
-            <span>Juego</span>
-            <span>Partidas</span>
-            <span>Puntos</span>
-         `;
-      } else {
-         rankingTablaContainer.classList.add("ranking-individual");
-         rankingHead.innerHTML = `
-            <span>Pos</span>
-            <span>Jugador</span>
-            <span>Juego</span>
-            <span>Partidas</span>
-            <span>Puntos</span>
-         `;
-      }
+   rankingTablaContainer.classList.remove("ranking-individual");
+   rankingHead.innerHTML = `
+      <th>Equipo</th>
+      <th>Pos</th>
+      <th>Jugador</th>
+      <th>Juego</th>
+      <th>Partidas</th>
+      <th>Puntos</th>
+   `;
+} else {
+   rankingTablaContainer.classList.add("ranking-individual");
+   rankingHead.innerHTML = `
+      <th>Pos</th>
+      <th>Jugador</th>
+      <th>Juego</th>
+      <th>Partidas</th>
+      <th>Puntos</th>
+   `;
+}
+   }
+
+   // --- Agenda del torneo (pestaña Encuentros) ---
+   const listaActividades = document.getElementById("lista-actividades");
+   if (listaActividades && torneo.actividades) {
+
+      const iconosPorTipo = {
+         ceremonia: "fa-flag",
+         partido: "fa-gamepad",
+         pausa: "fa-mug-hot",
+         premiacion: "fa-trofeo"
+      };
+
+      listaActividades.innerHTML = torneo.actividades.map((a) => `
+       <li class="actividad-item tipo-${a.tipo}">
+      <div class="actividad-fecha">
+         <span>${a.fecha}</span>
+         <span class="actividad-hora">${a.hora}</span>
+      </div>
+      <div class="actividad-contenido">
+         <div class="actividad-icono">
+            <i class="fa-solid ${iconosPorTipo[a.tipo] || 'fa-calendar'}"></i>
+         </div>
+         <span class="actividad-titulo">${a.titulo}</span>
+         </div>
+        </li>
+      `).join("");
+   }
+
+   // --- Resultados detallados ---
+   const listaResultados = document.getElementById("lista-resultados");
+   if (listaResultados && torneo.resultados) {
+      listaResultados.innerHTML = torneo.resultados.map((r, indice) => `
+         <li class="resultado-card" data-indice="${indice}">
+            <div class="resultado-cabecera">
+               <div>
+                  <span class="resultado-encuentro">${r.encuentro}</span>
+                  <span class="resultado-fecha">${r.fecha}</span>
+               </div>
+               <span class="resultado-marcador">${r.marcador}</span>
+               <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="resultado-detalles">
+               ${r.detalles.map((d) => `
+                  <div class="resultado-detalle-item">
+                     <span>${d.tipo}</span>
+                     <span>${d.valor}</span>
+                  </div>
+               `).join("")}
+            </div>
+         </li>
+      `).join("");
+
+      listaResultados.querySelectorAll(".resultado-cabecera").forEach((cabecera) => {
+         cabecera.addEventListener("click", () => {
+            cabecera.closest(".resultado-card").classList.toggle("abierto");
+         });
+      });
    }
 }
 
@@ -160,7 +222,7 @@ function renderTournament(torneo) {
          const columna = document.createElement("div");
          columna.className = `bracket-round ${claseExtra}`;
 
-         const titulo = document.createElement("h4");
+         const titulo = document.createElement("h3");
          titulo.textContent = ronda.nombreRonda;
          columna.appendChild(titulo);
 
@@ -192,7 +254,7 @@ function renderTournament(torneo) {
 
       centro.innerHTML = `
       <div class="final-match">
-         <h4>${final.nombreRonda}</h4>
+         <h3>${final.nombreRonda}</h3>
 
          <div class="bracket-matchup final-box">
             <div class="matchup-team">
@@ -225,6 +287,26 @@ function renderTournament(torneo) {
       container.appendChild(cuartosDer);
       container.appendChild(octavosDer);
    }
+
+   const contenedorRondas = document.getElementById("rondas-suizo");
+      if (contenedorRondas) {
+         if (torneo.formato === "suizo" && torneo.rondas) {
+            contenedorRondas.innerHTML = torneo.rondas.map((ronda) => `
+               <div class="ronda-card">
+                  <h3>Ronda ${ronda.numero}</h3>
+                  ${ronda.partidos.map((p) => `
+                     <div class="ronda-partido">
+                        <span class="ronda-jugador blancas">${p.blancas}</span>
+                        <span class="ronda-resultado">${p.resultado}</span>
+                        <span class="ronda-jugador negras">${p.negras}</span>
+                     </div>
+                  `).join("")}
+               </div>
+            `).join("");
+         } else {
+            contenedorRondas.innerHTML = "";
+         }
+      }
 
 else if (torneo.formato === "liga" || torneo.formato === "suizo") {
       const esEquipoTabla = torneo.tipoParticipacion === "equipos";   // <-- NUEVA línea

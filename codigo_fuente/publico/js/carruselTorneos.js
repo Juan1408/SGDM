@@ -40,7 +40,7 @@ if (gameSlides.length > 0) {
 // =====================
 // CARRUSEL JUEGOS DESTACADOS
 // =====================
-const track = document.getElementById('games-track');
+const track = document.getElementById('juegos-track');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
@@ -94,7 +94,7 @@ function medalClass(pos) {
 }
 
 function renderTable(data) {
-  const body = document.getElementById("ranking-body");
+  const body = document.getElementById("ranking-cuerpo");
   if (!body) return;
   body.innerHTML = data.map(item => `
     <div class="ranking-row">

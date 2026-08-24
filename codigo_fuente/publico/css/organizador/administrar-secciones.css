@@ -185,24 +185,24 @@
     border-radius: 999px;
 }
 
-.fixture-card-info {
+.fixture-tarjeta-info {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
 }
 
-.fixture-card-info p {
+.fixture-tarjeta-info p {
     margin: 0;
     color: var(--text-secondary);
     font-size: 0.88rem;
 }
 
-.fixture-card-info i {
+.fixture-tarjeta-info i {
     margin-right: 6px;
     color: var(--color-primary);
 }
 
-.fixture-card-info strong {
+.fixture-tarjeta-info strong {
     color: var(--text);
 }
 

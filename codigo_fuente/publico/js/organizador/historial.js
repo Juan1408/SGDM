@@ -3,7 +3,7 @@
 /*
 =====================================================
    HISTORIAL - lista simple de torneos finalizados.
-   Reutiliza el componente .tarjeta-lista--torneo
+   Reutiliza el componente .tarjeta-lista-torneo
    (mismo que en Dashboard) y el .chip de estado,
    así no se duplica CSS para esta página.
 =====================================================
@@ -28,26 +28,28 @@ function mostrarHistorial() {
    historialLista.innerHTML = finalizados
       .map(
          (torneo) => `
-      <article class="tarjeta-lista tarjeta-lista--torneo">
+      <li>
+         <article class="tarjeta-lista tarjeta-lista-torneo">
 
-         <img src="../../img/torneos/card1.jpg" alt="${torneo.nombre}">
+            <img src="../../publico/img/torneos/card1.jpg" alt="${torneo.nombre}">
 
-         <div class="info-torneo">
-            <span class="chip chip--peligro">Finalizado</span>
-            <h4>${torneo.nombre}</h4>
-            <p>${torneo.disciplina} · ${torneo.sistema}</p>
+            <div class="info-torneo">
+               <span class="chip chip-peligro">Finalizado</span>
+               <h4>${torneo.nombre}</h4>
+               <p>${torneo.disciplina} · ${torneo.sistema}</p>
 
-            <div class="meta-torneo">
-               <span>${torneo.participantes}</span>
-               <span>${formatearFechaCorta(torneo.fechaInicio)}</span>
+               <div class="meta-torneo">
+                  <span>${torneo.participantes}</span>
+                  <span>${formatearFechaCorta(torneo.fechaInicio)}</span>
+               </div>
             </div>
-         </div>
 
-         <a href="administrar-torneo.html?id=${torneo.id}" class="boton boton--gestion">
-            Ver detalle
-         </a>
+            <a href="administrar-torneo.html?id=${torneo.id}" class="boton boton-gestion">
+               Ver detalle
+            </a>
 
-      </article>
+         </article>
+      </li>
    `
       )
       .join("");

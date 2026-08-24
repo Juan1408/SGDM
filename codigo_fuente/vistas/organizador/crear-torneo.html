@@ -14,7 +14,16 @@
       rel="stylesheet">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-   <link rel="stylesheet" href="../../publico/css/base-organizador-layout.css">
+
+   <!-- Layout compartido de organizador -->
+   <!-- Página específica -->
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/botones.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/chips.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
    <link rel="stylesheet" href="../../publico/css/organizador/crear-torneo.css">
 </head>
 
@@ -47,7 +56,7 @@
 
       <div id="crear-torneo-notificacion" class="crear-torneo-notificacion" aria-live="polite"></div>
 
-      <form id="crear-torneo-form" class="crear-torneo-grid" novalidate>
+      <form id="crear-torneo-formulario" class="crear-torneo-grid" novalidate>
 
 
          <!-- COLUMNA 1 -->
@@ -65,11 +74,11 @@
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="discipline">
+               <label for="diciplina">
                   Disciplina
                </label>
 
-               <select id="discipline" name="disciplina" required>
+               <select id="diciplina" name="disciplina" required>
                   <option value="">
                      Seleccionar disciplina
                   </option>
@@ -85,11 +94,11 @@
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="competitionSystem">
+               <label for="sistema-competicion">
                   Sistema de competencia
                </label>
 
-               <select id="competitionSystem" name="sistema" required disabled>
+               <select id="sistema-competicion" name="sistema" required disabled>
                   <option value="">
                      Seleccioná primero una disciplina
                   </option>
@@ -97,24 +106,24 @@
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="participants">
+               <label for="participantes">
                   Cupos máximos
                </label>
 
-               <input id="participants" name="cupos" type="number" min="2" max="64" step="1"
+               <input id="participantes" name="cupos" type="number" min="2" max="64" step="1"
                   placeholder="Cantidad de participantes" required>
 
-               <small id="ayudaCupos">
+               <small id="ayuda-cupos">
                   Indicá la cantidad máxima de equipos o jugadores.
                </small>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="community">
+               <label for="comunidad">
                   Comunidad u organización
                </label>
 
-               <input id="community" name="comunidad" type="text" minlength="2" maxlength="80"
+               <input id="comunidad" name="comunidad" type="text" minlength="2" maxlength="80"
                   placeholder="Ej.: Club ASCEND" required>
             </div>
 
@@ -126,52 +135,52 @@
             <h2>Fechas y ubicación</h2>
 
             <div class="crear-torneo-campo">
-               <label for="inscriptionStart">
+               <label for="comienzo-inscripcion">
                   Inicio de inscripciones
                </label>
 
-               <input id="inscriptionStart" name="fechaInicioInscripcion" type="date" required>
+               <input id="comienzo-inscripcion" name="fechaInicioInscripcion" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="inscriptionEnd">
+               <label for="final-inscripcion">
                   Cierre de inscripciones
                </label>
 
-               <input id="inscriptionEnd" name="fechaCierre" type="date" required>
+               <input id="final-inscripcion" name="fechaCierre" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="tournamentStart">
+               <label for="comienzo-torneo">
                   Inicio del torneo
                </label>
 
-               <input id="tournamentStart" name="fechaInicio" type="date" required>
+               <input id="comienzo-torneo" name="fechaInicio" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="tournamentEnd">
+               <label for="final-torneo">
                   Fin estimado del torneo
                </label>
 
-               <input id="tournamentEnd" name="fechaFin" type="date" required>
+               <input id="final-torneo" name="fechaFin" type="date" required>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="venue">
+               <label for="evento">
                   Lugar de los encuentros
                </label>
 
-               <input id="venue" name="ubicacion" type="text" minlength="2" maxlength="100"
+               <input id="evento" name="ubicacion" type="text" minlength="2" maxlength="100"
                   placeholder="Online, estadio, club..." required>
             </div>
 
             <div class="crear-torneo-campo">
-               <label for="locality">
+               <label for="localidad">
                   Localidad
                </label>
 
-               <input id="locality" name="localidad" type="text" minlength="2" maxlength="80"
+               <input id="localidad" name="localidad" type="text" minlength="2" maxlength="80"
                   placeholder="Ciudad o departamento" required>
             </div>
 
@@ -256,21 +265,21 @@
                </header>
 
                <div class="crear-torneo-campo">
-                  <label for="eventTitle">
+                  <label for="titulo-evento">
                      Título
                   </label>
 
-                  <input id="eventTitle" type="text" maxlength="100" placeholder="Ej.: Reunión de capitanes">
+                  <input id="titulo-evento" type="text" maxlength="100" placeholder="Ej.: Reunión de capitanes">
                </div>
 
                <div class="crear-evento-fila">
 
                   <div class="crear-torneo-campo">
-                     <label for="eventType">
+                     <label for="evento-tipo">
                         Tipo
                      </label>
 
-                     <select id="eventType">
+                     <select id="evento-tipo">
                         <option value="administrativo">
                            Administrativo
                         </option>
@@ -290,19 +299,19 @@
                   </div>
 
                   <div class="crear-torneo-campo">
-                     <label for="eventDate">
+                     <label for="evento-fecha">
                         Fecha
                      </label>
 
-                     <input id="eventDate" type="date">
+                     <input id="evento-fecha" type="date">
                   </div>
 
                   <div class="crear-torneo-campo">
-                     <label for="eventTime">
+                     <label for="evento-horario">
                         Hora
                      </label>
 
-                     <input id="eventTime" type="time">
+                     <input id="evento-horario" type="time">
                   </div>
 
                </div>
@@ -328,7 +337,7 @@
             </section>
 
             <button class="crear-torneo-submit" type="submit">
-               <i class="fa-solid fa-trophy"></i>
+               <i class="fa-solid fa-trofeo"></i>
                Crear torneo
             </button>
 
@@ -348,7 +357,7 @@
 
    <script>
       // Cerrar selector de hora al seleccionar
-      const timeInput = document.getElementById('eventTime');
+      const timeInput = document.getElementById('evento-horario');
       if(timeInput) {
          timeInput.addEventListener('change', function() {
             this.blur();

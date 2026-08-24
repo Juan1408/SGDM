@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ASCEND - Favoritos</title>
+
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/jugador/perfil-jugador.css">
+   <link rel="stylesheet" href="../../publico/css/jugador/favoritos.css">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+   <!-- NAVBAR ---------------------------->
+   <header id="navbar-publico-placeholder"></header>
+
+   <main class="equipo-pagina">
+
+      <div class="favoritos-header">
+         <h1>Favoritos</h1>
+         <p>Los torneos y equipos que marcaste para seguir de cerca.</p>
+      </div>
+
+      <!-- TORNEOS FAVORITOS -->
+      <section class="equipo-miembros">
+
+         <h2 class="seccion-gradiente-titulo">Torneos Favoritos</h2>
+
+         <ul class="torneos-organiza-grilla" id="lista-torneos-favoritos">
+            <!-- Se llena por JS -->
+         </ul>
+
+         <p class="lista-vacia oculto" id="mensaje-sin-torneos-favoritos">
+            Todavía no marcaste ningún torneo como favorito.
+         </p>
+
+      </section>
+
+      <!-- EQUIPOS FAVORITOS -->
+      <section class="equipo-miembros">
+
+         <h2 class="seccion-gradiente-titulo">Equipos Favoritos</h2>
+
+         <ul class="mis-equipos-grid" id="lista-equipos-favoritos">
+            <!-- Se llena por JS -->
+         </ul>
+
+         <p class="lista-vacia oculto" id="mensaje-sin-equipos-favoritos">
+            Todavía no marcaste ningún equipo como favorito.
+         </p>
+
+      </section>
+
+   </main>
+
+   <!-- FOOTER ---------------------------->
+   <footer id="footer-publico-placeholder"></footer>
+
+   <script src="../../publico/js/includesPublicos.js"></script>
+   <script src="../../publico/js/navbar.js"></script>
+   <script src="../../publico/js/favoritos.js"></script>
+
+</body>
+</html>

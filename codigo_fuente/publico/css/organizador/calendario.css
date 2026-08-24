@@ -77,7 +77,7 @@
    gap: 1rem;
 }
 
-.calendario-resumen-card {
+.calendario-resumen-tarjeta {
    display: flex;
    align-items: center;
    gap: 1rem;
@@ -103,12 +103,12 @@
    font-size: 1.2rem;
 }
 
-.calendario-resumen-card strong {
+.calendario-resumen-tarjeta strong {
    display: block;
    font-size: 1.5rem;
 }
 
-.calendario-resumen-card span:last-child {
+.calendario-resumen-tarjeta span:last-child {
    font-size: .8rem;
    color: var(--texto-secundario);
 }

@@ -80,7 +80,35 @@ rankingEquipo: {
                { id: 15, equipo1: "Por definir", score1: null, equipo2: "Por definir", score2: null, ganador: null }
             ]
          }
+      ],
+      
+      actividades: [
+   { fecha: "26 Mayo 2026", hora: "18:00", tipo: "ceremonia", titulo: "Ceremonia de apertura" },
+   { fecha: "26 Mayo 2026", hora: "19:00", tipo: "partido", titulo: "Inicio de Octavos de Final" },
+   { fecha: "02 Junio 2026", hora: "18:00", tipo: "partido", titulo: "Cuartos de Final" },
+   { fecha: "09 Junio 2026", hora: "18:00", tipo: "partido", titulo: "Semifinales" },
+   { fecha: "20 Junio 2026", hora: "20:00", tipo: "premiacion", titulo: "Gran Final y entrega de premios" }
+],
+
+resultados: [
+   {
+      encuentro: "Fire Wolves vs Cyber Titans",
+      marcador: "3 - 1",
+      fecha: "26 Mayo 2026",
+      detalles: [
+         { tipo: "Goleador", valor: "Juan Pérez (2), Marco López (1)" },
+         { tipo: "Posesión", valor: "Fire Wolves 58%" }
       ]
+   },
+   {
+      encuentro: "Mental Squad vs Nova Chess",
+      marcador: "2 - 0",
+      fecha: "26 Mayo 2026",
+      detalles: [
+         { tipo: "MVP", valor: "Carla Suárez" }
+      ]
+   }
+],
    },
 
 
@@ -121,8 +149,64 @@ rankingEquipo: {
          { posicion: 4, equipo: "Pedro Castro", PJ: 5, G: 3, P: 2, Puntos: 3.5 },
          { posicion: 5, equipo: "Valentina Acosta", PJ: 5, G: 2, P: 3, Puntos: 2.5 },
          { posicion: 6, equipo: "Nicolás Méndez", PJ: 5, G: 1, P: 4, Puntos: 1.5 }
+      ],
+      
+      actividades: [
+   { fecha: "10 Junio 2026", hora: "10:00", tipo: "ceremonia", titulo: "Acreditación de jugadores" },
+   { fecha: "10 Junio 2026", hora: "11:00", tipo: "partido", titulo: "Ronda 1" },
+   { fecha: "11 Junio 2026", hora: "11:00", tipo: "partido", titulo: "Ronda 2" },
+   { fecha: "12 Junio 2026", hora: "11:00", tipo: "partido", titulo: "Ronda 3" },
+   { fecha: "15 Junio 2026", hora: "17:00", tipo: "premiacion", titulo: "Entrega de trofeos" }
+],
+   
+rondas: [
+   {
+      numero: 1,
+      partidos: [
+         { blancas: "María González", negras: "Tomás Rivero", resultado: "1-0" },
+         { blancas: "Lucía Fontana", negras: "Pedro Castro", resultado: "0-1" },
+         { blancas: "Valentina Acosta", negras: "Nicolás Méndez", resultado: "1-0" }
+      ]
+   },
+   {
+      numero: 2,
+      partidos: [
+         { blancas: "María González", negras: "Lucía Fontana", resultado: "1-0" },
+         { blancas: "Pedro Castro", negras: "Valentina Acosta", resultado: "½-½" },
+         { blancas: "Tomás Rivero", negras: "Nicolás Méndez", resultado: "1-0" }
+      ]
+   },
+   {
+      numero: 3,
+      partidos: [
+         { blancas: "María González", negras: "Pedro Castro", resultado: "1-0" },
+         { blancas: "Tomás Rivero", negras: "Valentina Acosta", resultado: "1-0" },
+         { blancas: "Lucía Fontana", negras: "Nicolás Méndez", resultado: "0-1" }
       ]
    }
+],
+
+resultados: [
+   {
+      encuentro: "María González vs Tomás Rivero",
+      marcador: "1 - 0",
+      fecha: "10 Junio 2026",
+      detalles: [
+         { tipo: "Apertura", valor: "Defensa Siciliana" },
+         { tipo: "Duración", valor: "42 jugadas" }
+      ]
+   },
+   {
+      encuentro: "Lucía Fontana vs Pedro Castro",
+      marcador: "0 - 1",
+      fecha: "10 Junio 2026",
+      detalles: [
+         { tipo: "Apertura", valor: "Gambito de Dama" }
+      ]
+   }
+],
+
+}
 
    ,
 
@@ -173,6 +257,27 @@ rankingEquipo: {
       { posicion: 4, equipo: "Racing Este", PJ: 6, G: 3, P: 3, Puntos: 9 },
       { posicion: 5, equipo: "Unión Oeste", PJ: 6, G: 2, P: 4, Puntos: 6 },
       { posicion: 6, equipo: "Sportivo Central", PJ: 6, G: 1, P: 5, Puntos: 3 }
-   ]
+   ],
+
+   actividades: [
+   { fecha: "16 Mayo 2026", hora: "19:00", tipo: "ceremonia", titulo: "Presentación de equipos" },
+   { fecha: "23 Mayo 2026", hora: "19:00", tipo: "partido", titulo: "Fecha 1" },
+   { fecha: "30 Mayo 2026", hora: "19:00", tipo: "partido", titulo: "Fecha 2" },
+   { fecha: "13 Junio 2026", hora: "19:00", tipo: "pausa", titulo: "Semana libre" },
+   { fecha: "20 Junio 2026", hora: "19:00", tipo: "premiacion", titulo: "Última fecha y premiación" }
+],
+
+resultados: [
+   {
+      encuentro: "Leones FC vs Atlético Norte",
+      marcador: "4 - 2",
+      fecha: "16 Mayo 2026",
+      detalles: [
+         { tipo: "Goleador", valor: "Nicolás Pereyra (3)" },
+         { tipo: "Tarjetas", valor: "1 amarilla - Atlético Norte" }
+      ]
+   }
+],
+
 }
 };

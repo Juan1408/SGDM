@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ASCEND - Mi Equipo</title>
+
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/jugador/crear-equipo.css">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+   <!-- NAVBAR ---------------------------->
+   <header id="navbar-publico-placeholder"></header>
+
+   <main class="crear-equipo-pagina">
+
+
+      <!-- ======================================================
+           ESTADO 1: TODAVÍA NO TENÉS EQUIPO → formulario de crear
+           (el JS oculta este bloque si ya sos líder de uno)
+      ====================================================== -->
+      <div id="vista-crear-equipo">
+
+         <div class="crear-equipo-header">
+            <h1>Crear Equipo</h1>
+            <p>Armá tu equipo para anotarte a torneos y sumar miembros. El código de invitación se genera automáticamente al crearlo.</p>
+         </div>
+
+         <form class="crear-equipo-formulario" id="form-crear-equipo">
+
+            <div class="tarjeta-equipo crear-equipo-imagenes">
+               <div class="campo-imagen campo-banner">
+                  <div class="preview-banner" id="preview-banner-crear">
+                     <img id="preview-banner-crear-img" src="" alt="" hidden>
+                     <span class="placeholder-texto">Sin banner todavía</span>
+                  </div>
+                  <label for="input-banner-crear" class="boton-subir-imagen">
+                     <i class="fa-solid fa-image"></i> Subir banner
+                  </label>
+                  <input type="file" id="input-banner-crear" accept="image/*" hidden>
+               </div>
+
+               <div class="campo-imagen campo-escudo">
+                  <div class="preview-escudo" id="preview-escudo-crear">
+                     <img id="preview-escudo-crear-img" src="" alt="" hidden>
+                     <i class="fa-solid fa-shield-halved placeholder-icono"></i>
+                  </div>
+                  <label for="input-escudo-crear" class="boton-subir-imagen">
+                     <i class="fa-solid fa-camera"></i> Subir escudo
+                  </label>
+                  <input type="file" id="input-escudo-crear" accept="image/*" hidden>
+               </div>
+            </div>
+
+            <div class="tarjeta-equipo">
+               <h2>Datos del equipo</h2>
+
+               <div class="campo-grupo">
+                  <label for="crear-nombre">Nombre del equipo</label>
+                  <input type="text" id="crear-nombre" placeholder="Ej: Fire Wolves" required maxlength="100">
+               </div>
+
+               <div class="campo-fila">
+                  <div class="campo-grupo">
+                     <label for="crear-juego">Juego / Disciplina</label>
+                     <select id="crear-juego" required>
+                        <option value="" disabled selected>Seleccioná un juego</option>
+                        <option value="1">Valorant</option>
+                        <option value="2">League of Legends</option>
+                        <option value="3">Ajedrez</option>
+                        <option value="4">Fútbol 5</option>
+                        <option value="5">Truco</option>
+                     </select>
+                  </div>
+
+                  <div class="campo-grupo">
+                     <label for="crear-localidad">Localidad</label>
+                     <input type="text" id="crear-localidad" placeholder="Ej: Montevideo - Uruguay" maxlength="100">
+                  </div>
+               </div>
+
+               <div class="campo-grupo">
+                  <label for="crear-descripcion">Descripción</label>
+                  <textarea id="crear-descripcion" rows="4" placeholder="Contá de qué se trata tu equipo..."></textarea>
+               </div>
+            </div>
+
+            <div class="crear-equipo-acciones">
+               <button type="submit" class="boton-registro">Crear Equipo</button>
+            </div>
+
+         </form>
+
+      </div>
+
+      <!-- ======================================================
+           ESTADO 2: YA SOS LÍDER DE UN EQUIPO → gestión
+           (el JS muestra este bloque en vez del de arriba)
+      ====================================================== -->
+      <div id="vista-gestionar-equipo" class="oculto">
+
+         <div class="crear-equipo-header">
+            <span class="gestion-etiqueta" id="gestion-rol-etiqueta">Líder del equipo</span>
+            <h1 id="gestion-nombre-equipo">Gestionar Equipo</h1>
+            <p>Editá los datos de tu equipo, sumá jugadores nuevos y asigná un capitán.</p>
+         </div>
+
+         <div class="crear-equipo-formulario">
+
+            <!-- Editar datos del equipo -->
+            <form class="tarjeta-equipo" id="formulario-editar-equipo">
+               <h2>Datos del equipo</h2>
+
+               <div class="crear-equipo-imagenes">
+                  <div class="campo-imagen campo-banner">
+                     <div class="preview-banner" id="preview-banner-gestion">
+                        <img id="preview-banner-gestion-img" src="" alt="" hidden>
+                        <span class="placeholder-texto">Sin banner todavía</span>
+                     </div>
+                     <label for="input-banner-gestion" class="boton-subir-imagen">
+                        <i class="fa-solid fa-image"></i> Cambiar banner
+                     </label>
+                     <input type="file" id="input-banner-gestion" accept="image/*" hidden>
+                  </div>
+
+                  <div class="campo-imagen campo-escudo">
+                     <div class="preview-escudo" id="preview-escudo-gestion">
+                        <img id="preview-escudo-gestion-img" src="" alt="" hidden>
+                        <i class="fa-solid fa-shield-halved placeholder-icono"></i>
+                     </div>
+                     <label for="input-escudo-gestion" class="boton-subir-imagen">
+                        <i class="fa-solid fa-camera"></i> Cambiar escudo
+                     </label>
+                     <input type="file" id="input-escudo-gestion" accept="image/*" hidden>
+                  </div>
+               </div>
+
+               <div class="campo-grupo">
+                  <label for="gestion-nombre">Nombre del equipo</label>
+                  <input type="text" id="gestion-nombre" required maxlength="100">
+               </div>
+
+               <div class="campo-fila">
+                  <div class="campo-grupo">
+                     <label for="gestion-juego">Juego / Disciplina</label>
+                     <select id="gestion-juego" required>
+                        <option value="1">Valorant</option>
+                        <option value="2">League of Legends</option>
+                        <option value="3">Ajedrez</option>
+                        <option value="4">Fútbol 5</option>
+                        <option value="5">Truco</option>
+                     </select>
+                  </div>
+
+                  <div class="campo-grupo">
+                     <label for="gestion-localidad">Localidad</label>
+                     <input type="text" id="gestion-localidad" maxlength="100">
+                  </div>
+               </div>
+
+               <div class="campo-grupo">
+                  <label for="gestion-descripcion">Descripción</label>
+                  <textarea id="gestion-descripcion" rows="4"></textarea>
+               </div>
+
+               <div class="campo-grupo">
+                  <label>Código de invitación</label>
+                  <div class="codigo-invitacion-box">
+                     <span id="codigo-invitacion-texto">----</span>
+                     <button type="button" id="btn-copiar-codigo"><i class="fa-solid fa-copy"></i> Copiar</button>
+                  </div>
+               </div>
+
+               <div class="crear-equipo-acciones">
+                  <button type="submit" class="boton-registro">Guardar Cambios</button>
+               </div>
+            </form>
+
+            <!-- Miembros del equipo -->
+            <section class="tarjeta-equipo">
+               <h2>Miembros del equipo</h2>
+               <ul class="lista-jugadores" id="lista-miembros"></ul>
+            </section>
+
+            <!-- Agregar jugadores -->
+            <section class="tarjeta-equipo">
+               <h2>Agregar jugadores</h2>
+
+               <div class="buscador-jugadores">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="input-buscar-jugador" placeholder="Buscar por nombre o usuario...">
+               </div>
+
+               <ul class="lista-jugadores" id="lista-resultados-busqueda">
+                  <li class="lista-vacia" id="mensaje-busqueda-vacia">Escribí un nombre o usuario para buscar jugadores.</li>
+               </ul>
+            </section>
+
+            <!-- Solicitudes pendientes -->
+            <section class="tarjeta-equipo">
+               <h2>Solicitudes pendientes</h2>
+               <ul class="lista-jugadores" id="lista-solicitudes">
+                  <li class="lista-vacia" id="mensaje-solicitudes-vacia">No hay solicitudes pendientes.</li>
+               </ul>
+            </section>
+
+         </div>
+
+      </div>
+
+   </main>
+
+   <!-- FOOTER ---------------------------->
+   <footer id="footer-publico-placeholder"></footer>
+
+   <script src="../../publico/js/includesPublicos.js"></script>
+   <script src="../../publico/js/navbar.js"></script>
+   <script src="../../publico/js/crear-equipo.js"></script>
+
+</body>
+</html>

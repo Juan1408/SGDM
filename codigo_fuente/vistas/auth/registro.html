@@ -9,7 +9,8 @@
    <title>ASCEND - Crear Cuenta</title>
 
    <!-- CSS -->
-   <link rel="stylesheet" href="../../publico/css/base-auth.css">
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+  <link rel="stylesheet" href="../../publico/css/publico/login.css">
 
    <!-- Font Awesome -->
    <link
@@ -26,7 +27,7 @@
 
 <body>
 
-  <div class="login-contenedor">
+  <main class="login-contenedor">
 
   <!-- PANEL DEL FORMULARIO -->
   <div class="login-panel">
@@ -40,54 +41,52 @@
           <img src="../../publico/img/logos/ascend-png.png" alt="Logo de ASCEND">
         </a>
       </div>
-      <h2>Crear Cuenta</h2>
+      <h1>Crear Cuenta</h1>
       <form>
         <div class="input-group">
-          <input type="text" required>
-          <label>Nombre completo</label>
+          <input type="text" id="registro-nombre" required>
+          <label for="registro-nombre">Nombre completo</label>
         </div>
         <div class="input-group">
-          <input type="text" required>
-          <label>Usuario</label>
+          <input type="text" id="registro-usuario" required>
+          <label for="registro-usuario">Usuario</label>
         </div>
-        <div class="role-toggle">
-          <p>Rol</p>
+        <fieldset class="role-toggle">
+          <legend>Rol</legend>
           <div class="role-options">
             <input type="radio" name="rol" id="rol-jugador" value="jugador" checked>
             <label for="rol-jugador"><i class="fa-solid fa-user"></i> Jugador</label>
             <input type="radio" name="rol" id="rol-organizador" value="organizador">
             <label for="rol-organizador"><i class="fa-solid fa-user-shield"></i> Organizador</label>
           </div>
-        </div>
+        </fieldset>
         <div class="input-group">
-          <input type="email" required>
-          <label>Correo electrónico</label>
+          <input type="email" id="registro-email" required>
+          <label for="registro-email">Correo electrónico</label>
         </div>
         <div class="input-group password-group">
-          <input type="password" required>
-          <label>Contraseña</label>
-          <i class="fa-regular fa-eye-slash"></i>
+          <input type="password" id="registro-password" required>
+          <label for="registro-password">Contraseña</label>
+          <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
+            <i class="fa-regular fa-eye-slash"></i>
+          </button>
         </div>
         <div class="input-group password-group">
-          <input type="password" required>
-          <label>Confirmar contraseña</label>
-          <i class="fa-regular fa-eye-slash"></i>
+          <input type="password" id="registro-password-confirmar" required>
+          <label for="registro-password-confirmar">Confirmar contraseña</label>
+          <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
+            <i class="fa-regular fa-eye-slash"></i>
+          </button>
         </div>
         <button type="button" class="auth-btn">Registrarse</button>
       </form>
-      <p class="switch-text">¿Ya tienes cuenta? <span><a href="login.html">Iniciar sesión</a></span></p>
+      <p class="switch-text">¿Ya tienes cuenta? <a href="login.html">Iniciar sesión</a></p>
     </div>
 
   </div>
-</div>
+</main>
 
-
-   <script src="../../publico/js/mensaje.js"></script>
 
 </body>
 
 </html>
-
-
-
-

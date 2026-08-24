@@ -5,7 +5,7 @@
 
 .juegos-header { margin-bottom: 48px; }
 
-.juegos-subtitle {
+.ganador-subtitulo {
   color: var(--color-secundario);
   text-transform: uppercase;
   font-weight: 700;
@@ -57,13 +57,16 @@
   max-width: 100%;
 }
 
-.games-grid {
+.juegos-grillas {
   display: flex;
   gap: 28px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
-.game-card {
+.tarjeta-juego {
   --background: linear-gradient(to right, #13b37f, #11a3c8);
   min-width: 190px;
   width: 190px;
@@ -78,7 +81,7 @@
   flex-shrink: 0;
 }
 
-.game-card::after {
+.tarjeta-juego::after {
   position: absolute;
   content: "";
   top: -22px;
@@ -93,7 +96,7 @@
   transition: opacity 0.5s;
 }
 
-.game-card:hover::after {
+.tarjeta-juego:hover::after {
   opacity: 0.6;
   padding: 0.7rem 0;
   top: 18px;
@@ -102,7 +105,7 @@
 
 
 
-.card-info {
+.tarjeta-info {
   background: #1f1a1d;
   width: 100%;
   height: 100%;
@@ -114,7 +117,7 @@
   justify-content: flex-end;
 }
 
-.card-info img {
+.tarjeta-info img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -122,26 +125,26 @@
   object-fit: cover;
 }
 
-.card-overlay {
+.tarjeta-overlay {
   position: relative;
   z-index: 2;
   background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
   padding: 16px 14px 14px;
 }
 
-.card-overlay h3 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.card-overlay p  { color: #ccc; font-size: 12px; }
+.tarjeta-overlay h3 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.tarjeta-overlay p  { color: #ccc; font-size: 12px; }
 
-.game-card.lol  { --background: linear-gradient(to right, #C89B3C, #785A28); }
-.game-card.apex { --background: linear-gradient(to right, #ff4500, #e91e8c); }
-.game-card.cs   { --background: linear-gradient(to right, #4fc3f7, #1565c0); }
-.game-card.wow  { --background: linear-gradient(to right, #00c6ff, #0050a0); }
-.game-card.val  { --background: linear-gradient(to right, #ff4655, #8b0000); }
-.game-card.chess{ --background: linear-gradient(to right, #b5935a, #5a3e1b); }
+.tarjeta-juego.lol  { --background: linear-gradient(to right, #C89B3C, #785A28); }
+.tarjeta-juego.apex { --background: linear-gradient(to right, #ff4500, #e91e8c); }
+.tarjeta-juego.cs   { --background: linear-gradient(to right, #4fc3f7, #1565c0); }
+.tarjeta-juego.wow  { --background: linear-gradient(to right, #00c6ff, #0050a0); }
+.tarjeta-juego.val  { --background: linear-gradient(to right, #ff4655, #8b0000); }
+.tarjeta-juego.chess{ --background: linear-gradient(to right, #b5935a, #5a3e1b); }
 
 /**TOP 3**/
 
-.winners-section {
+.seccion-ganadores {
   background:
     radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
     radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
@@ -154,9 +157,9 @@
   gap: 40px;
 }
 
-.winners-left { flex: 1; min-width: 260px; }
+.ganadores-izquierda { flex: 1; min-width: 260px; }
 
-.winners-left .tag {
+.ganadores-izquierda .tag {
   color: var(--color-secundario);
   text-transform: uppercase;
   font-weight: 700;
@@ -165,7 +168,7 @@
   margin-bottom: 14px;
 }
 
-.winners-left h2 {
+.ganadores-izquierda h2 {
   color: #fff;
   font-size: 30px;
   font-weight: 800;
@@ -173,21 +176,21 @@
   margin-bottom: 22px;
 }
 
-.winners-left h2 span { color: var(--color-secundario); }
+.ganadores-izquierda h2 span { color: var(--color-secundario); }
 
-.winners-left .trophy {
+.ganadores-izquierda .trofeo {
   font-size: 70px;
   margin-top: 10px;
 }
 
-.winners-right {
+.ganadores-derecha {
   flex: 1.2;
   width: 100%;
   min-width: 0;
   position: relative;
 }
 
-.winners-badge {
+.ganadores-insignia {
   position: absolute;
   top: -18px;
   right: 50%;
@@ -203,7 +206,7 @@
   white-space: nowrap;
 }
 
-.winners-list {
+.ganadores-lista {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 18px;
@@ -225,7 +228,7 @@
 
 .winner-row.gold { border-color: rgba(255,215,0,0.35); }
 
-.winner-rank {
+.ganador-rango {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -238,11 +241,11 @@
   flex-shrink: 0;
 }
 
-.winner-row.gold .winner-rank   { background: linear-gradient(135deg, #ffe27a, #ffb300); }
-.winner-row.silver .winner-rank { background: linear-gradient(135deg, #e8e8e8, #b0b0b0); }
-.winner-row.bronze .winner-rank { background: linear-gradient(135deg, #e0a868, #b87333); }
+.winner-row.gold .ganador-rango   { background: linear-gradient(135deg, #ffe27a, #ffb300); }
+.winner-row.silver .ganador-rango { background: linear-gradient(135deg, #e8e8e8, #b0b0b0); }
+.winner-row.bronze .ganador-rango { background: linear-gradient(135deg, #e0a868, #b87333); }
 
-.winner-avatar {
+.ganador-avatar {
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -256,14 +259,14 @@
   flex-shrink: 0;
 }
 
-.winner-name {
+.ganador-nombre {
   color: #fff;
   font-size: 14px;
   font-weight: 600;
   flex: 1;
 }
 
-.winner-amount {
+.ganador-monto {
   background: rgba(0, 255, 238,0.12);
   color: var(--color-secundario);
   font-size: 13px;
@@ -273,22 +276,22 @@
 }
 
 @media (min-width: 700px) {
-  .winners-section {
+  .seccion-ganadores {
     flex-direction: row;
     align-items: center;
     text-align: left;
     gap: 60px;
   }
 
-  .winners-left h2 { font-size: 44px; }
-  .winners-left .trophy { font-size: 90px; }
-  .winners-right { min-width: 320px; }
-  .winners-badge { right: 30px; transform: none; }
+  .ganadores-izquierda h2 { font-size: 44px; }
+  .ganadores-izquierda .trofeo { font-size: 90px; }
+  .ganadores-derecha { min-width: 320px; }
+  .ganadores-insignia { right: 30px; transform: none; }
 }
 
 
 /**RANKINGS**/
-.ranking-section {
+.seccion-ranking {
   background: var(--fondo-principal);
   padding: 48px 6%;
 }
@@ -299,6 +302,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
 .ranking-header p {
@@ -316,11 +322,31 @@
   font-weight: 800;
 }
 
-.ranking-table {
+.seccion-tabla {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
   overflow: hidden;
+}
+
+.seccion-tabla table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.seccion-tabla thead,
+.seccion-tabla tbody {
+  display: block;
+  width: 100%;
+}
+
+.seccion-tabla th,
+.seccion-tabla td {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-weight: normal;
+  border: none;
 }
 
 .ranking-row {

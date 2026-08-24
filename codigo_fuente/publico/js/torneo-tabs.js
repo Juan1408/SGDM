@@ -1,5 +1,5 @@
 const tabButtons = document.querySelectorAll(".td-tabs button");
-const tabPanels = document.querySelectorAll(".tab-panel");
+const tabPanels = document.querySelectorAll(".panel-pestañas");
 
 tabButtons.forEach(button => {
    button.addEventListener("click", () => {

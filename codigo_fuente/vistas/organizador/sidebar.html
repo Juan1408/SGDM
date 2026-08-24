@@ -7,73 +7,91 @@
    <div class="sidebar-usuario">
       <img src="../../publico/img/logos/eagles.png" alt="Usuario">
 
-      <div class="sidebar-usuario__datos">
+      <div class="sidebar-usuario-datos">
          <h3>Valentina</h3>
          <span>Organizador</span>
       </div>
    </div>
 
-   <nav class="sidebar-nav">
+   <nav class="sidebar-nav" aria-label="Menú del panel de organizador">
 
-      <a class="sidebar-link" href="perfil.html" data-page="perfil">
-         <i class="fa-solid fa-user"></i>
-         <span>Mi perfil</span>
-      </a>
+      <ul class="sidebar-lista">
 
-      <a class="sidebar-link" href="dashboard.html" data-page="dashboard">
-         <i class="fa-solid fa-house"></i>
-         <span>Inicio</span>
-      </a>
-
-      <div class="sidebar-item-desplegable">
-
-         <button class="sidebar-desplegable-btn" type="button">
-            <span class="sidebar-desplegable-btn__contenido">
-               <i class="fa-solid fa-trophy"></i>
-               <span>Mis torneos</span>
-            </span>
-
-            <i class="fa-solid fa-chevron-down sidebar-flecha"></i>
-         </button>
-
-         <div class="sidebar-submenu">
-
-            <a class="sidebar-link" href="mis-torneos.html" data-page="mis-torneos">
-               <i class="fa-solid fa-list"></i>
-               <span>Ver mis torneos</span>
+         <li>
+            <a class="sidebar-link" href="perfil.html" data-page="perfil">
+               <i class="fa-solid fa-user"></i>
+               <span>Mi perfil</span>
             </a>
+         </li>
 
-            <a class="sidebar-link" href="crear-torneo.html" data-page="crear-torneo">
-               <i class="fa-solid fa-plus"></i>
-               <span>Crear torneo</span>
+         <li>
+            <a class="sidebar-link" href="dashboard.html" data-page="dashboard">
+               <i class="fa-solid fa-house"></i>
+               <span>Inicio</span>
             </a>
+         </li>
 
-         </div>
+         <li class="sidebar-item-desplegable">
 
-      </div>
+            <button class="sidebar-desplegable-btn" type="button" aria-expanded="false">
+               <span class="sidebar-desplegable-btn-contenido">
+                  <i class="fa-solid fa-trofeo"></i>
+                  <span>Mis torneos</span>
+               </span>
 
-      <a class="sidebar-link" href="calendario.html" data-page="calendario">
-         <i class="fa-solid fa-calendar-days"></i>
-         <span>Calendario</span>
-      </a>
+               <i class="fa-solid fa-chevron-down sidebar-flecha"></i>
+            </button>
 
-      <a class="sidebar-link" href="resultados.html" data-page="resultados">
-         <i class="fa-solid fa-chart-simple"></i>
-         <span>Resultados</span>
-      </a>
+            <ul class="sidebar-submenu">
 
-      <a class="sidebar-link" href="historial.html" data-page="historial">
-         <i class="fa-solid fa-clock-rotate-left"></i>
-         <span>Historial</span>
-      </a>
+               <li>
+                  <a class="sidebar-link" href="mis-torneos.html" data-page="mis-torneos">
+                     <i class="fa-solid fa-list"></i>
+                     <span>Ver mis torneos</span>
+                  </a>
+               </li>
 
-      <a class="sidebar-link" href="../auth/login.html" data-page="salir">
-         <i class="fa-solid fa-arrow-right-from-bracket"></i>
-         <span>Salir</span>
-      </a>
+               <li>
+                  <a class="sidebar-link" href="crear-torneo.html" data-page="crear-torneo">
+                     <i class="fa-solid fa-plus"></i>
+                     <span>Crear torneo</span>
+                  </a>
+               </li>
+
+            </ul>
+
+         </li>
+
+         <li>
+            <a class="sidebar-link" href="calendario.html" data-page="calendario">
+               <i class="fa-solid fa-calendar-days"></i>
+               <span>Calendario</span>
+            </a>
+         </li>
+
+         <li>
+            <a class="sidebar-link" href="resultados.html" data-page="resultados">
+               <i class="fa-solid fa-chart-simple"></i>
+               <span>Resultados</span>
+            </a>
+         </li>
+
+         <li>
+            <a class="sidebar-link" href="historial.html" data-page="historial">
+               <i class="fa-solid fa-clock-rotate-left"></i>
+               <span>Historial</span>
+            </a>
+         </li>
+
+         <li>
+            <a class="sidebar-link" href="../auth/login.html" data-page="salir">
+               <i class="fa-solid fa-arrow-right-from-bracket"></i>
+               <span>Salir</span>
+            </a>
+         </li>
+
+      </ul>
 
    </nav>
 
-
-
-
+</aside>

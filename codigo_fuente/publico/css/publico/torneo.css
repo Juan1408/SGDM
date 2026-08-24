@@ -1,4 +1,4 @@
-.tournaments-page {
+.torneos-pagina {
    padding: 48px 6%;
    background:
       radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
@@ -16,12 +16,12 @@
 }
 
 
-.page-header {
+.header-pagina {
    max-width: 780px;
    margin-bottom: 32px;
 }
 
-.page-subtitle {
+.subtitulo-pagina {
    color: var(--color-secundario);
    text-transform: uppercase;
    font-weight: 700;
@@ -29,13 +29,13 @@
    margin-bottom: 10px;
 }
 
-.page-header h2 {
+.header-pagina h2 {
    font-size: clamp(32px, 6vw, 70px);
    line-height: 1.05;
    margin-bottom: 18px;
 }
 
-.page-header p {
+.header-pagina p {
    color: #c9c9dc;
    line-height: 1.7;
 }
@@ -66,7 +66,7 @@
    Desde 900px, buscador al lado de los chips
    y los selects en más columnas. */
 
-.filters-panel {
+.panel-filtros {
    width: 100vw;
    margin-left: calc(50% - 50vw);
    margin-right: calc(50% - 50vw);
@@ -77,14 +77,14 @@
    background: #fff;
 }
 
-.top-row {
+.top-fila {
    display: flex;
    flex-direction: column;
    align-items: stretch;
    gap: 14px;
 }
 
-.search-box {
+.buscador {
    height: 48px;
    width: 100%;
    min-width: 0;
@@ -95,11 +95,11 @@
    background: #e8e8e8;
 }
 
-.search-box i {
+.buscador i {
    color: #351080;
 }
 
-.search-box input {
+.buscador input {
    width: 100%;
    min-width: 0;
    border: none;
@@ -109,14 +109,17 @@
    font-family: inherit;
 }
 
-.search-box input::placeholder {
+.buscador input::placeholder {
    color: #555;
 }
 
-.chips-container {
+.chips-contenedor {
    display: flex;
    flex-wrap: wrap;
    gap: 8px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
 .chip {
@@ -136,13 +139,13 @@
    box-shadow: none;
 }
 
-.select-filters {
+.seleccionar-filtros {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 12px;
 }
 
-.select-filters select {
+.seleccionar-filtros select {
    width: 100%;
    min-width: 0;
    height: 46px;
@@ -157,10 +160,13 @@
 /* GRID DE TORNEOS - mobile first: 1 columna,
    protegida con minmax para que no se desborde. */
 
-.tournaments-grid {
+.torneos-grid {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 24px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
 .torneo-tarjeta {
@@ -221,7 +227,7 @@
    margin-bottom: 16px;
 }
 
-.card-footer {
+.pie-tarjeta {
    display: flex;
    flex-wrap: wrap;
    justify-content: space-between;
@@ -232,17 +238,17 @@
    font-size: 13px;
 }
 
-.card-footer span {
+.pie-tarjeta span {
    color: #ff8be8;
 }
 
-.card-footer a {
+.pie-tarjeta a {
    color: var(--color-secundario);
    text-decoration: none;
    font-weight: 700;
 }
 
-.agenda-button {
+.ver-mas-boton {
    margin-top: 32px;
    display: flex;
    justify-content: center;
@@ -256,7 +262,7 @@
 
 @media (min-width: 600px) {
 
-   .select-filters {
+   .seleccionar-filtros {
       grid-template-columns: repeat(2, minmax(0, 1fr));
    }
 
@@ -273,7 +279,7 @@
 
 @media (min-width: 700px) {
 
-   .tournaments-grid {
+   .torneos-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
    }
 }
@@ -285,7 +291,7 @@
 
 @media (min-width: 900px) {
 
-   .tournaments-page {
+   .torneos-pagina {
       padding: 90px 8%;
    }
 
@@ -293,17 +299,17 @@
       padding: 90px 8% 67px;
    }
 
-   .filters-panel {
+   .panel-filtros {
       padding: 35px 8%;
    }
 
-   .top-row {
+   .top-fila {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
    }
 
-   .search-box {
+   .buscador {
       width: auto;
       min-width: 260px;
       height: 52px;
@@ -314,12 +320,12 @@
       padding: 12px;
    }
 
-   .select-filters {
+   .seleccionar-filtros {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
    }
 
-   .select-filters select {
+   .seleccionar-filtros select {
       height: 48px;
    }
 }
@@ -331,7 +337,7 @@
 
 @media (min-width: 1000px) {
 
-   .tournaments-grid {
+   .torneos-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 34px;
    }

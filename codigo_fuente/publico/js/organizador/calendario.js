@@ -336,7 +336,7 @@ function crearTarjetaPartido(partido) {
                <span>
                   <i class="fa-solid fa-location-dot"></i>
                   ${escaparTexto(
-                     partido.venue || "A definir"
+                     partido.evento || "A definir"
                   )}
                </span>
 

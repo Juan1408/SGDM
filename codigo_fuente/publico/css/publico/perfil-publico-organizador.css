@@ -1,614 +1,606 @@
-/* ==========================================================================
-   PERFIL PÚBLICO DEL ORGANIZADOR
-   ========================================================================== */
+/* =========================================================
+   PERFIL PÚBLICO DEL ORGANIZADOR — Mobile first
+   Misma estructura y clases que perfil-equipo.css (sin
+   tabs). Todo lo de acá abajo hasta el corte de "PÁGINA
+   ESPECÍFICA" es literal lo mismo que perfil-equipo.css,
+   para que ambos perfiles se vean idénticos.
+========================================================= */
 
-body {
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.equipo-pagina {
+   background: #030205;
+   color: #fff;
    font-family: 'Poppins', sans-serif;
-   background:
-      radial-gradient(circle at 15% 20%, rgba(var(--color-secundario-rgb), 0.18), transparent 28%),
-      radial-gradient(circle at 85% 40%, rgba(var(--color-primario-rgb), 0.16), transparent 30%),
-      var(--fondo-principal);
+   padding-top: 80px; /* alto del navbar fijo */
+   padding-bottom: 40px;
+   overflow-x: hidden;
+}
+
+/* Ancho compartido por TODO el contenido — el banner del
+   header usa este mismo ancho, no va de punta a punta. */
+.equipo-card,
+.equipo-hero-banner,
+.equipo-identidad,
+.equipo-stats,
+.torneos-organiza-grid,
+.mis-equipos-grid,
+.section-title-gradient {
+   width: 92%;
+   max-width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.equipo-card {
+   margin-top: 24px;
+   padding: 24px 20px;
+   background: #101010;
+   border-radius: 20px;
+}
+
+.equipo-card h2 {
+   font-size: 1.4rem;
+   font-weight: 800;
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+/* =========================================================
+   HERO: banner + logo + datos + stats (sin tabs)
+========================================================= */
+
+.equipo-hero {
+   padding-bottom: 20px;
+}
+
+.equipo-hero-banner {
+   height: 190px;
+   margin-top: 16px;
+   border-radius: 16px;
+   overflow: hidden;
+}
+
+.equipo-hero-banner img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.equipo-identidad {
+   text-align: center;
+}
+
+.equipo-logo {
+   width: 110px;
+   height: 110px;
+   margin: -55px auto 14px;
+   border-radius: 50%;
+   overflow: hidden;
+   background: #d9d9d9;
+   border: 4px solid transparent;
+   background-image:
+      linear-gradient(#0a0a12, #0a0a12),
+      linear-gradient(180deg, #52228e, #30f5d2);
+   background-origin: border-box;
+   background-clip: content-box, border-box;
+   position: relative;
+   z-index: 2;
+}
+
+.equipo-logo img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.equipo-nombre {
+   font-size: 1.6rem;
+   font-weight: 800;
+   margin-bottom: 10px;
+}
+
+.equipo-descripcion {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+   line-height: 1.6;
+   margin-bottom: 18px;
+}
+
+.equipo-datos {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 22px;
+   padding-bottom: 18px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipo-dato {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   font-size: 0.85rem;
+   color: #eee;
+}
+
+.equipo-dato i {
+   color: #30f5d2;
+}
+
+.equipo-stats {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 14px;
+}
+
+.stat-card {
+   min-height: 120px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   text-align: center;
+   padding: 14px 10px;
+   border-radius: 12px;
+   background: linear-gradient(180deg, #52228e, #170928);
+}
+
+.stat-card strong {
+   font-size: 2rem;
+   font-weight: 800;
+}
+
+.stat-card span {
+   font-size: 0.85rem;
+   color: #e4e0f0;
+}
+
+@media (min-width: 900px) {
+
+   .equipo-hero-banner {
+      height: 400px;
+   }
+
+   .equipo-identidad {
+      display: flex;
+      align-items: flex-end;
+      gap: 28px;
+      text-align: left;
+   }
+
+   .equipo-logo {
+      flex-shrink: 0;
+      width: 170px;
+      height: 170px;
+      margin: -130px 0 0;
+   }
+
+   .equipo-info-texto {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 6px;
+   }
+
+   .equipo-nombre {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+   }
+
+   .equipo-descripcion {
+      max-width: 640px;
+      margin-bottom: 0;
+   }
+
+   .equipo-datos {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 40px;
+      margin-top: 18px;
+   }
+
+   .equipo-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+   }
+
+   .stat-card {
+      min-height: 150px;
+   }
+
+   .stat-card strong {
+      font-size: 2.6rem;
+   }
+}
+
+/* =========================================================
+   BOTÓN "SEGUIR" (misma tarjeta que Capitanes en
+   perfil-equipo, con la variante --solo-boton)
+========================================================= */
+
+.capitanes-fila {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 16px;
+   text-align: center;
+}
+
+.boton-solicitar-unirse {
+   border: none;
+   width: 100%;
+   max-width: 280px;
+   padding: 14px 20px;
+   border-radius: 8px;
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.9rem;
+   font-weight: 800;
+   letter-spacing: 0.5px;
+   cursor: pointer;
+}
+
+@media (min-width: 700px) {
+
+   .capitanes-fila--solo-boton {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+   }
+
+   .capitanes-fila--solo-boton .boton-solicitar-unirse {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+/* =========================================================
+   TÍTULO DE SECCIÓN (Torneos, Equipos)
+========================================================= */
+
+.team-members {
+   margin-top: 40px;
+}
+
+.section-title-gradient {
+   width: fit-content;
+   max-width: 92%;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 24px;
+   padding: 10px 24px;
+   font-size: 1.3rem;
+   font-weight: 700;
+   color: #fff;
+   text-align: center;
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   overflow-wrap: break-word;
+}
+
+@media (min-width: 650px) {
+   .section-title-gradient {
+      font-size: 1.7rem;
+      padding: 10px 40px;
+   }
+}
+
+@media (min-width: 900px) {
+   .section-title-gradient {
+      font-size: 2rem;
+      padding: 10px 60px;
+   }
+}
+
+/* =========================================================
+   EQUIPOS QUE GESTIONA — reutiliza el mismo código de
+   tarjeta que mis-equipos.html (.mis-equipos-grid /
+   .mi-equipo-card). Los títulos van en <h3> porque acá
+   "Equipos que gestiona" ya es el <h2> de la sección.
+========================================================= */
+
+.mis-equipos-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+   list-style: none;
+}
+
+.mi-equipo-card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 14px;
+   text-align: center;
+   padding: 20px;
+   background: #101010;
+   border-radius: 16px;
+}
+
+.mi-equipo-card img {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+}
+
+.mi-equipo-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.mi-equipo-badge {
+   display: inline-block;
+   padding: 4px 12px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+}
+
+.mi-equipo-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
 }
 
-.organizer-page {
-   max-width: 1120px;
-   width: min(1120px, 92%);
-   margin: 48px auto;
-   padding: 0 18px;
+.mi-equipo-badge.badge-capitan {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
 }
 
-/* ==========================================================================
-   HERO (tarjeta con avatar grande + métricas)
-   ========================================================================== */
-
-.organizer-hero {
-   padding: 0;
-   border: none;
-   background: transparent;
-   box-shadow: none;
-   margin-bottom: 32px;
+.mi-equipo-badge.badge-miembro {
+   background: rgba(255, 255, 255, 0.08);
+   color: #c7c7d8;
 }
 
-.organizer-label {
+.boton-secundario {
    display: inline-flex;
    align-items: center;
+   justify-content: center;
+   width: 100%;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(48, 245, 210, 0.35);
+   color: #fff;
    padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 600;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.boton-secundario:hover {
+   background: rgba(48, 245, 210, 0.12);
+   border-color: #30f5d2;
+}
+
+@media (min-width: 700px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .mi-equipo-card {
+      flex-direction: row;
+      text-align: left;
+   }
+
+   .mi-equipo-info {
+      flex: 1;
+      min-width: 0;
+   }
+
+   .boton-secundario {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+@media (min-width: 900px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+
+   .mi-equipo-card {
+      flex-direction: column;
+      text-align: center;
+   }
+
+   .boton-secundario {
+      width: 100%;
+   }
+}
+
+/* =========================================================
+   TESTIMONIOS (reutilizado para "Opiniones")
+========================================================= */
+
+.testimonio-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+   gap: 10px;
+}
+
+.testimonio-avatar {
+   width: 80px;
+   height: 80px;
+   border-radius: 50%;
+   background: #d9d9d9;
+}
+
+.testimonio-nombre {
+   font-size: 1rem;
+   font-weight: 600;
+}
+
+.testimonio-estrellas {
+   color: #ffd700;
+   font-size: 1rem;
+   display: flex;
+   gap: 4px;
+}
+
+.testimonio-item p {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+   line-height: 1.7;
+   max-width: 560px;
+}
+
+/* =========================================================
+   PÁGINA ESPECÍFICA — lo que no existe en perfil-equipo
+========================================================= */
+
+.organizador-etiqueta {
+   display: inline-block;
+   margin-bottom: 8px;
+   padding: 6px 16px;
    border-radius: 999px;
    background: rgba(var(--color-secundario-rgb), 0.12);
    color: var(--color-secundario);
-   font-size: 12px;
+   font-size: 0.75rem;
    font-weight: 700;
    letter-spacing: 0.04em;
 }
 
-.organizer-hero--card .organizer-hero-card {
+.perfil-organizador-cta-texto {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+}
+
+/* --- Torneos que organiza --- */
+
+.torneos-organiza-grid {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
-   gap: 28px;
-   padding: 24px;
-   max-width: 1040px;
-   margin: 0 auto;
-   background: linear-gradient(180deg, rgba(11, 16, 34, 0.96), rgba(4, 7, 20, 0.96));
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.16);
-   border-radius: 28px;
-   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-}
-
-.organizer-avatar,
-.organizer-avatar--big {
-   width: 100%;
-   min-height: 220px;
-   aspect-ratio: 1 / 1;
-   border-radius: 28px;
-   background: #111 no-repeat center/cover;
-   overflow: hidden;
-   border: 4px solid rgba(var(--color-secundario-rgb), 0.35);
-}
-
-.organizer-hero-content {
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
    gap: 18px;
-   text-align: center;
+   list-style: none;
 }
 
-.organizer-hero-content h1 {
-   margin: 0;
-   font-size: clamp(1.8rem, 6vw, 3.4rem);
-   line-height: 1.1;
-}
-
-.organizer-hero-content p {
-   max-width: 680px;
-   margin: 0 auto;
-   color: #d1d3e0;
-   line-height: 1.75;
-}
-
-.organizer-hero-buttons {
-   display: flex;
-   flex-wrap: wrap;
-   justify-content: center;
-   gap: 14px;
-   margin-top: 8px;
-}
-
-.perfil-boton-primario,
-.perfil-boton-secundario {
-   padding: 14px 26px;
-   border-radius: 999px;
-   font-weight: 700;
-   font-size: 14px;
-   cursor: pointer;
+.torneo-organiza-card {
+   display: block;
    text-decoration: none;
-   font-family: inherit;
-}
-
-.perfil-boton-primario {
-   background: var(--color-secundario);
-   border: none;
-   color: #06070d;
-}
-
-.perfil-boton-primario:hover {
-   box-shadow: 0 18px 28px rgba(var(--color-secundario-rgb), 0.2);
-}
-
-.perfil-boton-secundario {
-   display: inline-flex;
-   justify-content: center;
-   align-items: center;
-   gap: 8px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
-   background: rgba(var(--color-secundario-rgb), 0.06);
-   color: #f4f7ff;
-}
-
-.organizer-hero-metrics {
-   display: grid;
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 14px;
-}
-
-.hero-metric {
-   padding: 18px;
-   border-radius: 20px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.12);
-   background: rgba(255, 255, 255, 0.03);
-   text-align: center;
-}
-
-.hero-metric strong {
-   display: block;
-   font-size: 1.7rem;
-   line-height: 1.05;
-   margin-bottom: 6px;
-   color: #fff;
-}
-
-.hero-metric span {
-   color: #c8cdf7;
-   font-size: 0.85rem;
-}
-
-.hero-metric--location strong {
-   font-size: 1.1rem;
-   line-height: 1.3;
-}
-
-/*
-=====================================================
-   TABLET (min-width: 700px)
-===================================================== */
-
-@media (min-width: 700px) {
-
-   .organizer-hero-metrics {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-   }
-}
-
-/*
-=====================================================
-   ESCRITORIO (min-width: 960px)
-===================================================== */
-
-@media (min-width: 960px) {
-
-   .organizer-hero--card .organizer-hero-card {
-      grid-template-columns: minmax(240px, 320px) 1fr;
-      gap: 28px;
-      padding: 32px;
-   }
-
-   .organizer-avatar,
-   .organizer-avatar--big {
-      min-height: 320px;
-   }
-
-   .organizer-hero-content {
-      text-align: left;
-   }
-
-   .organizer-hero-content p {
-      margin: 0;
-   }
-
-   .organizer-hero-buttons {
-      justify-content: flex-start;
-   }
-
-   .organizer-hero-metrics {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: stretch;
-   }
-}
-
-/* ==========================================================================
-   TARJETA DE PERFIL (versión chica, usada como link de vista previa)
-   ========================================================================== */
-
-.organizer-profile-link {
-   display: block;
-   width: 100%;
    color: inherit;
-   text-decoration: none;
+   background: #101010;
+   border-radius: 16px;
+   overflow: hidden;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   transition: 0.25s ease;
 }
 
-.organizer-profile {
-   padding: 26px;
-   background: rgba(10, 14, 25, 0.98);
-   border-radius: 28px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
-   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
-   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+.torneo-organiza-card:hover {
+   transform: translateY(-4px);
+   border-color: var(--color-secundario);
 }
 
-.organizer-profile-link:hover .organizer-profile {
-   transform: translateY(-3px);
-   border-color: rgba(var(--color-secundario-rgb), 0.4);
-   box-shadow: 0 22px 58px rgba(0, 0, 0, 0.38);
-}
-
-.organizer-profile-header {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   gap: 18px;
-   margin-bottom: 18px;
-}
-
-.organizer-profile-label {
+.torneo-organiza-card img {
+   width: 100%;
+   height: 160px;
+   object-fit: cover;
    display: block;
-   margin: 0 auto 16px;
-   padding: 8px 18px;
-   border-radius: 999px;
-   background: rgba(var(--color-secundario-rgb), 0.12);
-   color: var(--color-secundario);
-   font-size: 12px;
-   text-align: center;
-   width: fit-content;
 }
 
-.organizer-profile-info .organizer-label {
-   display: inline-block;
-   margin-bottom: 8px;
-   padding: 6px 14px;
+.torneo-organiza-info {
+   padding: 14px 16px;
 }
 
-.organizer-profile-info h4 {
-   margin: 0 0 10px;
-   font-size: 22px;
-}
-
-.organizer-profile-info p {
-   margin: 0;
-   color: #d2d2df;
-   line-height: 1.6;
-}
-
-.organizer-profile-stats {
-   display: flex;
-   gap: 14px;
-   margin-top: 12px;
-   flex-wrap: wrap;
-}
-
-.organizer-profile-stats span {
-   font-size: 13px;
-   color: #c8fff0;
-}
-
-.organizer-profile-details {
-   display: grid;
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 16px;
-   margin-top: 20px;
-}
-
-.organizer-profile-details strong {
-   display: block;
+.torneo-organiza-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
    margin-bottom: 6px;
-   color: #fff;
 }
 
-.organizer-profile-details p {
-   margin: 0;
-   color: #c8cdf7;
+.torneo-organiza-info span {
+   font-size: 0.8rem;
+   color: var(--texto-secundario);
 }
 
-.organizer-profile-actions {
-   display: flex;
-   flex-wrap: wrap;
-   gap: 12px;
-   margin-top: 22px;
+@media (min-width: 650px) {
+   .torneos-organiza-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
 }
 
-.organizer-profile-actions.organizer-profile-actions--wide {
-   gap: 14px;
+@media (min-width: 900px) {
+   .torneos-organiza-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
 }
 
-.organizer-profile-actions.organizer-profile-actions--centered {
-   justify-content: center;
+/* --- Opiniones --- */
+
+.opiniones-subtitulo {
+   text-align: center;
+   font-size: 0.85rem;
+   color: var(--texto-secundario);
+   margin-top: -12px;
+   margin-bottom: 24px;
 }
 
-.organizer-profile-actions .perfil-boton-primario,
-.organizer-profile-actions .perfil-boton-secundario {
-   width: auto;
-}
-
-/* ==========================================================================
-   RESUMEN / TARJETAS PRINCIPALES (organizer-overview)
-   ========================================================================== */
-
-.organizer-overview {
-   display: grid;
-   grid-template-columns: minmax(0, 1fr);
-   gap: 22px;
-   margin-top: 36px;
-}
-
-.organizer-card {
-   background: rgba(7, 8, 18, 0.95);
-   border-radius: 24px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.12);
-   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
-}
-
-.organizer-card--main {
+.opiniones-grid {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 20px;
-   padding: 24px;
+   list-style: none;
 }
 
-.organizer-card-left {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   gap: 18px;
-   text-align: center;
+.testimonio-item--form {
+   align-items: stretch;
+   text-align: left;
 }
 
-.organizer-card-badges {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   gap: 10px;
-   flex-wrap: wrap;
-}
-
-.organizer-badge {
-   display: inline-flex;
-   align-items: center;
-   padding: 8px 16px;
-   border-radius: 999px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.15);
-   color: #c8fff0;
-   font-size: 13px;
-}
-
-.organizer-card-right h2 {
-   margin-top: 0;
-   font-size: 2rem;
-   text-align: center;
-}
-
-.organizer-card-description {
-   margin: 18px 0 0;
-   color: #d2d2df;
-   line-height: 1.75;
-}
-
-.organizer-card--stats {
-   display: grid;
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 14px;
-   padding: 20px;
-}
-
-.stat-item {
-   background: rgba(255, 255, 255, 0.03);
-   border: 1px solid rgba(255, 255, 255, 0.08);
-   border-radius: 22px;
-   padding: 18px;
-   text-align: center;
-}
-
-.stat-item strong {
-   display: block;
-   font-size: 1.8rem;
-   margin-bottom: 8px;
-}
-
-.stat-item span {
-   color: #c8cdf7;
-   font-size: 0.9rem;
-}
-
-.organizer-card.organizer-locked {
-   flex-direction: column;
-   align-items: flex-start;
-   background: rgba(255, 255, 255, 0.04);
-   border-color: rgba(255, 255, 255, 0.08);
-   color: #ccc;
-   padding: 22px;
-}
-
-.organizer-card.organizer-locked p {
-   margin: 0;
-   color: #e4e4e4;
-}
-
-.organizer-card.organizer-locked a {
-   display: none;
-}
-
-/*
-=====================================================
-   ESCRITORIO (min-width: 900px)
-===================================================== */
-
-@media (min-width: 900px) {
-
-   .organizer-card--main {
-      grid-template-columns: 220px 1fr;
-      gap: 24px;
-      padding: 30px;
-   }
-
-   .organizer-card-right h2 {
-      font-size: 2.6rem;
-      text-align: left;
-   }
-
-   .organizer-card--stats {
-      padding: 28px;
-   }
-}
-
-@media (min-width: 700px) {
-
-   .organizer-overview {
-      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
-      gap: 26px;
-   }
-}
-
-/* ==========================================================================
-   TORNEOS ORGANIZADOS / OPINIONES
-   ========================================================================== */
-
-.organizer-events,
-.organizer-reviews {
-   margin-top: 36px;
-}
-
-.section-heading {
-   display: flex;
-   flex-direction: column;
-   gap: 12px;
-   margin-bottom: 20px;
-}
-
-.section-heading h3 {
-   margin: 0;
-   font-size: 1.6rem;
-}
-
-.section-heading p {
-   margin: 0;
-   color: #c8cdf7;
-   max-width: 560px;
-}
-
-.event-grid,
-.review-grid {
-   display: grid;
-   grid-template-columns: minmax(0, 1fr);
-   gap: 18px;
-}
-
-.event-card {
-   background: rgba(10, 14, 25, 0.95);
-   padding: 16px;
-   border-radius: 22px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.12);
-   overflow: hidden;
-}
-
-.event-card img {
-   width: 100%;
-   height: 170px;
-   object-fit: cover;
-   border-radius: 18px;
-}
-
-.event-card h4 {
-   margin: 16px 0 8px;
-   font-size: 1.1rem;
-}
-
-.event-card span {
-   color: #c8cdf7;
-   font-size: 0.9rem;
-}
-
-.review-card {
-   background: rgba(10, 14, 25, 0.95);
-   padding: 22px;
-   border-radius: 22px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.1);
-   min-height: 200px;
-   display: flex;
-   flex-direction: column;
-   gap: 16px;
-}
-
-.review-head {
-   display: flex;
-   align-items: center;
-   gap: 14px;
-}
-
-.review-avatar {
-   width: 48px;
-   height: 48px;
-   flex-shrink: 0;
-   border-radius: 50%;
-   background: linear-gradient(180deg, var(--color-secundario), var(--color-primario));
-}
-
-.review-head h4 {
-   margin: 0;
-}
-
-.review-head span {
-   color: var(--color-secundario);
+.testimonio-item--form h3 {
+   font-size: 1rem;
    font-weight: 700;
+   margin-bottom: 12px;
 }
 
-.review-card p {
-   margin: 0;
-   color: #d2d2df;
-   line-height: 1.7;
-   flex: 1;
-}
-
-.review-card--form {
-   background: rgba(10, 14, 25, 0.95);
-   padding: 22px;
-   border-radius: 22px;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.1);
-}
-
-.review-card--form h4 {
-   margin: 0 0 16px;
-}
-
-.review-card--form textarea {
+.testimonio-item--form textarea {
    width: 100%;
-   min-height: 110px;
+   min-height: 90px;
    resize: vertical;
-   padding: 16px;
-   border-radius: 18px;
+   padding: 12px 14px;
+   border-radius: 10px;
    border: 1px solid rgba(255, 255, 255, 0.1);
    background: rgba(255, 255, 255, 0.04);
    color: #fff;
-   margin-bottom: 14px;
    font-family: inherit;
+   font-size: 0.85rem;
+   margin-bottom: 14px;
 }
 
-/*
-=====================================================
-   ESCRITORIO (min-width: 780px)
-===================================================== */
+.testimonio-item--form button {
+   border: none;
+   width: 100%;
+   padding: 12px;
+   border-radius: 8px;
+   background: linear-gradient(90deg, #52228e, #ed07ee);
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.85rem;
+   font-weight: 700;
+   cursor: pointer;
+}
 
-@media (min-width: 780px) {
-
-   .event-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-   }
-
-   .review-grid {
+@media (min-width: 650px) {
+   .opiniones-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
    }
 }
 
-@media (min-width: 1080px) {
-
-   .review-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-   }
-
-   .section-heading {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
+@media (min-width: 1100px) {
+   .opiniones-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
    }
 }
-
-.avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-

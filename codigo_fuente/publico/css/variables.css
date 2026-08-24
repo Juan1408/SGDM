@@ -1,8 +1,8 @@
 :root {
-   --color-primario: #F511CB;
+   --color-primario: #f200ff;
    --color-secundario: #00FFEE;
-   --color-violeta: #6425A7;
-   --color-azul: #097AEC;
+   --color-violeta: #a701fa;
+   --color-azul: #2102f1;
 
    /* Mismos colores de arriba, como triplete R,G,B
       (sin "rgb()" alrededor) para poder usarlos

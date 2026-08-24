@@ -9,7 +9,8 @@
    <title>ASCEND - Login</title>
 
    <!-- CSS -->
-   <link rel="stylesheet" href="../../publico/css/base-auth.css">
+  <link rel="stylesheet" href="../../publico/css/variables.css">
+  <link rel="stylesheet" href="../../publico/css/publico/login.css">
 
    <!-- Font Awesome -->
    <link
@@ -26,7 +27,7 @@
 
 <body>
 
-  <div class="login-contenedor">
+  <main class="login-contenedor">
 
   <!-- PANEL DEL FORMULARIO -->
   <div class="login-panel">
@@ -40,36 +41,33 @@
           <img src="../../publico/img/logos/ascend-png.png" alt="Logo de ASCEND">
         </a>
       </div>
-      <h2>Iniciar Sesión</h2>
+      <h1>Iniciar Sesión</h1>
       <form>
         <div class="input-group">
-          <input type="email" required>
-          <label>Correo electrónico</label>
+          <input type="email" id="login-email" required>
+          <label for="login-email">Correo electrónico</label>
         </div>
         <div class="input-group password-group">
-          <input type="password" required>
-          <label>Contraseña</label>
-          <i class="fa-regular fa-eye-slash"></i>
+          <input type="password" id="login-password" required>
+          <label for="login-password">Contraseña</label>
+          <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
+            <i class="fa-regular fa-eye-slash"></i>
+          </button>
         </div>
         <div class="forgot-password">
           <a href="recuperar-password.html">¿Olvidaste tu contraseña?</a>
         </div>
         <button type="submit" class="auth-btn">Ingresar</button>
       </form>
-      <p class="switch-text">¿No tienes cuenta? <span><a href="registro.html">Registrarse</a></span></p>
+      <p class="switch-text">¿No tienes cuenta? <a href="registro.html">Registrarse</a></p>
     </div>
 
   </div>
-</div>
+</main>
 
 
    <script src="../../publico/js/login.js"></script>
-   <script src="../../publico/js/mensaje.js"></script>
 
 </body>
 
 </html>
-
-
-
-

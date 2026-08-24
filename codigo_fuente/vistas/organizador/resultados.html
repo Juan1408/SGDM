@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>ASCEND | Resultados</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/botones.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/chips.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/organizador/resultados.css">
+</head>
+
+<body>
+
+   <header id="navbar-placeholder"></header>
+   <aside id="sidebar-placeholder"></aside>
+
+   <main class="dashboard-organizador resultados-pagina">
+
+      <!-- ENCABEZADO -->
+      <header class="resultados-header">
+
+         <div>
+            <span class="resultados-etiqueta">
+               Agenda general
+            </span>
+
+            <h1>Resultados</h1>
+
+            <p>
+               Últimos resultados cargados en todos tus torneos,
+               en un mismo lugar.
+            </p>
+         </div>
+
+      </header>
+
+      <!-- RESUMEN -->
+      <dl class="resultados-resumen">
+
+         <div class="resultados-resumen-tarjeta">
+            <span class="resultados-resumen-icono">
+               <i class="fa-solid fa-clipboard-check"></i>
+            </span>
+
+            <div>
+               <dd id="totalResultadosCargados">0</dd>
+               <dt>Resultados cargados</dt>
+            </div>
+         </div>
+
+         <div class="resultados-resumen-tarjeta">
+            <span class="resultados-resumen-icono">
+               <i class="fa-solid fa-calendar-week"></i>
+            </span>
+
+            <div>
+               <dd id="resultadosEstaSemana">0</dd>
+               <dt>Esta semana</dt>
+            </div>
+         </div>
+
+         <div class="resultados-resumen-tarjeta">
+            <span class="resultados-resumen-icono">
+               <i class="fa-solid fa-trofeo"></i>
+            </span>
+
+            <div>
+               <dd id="torneosConResultados">0</dd>
+               <dt>Torneos con resultados</dt>
+            </div>
+         </div>
+
+      </dl>
+
+      <!-- FILTROS -->
+      <section class="resultados-filtros">
+
+         <div class="resultados-filtro resultados-filtro--buscar">
+            <label for="buscarResultado">
+               Buscar participante
+            </label>
+
+            <div class="resultados-input-icono">
+               <i class="fa-solid fa-magnifying-glass"></i>
+               <input id="buscarResultado" type="search" placeholder="Equipo o jugador...">
+            </div>
+         </div>
+
+         <div class="resultados-filtro">
+            <label for="filtroTorneoResultados">
+               Torneo
+            </label>
+
+            <select id="filtroTorneoResultados">
+               <option value="todos">
+                  Todos los torneos
+               </option>
+            </select>
+         </div>
+
+         <div class="resultados-filtro">
+            <label for="filtroFechaResultados">
+               Fecha
+            </label>
+
+            <input id="filtroFechaResultados" type="date">
+         </div>
+
+         <button class="resultados-limpiar" id="limpiarFiltrosResultados" type="button">
+            <i class="fa-solid fa-rotate-left"></i>
+            Limpiar
+         </button>
+
+      </section>
+
+      <!-- LISTA -->
+      <section class="resultados-contenido">
+
+         <div class="resultados-contenido-header">
+            <div>
+               <span>Agenda</span>
+               <h2>Últimos resultados</h2>
+            </div>
+
+            <strong id="cantidadResultados">
+               0 resultados
+            </strong>
+         </div>
+
+         <div class="resultados-lista" id="resultadosLista"></div>
+
+      </section>
+
+   </main>
+
+   <script src="../../publico/js/organizador/includes.js"></script>
+   <script src="../../publico/js/organizador/sidebar.js"></script>
+
+   <script src="../../publico/js/organizador/utils.js"></script>
+   <script src="../../publico/js/organizador/resultados.js"></script>
+
+</body>
+
+</html>

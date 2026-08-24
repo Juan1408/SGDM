@@ -1,0 +1,42 @@
+/* =========================================================
+   SOLICITUDES — Mobile first
+   Reutiliza .lista-jugadores / .fila-jugador / .lista-vacia
+   que ya vienen con estilo completo desde crear-equipo.css.
+========================================================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+
+.solicitudes-contenedor {
+   margin-top: 24px;
+}
+
+.fila-jugador-invitado-por {
+   display: block;
+   font-size: 0.7rem;
+   color: var(--texto-secundario);
+   margin-top: 2px;
+}
+
+.boton-aceptar-solicitud {
+   background: linear-gradient(90deg, #30f5d2, #0aa88e);
+   color: #06170f;
+}
+
+.boton-aceptar-solicitud:hover {
+   filter: brightness(1.1);
+}
+
+.boton-rechazar-solicitud {
+   background: transparent;
+   border: 1px solid rgba(255, 80, 80, 0.4) !important;
+   color: #ff8080;
+}
+
+.boton-rechazar-solicitud:hover {
+   background: rgba(255, 80, 80, 0.1);
+}

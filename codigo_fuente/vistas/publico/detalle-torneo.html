@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -30,7 +30,7 @@
 
    <!-- NAVBAR ---------------------------->
 
-   <div id="navbar-publico-placeholder"></div>
+   <header id="navbar-publico-placeholder"></header>
 
 
    <main class="tournament-detail">
@@ -41,8 +41,8 @@
          </div>
 
          <div class="td-hero-contenido">
-            <p id="hero-subtitulo" >Torneo de Rugby</p>
-              <h2><span id="hero-equipo-1">BLACK FERNS</span> <br>vs<br> <span id="hero-equipo-2">WOMAN'S EAGLES</span></h2>
+            <p id="hero-subtitulo">Torneo de Rugby</p>
+            <h1><span id="hero-equipo-1">BLACK FERNS</span> <br>vs<br> <span id="hero-equipo-2">WOMAN'S EAGLES</span></h1>
             <span id="hero-fechas">26 Mayo 2026 - 08 Diciembre 2026</span>
 
             <div class="td-actions">
@@ -78,9 +78,9 @@
       <!-- INFO GENERAL ---------------------->
       <!-------------------------------------->
 
-      <section class="td-content">
+      <section class="td-contenido">
 
-         <div class="tab-panel active" id="info">
+         <div class="panel-pestañas active" id="info">
 
             <div class="info-layout">
 
@@ -94,14 +94,14 @@
                         <span id="meta-estado">En curso</span>
                      </div>
 
-                     <h3>Información</h3>
+                     <h2>Información</h2>
                      <p id="info-descripcion">
                         Torneo competitivo de rugby entre equipos destacados. Los participantes
                         competirán en una estructura organizada con fechas, encuentros, resultados
                         y seguimiento dentro de ASCEND.
                      </p>
 
-                     <h3>Reglas</h3>
+                     <h2>Reglas</h2>
                      <p id="info-reglas">
                         Los equipos deberán respetar los horarios establecidos, el formato del
                         torneo y las indicaciones del organizador. Los resultados serán cargados
@@ -110,51 +110,65 @@
                   </section>
 
                   <section class="td-trofeos">
-                     <div class="trofeo-card">
-                        <i class="fa-solid fa-trophy"></i>
-                        <h4>Prize pool</h4>
-                        <p id="premio-primero">+ $200</p>
-                     </div>
+                     <ul class="td-trofeos-lista">
+                        <li>
+                           <article class="tarjeta-trofeo">
+                              <i class="fa-solid fa-trofeo"></i>
+                              <h3>Prize pool</h3>
+                              <p id="primer-premio">+ $200</p>
+                           </article>
+                        </li>
 
-                     <div class="trofeo-card">
-                        <i class="fa-solid fa-medal"></i>
-                        <h4>Segundo lugar</h4>
-                        <p id="premio-segundo">+ $100</p>
-                     </div>
+                        <li>
+                           <article class="tarjeta-trofeo">
+                              <i class="fa-solid fa-medal"></i>
+                              <h3>Segundo lugar</h3>
+                              <p id="segundo-premio">+ $100</p>
+                           </article>
+                        </li>
 
-                     <div class="trofeo-card">
-                        <i class="fa-solid fa-award"></i>
-                        <h4>Tercer lugar</h4>
-                        <p id="premio-tercero">+ $50</p>
-                     </div>
+                        <li>
+                           <article class="tarjeta-trofeo">
+                              <i class="fa-solid fa-award"></i>
+                              <h3>Tercer lugar</h3>
+                              <p id="tercer-premio">+ $50</p>
+                           </article>
+                        </li>
+                     </ul>
                   </section>
 
                   <section class="td-comentarios">
-                     <h3>Comentarios</h3>
+                     <h2>Comentarios</h2>
 
-                     <div class="caja-comentario">
-                        <div class="comentario-avatar"></div>
-                        <div>
-                           <h4>Usuario <span>29/09/2026</span></h4>
-                           <p>Comentario hecho por el usuario sobre el torneo.</p>
-                           <button>Responder</button>
-                        </div>
-                     </div>
+                     <ul class="lista-comentarios">
+                        <li>
+                           <article class="caja-comentario">
+                              <div class="comentario-avatar"></div>
+                              <div>
+                                 <h3>Usuario <span>29/09/2026</span></h3>
+                                 <p>Comentario hecho por el usuario sobre el torneo.</p>
+                                 <button>Responder</button>
+                              </div>
+                           </article>
+                        </li>
 
-                     <div class="caja-comentario">
-                        <div class="comentario-avatar"></div>
-                        <div>
-                           <h4>Usuario <span>29/09/2026</span></h4>
-                           <p>Consulta sobre horarios, equipos o inscripción.</p>
-                           <button>Responder</button>
-                        </div>
-                     </div>
+                        <li>
+                           <article class="caja-comentario">
+                              <div class="comentario-avatar"></div>
+                              <div>
+                                 <h3>Usuario <span>29/09/2026</span></h3>
+                                 <p>Consulta sobre horarios, equipos o inscripción.</p>
+                                 <button>Responder</button>
+                              </div>
+                           </article>
+                        </li>
+                     </ul>
 
                      <a class="load-more" href="en-construccion.html">Cargar más</a>
                   </section>
 
                   <section class="td-formulario-comentarios">
-                     <h3>Dejar un comentario</h3>
+                     <h2>Dejar un comentario</h2>
 
                      <div class="formulario-fila">
                         <input type="text" placeholder="Nombre">
@@ -172,24 +186,24 @@
                <!-- SIDEBAR DERECHA -->
                <aside class="td-sidebar">
 
-                  <div class="next-tournament">
-                     <h3>PRÓXIMO TORNEO</h3>
+                  <div class="proximo-torneo">
+                     <h2>Próximo Torneo</h2>
                      <img src="../../publico/img/torneos/card5.jpg" alt="Próximo torneo">
-                     <h4>Virtual Odyssey Chronicles</h4>
+                     <h3>Virtual Odyssey Chronicles</h3>
                   </div>
 
-                  <div class="organizer-profile" id="organizerProfile">
-                     <div class="organizer-profile-header">
+                  <div class="perfil-organizador" id="organizerProfile">
+                     <div class="perfil-organizador-header">
                         <div class="organizer-avatar" id="organizerAvatar">
 
-                           <img id="foto-organizador" src="../../publico/img/avatars/a1.png">
+                           <img id="foto-organizador" src="../../publico/img/avatars/a1.png" alt="Foto del organizador">
                         </div>
 
                      </div>
-                     <div class="organizer-profile-label">Organizador</div>
-                     <div class="organizer-profile-actions organizer-profile-actions--centered">
+                     <div class="perfil-organizador-label">Organizador</div>
+                     <div class="perfil-organizador-actions perfil-organizador-actions--centered">
                         <button class="perfil-boton-primario">Seguir</button>
-                        <a href="perfil-publico-organizador.html">Ver perfil</a>
+                        <a href="perfil-publico-organizador.html" class="perfil-boton-secundario">Ver perfil</a>
                      </div>
                   </div>
 
@@ -203,58 +217,64 @@
          <!--- PARTICIPANTES -------------------->
          <!-------------------------------------->
 
-         <div class="tab-panel" id="participantes">
-            <section class="participants-section">
-               <h3 id="titulo-participantes">Equipos que participan</h3>
-               <div class="participants-grid" id="participantes-grid">
+         <div class="panel-pestañas" id="participantes">
+            <section class="seccion-participantes">
+               <h2 id="titulo-participantes">Equipos que participan</h2>
+               <ul class="participantes-grilla" id="participantes-grid">
 
-                  <article class="participant-card">
-                     <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Black Ferns Team">
+                  <li>
+                     <article class="participantes-tarjeta">
+                        <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Black Ferns Team">
 
-                     <div class="participant-info">
-                        <h4>Black Ferns Team</h4>
-                        <p>Rugby</p>
-                        <p>15 Participantes</p>
-                        <p>Puntos: 3200</p>
-                     </div>
-                  </article>
+                        <div class="participantes-info">
+                           <h3>Black Ferns Team</h3>
+                           <p>Rugby</p>
+                           <p>15 Participantes</p>
+                           <p>Puntos: 3200</p>
+                        </div>
+                     </article>
+                  </li>
 
-                  <article class="participant-card">
-                     <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Woman's Eagles">
+                  <li>
+                     <article class="participantes-tarjeta">
+                        <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Woman's Eagles">
 
-                     <div class="participant-info">
-                        <h4>Woman's Eagles</h4>
-                        <p>Rugby</p>
-                        <p>15 Participantes</p>
-                        <p>Puntos: 2980</p>
-                     </div>
-                  </article>
+                        <div class="participantes-info">
+                           <h3>Woman's Eagles</h3>
+                           <p>Rugby</p>
+                           <p>15 Participantes</p>
+                           <p>Puntos: 2980</p>
+                        </div>
+                     </article>
+                  </li>
 
-                  <article class="participant-card">
-                     <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Rugby Stars">
+                  <li>
+                     <article class="participantes-tarjeta">
+                        <img src="../../publico/img/black ferns/black-ferns_mobilell.png" alt="Rugby Stars">
 
-                     <div class="participant-info">
-                        <h4>Rugby Stars</h4>
-                        <p>Rugby</p>
-                        <p>15 Participantes</p>
-                        <p>Puntos: 2450</p>
-                     </div>
-                  </article>
+                        <div class="participantes-info">
+                           <h3>Rugby Stars</h3>
+                           <p>Rugby</p>
+                           <p>15 Participantes</p>
+                           <p>Puntos: 2450</p>
+                        </div>
+                     </article>
+                  </li>
 
-               </div>
+               </ul>
             </section>
 
             <!-- MIEMBROS DEL EQUIPO -->
 
-            <section class="team-members">
+            <section class="equipo-miembros">
 
-               <h3 class="section-title-gradient">
+               <h2 class="seccion-gradiente-titulo">
                   Miembros del equipo
-               </h3>
+               </h2>
 
-               <div class="members-grid" id="members-grid">
-
-               </div>
+               <ul class="miembros-grilla" id="miembros-grilla">
+                  <!-- Se llena por JS -->
+               </ul>
                <div class="ver-mas-miembros">
                   <a href="calendario.html" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
        transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
@@ -268,41 +288,37 @@
             <section class="ranking-equipo">
 
                <div class="ranking-header">
-                  <h3 id="titulo-ranking">Rankings del Equipo</h3>
+                  <h2 id="titulo-ranking">Rankings del Equipo</h2>
                </div>
 
-               <div class="ranking-tabla" id="ranking-tabla-container">
+               <div class="ranking-tabla" id="ranking-tabla-contenedor">
 
-                  <div class="ranking-head">
-
-                     <span>Equipo</span>
-                     <span>Pos</span>
-                     <span>Jugador</span>
-                     <span>Juego</span>
-                     <span>Partidas</span>
-                     <span>Puntos</span>
-
-                  </div>
-
-                  <!-------------------- FILA ---------------------------------->
-<div id="ranking-filas">
-   
-</div>
-
-                  <!-- foreach($jugadores as $jugador){
-           Crear una fila con:
-
-         - Logo del equipo
-         - Posición en el ranking
-         - Foto del jugador
-         - Nombre del jugador
-         - Juego
-         - Partidas jugadas
-         - Puntos
-         }
-       cambio de equipo y cambia la ID, muestra la info de esos jugadores -->
+                  <table>
+                     <thead>
+                        <tr id="ranking-head" class="ranking-head">
+                           <!-- Se llena por JS: cambia según sea equipo o individual -->
+                        </tr>
+                     </thead>
+                     <tbody id="ranking-filas">
+                        <!-- Se llena por JS -->
+                     </tbody>
+                  </table>
 
                </div>
+
+               <!-- foreach($jugadores as $jugador){
+                     Crear una fila con:
+
+                   - Logo del equipo
+                   - Posición en el ranking
+                   - Foto del jugador
+                   - Nombre del jugador
+                   - Juego
+                   - Partidas jugadas
+                   - Puntos
+                   }
+                 cambio de equipo y cambia la ID, muestra la info de esos jugadores -->
+
             </section>
 
          </div>
@@ -312,10 +328,12 @@
          <!-------------------------------------->
 
 
-         <div class="tab-panel" id="encuentros">
+         <div class="panel-pestañas" id="encuentros">
             <div class="td-info-general">
-               <h3>Encuentros</h3>
-               <p>Próximos emparejamientos y horarios del torneo...</p>
+               <h2>Agenda del Torneo</h2>
+               <ul class="lista-actividades" id="lista-actividades">
+                  <!-- Se llena por JS -->
+               </ul>
             </div>
          </div>
 
@@ -324,10 +342,10 @@
          <!-------------------------------------->
 
 
-         <div class="tab-panel" id="resultados">
+         <div class="panel-pestañas" id="resultados">
             <div class="td-info-general">
-               <h3>Resultados</h3>
-               <p>Durazno 2 - 1 Flores</p>
+               <h2>Resultados</h2>
+               <ul class="lista-resultados" id="lista-resultados"></ul>
             </div>
          </div>
 
@@ -337,80 +355,86 @@
          <!-------------------------------------->
 
 
-         <div class="tab-panel" id="bracket">
+         <div class="panel-pestañas" id="bracket">
 
             <div class="bracket-container">
                <h2 class="bracket-title" id="tournament-title">CRONOGRAMA DEL <span>TORNEO</span></h2>
                <p class="bracket-subtitle" id="tournament-info-meta">CARGANDO FORMATO...</p>
 
+               <div class="rondas-suizo" id="rondas-suizo"></div>
+
                <div class="brackets-dynamic-wrapper" id="brackets-render-box"></div>
             </div>
 
 
-<section class="calendario-vs reveal">
+            <section class="calendario-vs reveal">
 
-      <div class="agenda-header">
-         <p class="seccion-subtitulo"># CALENDARIO</p>
-         <h3>Próximos Enfrentamientos</h3>
-      </div>
+               <div class="agenda-header">
+                  <p class="seccion-subtitulo"># CALENDARIO</p>
+                  <h2>Próximos Enfrentamientos</h2>
+               </div>
 
-      <div class="vs-lista">
+               <ul class="vs-lista">
 
-         <a href="detalle-torneo.html" class="enfrentamiento-card">
+                  <li>
+                     <a href="detalle-torneo.html" class="enfrentamiento-tarjeta">
 
-            <div class="enfrentamiento-equipo">
-               <img src="../../publico/img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Black Ferns</span>
-            </div>
+                        <div class="enfrentamiento-equipo">
+                           <img src="../../publico/img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
+                           <span class="enfrentamiento-nombre">Black Ferns</span>
+                        </div>
 
-            <div class="enfrentamiento-centro">
-               <span class="enfrentamiento-vs">Vs</span>
-               <span class="enfrentamiento-fecha">26 Ago 2026</span>
-               <span class="enfrentamiento-canal">
-                  <i class="fa-brands fa-discord"></i> Discord
-               </span>
-            </div>
+                        <div class="enfrentamiento-centro">
+                           <span class="enfrentamiento-vs">Vs</span>
+                           <span class="enfrentamiento-fecha">26 Ago 2026</span>
+                           <span class="enfrentamiento-canal">
+                              <i class="fa-brands fa-discord"></i> Discord
+                           </span>
+                        </div>
 
-            <div class="enfrentamiento-equipo">
-               <img src="../../publico/img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Woman's Eagles</span>
-            </div>
+                        <div class="enfrentamiento-equipo">
+                           <img src="../../publico/img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
+                           <span class="enfrentamiento-nombre">Woman's Eagles</span>
+                        </div>
 
-         </a>
+                     </a>
+                  </li>
 
-       <a href="detalle-torneo.html?id=futbol-5" class="enfrentamiento-card">
+                  <li>
+                     <a href="detalle-torneo.html?id=futbol-5" class="enfrentamiento-tarjeta">
 
-            <div class="enfrentamiento-equipo">
-               <img src="../../publico/img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Durazno</span>
-            </div>
+                        <div class="enfrentamiento-equipo">
+                           <img src="../../publico/img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
+                           <span class="enfrentamiento-nombre">Durazno</span>
+                        </div>
 
-            <div class="enfrentamiento-centro">
-               <span class="enfrentamiento-vs">Vs</span>
-               <span class="enfrentamiento-fecha">16 Mayo 2026</span>
-               <span class="enfrentamiento-canal">
-                  <i class="fa-brands fa-twitch"></i> Twitch
-               </span>
-            </div>
+                        <div class="enfrentamiento-centro">
+                           <span class="enfrentamiento-vs">Vs</span>
+                           <span class="enfrentamiento-fecha">16 Mayo 2026</span>
+                           <span class="enfrentamiento-canal">
+                              <i class="fa-brands fa-twitch"></i> Twitch
+                           </span>
+                        </div>
 
-            <div class="enfrentamiento-equipo">
-               <img src="../../publico/img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
-               <span class="enfrentamiento-nombre">Flores</span>
-            </div>
+                        <div class="enfrentamiento-equipo">
+                           <img src="../../publico/img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
+                           <span class="enfrentamiento-nombre">Flores</span>
+                        </div>
 
-         </a>
-         
-         </div>
-</section>
+                     </a>
+                  </li>
+
+               </ul>
+            </section>
 
             <!-------------------------------------->
             <!--- STREAMING Y NOTICIAS ------------->
             <!-------------------------------------->
 
-            <div class="streaming-section">
-               <div class="streaming-content">
+            <div class="seccion-streaming">
+               <div class="contenido-streaming">
                   <h2>Streaming Ahora</h2>
-                  <div class="streaming-socials">
+                  <div class="redes-streaming">
                      <a href="en-construccion.html" aria-label="Discord"><i class="fab fa-discord"></i></a>
                      <a href="en-construccion.html" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                      <a href="en-construccion.html" aria-label="X"><i class="fab fa-x-twitter"></i></a>
@@ -422,10 +446,10 @@
                </div>
             </div>
 
-            <div class="newsletter-section">
-               <div class="newsletter-box">
-                  <h3>BOLETÍN DE NOTICIAS ASCEND</h3>
-                  <form class="newsletter-form" onsubmit="event.preventDefault();">
+            <div class="newsletter-seccion">
+               <div class="newsletter-caja">
+                  <h2>Boletín de Noticias ASCEND</h2>
+                  <form class="newsletter-formulario" onsubmit="event.preventDefault();">
                      <input type="email" placeholder="Introduce tu correo electrónico" required>
                      <button type="submit">SUSCRIBIRSE</button>
                   </form>
@@ -435,11 +459,13 @@
          </div>
 
 
+      </section>
+
    </main>
 
    <!-- FOOTER ---------------------------->
 
-   <div id="footer-publico-placeholder"></div>
+   <footer id="footer-publico-placeholder"></footer>
 
    <script src="../../publico/js/includesPublicos.js"></script>
    <script src="../../publico/js/hero-slider.js"></script>
