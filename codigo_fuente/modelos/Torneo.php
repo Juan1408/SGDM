@@ -40,4 +40,15 @@ class Torneo {
         return $torneos;
     }
     
+    //Metodo para obtener todos los torneos
+    public function obtenerTorneos(){
+        $sql = "SELECT t.*, j.nombre AS nombre_juego
+                FROM torneos t
+                INNER JOIN juegos j ON t.juego_id = j.id
+                ORDER BY t.fecha_inicio DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        $torneos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $torneos;
+    }   
 }

@@ -57,13 +57,13 @@ class Usuario {
     }
 
     //Metodo para contar el total de organizadores registrados
-    public function contarTotalOrganizadoresRegistrados(){
+   public function contarTotalOrganizadoresRegistrados(){
      $sql = "SELECT COUNT(*) as total FROM usuarios WHERE rol_id = 2";
      $stmt = $this->bd->prepare($sql);
      $stmt->execute();
      $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
      return $resultado['total'] ?? 0;    
-    }    
+    }   
 
     //Metodo para obtener los ultimos jugadores registrados
     public function obtenerUltimosJugadoresRegistrados(int $limite){
