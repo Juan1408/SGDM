@@ -15,25 +15,29 @@
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-   <!-- CSS base y tokens -->
-   <!-- Componentes compartidos -->
    <!-- Layout compartido de organizador -->
    <!-- Página específica -->
-   <link rel="stylesheet" href="../../publico/css/base-organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/botones.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/chips.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
    <link rel="stylesheet" href="../../publico/css/organizador/historial.css">
 </head>
 
 <body>
 
-   <div id="navbar-placeholder"></div>
-   <div id="sidebar-placeholder"></div>
+   <header id="navbar-placeholder"></header>
+   <aside id="sidebar-placeholder"></aside>
 
    <main class="dashboard-organizador">
 
       <header class="dashboard-header">
          <div>
             <p class="dashboard-tag">PANEL DEL ORGANIZADOR</p>
-            <h2>Historial</h2>
+            <h1>Historial</h1>
          </div>
       </header>
 
@@ -44,7 +48,7 @@
             <a href="mis-torneos.html">Ver mis torneos</a>
          </header>
 
-         <div class="lista-torneo" id="historialLista"></div>
+         <ul class="lista-torneo" id="historialLista"></ul>
 
       </section>
 

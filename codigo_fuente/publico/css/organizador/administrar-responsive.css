@@ -35,17 +35,17 @@
       flex-wrap: wrap;
    }
 
-   .torneo-menu__button,
-   .torneo-menu__group > .torneo-menu__button {
+   .torneo-menu-boton,
+   .torneo-menu-grupo > .torneo-menu-boton {
       width: auto;
       min-height: auto;
    }
 
-   .torneo-menu__group {
+   .torneo-menu-grupo {
       width: auto;
    }
 
-   .torneo-menu__submenu {
+   .torneo-menu-submenu {
       left: 0;
       right: auto;
       min-width: 220px;

@@ -125,7 +125,7 @@ fixture: [
                 teamB: "Dark Wolves",
                 date: "2026-08-15",
                 time: "18:00",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             },
             {
@@ -134,7 +134,7 @@ fixture: [
                 teamB: "Blue Dragons",
                 date: "2026-08-15",
                 time: "19:30",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             },
             {
@@ -143,7 +143,7 @@ fixture: [
                 teamB: "Red Titans",
                 date: "2026-08-16",
                 time: "18:00",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             },
             {
@@ -152,7 +152,7 @@ fixture: [
                 teamB: "Team Aurora",
                 date: "2026-08-16",
                 time: "19:30",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             }
         ]
@@ -167,7 +167,7 @@ fixture: [
                 teamB: "Ganador partido 2",
                 date: "2026-08-20",
                 time: "18:00",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             },
             {
@@ -176,7 +176,7 @@ fixture: [
                 teamB: "Ganador partido 4",
                 date: "2026-08-20",
                 time: "20:00",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             }
         ]
@@ -191,7 +191,7 @@ fixture: [
                 teamB: "Ganador semifinal 2",
                 date: "2026-08-24",
                 time: "20:00",
-                venue: "Online",
+                evento: "Online",
                 status: "Pendiente"
             }
         ]
@@ -645,7 +645,7 @@ function generarFixtureEliminacionDirecta(
                 teamB,
                 date: fechaInicio,
                 time: horaInicial,
-                venue: ubicacion,
+                evento: ubicacion,
                 scoreA: null,
                 scoreB: null,
                 winner: null,

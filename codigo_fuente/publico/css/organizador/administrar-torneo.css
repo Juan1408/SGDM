@@ -86,7 +86,7 @@
    min-width: 0;
 }
 
-.torneo-header__label {
+.torneo-header-label {
    color: var(--color-secundario);
    font-weight: 700;
    letter-spacing: 1.5px;
@@ -132,17 +132,13 @@
    Lista vertical de botones a todo el ancho.
 ============================= */
 
-.torneo-menu {
-   display: flex;
-   flex-direction: column;
-   align-items: start;
-   gap: .5rem;
 
+.torneo-menu {
    position: relative;
 }
 
-.torneo-menu__button {
-   width: 100%;
+.torneo-menu-boton {
+   width: auto;
    min-height: 54px;
 
    display: flex;
@@ -161,55 +157,57 @@
    transition: var(--transicion);
 }
 
-.torneo-menu__button i:first-child {
+.torneo-menu-boton i:first-child {
    color: var(--color-primario);
 }
 
-.torneo-menu__button:hover {
+.torneo-menu-boton:hover {
    color: #fff;
    border-color: var(--color-secundario);
 }
 
-.torneo-menu__button.active {
+.torneo-menu-boton.active {
    color: #fff;
    background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
 }
 
-.torneo-menu > .torneo-menu__button {
-   align-self: start;
-}
 
-.torneo-menu__group {
+.torneo-menu-grupo {
    position: relative;
-   width: 100%;
+   width: auto;
    min-width: 0;
 }
 
-.torneo-menu__group > .torneo-menu__button {
-   width: 100%;
+.torneo-menu-grupo > .torneo-menu-boton {
+   width: auto;
    min-height: 54px;
 }
 
-.torneo-menu__toggle i:last-child {
+.torneo-menu-toggle i:last-child {
    margin-left: auto;
    font-size: .7rem;
    transition: transform .25s ease;
 }
 
-.torneo-menu__group.open .torneo-menu__toggle i:last-child {
+.torneo-menu-grupo.open .torneo-menu-toggle i:last-child {
    transform: rotate(180deg);
 }
 
-.torneo-menu__submenu {
+.torneo-menu-submenu {
    display: none;
    flex-direction: column;
    gap: .35rem;
 
+
+   list-style: none;
+   margin: 0;
+   padding: .5rem;
+
    position: absolute;
    top: calc(100% + .5rem);
    left: 0;
-   right: 0;
+   min-width: 200px;
    z-index: 50;
 
    padding: .5rem;
@@ -219,11 +217,11 @@
    box-shadow: 0 14px 35px rgba(0, 0, 0, .45);
 }
 
-.torneo-menu__group.open .torneo-menu__submenu {
+.torneo-menu-grupo.open .torneo-menu-submenu {
    display: flex;
 }
 
-.torneo-menu__submenu button {
+.torneo-menu-submenu button {
    width: 100%;
    min-height: 42px;
    padding: .6rem .75rem;
@@ -239,15 +237,27 @@
    transition: var(--transicion);
 }
 
-.torneo-menu__submenu button:hover {
+.torneo-menu-submenu button:hover {
    color: #fff;
    background: rgba(0, 255, 238, .08);
 }
 
-.torneo-menu__submenu button.active {
+.torneo-menu-submenu button.active {
    color: #fff;
    background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
+}
+
+.torneo-menu-lista {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   align-items: start;
+   gap: .5rem;
+
+   list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
 /* ============================

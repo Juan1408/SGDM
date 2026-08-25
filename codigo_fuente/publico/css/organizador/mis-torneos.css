@@ -10,7 +10,7 @@
 =====================================================
 */
 
-.torneos-page {
+.torneos-pagina {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 1.25rem;
@@ -21,7 +21,7 @@
    COLUMNA IZQUIERDA - LISTADO
 ============================= */
 
-.torneos-page__listado {
+.torneos-pagina-listado {
    padding: 1.1rem;
    background: var(--fondo-tarjeta);
    border-radius: var(--radio-lg);
@@ -243,7 +243,7 @@
 
 @media (min-width: 1000px) {
 
-   .torneos-page {
+   .torneos-pagina {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
    }
 

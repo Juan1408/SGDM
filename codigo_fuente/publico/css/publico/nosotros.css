@@ -1,0 +1,336 @@
+/* =========================================================
+   NOSOTROS — Mobile first
+========================================================= */
+
+.nosotros-etiqueta,
+.seccion-titulo-centrado p {
+   color: var(--color-secundario);
+   text-transform: uppercase;
+   font-size: 13px;
+   font-weight: 700;
+   letter-spacing: 2px;
+}
+
+/* ============================
+   QUIÉNES SOMOS
+============================= */
+
+.nosotros-intro {
+   padding: 60px 6% 0;
+   max-width: 900px;
+   margin: 0 auto;
+   text-align: center;
+}
+
+.nosotros-intro h1 {
+   font-size: 32px;
+   margin: 10px 0 20px;
+}
+
+.nosotros-intro p {
+   color: #c7c1ea;
+   line-height: 1.7;
+}
+
+/* ============================
+   MISIÓN Y VISIÓN
+============================= */
+
+.mision-vision {
+   padding: 50px 6%;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 24px;
+   max-width: 1100px;
+   margin: 0 auto;
+   
+}
+
+.mv-card {
+   background: #171236;
+   border-radius: 16px;
+   padding: 30px 24px;
+   text-align: center;
+}
+
+.mv-card i {
+   font-size: 34px;
+   color: var(--color-secundario);
+   margin-bottom: 14px;
+}
+
+.mv-card h2 {
+   font-size: 22px;
+   margin-bottom: 14px;
+}
+
+.mv-card p {
+   color: #c7c1ea;
+   line-height: 1.7;
+   font-size: 14px;
+}
+
+/* ============================
+   Título centrado (reutilizado
+   en Valores/Identidad/Público/Equipo)
+============================= */
+
+.seccion-titulo-centrado {
+   text-align: center;
+   margin-bottom: 40px;
+}
+
+.seccion-titulo-centrado h2 {
+   font-size: 28px;
+   margin-top: 8px;
+}
+
+/* ============================
+   VALORES
+============================= */
+
+.valores {
+   padding: 50px 6%;
+   background-color: var(--fondo-principal);
+}
+
+.valores-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 20px;
+   max-width: 1100px;
+   margin: 0 auto;
+   list-style: none;
+   padding: 0;
+}
+
+.valor-tarjeta {
+   background: linear-gradient(var(--color-azul), var(--color-violeta));
+   border-radius: 16px;
+   padding: 26px 22px;
+   text-align: center;
+}
+
+.valor-icono {
+   width: 56px;
+   height: 56px;
+   margin: 0 auto 16px;
+   border-radius: 14px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 22px;
+}
+
+.valor-icono.cyan {
+   background: rgba(var(--color-secundario-rgb), .25);
+   color: var(--color-secundario);
+}
+
+.valor-icono.pink {
+   background: rgba(var(--color-primario-rgb), .25);
+   color: var(--color-primario);
+}
+
+.valor-tarjeta h3 {
+   font-size: 18px;
+   margin-bottom: 10px;
+}
+
+.valor-tarjeta p {
+   color: #c7c1ea;
+   font-size: 14px;
+   line-height: 1.6;
+}
+
+/* ============================
+   REGLAS DEL SISTEMA
+============================= */
+
+.reglas {
+   padding: 50px 6%;
+   background: #171236;
+}
+
+.reglas-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 20px;
+   max-width: 1100px;
+   margin: 0 auto;
+   list-style: none;
+   padding: 0;
+}
+
+.regla-categoria {
+   background: #0f0c26;
+   border-radius: 16px;
+   padding: 26px 22px;
+   text-align: left;
+}
+
+.regla-categoria i {
+   font-size: 26px;
+   color: var(--color-secundario);
+   margin-bottom: 12px;
+   display: block;
+}
+
+.regla-categoria h3 {
+   font-size: 18px;
+   margin-bottom: 14px;
+}
+
+.regla-lista {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.regla-lista li {
+   position: relative;
+   padding-left: 18px;
+   color: #c7c1ea;
+   font-size: 13.5px;
+   line-height: 1.6;
+}
+
+.regla-lista li::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 8px;
+   width: 6px;
+   height: 6px;
+   border-radius: 50%;
+   background: var(--color-primario);
+}
+
+/* ============================
+   PÚBLICO OBJETIVO
+============================= */
+
+.publico-objetivo {
+   padding: 50px 6%;
+}
+
+.publico-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 16px;
+   max-width: 1100px;
+   margin: 0 auto;
+   list-style: none;
+   padding: 0;
+}
+
+.publico-tarjeta {
+   background: #171236;
+   border-radius: 14px;
+   padding: 22px 14px;
+   text-align: center;
+   min-width: 0;
+}
+
+.publico-tarjeta i {
+   font-size: 26px;
+   color: var(--color-primario);
+   margin-bottom: 12px;
+}
+
+.publico-tarjeta h3 {
+   font-size: 14px;
+   line-height: 1.4;
+}
+
+/* ============================
+   EQUIPO
+============================= */
+
+.equipo {
+   padding: 50px 6% 70px;
+}
+
+.equipo-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 24px;
+   max-width: 1000px;
+   margin: 0 auto;
+   list-style: none;
+   padding: 0;
+}
+
+.tarjeta-equipo {
+   text-align: center;
+}
+
+.tarjeta-equipo img {
+   width: 90px;
+   height: 90px;
+   border-radius: 50%;
+   object-fit: cover;
+   margin: 0 auto 14px;
+   border: 3px solid rgba(var(--color-secundario-rgb), .35);
+}
+
+.tarjeta-equipo h3 {
+   font-size: 15px;
+   margin-bottom: 4px;
+}
+
+.tarjeta-equipo p {
+   color: var(--color-secundario);
+   font-size: 12px;
+   text-transform: uppercase;
+   letter-spacing: .5px;
+}
+
+/* =========================================================
+   TABLET (min-width: 700px)
+========================================================= */
+
+@media (min-width: 700px) {
+
+   .nosotros-intro h1 {
+      font-size: 42px;
+   }
+
+   .mision-vision {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .valores-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .reglas-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .seccion-titulo-centrado h2 {
+      font-size: 34px;
+   }
+}
+
+/* =========================================================
+   ESCRITORIO (min-width: 1000px)
+========================================================= */
+
+@media (min-width: 1000px) {
+
+   .valores-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+
+   .publico-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+
+   .equipo-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+}

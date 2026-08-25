@@ -11,12 +11,12 @@
 /*
 =====================================================
    TARJETA STAT - Indicador numérico (dashboard)
-   Uso: <article class="tarjeta-stat">
-           <div class="tarjeta-stat__icono tarjeta-stat__icono--rosa">
+   Uso: <article class="tarjeta-estadistica">
+           <div class="tarjeta-estadistica__icono tarjeta-estadistica__icono--rosa">
 =====================================================
 */
 
-.tarjeta-stat {
+.tarjeta-estadistica {
    display: flex;
    align-items: center;
    gap: var(--espacio-md);
@@ -29,7 +29,7 @@
    border-radius: var(--radio-lg);
 }
 
-.tarjeta-stat__icono {
+.tarjeta-estadistica-icono {
    width: 60px;
    height: 60px;
    flex-shrink: 0;
@@ -45,16 +45,16 @@
    color: var(--color-secundario);
 }
 
-.tarjeta-stat__icono--rosa { background: rgba(245, 17, 203, .15); color: var(--color-primario); }
-.tarjeta-stat__icono--violeta { background: rgba(100, 37, 167, .15); color: var(--color-violeta); }
-.tarjeta-stat__icono--celeste { background: rgba(32, 196, 255, .15); color: #097AEC; }
+.tarjeta-estadistica-icono--rosa { background: rgba(245, 17, 203, .15); color: var(--color-primario); }
+.tarjeta-estadistica-icono--violeta { background: rgba(100, 37, 167, .15); color: var(--color-violeta); }
+.tarjeta-estadistica-icono--celeste { background: rgba(32, 196, 255, .15); color: #097AEC; }
 
-.tarjeta-stat p {
+.tarjeta-estadistica p {
    margin: 0;
    color: var(--texto-secundario);
 }
 
-.tarjeta-stat h3 {
+.tarjeta-estadistica h3 {
    margin: 0.4rem 0 0;
    font-size: 2rem;
 }
@@ -90,18 +90,18 @@
    transition: var(--transicion);
 }
 
-.tarjeta-lista--torneo {
+.tarjeta-lista-torneo {
    border-color: rgba(245, 17, 203, 0.25);
    box-shadow: 0 0 22px rgba(245, 17, 203, 0.12);
 }
 
-.tarjeta-lista--torneo:hover {
+.tarjeta-lista-torneo:hover {
    transform: translateY(-4px);
    border-color: var(--color-secundario);
    box-shadow: 0 0 28px rgba(0, 255, 238, 0.22);
 }
 
-.tarjeta-lista--torneo img {
+.tarjeta-lista-torneo img {
    width: 100%;
    height: 160px;
    object-fit: cover;
@@ -148,12 +148,12 @@
    font-weight: 700;
 }
 
-.tarjeta-lista--encuentro {
+.tarjeta-lista-encuentro {
    border-color: rgba(0, 255, 238, 0.18);
    justify-items: center;
 }
 
-.tarjeta-lista--encuentro:hover {
+.tarjeta-lista-encuentro:hover {
    border-color: var(--color-primario);
    box-shadow: 0 0 24px rgba(245, 17, 203, 0.18);
 }
@@ -189,16 +189,16 @@
       text-align: left;
    }
 
-   .tarjeta-lista--torneo {
+   .tarjeta-lista-torneo {
       grid-template-columns: 150px minmax(0, 1fr) auto;
    }
 
-   .tarjeta-lista--torneo img {
+   .tarjeta-lista-torneo img {
       width: 150px;
       height: 95px;
    }
 
-   .tarjeta-lista--encuentro {
+   .tarjeta-lista-encuentro {
       grid-template-columns: 62px minmax(0, 1fr) auto;
       justify-items: stretch;
    }

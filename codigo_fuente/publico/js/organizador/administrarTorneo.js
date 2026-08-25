@@ -410,17 +410,17 @@ elementos.botones.forEach((boton) => {
 });
 
 const gruposMenu = document.querySelectorAll(
-   ".torneo-menu__group"
+   ".torneo-menu-grupo"
 );
 
 document
-   .querySelectorAll(".torneo-menu__toggle")
+   .querySelectorAll(".torneo-menu-toggle")
    .forEach((boton) => {
       boton.addEventListener("click", (evento) => {
          evento.stopPropagation();
 
          const grupoActual = boton.closest(
-            ".torneo-menu__group"
+            ".torneo-menu-grupo"
          );
 
          gruposMenu.forEach((grupo) => {
@@ -434,7 +434,7 @@ document
    });
 
 document.addEventListener("click", (evento) => {
-   if (!evento.target.closest(".torneo-menu__group")) {
+   if (!evento.target.closest(".torneo-menu-grupo")) {
       gruposMenu.forEach((grupo) => {
          grupo.classList.remove("open");
       });

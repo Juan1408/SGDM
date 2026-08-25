@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -9,7 +9,8 @@
    <title>ASCEND - Login</title>
 
    <!-- CSS -->
-   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base-auth.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/login.css">
 
    <!-- Font Awesome -->
    <link
@@ -26,7 +27,7 @@
 
 <body>
 
-  <div class="login-contenedor">
+  <main class="login-contenedor">
 
   <!-- PANEL DEL FORMULARIO -->
   <div class="login-panel">
@@ -40,7 +41,7 @@
           <img src="<?php echo URL_BASE; ?>img/logos/ascend-png.png" alt="Logo de ASCEND">
         </a>
       </div>
-      <h2>Iniciar Sesión</h2>
+      <h1>Iniciar Sesión</h1>
 
       <!--Muestra el error de login si existe-->
       <?php if (isset($error)): ?>
@@ -50,33 +51,30 @@
       <!--Formulario de login-->
       <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarLogin" method="POST">
         <div class="input-group">
-          <input name="email" type="email" required>
-          <label>Correo electrónico</label>
+          <input name="email" type="email" id="login-email" required>
+          <label for="login-email">Correo electrónico</label>
         </div>
         <div class="input-group password-group">
-          <input name="contrasena" type="password" required>
-          <label>Contraseña</label>
-          <i class="fa-regular fa-eye-slash"></i>
+          <input name="contrasena" type="password" id="login-password" required>
+          <label for="login-password">Contraseña</label>
+          <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
+            <i class="fa-regular fa-eye-slash"></i>
+          </button>
         </div>
         <div class="forgot-password">
-          <a href="recuperar-password.html">¿Olvidaste tu contraseña?</a>
+          <a href="<?php echo URL_BASE; ?>recuperar-password.html">¿Olvidaste tu contraseña?</a>
         </div>
         <button type="submit" class="auth-btn">Ingresar</button>
       </form>
-      <p class="switch-text">¿No tienes cuenta? <span><a href="registro.html">Registrarse</a></span></p>
+      <p class="switch-text">¿No tienes cuenta? <a href="<?php echo URL_BASE; ?>registro.html">Registrarse</a></p>
     </div>
 
   </div>
-</div>
+</main>
 
 
-   <!--<script src="<?php echo URL_BASE; ?>js/login.js"></script>-->
-   <!--<script src="<?php echo URL_BASE; ?>js/mensaje.js"></script>-->
+   <script src="<?php echo URL_BASE; ?>js/login.js"></script>
 
 </body>
 
 </html>
-
-
-
-

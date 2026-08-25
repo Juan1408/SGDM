@@ -74,16 +74,26 @@ body {
    font-weight: 600;
    letter-spacing: 2px;
    text-transform: uppercase;
-   margin-bottom: 30px;
+   margin-bottom: 0px;
+   margin-top: 40px;
    text-shadow: 0 0 18px rgba(var(--color-secundario-rgb), 0.7);
 }
 
-.hero-contenido h2 {
+.hero-contenido h1 {
    font-size: 34px;
    line-height: 1.15;
    font-weight: 700;
-   margin-bottom: 50px;
-   text-shadow: 8px 10px 0 rgba(0,0,0,.35);
+   margin-bottom: -20px;
+   margin-top: 40px;
+
+   background: linear-gradient(var(--color-primario), var(--color-violeta));
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+   color: transparent;
+   
+   filter: drop-shadow(8px 10px 0 rgba(0,0,0,.35));
+
 }
 
 .hero-descripcion {
@@ -92,6 +102,7 @@ body {
    font-size: 14px;
    line-height: 1.7;
    margin-bottom: 60px;
+   margin-top: 50px;
 }
 
 .hero-botones {
@@ -204,9 +215,15 @@ body {
    padding: 40px 6% 0;
    position: relative;
    z-index: 20;
+}
+
+.categoria-tarjetas-lista {
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 24px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
 }
 
 .tarjetas {
@@ -236,7 +253,7 @@ body {
    display: block;
 }
 
-.tarjetas h3 {
+.tarjetas h2 {
    font-size: 24px;
    margin-bottom: 12px;
 }
@@ -273,21 +290,21 @@ body {
       0 0 60px rgba(var(--color-secundario-rgb), 0.12);
 }
 
-.features-tag {
+.caracteristica-tag {
    color: var(--color-secundario);
    font-weight: 800;
    letter-spacing: 2px;
    margin-bottom: 15px;
 }
 
-.funcionalidades-contenido h3 {
+.funcionalidades-contenido h2 {
    color: var(--texto-principal);
    font-size: 34px;
    line-height: 1.25;
    margin-bottom: 30px;
 }
 
-.funcionalidades-contenido h3 span {
+.funcionalidades-contenido h2 span {
    display: block;
    color: transparent;
    -webkit-text-stroke: 1px #fff;
@@ -327,7 +344,7 @@ body {
    backdrop-filter: blur(12px);
 }
 
-.feature-icon {
+.caracteristica-icon {
    min-width: 52px;
    height: 52px;
    border-radius: 18px;
@@ -338,13 +355,13 @@ body {
    background: rgba(255, 255, 255, 0.06);
 }
 
-.feature-icon.cyan {
+.caracteristica-icon.cyan {
    color: var(--color-secundario);
    border: 1px solid var(--color-secundario);
    box-shadow: 0 0 10px rgba(var(--color-secundario-rgb), 0.25);
 }
 
-.feature-icon.pink {
+.caracteristica-icon.pink {
    color: var(--color-primario);
    border: 1px solid var(--color-primario);
    box-shadow: 0 0 10px rgba(var(--color-primario-rgb), 0.25);
@@ -374,7 +391,7 @@ body {
 }
 
 
-.section-title {
+.seccion-titulo {
    display: flex;
    flex-direction: column;
    align-items: flex-start;
@@ -382,11 +399,11 @@ body {
    margin-bottom: 28px;
 }
 
-.section-title h3 {
+.seccion-titulo h2 {
    font-size: 26px;
 }
 
-.section-title a {
+.seccion-titulo a {
    color: var(--color-secundario);
    text-decoration: none;
    font-weight: 600;
@@ -496,7 +513,7 @@ body {
    text-transform: uppercase;
 }
 
-.agenda-header h3 {
+.agenda-header h2 {
    font-size: 32px;
    font-weight: 700;
    color: var(--texto-principal);
@@ -521,7 +538,7 @@ body {
    y tipografía más chicos; crecen desde 600px.
 ========================= */
 
-.enfrentamiento-card {
+.enfrentamiento-tarjeta {
    display: flex;
    align-items: center;
    justify-content: space-between;
@@ -540,7 +557,7 @@ body {
    transition: 0.3s ease;
 }
 
-.enfrentamiento-card:hover {
+.enfrentamiento-tarjeta:hover {
    transform: translateY(-4px);
    border-color: var(--color-secundario);
    box-shadow: 0 0 30px rgba(var(--color-secundario-rgb), 0.2);
@@ -621,7 +638,7 @@ body {
 
 @media (min-width: 600px) {
 
-   .enfrentamiento-card {
+   .enfrentamiento-tarjeta {
       padding: 24px 40px;
       gap: 24px;
    }
@@ -674,13 +691,13 @@ body {
    letter-spacing: 2px;
 }
 
-.comunidad-contenido h3 {
+.comunidad-contenido h2 {
    font-size: 32px;
    line-height: 1.2;
    margin: 16px 0 22px;
 }
 
-.comunidad-contenido h3 strong {
+.comunidad-contenido h2 strong {
    display: block;
    color: transparent;
    -webkit-text-stroke: 1px #fff;
@@ -740,7 +757,7 @@ body {
    padding: 24px;
 }
 
-.noticias-tarjeta h4 {
+.noticias-tarjeta h3 {
    font-size: 20px;
    margin: 10px 0;
 }
@@ -756,7 +773,7 @@ body {
    columnas en una sola fila, más alto.
 ========================= */
 
-.stats-banner {
+.estadisticas-banner {
    position: relative;
    min-height: 260px;
    display: flex;
@@ -779,7 +796,8 @@ body {
    );
 }
 
-.stats-grid {
+.estadisticas-grid {
+   margin: 0;
    position: relative;
    z-index: 2;
    width: 100%;
@@ -790,7 +808,7 @@ body {
    padding: 24px 6%;
 }
 
-.stat-item {
+.estadisticas-item {
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -800,14 +818,14 @@ body {
    text-align: center;
 }
 
-.stat-item strong {
+.estadisticas-item dd {
    font-size: 1.6rem;
    font-weight: 800;
    color: var(--texto-principal);
    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
 
-.stat-item span {
+.estadisticas-item dt {
    font-size: 0.85rem;
    font-weight: 600;
    color: var(--texto-principal);
@@ -816,20 +834,20 @@ body {
 
 @media (min-width: 700px) {
 
-   .stats-banner {
+   .estadisticas-banner {
       min-height: 340px;
    }
 
-   .stats-grid {
+   .estadisticas-grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       padding: 30px 8%;
    }
 
-   .stat-item strong {
+   .estadisticas-item strong {
       font-size: 2.4rem;
    }
 
-   .stat-item span {
+   .estadisticas-item span {
       font-size: 1rem;
    }
 }
@@ -841,158 +859,115 @@ body {
    varias columnas). Desde 600px: 2 columnas
    con zig-zag. Desde 1000px: 4 columnas.
 ========================= */
-
 .top-jugadores {
-   padding: 70px 6%;
-   background:
-      radial-gradient(circle at 15% 30%, rgba(180, 55, 255, 0.18), transparent 25%),
-      radial-gradient(circle at 85% 70%, rgba(var(--color-primario-rgb), 0.14), transparent 26%),
-      #171236;
-   overflow: hidden;
+padding: 70px 6%;
+background:
+radial-gradient(circle at 15% 30%, rgba(180, 55, 255, 0.18), transparent 25%),
+radial-gradient(circle at 85% 70%, rgba(var(--color-primario-rgb), 0.14), transparent 26%),
+#171236;
+overflow: hidden;
 }
 
 .top-jugadores-header {
-   text-align: center;
-   margin-bottom: 50px;
+text-align: center;
+margin-bottom: 50px;
 }
 
 .top-jugadores-header span {
-   color: var(--color-secundario);
-   text-transform: uppercase;
-   font-size: 13px;
-   font-weight: 700;
-   letter-spacing: 2px;
+color: var(--color-secundario);
+text-transform: uppercase;
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 2px;
 }
 
-.top-jugadores-header h3 {
-   font-size: 32px;
-   margin-top: 8px;
+.top-jugadores-header h2 {
+font-size: 32px;
+margin-top: 8px;
 }
 
 .top-jugadores-header p {
-   color: #c7c1ea;
-   margin-top: 10px;
+color: #c7c1ea;
+margin-top: 10px;
 }
 
-.top-jugadores-row {
-   display: grid;
-   grid-template-columns: minmax(0, 1fr);
-   gap: 30px;
-   align-items: start;
+.top-jugadores-fila{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:50px;
 }
 
-.top-jugador-tarjeta {
-   position: relative;
-   min-height: 340px;
-   display: flex;
-   flex-direction: column;
-   opacity: 0;
-   transform: translateY(0);
-   animation: showPlayer 0.9s ease forwards;
+.top-jugador-tarjeta{
+    position:relative;
 }
 
-.top-jugador-tarjeta:nth-child(2) {
-   animation-delay: 0.15s;
+.jugador-img{
+
+    width:100%;
+    height:240px;
+
+    display:block;
+    object-fit:cover;
+
+    clip-path:polygon(
+        0 0,
+        calc(100% - 34px) 0,
+        100% 34px,
+        100% 100%,
+        0 100%
+    );
+
 }
 
-.top-jugador-tarjeta:nth-child(3) {
-   animation-delay: 0.3s;
+.jugador-info{
+
+    position:relative;
+
+    left:0;
+    right:0;
+
+    bottom:38px;
+
+    padding:25px 25px 25px 35px;
+
+    background:linear-gradient(
+        115deg,
+        var(--color-violeta),
+        var(--color-primario)
+    );
+
+    clip-path:polygon(
+        0 0,
+        82% 0,
+        100% 28%,
+        100% 100%,
+        28% 100%,
+        0 68%
+    );
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35);
+
 }
 
-.top-jugador-tarjeta:nth-child(4) {
-   animation-delay: 0.45s;
+.jugador-info h3{
+
+    font-size:1rem;
+    font-weight:700;
+    text-transform:uppercase;
+
+    margin-bottom:6px;
+
 }
 
-.jugador-img-box {
-   width: 100%;
-   height: 200px;
-   border-radius: 24px;
-   background:
-      linear-gradient(145deg, rgba(var(--color-primario-rgb), 0.35), rgba(100, 50, 255, 0.25)),
-      #24134f;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 0 35px rgba(180, 55, 255, 0.28);
-   overflow: hidden;
+.jugador-info p{
+
+    font-size:.9rem;
+    color:rgba(255,255,255,.85);
+
 }
 
-.jugador-img-box img {
-   width: 78%;
-   height: 78%;
-   object-fit: contain;
-   filter: drop-shadow(0 0 16px rgba(var(--color-primario-rgb), 0.45));
-}
-
-.jugador-info {
-   position: relative;
-   margin-top: 34px;
-   padding-left: 26px;
-}
-
-.jugador-info::before {
-   content: "";
-   position: absolute;
-   left: 0;
-   top: -55px;
-   width: 2px;
-   height: 120px;
-   background: linear-gradient(to bottom, #b85cff, #ff35d3);
-   box-shadow: 0 0 14px rgba(184, 92, 255, 0.9);
-}
-
-.jugador-info::after {
-   content: "";
-   position: absolute;
-   left: -4px;
-   top: -59px;
-   width: 10px;
-   height: 10px;
-   border-radius: 50%;
-   background: #b85cff;
-   box-shadow: 0 0 15px rgba(184, 92, 255, 0.9);
-}
-
-.jugador-info h4 {
-   font-size: 22px;
-   margin-bottom: 8px;
-}
-
-.jugador-info p {
-   color: #eeeaff;
-   font-size: 14px;
-   margin-bottom: 14px;
-}
-
-.jugador-iconos {
-   display: flex;
-   gap: 14px;
-}
-
-.jugador-iconos i {
-   color: var(--texto-principal);
-   font-size: 15px;
-}
-
-/* =========================
-   CONTACTO
-   Mobile first: 1 columna.
-   Desde 900px: info + formulario lado a lado.
-========================= */
-
-.contacto {
-   position: relative;
-   width: 100%;
-   padding: 70px 6%;
-   background:
-      radial-gradient(circle at 15% 20%, rgba(var(--color-primario-rgb), 0.2), transparent 28%),
-      radial-gradient(circle at 85% 40%, rgba(0, 255, 220, 0.16), transparent 30%),
-      var(--fondo-principal);
-   display: grid;
-   grid-template-columns: minmax(0, 1fr);
-   gap: 45px;
-   overflow: hidden;
-}
+/* section tag verificar si es necesario borrar*/
 
 .section-tag {
    display: inline-block;
@@ -1005,93 +980,113 @@ body {
    box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.35);
 }
 
-.contacto-info h3 {
-   font-size: 32px;
-   line-height: 1.2;
-   text-transform: uppercase;
-   margin-bottom: 35px;
+
+/* ==========================================
+   BOLETÍN DE NOTICIAS / NEWSLETTER
+   Mobile first: input y botón apilados.
+   Desde 700px: caja en fila, formulario en fila.
+   ========================================== */
+.newsletter-seccion {
+   background-color: #090714;
+   padding: 40px 6%;
 }
 
-.contacto-info h3 span {
-   display: block;
-   color: transparent;
-   -webkit-text-stroke: 1px #fff;
-   text-shadow: 0 0 28px rgba(var(--color-secundario-rgb), 0.45);
-}
-
-.contacto-item {
-   display: flex;
-   align-items: center;
-   gap: 20px;
-   margin-bottom: 28px;
-}
-
-.contacto-icon {
-   width: 56px;
-   height: 56px;
-   flex-shrink: 0;
-   border: 1px solid rgba(var(--color-secundario-rgb), 0.45);
-   background: rgba(255, 255, 255, 0.06);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 0 22px rgba(var(--color-secundario-rgb), 0.22);
-}
-
-.contacto-icon i {
-   color: var(--color-secundario);
-   font-size: 22px;
-}
-
-.contacto-item h4 {
-   font-size: 18px;
-   margin-bottom: 6px;
-}
-
-.contacto-item p {
-   color: #c9c9dc;
-}
-
-.contacto-formulario {
+.newsletter-caja {
+   background: linear-gradient(90deg, #131129 0%, #0d0a1b 100%);
+   border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
+   padding: 28px 22px;
    display: flex;
    flex-direction: column;
-   gap: 18px;
+   align-items: stretch;
+   gap: 20px;
+   text-align: center;
+   border-radius: 6px;
 }
 
-.contacto-formulario input,
-.contacto-formulario textarea {
+.newsletter-caja h2 {
+   font-size: 20px;
+   font-weight: 800;
+   color: #fff;
+   letter-spacing: 1px;
+}
+
+.newsletter-formulario {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   max-width: 100%;
+}
+
+.newsletter-formulario input {
    width: 100%;
    min-width: 0;
-   background: rgba(22, 22, 45, 0.75);
-   border: 1px solid rgba(var(--color-primario-rgb), 0.25);
+   background: #18152e;
+   border: 1px solid rgba(255,255,255,0.1);
+   padding: 14px 16px;
+   color: #fff;
+   font-family: inherit;
+   font-size: 14px;
+   border-radius: 8px;
    outline: none;
-   color: var(--texto-principal);
-   padding: 14px 18px;
-   font-family: 'Poppins', sans-serif;
-   font-size: 15px;
-   backdrop-filter: blur(14px);
-   box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.1);
+   margin-bottom: 10px;
 }
 
-.contacto-formulario textarea {
-   height: 140px;
-   resize: none;
-}
-
-.contacto-formulario button {
+.newsletter-formulario button {
    width: 100%;
+   background: var(--color-secundario);
+   color: #000;
+   font-weight: 700;
+   padding: 14px 0;
    border: none;
-   padding: 15px 35px;
-   font-weight: 800;
    cursor: pointer;
-   color: #07101c;
-   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
-   box-shadow: 0 0 24px rgba(var(--color-secundario-rgb), 0.35);
-   transition: 0.3s ease;
+   font-family: inherit;
+   font-size: 14px;
+   letter-spacing: 1px;
+   border-radius: 8px;
+   transition: 0.3s;
 }
 
-.contacto-formulario button:hover {
-   transform: translateY(-3px);
+.newsletter-formulario button:hover {
+   background: var(--color-primario);
+   color: #fff;
+   box-shadow: 0 0 15px rgba(var(--color-primario-rgb), 0.4);
+}
+
+@media (min-width: 700px) {
+
+   .newsletter-seccion {
+      padding: 60px 8%;
+   }
+
+   .newsletter-caja {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      text-align: left;
+      padding: 40px 60px;
+   }
+
+   .newsletter-caja h2 {
+      font-size: 28px;
+   }
+
+   .newsletter-formulario {
+      flex-direction: row;
+      max-width: 500px;
+   }
+
+   .newsletter-formulario input {
+      flex: 1;
+      margin-bottom: 0;
+      border-radius: 4px 0 0 4px;
+   }
+
+   .newsletter-formulario button {
+      width: auto;
+      padding: 0 30px;
+      border-radius: 0 4px 4px 0;
+   }
 }
 
 /* =========================
@@ -1158,22 +1153,10 @@ body {
       width: auto;
    }
 
-   .top-jugadores-row {
+   .top-jugadores-fila {
       grid-template-columns: repeat(2, minmax(0, 1fr));
    }
 
-   .top-jugador-tarjeta:nth-child(2),
-   .top-jugador-tarjeta:nth-child(4) {
-      padding-top: 130px;
-   }
-
-   .top-jugador-tarjeta:nth-child(odd) {
-      transform: translateY(-90px);
-   }
-
-   .top-jugador-tarjeta:nth-child(even) {
-      transform: translateY(90px);
-   }
 }
 
 /* =====================================================
@@ -1182,7 +1165,7 @@ body {
 
 @media (min-width: 700px) {
 
-   .section-title {
+   .seccion-titulo {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
@@ -1208,7 +1191,7 @@ body {
       margin-bottom: 70px;
    }
 
-   .agenda-header h3 {
+   .agenda-header h2 {
       font-size: 42px;
    }
 
@@ -1248,7 +1231,7 @@ body {
       font-size: 1rem;
    }
 
-   .hero-contenido h2 {
+   .hero-contenido h1 {
       font-size: clamp(2.5rem, 5vw, 4rem);
       line-height: 1.05;
    }
@@ -1261,10 +1244,13 @@ body {
       justify-content: flex-start;
    }
 
-   .categoria-tarjetas {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+   .categoria-tarjetas { 
       padding: 0 8%;
       gap: 34px;
+   }
+
+   .categoria-tarjetas-lista {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
    }
 
    .tarjetas {
@@ -1319,14 +1305,14 @@ body {
       border-radius: 18px;
    }
 
-   .feature-icon {
+   .caracteristica-icon {
       min-width: 60px;
       height: 60px;
       border-radius: 22px;
       font-size: 28px;
    }
 
-   .funcionalidades-item h4 {
+   .funcionalidades-item h3 {
       font-size: 20px;
    }
 
@@ -1338,7 +1324,7 @@ body {
       padding: 70px 8% 90px;
    }
 
-   .section-title h3 {
+   .seccion-titulo h2 {
       font-size: 34px;
    }
 
@@ -1348,7 +1334,7 @@ body {
       gap: 70px;
    }
 
-   .comunidad-contenido h3 {
+   .comunidad-contenido h2 {
       font-size: 46px;
    }
 
@@ -1377,61 +1363,32 @@ body {
       margin-bottom: 70px;
    }
 
-   .top-jugadores-header h3 {
+   .top-jugadores-header h2 {
       font-size: 46px;
    }
 
-   .top-jugadores-row {
+   .top-jugadores-fila {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 36px;
    }
 
-   .top-jugador-tarjeta {
-      min-height: 420px;
-   }
+   .funcionalidades-slider,
+   .vs-lista,
+   .noticias-grid,
+   .top-jugadores-fila {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+}
 
-   .jugador-img-box {
-      height: 220px;
-      border-radius: 28px;
+ .top-jugador-tarjeta {
+      min-height: 420px;
    }
 
    .jugador-info h4 {
       font-size: 26px;
    }
 
-   .contacto {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      padding: 70px 15%;
-      gap: 60px;
-   }
-
-   .contacto-info h3 {
-      font-size: 42px;
-      margin-bottom: 45px;
-   }
-
-   .contacto-icon {
-      width: 60px;
-      height: 60px;
-   }
-
-   .contacto-formulario {
-      gap: 20px;
-   }
-
-   .contacto-formulario input,
-   .contacto-formulario textarea {
-      padding: 16px 20px;
-      font-size: 15px;
-   }
-
-   .contacto-formulario textarea {
-      height: 150px;
-   }
-
-   .contacto-formulario button {
-      width: fit-content;
-   }
 }
 
 /* =====================================================
@@ -1440,7 +1397,13 @@ body {
 
 @media (min-width: 1000px) {
 
-   .top-jugadores-row {
+   .top-jugadores-fila {
       grid-template-columns: repeat(4, minmax(0, 1fr));
    }
 }
+
+/* en construccion */
+
+.pantalla-construccion { min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.pantalla-construccion i { font-size: 5rem; color: var(--color-primario); margin-bottom: 20px; }
+.pantalla-construccion .hero-buttons { margin-top: 30px; }

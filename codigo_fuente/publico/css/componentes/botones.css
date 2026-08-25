@@ -25,7 +25,7 @@
    border: 0;
 }
 
-.boton--gestion {
+.boton-gestion {
    color: #07101c;
    font-weight: 800;
    background: linear-gradient(90deg, var(--color-secundario), #097AEC);

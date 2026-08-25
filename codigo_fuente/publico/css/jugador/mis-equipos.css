@@ -1,0 +1,171 @@
+/* =========================================================
+   MIS EQUIPOS — Mobile first
+   Complementa crear-equipo.css.
+========================================================= */
+
+.mis-equipos-header {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 16px;
+   text-align: center;
+}
+
+.mis-equipos-header .boton-registro {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   text-decoration: none;
+}
+
+.mis-equipos-grid {
+   width: 92%;
+   max-width: 700px;
+   margin: 0 auto;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+
+   list-style: none;
+   padding: 0;
+}
+
+.mi-tarjeta-equipo {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 14px;
+   text-align: center;
+
+   padding: 20px;
+   background: #101010;
+   border-radius: 16px;
+}
+
+.mi-tarjeta-equipo img {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+}
+
+.mi-equipo-info h2 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.mi-equipo-badge {
+   display: inline-block;
+   padding: 4px 12px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+}
+
+.mi-equipo-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.mi-equipo-badge.badge-capitan {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
+}
+
+.mi-equipo-badge.badge-miembro {
+   background: rgba(255, 255, 255, 0.08);
+   color: #c7c7d8;
+}
+
+.boton-secundario {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(48, 245, 210, 0.35);
+   color: #fff;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 600;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.boton-secundario:hover {
+   background: rgba(48, 245, 210, 0.12);
+   border-color: #30f5d2;
+}
+
+.mis-equipos-vacio {
+   width: 92%;
+   max-width: 500px;
+   margin: 40px auto 0;
+   text-align: center;
+   color: #c9c9d6;
+   font-size: 0.9rem;
+}
+
+.mis-equipos-vacio a {
+   color: #30f5d2;
+}
+
+/* =========================================================
+   ESCRITORIO (min-width: 700px)
+========================================================= */
+
+@media (min-width: 700px) {
+
+   .mis-equipos-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+   }
+
+   .mis-equipos-header .boton-registro {
+      width: auto;
+      flex-shrink: 0;
+      padding-left: 24px;
+      padding-right: 24px;
+   }
+
+   .mis-equipos-grid {
+      max-width: 900px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .mi-tarjeta-equipo {
+      flex-direction: row;
+      text-align: left;
+   }
+
+   .mi-equipo-info {
+      flex: 1;
+      min-width: 0;
+   }
+
+   .boton-secundario {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+@media (min-width: 1100px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+
+   .mi-tarjeta-equipo {
+      flex-direction: column;
+      text-align: center;
+   }
+
+   .boton-secundario {
+      width: 100%;
+   }
+}

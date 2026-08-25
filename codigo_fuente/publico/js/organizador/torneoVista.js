@@ -314,7 +314,7 @@ function fixture(torneo, rondaActiva = null) {
                         </span>
                     </div>
 
-                    <div class="fixture-card-info">
+                    <div class="fixture-tarjeta-info">
                         <p>
                             <i class="fa-solid fa-calendar-day"></i>
                             <strong>Fecha:</strong>
@@ -330,7 +330,7 @@ function fixture(torneo, rondaActiva = null) {
                         <p>
                             <i class="fa-solid fa-location-dot"></i>
                             <strong>Sede:</strong>
-                            ${escaparHTML(partido.venue)}
+                            ${escaparHTML(partido.evento)}
                         </p>
                     </div>
 
@@ -510,7 +510,7 @@ function resultados(torneo) {
 
                         <p>
                             <i class="fa-solid fa-location-dot"></i>
-                            ${escaparHTML(partido.venue)}
+                            ${escaparHTML(partido.evento)}
                         </p>
 
                     </div>

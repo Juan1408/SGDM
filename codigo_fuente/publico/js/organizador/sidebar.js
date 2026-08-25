@@ -50,15 +50,15 @@
    }
 
    /* Marcar todo como leído (solo visual, sin backend) */
-   const btnMarcarLeido = document.querySelector('.navbar-notificaciones__marcar');
+   const btnMarcarLeido = document.querySelector('.navbar-notificaciones-marcar');
 
    if (btnMarcarLeido) {
       btnMarcarLeido.addEventListener('click', () => {
          document
-            .querySelectorAll('.navbar-notificaciones__item--sinleer')
-            .forEach((item) => item.classList.remove('navbar-notificaciones__item--sinleer'));
+            .querySelectorAll('.navbar-notificaciones-item-sin-leer')
+            .forEach((item) => item.classList.remove('navbar-notificaciones-item-sin-leer'));
 
-         const contador = document.querySelector('.navbar-notificaciones__contador');
+         const contador = document.querySelector('.navbar-notificaciones-contador');
          if (contador) contador.remove();
       });
    }

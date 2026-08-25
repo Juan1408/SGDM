@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
    const btnCambiarBanner = document.getElementById("btn-cambiar-banner");
    const inputBanner = document.getElementById("input-banner");
-   const bannerHeader = document.getElementById("perfil-banner");
+   const bannerImg = document.getElementById("perfil-banner-img");
 
    const camposEditables = [
       "perfil-nombre",
@@ -50,9 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
             imgAvatar.src = datos.avatarUrl;
          }
 
-         if (datos.bannerUrl && bannerHeader) {
-            bannerHeader.style.backgroundImage =
-               `linear-gradient(180deg, rgba(7,8,18,0.15), rgba(7,8,18,0.85)), url(${datos.bannerUrl})`;
+         if (datos.bannerUrl && bannerImg) {
+            bannerImg.src = datos.bannerUrl;
          }
       } catch (e) {
          console.warn("No se pudieron cargar los datos del perfil guardados.");
@@ -106,8 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
    inputBanner.addEventListener("change", () => {
       leerImagenComoURL(inputBanner, (url) => {
-         bannerHeader.style.backgroundImage =
-            `linear-gradient(180deg, rgba(7,8,18,0.15), rgba(7,8,18,0.85)), url(${url})`;
+         bannerImg.src = url;
       });
    });
 
@@ -120,10 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       datos.avatarUrl = imgAvatar.src;
-
-      const bannerActual = bannerHeader.style.backgroundImage;
-      const match = bannerActual.match(/url\((.*)\)/);
-      if (match) datos.bannerUrl = match[1].replace(/^["']|["']$/g, "");
+      datos.bannerUrl = bannerImg.src;
 
       localStorage.setItem("perfilJugadorDatos", JSON.stringify(datos));
       desactivarModoEdicion();

@@ -42,7 +42,7 @@
                   Detalle Torneos
                </a>
 
-               <a href="../publico/en-construccion.html">
+               <a href="../publico/juegos.html">
                   Juegos
                </a>
 
@@ -57,13 +57,13 @@
          </li>
 
          <li>
-            <a href="../publico/en-construccion.html">
+            <a href="../publico/nosotros.html">
                Nosotros
             </a>
          </li>
 
          <li>
-            <a href="../publico/index.html#contacto">
+            <a href="../publico/contacto.html">
                Contacto
             </a>
          </li>
@@ -85,8 +85,14 @@
          <span class="badge-notificaciones">3</span>
       </button>
       <div class="panel-notificaciones" id="panel-notificaciones">
-         <p class="notificaciones-vacio">No tenés notificaciones nuevas.</p>
-      </div>
+   <div class="notificaciones-header">
+      <h4>Notificaciones</h4>
+      <button type="button" id="btn-marcar-todo-leido">Marcar todo leído</button>
+   </div>
+   <div class="notificaciones-lista" id="notificaciones-lista">
+      <!-- Se llena por JS -->
+   </div>
+</div>
    </div>
 
    <div class="perfil-jugador-menu">
@@ -111,31 +117,104 @@
 </nav>
 
 
-<aside class="sidebar-jugador-flotante oculto" id="sidebar-jugador-flotante">
+<aside
+   class="sidebar-jugador-flotante oculto"
+   id="sidebar-jugador-flotante"
+   aria-label="Navegación del jugador"
+>
 
-   <a href="../jugador/perfil-jugador.html#mis-torneos" class="sidebar-flotante-item" title="Mis Torneos">
-      <i class="fa-solid fa-bookmark"></i>
-      <span>Guardados</span>
-   </a>
+   <nav aria-label="Menú del jugador">
 
-   <a href="../jugador/perfil-equipo.html" class="sidebar-flotante-item" title="Equipos/Clubes">
-      <i class="fa-solid fa-people-group" aria-hidden="true"></i>
-      <span>Equipos</span>
-   </a>
+      <ul class="sidebar-flotante-lista">
 
-   <a href="../publico/rankings.html" class="sidebar-flotante-item" title="Rankings">
-      <i class="fa-regular fa-star"></i>
-      <span>Favoritos</span>
-   </a>
+         <li>
+            <a
+               href="../jugador/solicitudes.html"
+               class="sidebar-flotante-item"
+               title="Solicitudes"
+            >
+               <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+               <span>Solicitudes</span>
+            </a>
+         </li>
 
-   <a href="../jugador/perfil-jugador.html#historial" class="sidebar-flotante-item" title="Historial">
-      <i class="fa-solid fa-clock-rotate-left"></i>
-      <span>Historial</span>
-   </a>
 
-   <a href="../jugador/perfil-jugador.html#estadisticas" class="sidebar-flotante-item" title="Estadísticas">
-      <i class="fa-solid fa-chart-simple"></i>
-      <span>Stats</span>
-   </a>
+         <li class="sidebar-flotante-desplegable">
+
+            <a
+               href="../jugador/mis-equipos.html"
+               class="sidebar-flotante-item sidebar-flotante-boton"
+               title="Mis equipos"
+            >
+               <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+               <span>Equipos</span>
+            </a>
+
+            <button
+               type="button"
+               class="sidebar-flotante-toggle"
+               aria-expanded="true"
+               aria-controls="submenu-equipos"
+               aria-label="Mostrar submenú de equipos"
+            >
+               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+
+            <ul
+               class="sidebar-flotante-submenu"
+               id="submenu-equipos"
+            >
+               <li>
+                  <a
+                     href="../jugador/crear-equipo.html"
+                     title="Crear equipo"
+                  >
+                     <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                     <span>Crear equipo</span>
+                  </a>
+               </li>
+            </ul>
+
+         </li>
+
+
+         <li>
+            <a
+               href="../jugador/favoritos.html"
+               class="sidebar-flotante-item"
+               title="Favoritos"
+            >
+               <i class="fa-regular fa-star" aria-hidden="true"></i>
+               <span>Favoritos</span>
+            </a>
+         </li>
+
+
+         <li>
+            <a
+               href="../jugador/perfil-jugador.html#historial"
+               class="sidebar-flotante-item"
+               title="Historial"
+            >
+               <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+               <span>Historial</span>
+            </a>
+         </li>
+
+
+         <li>
+            <a
+               href="../jugador/perfil-jugador.html#mis-torneos"
+               class="sidebar-flotante-item"
+               title="Guardados"
+            >
+               <i class="fa-solid fa-bookmark" aria-hidden="true"></i>
+               <span>Guardados</span>
+            </a>
+         </li>
+
+      </ul>
+
+   </nav>
 
 </aside>

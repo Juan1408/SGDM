@@ -40,7 +40,7 @@ if (gameSlides.length > 0) {
 // =====================
 // CARRUSEL JUEGOS DESTACADOS
 // =====================
-const track = document.getElementById('games-track');
+const track = document.getElementById('juegos-track');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
@@ -101,19 +101,19 @@ function medalClass(pos) {
 }
 
 function renderTable(data) {
-  const body = document.getElementById("ranking-body");
+  const body = document.getElementById("ranking-cuerpo");
   if (!body) return;
   body.innerHTML = data.map(item => `
-    <div class="ranking-row">
-      <span class="rk-pos ${medalClass(item.pos)}">${item.pos}</span>
-      <div class="rk-player">
+    <tr class="ranking-row">
+      <td class="rk-pos ${medalClass(item.pos)}">${item.pos}</td>
+      <td class="rk-player">
         <div class="rk-avatar">${item.iniciales}</div>
         <span>${item.nombre}</span>
-      </div>
-      <span class="rk-game">${item.juego}</span>
-      <span class="rk-encuentros">${item.partidas}</span>
-      <span class="rk-points">${item.puntos.toLocaleString("es-UY")}</span>
-    </div>
+      </td>
+      <td class="rk-game">${item.juego}</td>
+      <td class="rk-encuentros">${item.partidas}</td>
+      <td class="rk-points">${item.puntos.toLocaleString("es-UY")}</td>
+    </tr>
   `).join("");
 }
 
