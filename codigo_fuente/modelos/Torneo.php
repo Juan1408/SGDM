@@ -13,7 +13,7 @@ use PDO;
 require_once __DIR__ . '/Conexion.php';
 
 class Torneo {
-    private $bd;
+    private PDO $bd;
 
     public function __construct(){
     //Usamos el patron Singleton para obtener la instancia única de la base de datos

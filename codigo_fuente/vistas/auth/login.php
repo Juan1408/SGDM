@@ -73,8 +73,7 @@
 </main>
 
 
-   <script src="<?php echo URL_BASE; ?>js/login.js"></script>
-
+  
 </body>
 
 </html>

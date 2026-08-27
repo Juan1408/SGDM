@@ -10,6 +10,9 @@
  */
 
 namespace App\Ayudantes;
+use App\Ayudantes\Auditoria;
+
+require_once __DIR__ . '/../ayudantes/Auditorias.php';
 
 class Sesion {
 
@@ -22,7 +25,7 @@ class Sesion {
         }
     }
 
-    public static function iniciarLogin($usuarioBD) {
+    public static function iniciarLogin(array $usuarioBD) {
         self::iniciarSesion();
 
         //Ciberseguridad OWASP - Regeneración de ID de sesión
@@ -37,6 +40,9 @@ class Sesion {
 
         //Control de tiempo de expiración (Timeboxing)
         $_SESSION['expiracion_sesion'] = time() + 1800; //30 minutos
+
+        //Registramos el login en la auditoria
+        Auditoria::registrar('LOGIN_EXITOSO', "El usuaurio " . $_SESSION['email'] . " realizó inicio de sesión");
     }
 
     //Verifica si el usuario está logueado

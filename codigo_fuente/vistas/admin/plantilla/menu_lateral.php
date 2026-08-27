@@ -43,7 +43,6 @@
             <li><a href="#" class="menu-enlace">Administrar Torneos</a>
                 <ul class="menu-sublista">
                     <li><a href="#torneos/lista" class="menu-enlace">Ver y Configurar</a></li>
-                    <li><a href="#torneos/crear" class="menu-enlace">Crear Torneo Oficial</a></li>
                     <li><a href="#torneos/historial" class="menu-enlace">Historial de Torneos</a></li>
                 </ul>
             </li>
@@ -60,7 +59,7 @@
                 <ul class="menu-sublista">
                     <li><a href="#roles/lista" class="menu-enlace">Roles y Permisos</a></li>
                     <li><a href="#comunicaciones/enviar" class="menu-enlace">Enviar Alertas Globales</a></li>
-                    <li><a href="#auditoria/logs" class="menu-enlace">Logs de Auditoría</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=auditoria&a=index" class="menu-enlace">Logs de Auditoría</a></li>
                 </ul>
             </li>
 

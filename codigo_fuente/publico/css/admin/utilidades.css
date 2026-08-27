@@ -144,3 +144,45 @@
 .margen-superior-1 {
   margin-top: 1rem;
 }
+
+/* =========================================
+   TABLAS CON ANCHO FIJO, BORDES Y TRUNCADO
+   ========================================= */
+/* Solo en pantallas grandes (Desktop/Tablet) la tabla será fija */
+@media (min-width: 768px) {
+  .tabla-fija {
+    display: table !important;
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+  }
+}
+
+
+.tabla-fija th,
+.tabla-fija td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Esto dibuja las líneas separadoras entre columnas */
+  border: 1px solid var(--color-borde) !important;
+}
+
+/* Limitadores de columnas */
+.col-xs {
+  width: 50px;
+}
+
+.col-sm {
+  width: 140px;
+}
+
+/* La col-md (Descripción) se ajustará dinámicamente y se robará el espacio sobrante */
+.col-md {
+  width: auto;
+}
+
+/* Obligamos al User Agent a medir máximo 200px (nadie necesita leerlo a simple vista) */
+.col-lg {
+  width: 200px;
+}

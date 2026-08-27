@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌐 Mapa Visual 3D + Consultas SQL CRUD - SGDM ASCEND</title>
+    <style>
+        :root {
+            --bg-space: #060913;
+            --bg-card: rgba(13, 20, 36, 0.90);
+            --border-card: rgba(59, 130, 246, 0.25);
+            --neon-blue: #3b82f6;
+            --neon-cyan: #06b6d4;
+            --neon-purple: #a855f7;
+            --neon-emerald: #10b981;
+            --neon-amber: #f59e0b;
+            --neon-rose: #f43f5e;
+            --neon-pink: #ec4899;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-space);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra de Control Superior */
+        header {
+            background: rgba(10, 15, 29, 0.95);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .marca-titulo h1 {
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-contador {
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid var(--neon-cyan);
+            padding: 2px 8px;
+            border-radius: 12px;
+            -webkit-text-fill-color: var(--neon-cyan);
+        }
+
+        .controles-centro {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .buscador {
+            background: #131d31;
+            border: 1px solid #28354f;
+            padding: 5px 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            outline: none;
+            width: 180px;
+            transition: all 0.3s;
+        }
+        .buscador:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-filtro {
+            background: #131d31;
+            border: 1px solid #28354f;
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-filtro.activo, .btn-filtro:hover {
+            background: var(--neon-blue);
+            color: white;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-toggle-anim {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 7px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn-toggle-anim:hover { transform: scale(1.05); }
+
+        .btn-3d {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 7px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn-3d:hover { transform: scale(1.05); }
+
+        /* Viewport 3D y Espacio */
+        #viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            perspective: 1400px;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #060913 85%);
+            cursor: grab;
+        }
+        #viewport:active { cursor: grabbing; }
+
+        #escenario {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4800px;
+            height: 3800px;
+            margin-left: -2400px;
+            margin-top: -1900px;
+            transform-style: preserve-3d;
+            transition: transform 0.08s ease-out;
+        }
+
+        /* SVG para Líneas de Relación y Flujo */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .linea-relacion-fondo {
+            stroke: rgba(148, 163, 184, 0.15);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .linea-relacion-flujo {
+            stroke-width: 2.5;
+            fill: none;
+            stroke-dasharray: 6 10;
+            animation: flujoDatos 1.2s linear infinite;
+            filter: drop-shadow(0 0 6px currentColor);
+        }
+
+        .linea-relacion-flujo.tipo-1a1 { stroke: var(--neon-cyan); stroke-dasharray: 4 6; animation-duration: 0.8s; }
+        .linea-relacion-flujo.tipo-1aN { stroke: var(--neon-blue); animation-duration: 1.4s; }
+        .linea-relacion-flujo.tipo-torneo { stroke: var(--neon-amber); animation-duration: 1.1s; }
+        .linea-relacion-flujo.tipo-equipo { stroke: var(--neon-emerald); animation-duration: 1.3s; }
+        .linea-relacion-flujo.tipo-seguridad { stroke: var(--neon-rose); animation-duration: 1.5s; }
+
+        .linea-oculta { opacity: 0.05 !important; }
+        .linea-destacada {
+            stroke-width: 4.5 !important;
+            stroke: #fff !important;
+            filter: drop-shadow(0 0 14px #38bdf8) !important;
+            opacity: 1 !important;
+        }
+
+        @keyframes flujoDatos {
+            from { stroke-dashoffset: 32; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Tarjeta de Tabla (Nodo) */
+        .nodo-tabla {
+            position: absolute;
+            width: 260px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, opacity 0.3s;
+        }
+
+        .nodo-tabla:hover {
+            transform: translateZ(35px) scale(1.04) !important;
+            z-index: 50;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.4);
+            border-color: var(--neon-cyan);
+        }
+
+        .nodo-tabla.seleccionado {
+            border-color: #fff !important;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.8), inset 0 0 15px rgba(56, 189, 248, 0.3) !important;
+            z-index: 60;
+        }
+
+        .nodo-tabla.atenuado {
+            opacity: 0.15 !important;
+            filter: grayscale(80%);
+        }
+
+        .cabecera-tabla {
+            padding: 8px 12px;
+            border-top-left-radius: 9px;
+            border-top-right-radius: 9px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Colores por Dominio */
+        .dom-usuarios .cabecera-tabla { background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+        .dom-usuarios { border-color: rgba(37, 99, 235, 0.4); }
+
+        .dom-catalogos .cabecera-tabla { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+        .dom-catalogos { border-color: rgba(6, 182, 212, 0.4); }
+
+        .dom-equipos .cabecera-tabla { background: linear-gradient(135deg, #047857, #059669); }
+        .dom-equipos { border-color: rgba(5, 150, 105, 0.4); }
+
+        .dom-torneos .cabecera-tabla { background: linear-gradient(135deg, #b45309, #d97706); }
+        .dom-torneos { border-color: rgba(217, 119, 6, 0.4); }
+
+        .dom-gamificacion .cabecera-tabla { background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+        .dom-gamificacion { border-color: rgba(124, 58, 237, 0.4); }
+
+        .dom-comunicacion .cabecera-tabla { background: linear-gradient(135deg, #be185d, #db2777); }
+        .dom-comunicacion { border-color: rgba(219, 39, 119, 0.4); }
+
+        .dom-seguridad .cabecera-tabla { background: linear-gradient(135deg, #991b1b, #dc2626); }
+        .dom-seguridad { border-color: rgba(220, 38, 38, 0.4); }
+
+        .cuerpo-tabla {
+            padding: 6px 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.72rem;
+        }
+        .cuerpo-tabla::-webkit-scrollbar { width: 3px; }
+        .cuerpo-tabla::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+
+        .item-columna {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .item-columna:last-child { border-bottom: none; }
+
+        .nom-col { display: flex; align-items: center; gap: 4px; color: #e2e8f0; }
+        .tipo-col { color: var(--text-muted); font-family: Consolas, monospace; font-size: 0.65rem; }
+
+        .pk-icon { color: #fbbf24; font-size: 0.68rem; }
+        .fk-icon { color: #38bdf8; font-size: 0.68rem; }
+
+        /* Panel Lateral Expandido de Detalle y SQL CRUD */
+        #panel-lateral {
+            position: absolute;
+            right: -480px;
+            top: 55px;
+            bottom: 15px;
+            width: 460px;
+            background: rgba(10, 15, 29, 0.97);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px 0 0 16px;
+            padding: 20px;
+            z-index: 200;
+            box-shadow: -15px 0 45px rgba(0, 0, 0, 0.8);
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        #panel-lateral.abierto { right: 0; }
+
+        .cerrar-panel {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .cerrar-panel:hover { color: #fff; }
+
+        /* Pestañas del Panel */
+        .pestanas-panel {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .tab-btn {
+            background: #131d31;
+            border: 1px solid #28354f;
+            color: #94a3b8;
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.activo {
+            background: var(--neon-blue);
+            color: white;
+            border-color: var(--neon-blue);
+        }
+
+        .contenido-tab {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            display: none;
+        }
+        .contenido-tab.activo {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .contenido-tab::-webkit-scrollbar { width: 4px; }
+        .contenido-tab::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+
+        /* Bloque de Código SQL con Copiar */
+        .bloque-sql {
+            background: #090d16;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cabecera-sql {
+            background: #131d31;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .btn-copiar {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #38bdf8;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-copiar:hover { background: #38bdf8; color: #0f172a; }
+
+        pre.codigo-sql {
+            padding: 10px 12px;
+            margin: 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.74rem;
+            color: #a5f3fc;
+            line-height: 1.45;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            user-select: text;
+        }
+
+        .sql-kw { color: #f43f5e; font-weight: bold; }
+        .sql-func { color: #fbbf24; }
+        .sql-str { color: #a7f3d0; }
+        .sql-param { color: #c084fc; font-weight: bold; }
+
+        /* Notificación Toast */
+        #toast-copiado {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #10b981;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            z-index: 300;
+        }
+        #toast-copiado.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Leyenda Inferior */
+        .leyenda-inferior {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            display: flex;
+            gap: 15px;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Controles -->
+    <header>
+        <div class="marca-titulo">
+            <h1>ASCEND SGDM <span class="badge-contador">35 Tablas • Visualizador & SQL CRUD</span></h1>
+        </div>
+
+        <div class="controles-centro">
+            <input type="text" id="busqueda" class="buscador" placeholder="🔍 Buscar tabla o campo...">
+            
+            <button class="btn-filtro activo" data-dom="todos">Todas (35)</button>
+            <button class="btn-filtro" data-dom="usuarios">👤 Usuarios & Roles (9)</button>
+            <button class="btn-filtro" data-dom="catalogos">🎮 Catálogos (3)</button>
+            <button class="btn-filtro" data-dom="equipos">🛡️ Equipos (4)</button>
+            <button class="btn-filtro" data-dom="torneos">🏆 Torneos & Fixture (10)</button>
+            <button class="btn-filtro" data-dom="gamificacion">🏅 Logros (2)</button>
+            <button class="btn-filtro" data-dom="comunicacion">📬 Mensajes (2)</button>
+            <button class="btn-filtro" data-dom="seguridad">🔒 Seguridad (5)</button>
+
+            <button id="btn-anim-flujo" class="btn-toggle-anim">⚡ Flujo: Activo</button>
+            <button id="btn-toggle-3d" class="btn-3d">🧊 Vista 3D: ON</button>
+            <button id="btn-centrar" class="btn-filtro">🎯 Centrar</button>
+        </div>
+    </header>
+
+    <!-- Lienzo 3D -->
+    <div id="viewport">
+        <div id="escenario">
+            <!-- Canvas SVG para líneas dinámicas con animación de flujo de datos -->
+            <svg id="svg-canvas"></svg>
+
+            <!-- ======================================================== -->
+            <!-- 1. DOMINIO USUARIOS, ROLES Y PERFILES 1:1 EN 3FN         -->
+            <!-- ======================================================== -->
+            <div id="nodo-usuarios" class="nodo-tabla dom-usuarios" style="top: 1400px; left: 1800px;" data-tabla="usuarios">
+                <div class="cabecera-tabla">👑 usuarios (Padre)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">email</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col">contrasena_hash</span><span class="tipo-col">TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre_completo</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col">telefono</span><span class="tipo-col">VARCHAR(20)</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> rol_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">esta_activo</span><span class="tipo-col">BOOL</span></div>
+                    <div class="item-columna"><span class="nom-col">email_verificado</span><span class="tipo-col">BOOL</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-perfiles_jugadores" class="nodo-tabla dom-usuarios" style="top: 1750px; left: 1550px;" data-tabla="perfiles_jugadores">
+                <div class="cabecera-tabla">🎮 perfiles_jugadores (Hija 1:1)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col">apodo_gamertag</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col">bio / banner_url</span><span class="tipo-col">TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">nivel / experiencia</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col">pais / ciudad</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col">discord_tag / redes</span><span class="tipo-col">VARCHAR(255)</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-perfiles_organizadores" class="nodo-tabla dom-usuarios" style="top: 1750px; left: 2050px;" data-tabla="perfiles_organizadores">
+                <div class="cabecera-tabla">🏢 perfiles_organizadores (Hija 1:1)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre_organizacion</span><span class="tipo-col">VARCHAR(150)</span></div>
+                    <div class="item-columna"><span class="nom-col">bio_organizacion</span><span class="tipo-col">TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">localidad / sitio_web</span><span class="tipo-col">VARCHAR</span></div>
+                    <div class="item-columna"><span class="nom-col">verificado_oficial</span><span class="tipo-col">BOOL</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-roles" class="nodo-tabla dom-usuarios" style="top: 1400px; left: 1350px;" data-tabla="roles">
+                <div class="cabecera-tabla">🛡️ roles</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre_rol</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col">nivel_permiso</span><span class="tipo-col">INT</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-permisos" class="nodo-tabla dom-usuarios" style="top: 1100px; left: 1100px;" data-tabla="permisos">
+                <div class="cabecera-tabla">🔑 permisos</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre_permiso</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col">descripcion</span><span class="tipo-col">TEXT</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-rol_permisos" class="nodo-tabla dom-usuarios" style="top: 1100px; left: 1350px;" data-tabla="rol_permisos">
+                <div class="cabecera-tabla">🔗 rol_permisos (N:M)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> rol_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> permiso_id</span><span class="tipo-col">INT PK,FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-tokens_verificacion_email" class="nodo-tabla dom-usuarios" style="top: 1100px; left: 1700px;" data-tabla="tokens_verificacion_email">
+                <div class="cabecera-tabla">✉️ tokens_verificacion_email</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">token</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col">expira_en / usado</span><span class="tipo-col">TIMESTAMP</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-tokens_recuperacion" class="nodo-tabla dom-usuarios" style="top: 1100px; left: 2000px;" data-tabla="tokens_recuperacion">
+                <div class="cabecera-tabla">🔑 tokens_recuperacion</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">token</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col">expira_en</span><span class="tipo-col">TIMESTAMP</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-sesiones_activas" class="nodo-tabla dom-usuarios" style="top: 1400px; left: 2200px;" data-tabla="sesiones_activas">
+                <div class="cabecera-tabla">💻 sesiones_activas</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">token_sesion / ip</span><span class="tipo-col">VARCHAR</span></div>
+                    <div class="item-columna"><span class="nom-col">activa</span><span class="tipo-col">BOOL</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 2. DOMINIO CATÁLOGOS MULTIDEPORTIVOS                     -->
+            <!-- ======================================================== -->
+            <div id="nodo-juegos" class="nodo-tabla dom-catalogos" style="top: 1100px; left: 2550px;" data-tabla="juegos">
+                <div class="cabecera-tabla">🎮 juegos (Disciplinas)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col">categoria</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col">formato_equipo_defecto</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col">puntos_victoria/empate</span><span class="tipo-col">DECIMAL</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-modalidades" class="nodo-tabla dom-catalogos" style="top: 800px; left: 2550px;" data-tabla="modalidades">
+                <div class="cabecera-tabla">⚙️ modalidades</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre</span><span class="tipo-col">VARCHAR(50)</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-sistemas_puntuacion" class="nodo-tabla dom-catalogos" style="top: 800px; left: 2850px;" data-tabla="sistemas_puntuacion">
+                <div class="cabecera-tabla">🔢 sistemas_puntuacion</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col">puntos_victoria / empate</span><span class="tipo-col">DECIMAL</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 3. DOMINIO EQUIPOS Y ROSTERS                             -->
+            <!-- ======================================================== -->
+            <div id="nodo-equipos" class="nodo-tabla dom-equipos" style="top: 800px; left: 1800px;" data-tabla="equipos">
+                <div class="cabecera-tabla">🛡️ equipos</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre_equipo</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> creado_por</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">escudo_url / banner</span><span class="tipo-col">TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">codigo_invitacion</span><span class="tipo-col">VARCHAR(20)</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-equipo_miembros" class="nodo-tabla dom-equipos" style="top: 500px; left: 1600px;" data-tabla="equipo_miembros">
+                <div class="cabecera-tabla">👥 equipo_miembros (N:M)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> equipo_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col">numero_camiseta / pos</span><span class="tipo-col">INT/VARCHAR</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-equipo_capitanes" class="nodo-tabla dom-equipos" style="top: 500px; left: 1900px;" data-tabla="equipo_capitanes">
+                <div class="cabecera-tabla">⭐ equipo_capitanes</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> equipo_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> asignado_por</span><span class="tipo-col">INT FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-solicitudes_equipo" class="nodo-tabla dom-equipos" style="top: 500px; left: 2200px;" data-tabla="solicitudes_equipo">
+                <div class="cabecera-tabla">📩 solicitudes_equipo</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> equipo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">estado / respondido_por</span><span class="tipo-col">VARCHAR/FK</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 4. DOMINIO TORNEOS, FIXTURES Y RESULTADOS                -->
+            <!-- ======================================================== -->
+            <div id="nodo-torneos" class="nodo-tabla dom-torneos" style="top: 1400px; left: 2900px;" data-tabla="torneos">
+                <div class="cabecera-tabla">🏆 torneos</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">nombre</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> juego_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> organizador_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">formato / estado</span><span class="tipo-col">ENUM</span></div>
+                    <div class="item-columna"><span class="nom-col">cupo_max_equipos</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> modalidad_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> sistema_puntuacion_id</span><span class="tipo-col">INT FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_cambio_estado" class="nodo-tabla dom-torneos" style="top: 1100px; left: 3250px;" data-tabla="torneo_cambio_estado">
+                <div class="cabecera-tabla">📜 torneo_cambio_estado</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">estado_nuevo</span><span class="tipo-col">VARCHAR(50)</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-participantes_torneo" class="nodo-tabla dom-torneos" style="top: 1750px; left: 2900px;" data-tabla="participantes_torneo">
+                <div class="cabecera-tabla">🥊 participantes_torneo</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">tipo (equipo/usuario)</span><span class="tipo-col">ENUM</span></div>
+                    <div class="item-columna"><span class="nom-col">referencia_id</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col">estado / confirmado_por</span><span class="tipo-col">VARCHAR/FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_encuentros" class="nodo-tabla dom-torneos" style="top: 2100px; left: 2900px;" data-tabla="torneo_encuentros">
+                <div class="cabecera-tabla">⚔️ torneo_encuentros (Fixture)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">ronda</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> participante_local_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> participante_visitante_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">resultado_local / visitante</span><span class="tipo-col">DECIMAL</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> siguiente_encuentro_id</span><span class="tipo-col">INT FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_posiciones" class="nodo-tabla dom-torneos" style="top: 1750px; left: 3300px;" data-tabla="torneo_posiciones">
+                <div class="cabecera-tabla">📊 torneo_posiciones</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> participante_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col">partidos_jugados/ganados</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col">puntos / dif_goles</span><span class="tipo-col">INT/DEC</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_suizo_parejas" class="nodo-tabla dom-torneos" style="top: 2100px; left: 3300px;" data-tabla="torneo_suizo_parejas">
+                <div class="cabecera-tabla">♟️ torneo_suizo_parejas</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> participante_a_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> participante_b_id</span><span class="tipo-col">INT PK,FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-resultados_detalle" class="nodo-tabla dom-torneos" style="top: 2450px; left: 2900px;" data-tabla="resultados_detalle">
+                <div class="cabecera-tabla">🎯 resultados_detalle</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> encuentro_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">tipo_dato / valor</span><span class="tipo-col">VARCHAR(255)</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_config" class="nodo-tabla dom-torneos" style="top: 1400px; left: 3300px;" data-tabla="torneo_config">
+                <div class="cabecera-tabla">🛠️ torneo_config</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> clave</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col">valor</span><span class="tipo-col">TEXT</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_actividades" class="nodo-tabla dom-torneos" style="top: 1400px; left: 3600px;" data-tabla="torneo_actividades">
+                <div class="cabecera-tabla">📅 torneo_actividades</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">titulo / tipo / fecha</span><span class="tipo-col">VARCHAR/DATE</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-torneo_comentarios" class="nodo-tabla dom-torneos" style="top: 1750px; left: 3600px;" data-tabla="torneo_comentarios">
+                <div class="cabecera-tabla">💬 torneo_comentarios</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> torneo_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">comentario</span><span class="tipo-col">TEXT</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 5. DOMINIO GAMIFICACIÓN Y TROFEOS                        -->
+            <!-- ======================================================== -->
+            <div id="nodo-logros" class="nodo-tabla dom-gamificacion" style="top: 2150px; left: 1250px;" data-tabla="logros">
+                <div class="cabecera-tabla">🏅 logros</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">codigo / nombre</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col">puntos_recompensa</span><span class="tipo-col">INT</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-usuario_logros" class="nodo-tabla dom-gamificacion" style="top: 2150px; left: 1550px;" data-tabla="usuario_logros">
+                <div class="cabecera-tabla">🌟 usuario_logros (N:M)</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span><span class="fk-icon">🔗</span> logro_id</span><span class="tipo-col">INT PK,FK</span></div>
+                    <div class="item-columna"><span class="nom-col">estado / progreso</span><span class="tipo-col">ENUM/INT</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 6. DOMINIO COMUNICACIONES Y MARKETING                    -->
+            <!-- ======================================================== -->
+            <div id="nodo-notificaciones" class="nodo-tabla dom-comunicacion" style="top: 1750px; left: 2400px;" data-tabla="notificaciones">
+                <div class="cabecera-tabla">🔔 notificaciones</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">tipo / titulo / mensaje</span><span class="tipo-col">TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">leido</span><span class="tipo-col">BOOL</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-newsletter_subscriptores" class="nodo-tabla dom-comunicacion" style="top: 2150px; left: 2400px;" data-tabla="newsletter_subscriptores">
+                <div class="cabecera-tabla">📰 newsletter_subscriptores</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">email</span><span class="tipo-col">VARCHAR(255)</span></div>
+                    <div class="item-columna"><span class="nom-col">activo</span><span class="tipo-col">BOOL</span></div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- 7. DOMINIO CIBERSEGURIDAD Y AUDITORÍA (OWASP)            -->
+            <!-- ======================================================== -->
+            <div id="nodo-auditoria_cambios" class="nodo-tabla dom-seguridad" style="top: 1400px; left: 750px;" data-tabla="auditoria_cambios">
+                <div class="cabecera-tabla">📋 auditoria_cambios</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">tabla_afectada</span><span class="tipo-col">VARCHAR(100)</span></div>
+                    <div class="item-columna"><span class="nom-col">accion</span><span class="tipo-col">ENUM</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">datos_viejos/nuevos</span><span class="tipo-col">JSON</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-logs_acceso" class="nodo-tabla dom-seguridad" style="top: 1750px; left: 750px;" data-tabla="logs_acceso">
+                <div class="cabecera-tabla">🔐 logs_acceso</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">ip_origen / user_agent</span><span class="tipo-col">VARCHAR/TEXT</span></div>
+                    <div class="item-columna"><span class="nom-col">exito / fecha_hora</span><span class="tipo-col">BOOL/TS</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-logs_actividad" class="nodo-tabla dom-seguridad" style="top: 2100px; left: 750px;" data-tabla="logs_actividad">
+                <div class="cabecera-tabla">📑 logs_actividad</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">accion / descripcion</span><span class="tipo-col">VARCHAR/TEXT</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-politicas_contrasenas" class="nodo-tabla dom-seguridad" style="top: 1100px; left: 450px;" data-tabla="politicas_contrasenas">
+                <div class="cabecera-tabla">🛡️ politicas_contrasenas</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col">longitud_minima</span><span class="tipo-col">INT</span></div>
+                    <div class="item-columna"><span class="nom-col">mayus/minus/num/esp</span><span class="tipo-col">BOOL</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> actualizado_por</span><span class="tipo-col">INT FK</span></div>
+                </div>
+            </div>
+
+            <div id="nodo-historial_contrasenas" class="nodo-tabla dom-seguridad" style="top: 1400px; left: 450px;" data-tabla="historial_contrasenas">
+                <div class="cabecera-tabla">⏳ historial_contrasenas</div>
+                <div class="cuerpo-tabla">
+                    <div class="item-columna"><span class="nom-col"><span class="pk-icon">🔑</span> id</span><span class="tipo-col">INT PK</span></div>
+                    <div class="item-columna"><span class="nom-col"><span class="fk-icon">🔗</span> usuario_id</span><span class="tipo-col">INT FK</span></div>
+                    <div class="item-columna"><span class="nom-col">hash_anterior</span><span class="tipo-col">TEXT</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Panel Lateral con Pestañas: Info + Sentencias SQL CRUD -->
+    <div id="panel-lateral">
+        <button class="cerrar-panel" id="btn-cerrar-panel">&times;</button>
+        
+        <div>
+            <h2 id="det-tabla-nombre" style="font-size: 1.2rem; color: var(--neon-cyan); margin-bottom: 4px;">Detalle de Tabla</h2>
+            <p id="det-tabla-desc" style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;"></p>
+        </div>
+
+        <!-- Pestañas de Navegación -->
+        <div class="pestanas-panel">
+            <button class="tab-btn activo" data-tab="tab-sql">⚡ Sentencias SQL (CRUD)</button>
+            <button class="tab-btn" data-tab="tab-relaciones">🔗 Claves Foráneas (FK)</button>
+            <button class="tab-btn" data-tab="tab-php">🐘 En PHP (PDO)</button>
+        </div>
+
+        <!-- Pestaña 1: Sentencias SQL CRUD -->
+        <div id="tab-sql" class="contenido-tab activo">
+            <div id="contenedor-bloques-sql" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+
+        <!-- Pestaña 2: Claves Foráneas y Relaciones -->
+        <div id="tab-relaciones" class="contenido-tab">
+            <h3 style="font-size: 0.85rem; color: #a855f7; margin-bottom: 6px;">Integridad Referencial en 3FN:</h3>
+            <ul id="det-tabla-relaciones" style="font-size: 0.8rem; color: #94a3b8; padding-left: 20px; line-height: 1.6;"></ul>
+        </div>
+
+        <!-- Pestaña 3: Ejemplo de Implementación en PHP -->
+        <div id="tab-php" class="contenido-tab">
+            <div class="bloque-sql">
+                <div class="cabecera-sql">
+                    <span>🐘 Método Modelo PHP con PDO</span>
+                    <button class="btn-copiar" onclick="copiarAlPortapapeles(document.getElementById('code-php-ejemplo').innerText)">📋 Copiar</button>
+                </div>
+                <pre class="codigo-sql" id="code-php-ejemplo"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación Toast -->
+    <div id="toast-copiado">✅ ¡Sentencia SQL copiada al portapapeles!</div>
+
+    <!-- Leyenda Inferior -->
+    <div class="leyenda-inferior">
+        <span>🖱️ <b>Arrastrar:</b> Mover espacio</span>
+        <span>🔍 <b>Rueda:</b> Zoom (30% - 200%)</span>
+        <span>👆 <b>Clic en Tabla:</b> Ver sentencias SQL y relaciones</span>
+        <span>🟦 1:1 Subtipos • 🟨 Torneos • 🟩 Equipos • 🟥 Seguridad</span>
+    </div>
+
+    <!-- Script de Relaciones Dinámicas, Sentencias SQL y Flujo -->
+    <script>
+        // Diccionario de Relaciones Reales de Clave Foránea
+        const relacionesDB = [
+            { origen: 'nodo-usuarios', destino: 'nodo-roles', tipo: '1aN', desc: 'usuarios.rol_id ➔ roles.id' },
+            { origen: 'nodo-perfiles_jugadores', destino: 'nodo-usuarios', tipo: '1a1', desc: 'perfiles_jugadores.usuario_id ➔ usuarios.id (Subtipo 1:1)' },
+            { origen: 'nodo-perfiles_organizadores', destino: 'nodo-usuarios', tipo: '1a1', desc: 'perfiles_organizadores.usuario_id ➔ usuarios.id (Subtipo 1:1)' },
+            { origen: 'nodo-rol_permisos', destino: 'nodo-roles', tipo: '1aN', desc: 'rol_permisos.rol_id ➔ roles.id' },
+            { origen: 'nodo-rol_permisos', destino: 'nodo-permisos', tipo: '1aN', desc: 'rol_permisos.permiso_id ➔ permisos.id' },
+            { origen: 'nodo-tokens_verificacion_email', destino: 'nodo-usuarios', tipo: '1aN', desc: 'tokens_verificacion.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-tokens_recuperacion', destino: 'nodo-usuarios', tipo: '1aN', desc: 'tokens_recuperacion.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-sesiones_activas', destino: 'nodo-usuarios', tipo: '1aN', desc: 'sesiones_activas.usuario_id ➔ usuarios.id' },
+
+            { origen: 'nodo-equipos', destino: 'nodo-usuarios', tipo: 'equipo', desc: 'equipos.creado_por ➔ usuarios.id' },
+            { origen: 'nodo-equipo_miembros', destino: 'nodo-equipos', tipo: 'equipo', desc: 'equipo_miembros.equipo_id ➔ equipos.id' },
+            { origen: 'nodo-equipo_miembros', destino: 'nodo-usuarios', tipo: 'equipo', desc: 'equipo_miembros.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-equipo_capitanes', destino: 'nodo-equipos', tipo: 'equipo', desc: 'equipo_capitanes.equipo_id ➔ equipos.id' },
+            { origen: 'nodo-equipo_capitanes', destino: 'nodo-usuarios', tipo: 'equipo', desc: 'equipo_capitanes.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-solicitudes_equipo', destino: 'nodo-equipos', tipo: 'equipo', desc: 'solicitudes_equipo.equipo_id ➔ equipos.id' },
+            { origen: 'nodo-solicitudes_equipo', destino: 'nodo-usuarios', tipo: 'equipo', desc: 'solicitudes_equipo.usuario_id ➔ usuarios.id' },
+
+            { origen: 'nodo-torneos', destino: 'nodo-usuarios', tipo: 'torneo', desc: 'torneos.organizador_id ➔ usuarios.id' },
+            { origen: 'nodo-torneos', destino: 'nodo-juegos', tipo: 'torneo', desc: 'torneos.juego_id ➔ juegos.id' },
+            { origen: 'nodo-torneos', destino: 'nodo-modalidades', tipo: 'torneo', desc: 'torneos.modalidad_id ➔ modalidades.id' },
+            { origen: 'nodo-torneos', destino: 'nodo-sistemas_puntuacion', tipo: 'torneo', desc: 'torneos.sistema_puntuacion_id ➔ sistemas_puntuacion.id' },
+            { origen: 'nodo-torneo_cambio_estado', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_cambio_estado.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-participantes_torneo', destino: 'nodo-torneos', tipo: 'torneo', desc: 'participantes_torneo.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-participantes_torneo', destino: 'nodo-usuarios', tipo: 'torneo', desc: 'participantes_torneo.confirmado_por ➔ usuarios.id' },
+            { origen: 'nodo-torneo_encuentros', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_encuentros.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-torneo_encuentros', destino: 'nodo-participantes_torneo', tipo: 'torneo', desc: 'torneo_encuentros.participante_local_id ➔ participantes_torneo.id' },
+            { origen: 'nodo-torneo_posiciones', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_posiciones.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-torneo_posiciones', destino: 'nodo-participantes_torneo', tipo: 'torneo', desc: 'torneo_posiciones.participante_id ➔ participantes_torneo.id' },
+            { origen: 'nodo-torneo_suizo_parejas', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_suizo_parejas.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-resultados_detalle', destino: 'nodo-torneo_encuentros', tipo: 'torneo', desc: 'resultados_detalle.encuentro_id ➔ torneo_encuentros.id' },
+            { origen: 'nodo-torneo_config', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_config.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-torneo_actividades', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_actividades.torneo_id ➔ torneos.id' },
+            { origen: 'nodo-torneo_comentarios', destino: 'nodo-torneos', tipo: 'torneo', desc: 'torneo_comentarios.torneo_id ➔ torneos.id' },
+
+            { origen: 'nodo-usuario_logros', destino: 'nodo-usuarios', tipo: '1aN', desc: 'usuario_logros.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-usuario_logros', destino: 'nodo-logros', tipo: '1aN', desc: 'usuario_logros.logro_id ➔ logros.id' },
+            { origen: 'nodo-notificaciones', destino: 'nodo-usuarios', tipo: '1aN', desc: 'notificaciones.usuario_id ➔ usuarios.id' },
+
+            { origen: 'nodo-auditoria_cambios', destino: 'nodo-usuarios', tipo: 'seguridad', desc: 'auditoria_cambios.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-logs_acceso', destino: 'nodo-usuarios', tipo: 'seguridad', desc: 'logs_acceso.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-logs_actividad', destino: 'nodo-usuarios', tipo: 'seguridad', desc: 'logs_actividad.usuario_id ➔ usuarios.id' },
+            { origen: 'nodo-politicas_contrasenas', destino: 'nodo-usuarios', tipo: 'seguridad', desc: 'politicas_contrasenas.actualizado_por ➔ usuarios.id' },
+            { origen: 'nodo-historial_contrasenas', destino: 'nodo-usuarios', tipo: 'seguridad', desc: 'historial_contrasenas.usuario_id ➔ usuarios.id' }
+        ];
+
+        // Base de Datos de Consultas SQL CRUD Reales y Arquitectura
+        const bibliotecaSQL = {
+            'usuarios': {
+                desc: 'Tabla Padre de identidad y acceso en 3FN. Centraliza credenciales, correo único y rol.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Registrar Usuario Administrador o General)',
+                        sql: `INSERT INTO usuarios (email, contrasena_hash, nombre_completo, telefono, rol_id, esta_activo, email_verificado)\nVALUES (:email, :hash, :nombre, :telefono, :rol_id, 1, 1);`
+                    },
+                    {
+                        titulo: 'READ (Listar Usuarios con su Rol para Panel Admin)',
+                        sql: `SELECT u.id, u.email, u.nombre_completo, u.telefono, u.esta_activo, r.nombre_rol\nFROM usuarios u\nINNER JOIN roles r ON u.rol_id = r.id\nORDER BY u.id DESC;`
+                    },
+                    {
+                        titulo: 'READ (Login Seguro por Email)',
+                        sql: `SELECT id, email, contrasena_hash, nombre_completo, rol_id, esta_activo\nFROM usuarios\nWHERE email = :email AND esta_activo = 1\nLIMIT 1;`
+                    },
+                    {
+                        titulo: 'UPDATE (Modificar Datos de Perfil)',
+                        sql: `UPDATE usuarios\nSET nombre_completo = :nombre, telefono = :telefono\nWHERE id = :id;`
+                    },
+                    {
+                        titulo: 'DELETE (Desactivación Lógica - Soft Delete)',
+                        sql: `UPDATE usuarios SET esta_activo = 0 WHERE id = :id;`
+                    }
+                ],
+                php: `public function obtenerPorEmail(string $email): ?array {\n    $sql = "SELECT u.*, r.nombre_rol \n            FROM usuarios u \n            INNER JOIN roles r ON u.rol_id = r.id \n            WHERE u.email = :email LIMIT 1";\n    $stmt = $this->db->prepare($sql);\n    $stmt->execute([':email' => $email]);\n    $usuario = $stmt->fetch();\n    return $usuario ?: null;\n}`
+            },
+            'perfiles_jugadores': {
+                desc: 'Subtipo e hija 1:1 de usuarios. Almacena gamertag, banner, nivel, XP y redes.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Crear Perfil de Jugador tras Registro)',
+                        sql: `INSERT INTO perfiles_jugadores (usuario_id, apodo_gamertag, bio, pais, ciudad, discord_tag)\nVALUES (:usuario_id, :gamertag, :bio, 'Uruguay', :ciudad, :discord);`
+                    },
+                    {
+                        titulo: 'READ (Consultar Perfil Completo con Datos del Usuario Padre)',
+                        sql: `SELECT u.id, u.nombre_completo, u.email, pj.apodo_gamertag, pj.nivel, pj.experiencia_puntos, pj.pais, pj.discord_tag\nFROM usuarios u\nINNER JOIN perfiles_jugadores pj ON u.id = pj.usuario_id\nWHERE u.id = :usuario_id;`
+                    },
+                    {
+                        titulo: 'UPDATE (Subir Nivel y Puntos de Experiencia)',
+                        sql: `UPDATE perfiles_jugadores\nSET experiencia_puntos = experiencia_puntos + :puntos,\n    nivel = FLOOR((experiencia_puntos + :puntos) / 1000) + 1\nWHERE usuario_id = :usuario_id;`
+                    }
+                ],
+                php: `public function sumarExperiencia(int $usuarioId, int $xpGanada): bool {\n    $sql = "UPDATE perfiles_jugadores \n            SET experiencia_puntos = experiencia_puntos + :xp \n            WHERE usuario_id = :id";\n    $stmt = $this->db->prepare($sql);\n    return $stmt->execute([':xp' => $xpGanada, ':id' => $usuarioId]);\n}`
+            },
+            'perfiles_organizadores': {
+                desc: 'Subtipo e hija 1:1 de usuarios. Almacena clubes, federaciones y organizadores verificados.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Dar de Alta Perfil Organizador)',
+                        sql: `INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, bio_organizacion, localidad, telefono_contacto, sitio_web, verificado_oficial)\nVALUES (:usuario_id, :nombre_org, :bio, :localidad, :tel, :web, 0);`
+                    },
+                    {
+                        titulo: 'READ (Listar Organizadores Verificados para Directorio Público)',
+                        sql: `SELECT u.nombre_completo, po.nombre_organizacion, po.localidad, po.sitio_web, COUNT(t.id) AS total_torneos\nFROM perfiles_organizadores po\nINNER JOIN usuarios u ON po.usuario_id = u.id\nLEFT JOIN torneos t ON po.usuario_id = t.organizador_id\nWHERE po.verificado_oficial = 1\nGROUP BY po.usuario_id;`
+                    }
+                ],
+                php: `public function obtenerOrganizador(int $id): ?array {\n    $sql = "SELECT u.nombre_completo, po.* \n            FROM perfiles_organizadores po\n            INNER JOIN usuarios u ON po.usuario_id = u.id\n            WHERE po.usuario_id = :id";\n    $stmt = $this->db->prepare($sql);\n    $stmt->execute([':id' => $id]);\n    return $stmt->fetch() ?: null;\n}`
+            },
+            'torneos': {
+                desc: 'Entidad central de competencias deportivas y eSports. Define formato, cupos y reglas.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Crear Torneo con Configuración Multideporte)',
+                        sql: `INSERT INTO torneos (nombre, juego_id, organizador_id, formato, cupo_max_equipos, fecha_inicio, modalidad_id, sistema_puntuacion_id, estado)\nVALUES (:nombre, :juego_id, :organizador_id, :formato, :max_equipos, :fecha_inicio, :modalidad_id, :sistema_id, 'borrador');`
+                    },
+                    {
+                        titulo: 'READ (Listar Torneos Activos para Portal Público)',
+                        sql: `SELECT t.id, t.nombre, t.formato, t.estado, t.cupo_max_equipos, j.nombre AS juego_nombre, j.categoria, u.nombre_completo AS organizador\nFROM torneos t\nINNER JOIN juegos j ON t.juego_id = j.id\nINNER JOIN usuarios u ON t.organizador_id = u.id\nWHERE t.estado IN ('inscripciones_abiertas', 'en_curso')\nORDER BY t.fecha_inicio ASC;`
+                    },
+                    {
+                        titulo: 'UPDATE (Transición de Estado del Torneo)',
+                        sql: `UPDATE torneos\nSET estado = :nuevo_estado\nWHERE id = :torneo_id;`
+                    }
+                ],
+                php: `public function crearTorneo(array $datos): int {\n    $sql = "INSERT INTO torneos (nombre, juego_id, organizador_id, formato, cupo_max_equipos, fecha_inicio, modalidad_id, estado)\n            VALUES (:nombre, :juego_id, :org_id, :formato, :cupo, :fecha, :modalidad, 'borrador')";\n    $stmt = $this->db->prepare($sql);\n    $stmt->execute($datos);\n    return (int)$this->db->lastInsertId();\n}`
+            },
+            'torneo_encuentros': {
+                desc: 'Partidos, enfrentamientos y fixtures generados por el algoritmo del torneo.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Insertar Partido en Llave o Fixture)',
+                        sql: `INSERT INTO torneo_encuentros (torneo_id, ronda, participante_local_id, participante_visitante_id, fecha_hora_programada, estado)\nVALUES (:torneo_id, :ronda, :local_id, :visitante_id, :fecha_hora, 'programado');`
+                    },
+                    {
+                        titulo: 'UPDATE (Cargar Marcador y Declarar Ganador)',
+                        sql: `UPDATE torneo_encuentros\nSET resultado_local = :res_local, resultado_visitante = :res_vis,\n    estado = 'finalizado', participante_ganador_id = :ganador_id,\n    modificado_por_usuario_id = :admin_id\nWHERE id = :encuentro_id;`
+                    },
+                    {
+                        titulo: 'READ (Consultar Partidos de una Ronda con Nombres de Equipos)',
+                        sql: `SELECT e.id, e.ronda, pl.nombre AS local_nombre, pv.nombre AS visitante_nombre,\n       e.resultado_local, e.resultado_visitante, e.estado, pg.nombre AS ganador_nombre\nFROM torneo_encuentros e\nLEFT JOIN participantes_torneo pl ON e.participante_local_id = pl.id\nLEFT JOIN participantes_torneo pv ON e.participante_visitante_id = pv.id\nLEFT JOIN participantes_torneo pg ON e.participante_ganador_id = pg.id\nWHERE e.torneo_id = :torneo_id AND e.ronda = :ronda;`
+                    }
+                ],
+                php: `public function guardarMarcador(int $encuentroId, float $local, float $vis, int $ganadorId, int $usuarioId): bool {\n    $sql = "UPDATE torneo_encuentros \n            SET resultado_local = :loc, resultado_visitante = :vis, estado = 'finalizado', participante_ganador_id = :ganador, modificado_por_usuario_id = :usr \n            WHERE id = :id";\n    $stmt = $this->db->prepare($sql);\n    return $stmt->execute([':loc' => $local, ':vis' => $vis, ':ganador' => $ganadorId, ':usr' => $usuarioId, ':id' => $encuentroId]);\n}`
+            },
+            'torneo_posiciones': {
+                desc: 'Tabla de clasificación y estadísticas calculadas en tiempo real.',
+                crud: [
+                    {
+                        titulo: 'READ (Tabla de Posiciones Oficial Ordenada)',
+                        sql: `SELECT tp.*, pt.nombre AS equipo_nombre\nFROM torneo_posiciones tp\nINNER JOIN participantes_torneo pt ON tp.participante_id = pt.id\nWHERE tp.torneo_id = :torneo_id\nORDER BY tp.puntos DESC, tp.diferencia_goles DESC, tp.puntos_favor DESC;`
+                    },
+                    {
+                        titulo: 'UPDATE (Actualizar Estadísticas de un Ganador)',
+                        sql: `UPDATE torneo_posiciones\nSET partidos_jugados = partidos_jugados + 1, partidos_ganados = partidos_ganados + 1,\n    puntos_favor = puntos_favor + :goles_f, puntos_contra = puntos_contra + :goles_c,\n    puntos = puntos + 3\nWHERE torneo_id = :torneo_id AND participante_id = :participante_id;`
+                    }
+                ],
+                php: `public function obtenerClasificacion(int $torneoId): array {\n    $sql = "SELECT tp.*, pt.nombre AS participante \n            FROM torneo_posiciones tp \n            INNER JOIN participantes_torneo pt ON tp.participante_id = pt.id \n            WHERE tp.torneo_id = :tid \n            ORDER BY tp.puntos DESC, tp.diferencia_goles DESC";\n    $stmt = $this->db->prepare($sql);\n    $stmt->execute([':tid' => $torneoId]);\n    return $stmt->fetchAll();\n}`
+            },
+            'equipos': {
+                desc: 'Escuadras y clubes deportivos con sus capitanes y escudo.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Crear Nuevo Equipo)',
+                        sql: `INSERT INTO equipos (nombre_equipo, creado_por, escudo_url, descripcion, codigo_invitacion)\nVALUES (:nombre, :creador_id, :escudo, :desc, :codigo_unico);`
+                    },
+                    {
+                        titulo: 'READ (Listar Roster y Jugadores del Equipo)',
+                        sql: `SELECT u.nombre_completo, pj.apodo_gamertag, em.numero_camiseta, em.posicion, em.fecha_union\nFROM equipo_miembros em\nINNER JOIN usuarios u ON em.usuario_id = u.id\nLEFT JOIN perfiles_jugadores pj ON u.id = pj.usuario_id\nWHERE em.equipo_id = :equipo_id AND em.es_activo = 1;`
+                    }
+                ],
+                php: `public function crearEquipo(string $nombre, int $creadorId, string $codigo): int {\n    $sql = "INSERT INTO equipos (nombre_equipo, creado_por, codigo_invitacion) VALUES (:nom, :usr, :cod)";\n    $stmt = $this->db->prepare($sql);\n    $stmt->execute([':nom' => $nombre, ':usr' => $creadorId, ':cod' => $codigo]);\n    return (int)$this->db->lastInsertId();\n}`
+            },
+            'auditoria_cambios': {
+                desc: 'Bitácora inmutable de trazabilidad y seguridad (OWASP) sobre datos sensibles.',
+                crud: [
+                    {
+                        titulo: 'CREATE (Asentar Registro de Auditoría tras Modificación)',
+                        sql: `INSERT INTO auditoria_cambios (tabla_afectada, registro_id, accion, usuario_id, datos_viejos, datos_nuevos, ip_origen, user_agent)\nVALUES (:tabla, :reg_id, :accion, :usuario_id, :json_viejo, :json_nuevo, :ip, :ua);`
+                    },
+                    {
+                        titulo: 'READ (Filtrar Auditoría por Tabla o Usuario)',
+                        sql: `SELECT ac.*, u.email AS usuario_email, u.nombre_completo\nFROM auditoria_cambios ac\nLEFT JOIN usuarios u ON ac.usuario_id = u.id\nWHERE ac.tabla_afectada = :tabla\nORDER BY ac.fecha_hora DESC\nLIMIT 50;`
+                    }
+                ],
+                php: `public function registrarCambio(string $tabla, int $regId, string $accion, int $usrId, array $antes, array $despues): bool {\n    $sql = "INSERT INTO auditoria_cambios (tabla_afectada, registro_id, accion, usuario_id, datos_viejos, datos_nuevos, ip_origen) \n            VALUES (:t, :r, :a, :u, :v, :n, :ip)";\n    $stmt = $this->db->prepare($sql);\n    return $stmt->execute([\n        ':t' => $tabla, ':r' => $regId, ':a' => $accion, ':u' => $usrId,\n        ':v' => json_encode($antes), ':n' => json_encode($despues), ':ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'\n    ]);\n}`
+            }
+        };
+
+        // Elementos DOM
+        const svgCanvas = document.getElementById('svg-canvas');
+        const escenario = document.getElementById('escenario');
+        const viewport = document.getElementById('viewport');
+        const btn3D = document.getElementById('btn-toggle-3d');
+        const btnCentrar = document.getElementById('btn-centrar');
+        const btnAnim = document.getElementById('btn-anim-flujo');
+        const inputBusqueda = document.getElementById('busqueda');
+        const panelLateral = document.getElementById('panel-lateral');
+        const btnCerrarPanel = document.getElementById('btn-cerrar-panel');
+        const toast = document.getElementById('toast-copiado');
+
+        let is3D = true;
+        let animActiva = true;
+        let isDragging = false;
+        let startX, startY;
+        let posX = -300, posY = -400;
+        let scale = 0.75;
+        let rotX = 22, rotY = -12;
+
+        function renderizarLineas() {
+            svgCanvas.innerHTML = '';
+            relacionesDB.forEach((rel, index) => {
+                const elOrigen = document.getElementById(rel.origen);
+                const elDestino = document.getElementById(rel.destino);
+                if (!elOrigen || !elDestino) return;
+
+                const oLeft = parseFloat(elOrigen.style.left) + 130;
+                const oTop = parseFloat(elOrigen.style.top) + (elOrigen.offsetHeight / 2);
+                const dLeft = parseFloat(elDestino.style.left) + 130;
+                const dTop = parseFloat(elDestino.style.top) + (elDestino.offsetHeight / 2);
+
+                const dx = (dLeft - oLeft) * 0.45;
+                const pathData = `M ${oLeft} ${oTop} C ${oLeft + dx} ${oTop}, ${dLeft - dx} ${dTop}, ${dLeft} ${dTop}`;
+
+                // Línea de base estática
+                const pathBase = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                pathBase.setAttribute('d', pathData);
+                pathBase.setAttribute('class', 'linea-relacion-fondo');
+                svgCanvas.appendChild(pathBase);
+
+                // Línea de flujo de datos animada
+                if (animActiva) {
+                    const pathFlujo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathFlujo.setAttribute('d', pathData);
+                    pathFlujo.setAttribute('class', `linea-relacion-flujo tipo-${rel.tipo}`);
+                    pathFlujo.setAttribute('data-origen', rel.origen);
+                    pathFlujo.setAttribute('data-destino', rel.destino);
+                    pathFlujo.setAttribute('id', `linea-${index}`);
+                    svgCanvas.appendChild(pathFlujo);
+                }
+            });
+        }
+
+        function updateTransform() {
+            if (is3D) {
+                escenario.style.transform = `translate(${posX}px, ${posY}px) scale(${scale}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            } else {
+                escenario.style.transform = `translate(${posX}px, ${posY}px) scale(${scale}) rotateX(0deg) rotateY(0deg)`;
+            }
+        }
+
+        // Navegación
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.nodo-tabla') || e.target.closest('#panel-lateral')) return;
+            isDragging = true;
+            startX = e.clientX - posX;
+            startY = e.clientY - posY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            posX = e.clientX - startX;
+            posY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY * -0.001;
+            scale = Math.min(Math.max(0.25, scale + delta), 1.8);
+            updateTransform();
+        });
+
+        btn3D.addEventListener('click', () => {
+            is3D = !is3D;
+            btn3D.textContent = is3D ? '🧊 Vista 3D: ON' : '📐 Vista 2D Plana';
+            btn3D.style.background = is3D ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' : '#28354f';
+            updateTransform();
+        });
+
+        btnAnim.addEventListener('click', () => {
+            animActiva = !animActiva;
+            btnAnim.textContent = animActiva ? '⚡ Flujo: Activo' : '⏸️ Flujo: Pausado';
+            btnAnim.style.background = animActiva ? 'linear-gradient(135deg, #059669, #10b981)' : '#334155';
+            renderizarLineas();
+        });
+
+        btnCentrar.addEventListener('click', () => {
+            posX = -300; posY = -400; scale = 0.75;
+            rotX = is3D ? 22 : 0;
+            rotY = is3D ? -12 : 0;
+            updateTransform();
+        });
+
+        // Interacción y Clic en Tablas
+        document.querySelectorAll('.nodo-tabla').forEach(nodo => {
+            nodo.addEventListener('click', () => {
+                const idNodo = nodo.id;
+                const nombreTabla = nodo.getAttribute('data-tabla');
+
+                document.querySelectorAll('.nodo-tabla').forEach(n => n.classList.remove('seleccionado', 'atenuado'));
+                nodo.classList.add('seleccionado');
+
+                // Resaltar líneas
+                const conectadas = new Set([idNodo]);
+                const relacionesTabla = [];
+
+                relacionesDB.forEach((rel, idx) => {
+                    const linea = document.getElementById(`linea-${idx}`);
+                    if (rel.origen === idNodo || rel.destino === idNodo) {
+                        conectadas.add(rel.origen);
+                        conectadas.add(rel.destino);
+                        relacionesTabla.push(rel.desc);
+                        if (linea) {
+                            linea.classList.add('linea-destacada');
+                            linea.classList.remove('linea-oculta');
+                        }
+                    } else if (linea) {
+                        linea.classList.remove('linea-destacada');
+                        linea.classList.add('linea-oculta');
+                    }
+                });
+
+                document.querySelectorAll('.nodo-tabla').forEach(n => {
+                    if (!conectadas.has(n.id)) n.classList.add('atenuado');
+                });
+
+                // Cargar Información en el Panel
+                const info = bibliotecaSQL[nombreTabla] || {
+                    desc: `Tabla relacional en 3ra Forma Normal (3FN). Almacena registros del módulo de ${nombreTabla}.`,
+                    crud: [
+                        { titulo: 'SELECT (Consultar Registros)', sql: `SELECT * FROM ${nombreTabla} ORDER BY id DESC LIMIT 50;` },
+                        { titulo: 'SELECT (Buscar por ID)', sql: `SELECT * FROM ${nombreTabla} WHERE id = :id;` }
+                    ],
+                    php: `// Método genérico en modelo ${nombreTabla}\npublic function obtenerTodos(): array {\n    $sql = "SELECT * FROM ${nombreTabla} ORDER BY id DESC";\n    return $this->db->query($sql)->fetchAll();\n}`
+                };
+
+                document.getElementById('det-tabla-nombre').textContent = `📊 Tabla: ${nombreTabla}`;
+                document.getElementById('det-tabla-desc').textContent = info.desc;
+
+                // Renderizar Sentencias SQL CRUD
+                const contSQL = document.getElementById('contenedor-bloques-sql');
+                contSQL.innerHTML = '';
+
+                info.crud.forEach(item => {
+                    const divBloque = document.createElement('div');
+                    divBloque.className = 'bloque-sql';
+                    divBloque.innerHTML = `
+                        <div class="cabecera-sql">
+                            <span>⚡ ${item.titulo}</span>
+                            <button class="btn-copiar" onclick="copiarAlPortapapeles(\`${item.sql.replace(/`/g, '\\`')}\`)">📋 Copiar</button>
+                        </div>
+                        <pre class="codigo-sql">${item.sql}</pre>
+                    `;
+                    contSQL.appendChild(divBloque);
+                });
+
+                // Renderizar Relaciones
+                const ulRel = document.getElementById('det-tabla-relaciones');
+                ulRel.innerHTML = '';
+                if (relacionesTabla.length === 0) {
+                    ulRel.innerHTML = '<li>Tabla autónoma sin dependencias foráneas directas.</li>';
+                } else {
+                    relacionesTabla.forEach(r => {
+                        const li = document.createElement('li');
+                        li.textContent = r;
+                        ulRel.appendChild(li);
+                    });
+                }
+
+                // Renderizar Ejemplo PHP
+                document.getElementById('code-php-ejemplo').textContent = info.php;
+
+                panelLateral.classList.add('abierto');
+            });
+        });
+
+        btnCerrarPanel.addEventListener('click', () => {
+            panelLateral.classList.remove('abierto');
+            document.querySelectorAll('.nodo-tabla').forEach(n => n.classList.remove('seleccionado', 'atenuado'));
+            document.querySelectorAll('.linea-relacion-flujo').forEach(l => l.classList.remove('linea-destacada', 'linea-oculta'));
+        });
+
+        // Pestañas del Panel Lateral
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
+                document.querySelectorAll('.contenido-tab').forEach(c => c.classList.remove('activo'));
+
+                btn.classList.add('activo');
+                const targetTab = document.getElementById(btn.getAttribute('data-tab'));
+                if (targetTab) targetTab.classList.add('activo');
+            });
+        });
+
+        // Función Copiar al Portapapeles
+        window.copiarAlPortapapeles = function(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                toast.classList.add('visible');
+                setTimeout(() => { toast.classList.remove('visible'); }, 2000);
+            });
+        };
+
+        // Buscador
+        inputBusqueda.addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('.nodo-tabla').forEach(nodo => {
+                const match = nodo.textContent.toLowerCase().includes(q);
+                nodo.style.display = match ? 'block' : 'none';
+            });
+            renderizarLineas();
+        });
+
+        // Filtro por Dominio
+        document.querySelectorAll('.btn-filtro[data-dom]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.btn-filtro[data-dom]').forEach(b => b.classList.remove('activo'));
+                btn.classList.add('activo');
+                const dom = btn.getAttribute('data-dom');
+
+                document.querySelectorAll('.nodo-tabla').forEach(nodo => {
+                    if (dom === 'todos' || nodo.classList.contains(`dom-${dom}`)) {
+                        nodo.style.display = 'block';
+                    } else {
+                        nodo.style.display = 'none';
+                    }
+                });
+                renderizarLineas();
+            });
+        });
+
+        // Inicio
+        updateTransform();
+        setTimeout(renderizarLineas, 100);
+    </script>
+</body>
+</html>
