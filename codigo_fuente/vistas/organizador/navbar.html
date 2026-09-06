@@ -1,0 +1,88 @@
+﻿<nav class="navbar-organizador">
+
+   <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=dashboard" class="navbar-organizador-logo">
+    <img src="<?php echo URL_BASE; ?>img/logos/ascend-logo01.png" alt="Logo de ASCEND" class="logo-navbar">
+   </a>
+
+   <form class="navbar-organizador-buscar" role="search">
+
+      <i class="fa-solid fa-magnifying-glass"></i>
+
+      <input type="search" placeholder="Buscar...">
+
+   </form>
+
+   <div class="navbar-organizador-acciones">
+
+      <div class="navbar-notificaciones">
+
+         <button class="navbar-icono" id="btnNotificaciones" type="button" aria-label="Notificaciones"
+            aria-expanded="false" aria-controls="panelNotificaciones">
+            <i class="fa-solid fa-bell"></i>
+            <span class="navbar-notificaciones-contador">3</span>
+         </button>
+
+         <div class="navbar-notificaciones-panel" id="panelNotificaciones">
+
+            <header class="navbar-notificaciones-header">
+               <h3>Notificaciones</h3>
+               <button class="navbar-notificaciones-marcar" type="button">
+                  Marcar todo leído
+               </button>
+            </header>
+
+            <ul class="navbar-notificaciones-lista">
+
+               <li class="navbar-notificaciones-item navbar-notificaciones-item-sin-leer">
+                  <span class="navbar-notificaciones-icono navbar-notificaciones-icono-info">
+                     <i class="fa-solid fa-user-check"></i>
+                  </span>
+                  <div>
+                     <p><strong>Nueva solicitud</strong> de inscripción para "LoL Summer Cup"</p>
+                     <span>Hace 10 minutos</span>
+                  </div>
+               </li>
+
+               <li class="navbar-notificaciones-item navbar-notificaciones-item-sin-leer">
+                  <span class="navbar-notificaciones-icono navbar-notificaciones-icono--alerta">
+                     <i class="fa-solid fa-calendar-days"></i>
+                  </span>
+                  <div>
+                     <p><strong>Próximo partido</strong> en 2 horas: Artigas vs Flores</p>
+                     <span>Hace 1 hora</span>
+                  </div>
+               </li>
+
+               <li class="navbar-notificaciones-item navbar-notificaciones-item-sin-leer">
+                  <span class="navbar-notificaciones-icono navbar-notificaciones-icono--exito">
+                     <i class="fa-solid fa-clipboard-check"></i>
+                  </span>
+                  <div>
+                     <p>Falta cargar el <strong>resultado</strong> de Durazno vs Canelones</p>
+                     <span>Hace 3 horas</span>
+                  </div>
+               </li>
+
+               <li class="navbar-notificaciones-item">
+                  <span class="navbar-notificaciones-icono navbar-notificaciones-icono-info">
+                     <i class="fa-solid fa-trofeo"></i>
+                  </span>
+                  <div>
+                     <p>"Copa Black Ferns 2026" pasó a <strong>Fecha 4/8</strong></p>
+                     <span>Ayer</span>
+                  </div>
+               </li>
+
+            </ul>
+
+            <a href="historial.html" class="navbar-notificaciones-ver-todas">
+               Ver todas
+            </a>
+
+         </div>
+
+      </div>
+
+   </div>
+
+</nav>

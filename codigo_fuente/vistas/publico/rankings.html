@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ASCEND</title>
+
+  <!-- Swiper.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../publico/css/variables.css">
+  <link rel="stylesheet" href="../../publico/css/base.css">
+  <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
+  <link rel="stylesheet" href="../../publico/css/publico/home.css">
+  <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+  <link rel="stylesheet" href="../../publico/css/componentes/carruseles.css">
+  <link rel="stylesheet" href="../../publico/css/publico/rankings.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- NAVBAR ---------------------------->
+
+  <header id="navbar-publico-placeholder"></header>
+
+  <main>
+
+    <!-------------------------------------->
+    <!-- HERO ------------------------------>
+    <!-------------------------------------->
+
+    <section class="hero reveal">
+
+      <div class="hero-slider">
+
+        <div class="hero-slide active">
+          <img src="../../publico/img/banners/header01.jpg" alt="">
+        </div>
+
+        <div class="hero-slide">
+          <img src="../../publico/img/banners/header2.jpg" alt="">
+        </div>
+
+        <div class="hero-slide">
+          <img src="../../publico/img/banners/header3.jpg" alt="">
+        </div>
+      </div>
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-contenido">
+
+        <p class="hero-subtitulo">
+          Sistema de Gestión de Deportes y eSports
+        </p>
+
+        <h1>
+          Organiza y <br>Gestiona Torneos<br>
+        </h1>
+
+        <p class="hero-descripcion">
+          Administra competiciones, rankings, participantes y resultados
+          desde una sola plataforma moderna.
+        </p>
+
+        <div class="hero-botones">
+
+
+          <a href="en-construccion.html" class="primary-btn">
+            <span>Explorar Torneos</span>
+          </a>
+
+          <a href="../auth/login.html" class="secondary-btn">
+            Comenzar
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-------------------------------------->
+    <!-- TOP 3 ----------------------------->
+    <!-------------------------------------->
+
+    <section class="seccion-ganadores">
+      <div class="ganadores-izquierda">
+        <p class="tag">Mejores resultados</p>
+        <h2>Los mayores<br><span>ganadores</span><br>de hoy</h2>
+        <div class="trofeo">🏆</div>
+      </div>
+
+      <div class="ganadores-derecha">
+        <span class="ganadores-insignia">Mejores jugadores</span>
+        <ul class="ganadores-lista">
+
+          <li class="ganador-fila oro">
+            <div class="ganador-rango">1</div>
+            <div class="ganador-avatar">JS</div>
+            <span class="ganador-nombre">Joaquín Silva</span>
+            <span class="ganador-monto">+ 3,920 pts</span>
+          </li>
+
+          <li class="ganador-fila plata">
+            <div class="ganador-rango">2</div>
+            <div class="ganador-avatar">MR</div>
+            <span class="ganador-nombre">Maxi Rodríguez</span>
+            <span class="ganador-monto">+ 2,840 pts</span>
+          </li>
+
+          <li class="ganador-fila bronce">
+            <div class="ganador-rango">3</div>
+            <div class="ganador-avatar">LF</div>
+            <span class="ganador-nombre">Lucía Fontana</span>
+            <span class="ganador-monto">+ 2,610 pts</span>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-------------------------------------->
+    <!-- JUEGOS DESTACADOS ----------------->
+    <!-------------------------------------->
+
+    <section class="juegos-destacados">
+      <div class="juegos-header">
+        <p class="ganador-subtitulo">Competencias activas</p>
+        <h2>Juegos Destacados</h2>
+      </div>
+
+      <div class="carrusel-wrapper">
+        <button class="carrusel-btn" id="prev-btn">&#8592;</button>
+
+        <div class="carrusel-track-wrapper">
+          <ul class="juegos-grillas" id="juegos-track">
+
+            <li>
+              <article class="tarjeta-juego lol">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/basquet.png" alt="League of Legends">
+                  <div class="tarjeta-overlay">
+                    <h3>Basquetbol</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li>
+              <article class="tarjeta-juego apex">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/fly.jpg" alt="Apex Legends">
+                  <div class="tarjeta-overlay">
+                    <h3>Apex Legends</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li>
+              <article class="tarjeta-juego cs">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/uno.jpg" alt="Counter Strike">
+                  <div class="tarjeta-overlay">
+                    <h3>Uno</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li>
+              <article class="tarjeta-juego wow">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/futbol5.jpg" alt="World of Warcraft">
+                  <div class="tarjeta-overlay">
+                    <h3>Futbol 5</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li>
+              <article class="tarjeta-juego val">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/dos.jpg" alt="Valorant">
+                  <div class="tarjeta-overlay">
+                    <h3>Valorant</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li>
+              <article class="tarjeta-juego chess">
+                <div class="tarjeta-info">
+                  <img src="../../publico/img/juegos/chess.jpg" alt="Ajedrez">
+                  <div class="tarjeta-overlay">
+                    <h3>Ajedrez</h3>
+                    <p>4 anuncios</p>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+          </ul>
+        </div>
+
+        <button class="carrusel-btn" id="next-btn">&#8594;</button>
+      </div>
+    </section>
+
+    <!-------------------------------------->
+    <!-- RANKINGS -------------------------->
+    <!-------------------------------------->
+
+    <section class="seccion-ranking">
+      <div class="ranking-header">
+        <p>Tabla completa</p>
+        <h2>Ranking general</h2>
+
+        <ul class="ranking-tabs">
+          <li><button class="rk-tab active" data-tab="jugadores">Jugadores</button></li>
+          <li><button class="rk-tab" data-tab="equipos">Equipos</button></li>
+        </ul>
+      </div>
+
+      <div class="seccion-tabla">
+        <table>
+          <thead>
+            <tr class="ranking-fila encabezado">
+              <th>Pos</th>
+              <th id="rk-col-name">Jugador</th>
+              <th class="rk-game">Juego</th>
+              <th class="rk-encuentros">Partidas</th>
+              <th class="col-puntos">Puntos</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-cuerpo">
+            <!-- las filas se inyectan con JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER ---------------------------->
+
+  <footer id="footer-publico-placeholder"></footer>
+
+
+
+  <script src="../../publico/js/includesPublicos.js"></script>
+  <script src="../../publico/js/navbar.js"></script>
+  <script src="../../publico/js/hero-slider.js"></script>
+  <script src="../../publico/js/scroll-reveal.js"></script>
+  <script src="../../publico/js/featured-games.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+</body>
+
+</html>

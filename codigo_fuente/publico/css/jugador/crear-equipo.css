@@ -1,0 +1,504 @@
+/* =========================================================
+   MI EQUIPO (Crear / Gestionar) — Mobile first
+   Mismo lenguaje visual que perfil-equipo.css.
+========================================================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.oculto {
+   display: none !important;
+}
+
+.crear-equipo-pagina {
+   background: #030205;
+   color: #fff;
+   font-family: 'Poppins', sans-serif;
+   padding-top: 100px;
+   padding-bottom: 60px;
+   overflow-x: hidden;
+}
+
+.crear-equipo-header {
+   width: 92%;
+   max-width: 700px;
+   margin: 0 auto 28px;
+   text-align: center;
+}
+
+.crear-equipo-header h1 {
+   font-size: 1.7rem;
+   font-weight: 800;
+   margin-bottom: 10px;
+}
+
+.crear-equipo-header p {
+   font-size: 0.9rem;
+   color: #c9c9d6;
+   line-height: 1.6;
+}
+
+.gestion-etiqueta {
+   display: inline-block;
+   margin-bottom: 10px;
+   padding: 6px 16px;
+   border-radius: 999px;
+   background: rgba(var(--color-secundario-rgb), 0.12);
+   color: var(--color-secundario);
+   font-size: 0.75rem;
+   font-weight: 700;
+   letter-spacing: 0.04em;
+}
+
+.crear-equipo-formulario {
+   width: 92%;
+   max-width: 700px;
+   margin: 0 auto;
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+
+.tarjeta-equipo {
+   padding: 22px 20px;
+   background: #101010;
+   border-radius: 20px;
+}
+
+.tarjeta-equipo h2 {
+   font-size: 1.1rem;
+   font-weight: 700;
+   margin-bottom: 18px;
+}
+
+/* --- Escudo y banner --- */
+
+.crear-equipo-imagenes {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+
+.campo-imagen {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 12px;
+}
+
+.preview-banner {
+   width: 100%;
+   height: 140px;
+   border-radius: 14px;
+   overflow: hidden;
+   background: #1a1a1a;
+   border: 1px dashed rgba(255, 255, 255, 0.2);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.preview-banner img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.preview-escudo {
+   width: 110px;
+   height: 110px;
+   border-radius: 50%;
+   overflow: hidden;
+   background: #1a1a1a;
+   border: 1px dashed rgba(255, 255, 255, 0.2);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.preview-escudo img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.placeholder-texto {
+   font-size: 0.8rem;
+   color: #777;
+}
+
+.placeholder-icono {
+   font-size: 32px;
+   color: #555;
+}
+
+.boton-subir-imagen {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(48, 245, 210, 0.35);
+   color: #fff;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 600;
+   cursor: pointer;
+}
+
+.boton-subir-imagen:hover {
+   background: rgba(48, 245, 210, 0.12);
+   border-color: #30f5d2;
+}
+
+/* --- Campos del formulario --- */
+
+.campo-fila {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+}
+
+.campo-grupo {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+   margin-bottom: 16px;
+}
+
+.campo-grupo:last-child {
+   margin-bottom: 0;
+}
+
+.campo-grupo label {
+   font-size: 0.8rem;
+   color: #b8b8c9;
+}
+
+.campo-grupo input,
+.campo-grupo select,
+.campo-grupo textarea {
+   width: 100%;
+   min-width: 0;
+   background: #292844;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   color: #fff;
+   padding: 12px 14px;
+   border-radius: 8px;
+   font-family: inherit;
+   font-size: 0.9rem;
+   outline: none;
+}
+
+.campo-grupo select {
+   cursor: pointer;
+}
+
+.campo-grupo input:focus,
+.campo-grupo select:focus,
+.campo-grupo textarea:focus {
+   border-color: #30f5d2;
+   box-shadow: 0 0 0 3px rgba(48, 245, 210, 0.12);
+}
+
+.campo-grupo textarea {
+   resize: vertical;
+   min-height: 100px;
+}
+
+/* --- Código de invitación --- */
+
+.codigo-invitacion-box {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 10px;
+   background: #292844;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   border-radius: 8px;
+   padding: 12px 14px;
+}
+
+.codigo-invitacion-box span {
+   font-family: monospace;
+   font-size: 1rem;
+   letter-spacing: 1px;
+   color: var(--color-secundario);
+}
+
+.codigo-invitacion-box button {
+   flex-shrink: 0;
+   border: none;
+   background: rgba(255, 255, 255, 0.08);
+   color: #fff;
+   padding: 8px 14px;
+   border-radius: 999px;
+   font-size: 0.75rem;
+   font-family: inherit;
+   cursor: pointer;
+}
+
+.codigo-invitacion-box button:hover {
+   background: rgba(48, 245, 210, 0.18);
+}
+
+/* --- Buscador de jugadores --- */
+
+.buscador-jugadores {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   background: #292844;
+   border-radius: 8px;
+   padding: 12px 16px;
+   margin-bottom: 18px;
+}
+
+.buscador-jugadores i {
+   color: #999;
+}
+
+.buscador-jugadores input {
+   flex: 1;
+   min-width: 0;
+   border: none;
+   background: transparent;
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.9rem;
+   outline: none;
+}
+
+/* --- Filas de jugadores (miembros / resultados / solicitudes) --- */
+
+.lista-jugadores {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.lista-vacia {
+   text-align: center;
+   color: var(--texto-secundario);
+   font-size: 0.85rem;
+   padding: 10px 0;
+}
+
+.fila-jugador {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 10px 12px;
+   border-radius: 12px;
+   background: #1a1a1a;
+   flex-wrap: wrap;
+}
+
+.fila-jugador-avatar {
+   width: 42px;
+   height: 42px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+   background: #333;
+}
+
+.fila-jugador-info {
+   flex: 1;
+   min-width: 120px;
+}
+
+.fila-jugador-nombre {
+   font-size: 0.9rem;
+   font-weight: 600;
+   display: block;
+}
+
+.fila-jugador-usuario {
+   font-size: 0.75rem;
+   color: var(--texto-secundario);
+}
+
+.fila-jugador-badge {
+   padding: 4px 10px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.fila-jugador-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.fila-jugador-badge.badge-capitan {
+   background: rgba(var(--color-secundario-rgb), 0.15);
+   color: var(--color-secundario);
+}
+
+.fila-jugador-badge.badge-pendiente {
+   background: rgba(255, 200, 0, 0.15);
+   color: #ffcf40;
+}
+
+.fila-jugador-acciones {
+   display: flex;
+   gap: 8px;
+   flex-wrap: wrap;
+   width: 100%;
+}
+
+.fila-jugador-acciones button {
+   border: none;
+   padding: 8px 14px;
+   border-radius: 999px;
+   font-size: 0.75rem;
+   font-family: inherit;
+   font-weight: 600;
+   cursor: pointer;
+}
+
+.boton-hacer-capitan {
+   background: rgba(48, 245, 210, 0.12);
+   color: #30f5d2;
+}
+
+.boton-hacer-capitan:hover {
+   background: rgba(48, 245, 210, 0.22);
+}
+
+.boton-ceder-liderazgo {
+   background: rgba(245, 17, 203, 0.15);
+   color: #f511cb;
+}
+
+.boton-ceder-liderazgo:hover {
+   background: rgba(245, 17, 203, 0.28);
+}
+
+.boton-invitar {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.boton-invitar:hover {
+   filter: brightness(1.1);
+}
+
+.boton-cancelar-solicitud,
+.boton-quitar-miembro {
+   background: transparent;
+   border: 1px solid rgba(255, 80, 80, 0.4) !important;
+   color: #ff8080;
+}
+
+.boton-cancelar-solicitud:hover,
+.boton-quitar-miembro:hover {
+   background: rgba(255, 80, 80, 0.1);
+}
+
+.boton-simular-aceptar {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
+   border: 1px dashed rgba(48, 245, 210, 0.4) !important;
+}
+
+/* --- Botones de acción del formulario (crear/guardar) --- */
+
+.crear-equipo-acciones {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+}
+
+.crear-equipo-acciones .boton-registro,
+.crear-equipo-acciones .boton-cancelar-edicion {
+   width: 100%;
+   text-align: center;
+}
+
+.boton-registro {
+   border: none;
+   padding: 14px;
+   border-radius: 999px;
+   background: linear-gradient(90deg, #00FFEE, #097AEC);
+   color: #08101c;
+   font-family: inherit;
+   font-size: 0.9rem;
+   font-weight: 800;
+   cursor: pointer;
+}
+
+.boton-cancelar-edicion {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   background: transparent;
+   border: 1px solid rgba(255, 255, 255, 0.25);
+   color: #c7c7d8;
+   padding: 14px;
+   border-radius: 999px;
+   font-size: 0.9rem;
+   font-weight: 600;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.boton-cancelar-edicion:hover {
+   background: rgba(255, 80, 80, 0.1);
+   border-color: rgba(255, 80, 80, 0.5);
+   color: #ff8080;
+}
+
+/* =========================================================
+   ESCRITORIO (min-width: 700px)
+========================================================= */
+
+@media (min-width: 700px) {
+
+   .crear-equipo-imagenes {
+      flex-direction: row;
+      align-items: center;
+   }
+
+   .campo-banner {
+      flex: 1;
+   }
+
+   .campo-fila {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .crear-equipo-acciones {
+      flex-direction: row;
+      justify-content: flex-end;
+   }
+
+   .crear-equipo-acciones .boton-registro,
+   .crear-equipo-acciones .boton-cancelar-edicion {
+      width: auto;
+      padding-left: 32px;
+      padding-right: 32px;
+   }
+}
+
+@media (min-width: 600px) {
+
+   .fila-jugador {
+      flex-wrap: nowrap;
+   }
+
+   .fila-jugador-acciones {
+      width: auto;
+      flex-shrink: 0;
+   }
+}

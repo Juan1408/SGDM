@@ -1,0 +1,222 @@
+/* =========================================================
+   GESTIONAR EQUIPO — Mobile first
+   Complementa crear-equipo.css (reutilizado para el
+   formulario de datos del equipo).
+========================================================= */
+
+.gestion-etiqueta {
+   display: inline-block;
+   margin-bottom: 10px;
+   padding: 6px 16px;
+   border-radius: 999px;
+   background: rgba(var(--color-secundario-rgb), 0.12);
+   color: var(--color-secundario);
+   font-size: 0.75rem;
+   font-weight: 700;
+   letter-spacing: 0.04em;
+}
+
+/* --- Código de invitación --- */
+
+.codigo-invitacion-box {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 10px;
+   background: #292844;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   border-radius: 8px;
+   padding: 12px 14px;
+}
+
+.codigo-invitacion-box span {
+   font-family: monospace;
+   font-size: 1rem;
+   letter-spacing: 1px;
+   color: var(--color-secundario);
+}
+
+.codigo-invitacion-box button {
+   flex-shrink: 0;
+   border: none;
+   background: rgba(255, 255, 255, 0.08);
+   color: #fff;
+   padding: 8px 14px;
+   border-radius: 999px;
+   font-size: 0.75rem;
+   font-family: inherit;
+   cursor: pointer;
+}
+
+.codigo-invitacion-box button:hover {
+   background: rgba(48, 245, 210, 0.18);
+}
+
+/* --- Buscador de jugadores --- */
+
+.buscador-jugadores {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   background: #292844;
+   border-radius: 8px;
+   padding: 12px 16px;
+   margin-bottom: 18px;
+}
+
+.buscador-jugadores i {
+   color: #999;
+}
+
+.buscador-jugadores input {
+   flex: 1;
+   min-width: 0;
+   border: none;
+   background: transparent;
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.9rem;
+   outline: none;
+}
+
+/* --- Filas de jugadores (miembros / resultados / solicitudes) --- */
+
+.lista-jugadores {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+
+.lista-vacia {
+   text-align: center;
+   color: var(--texto-secundario);
+   font-size: 0.85rem;
+   padding: 10px 0;
+}
+
+.fila-jugador {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 10px 12px;
+   border-radius: 12px;
+   background: #1a1a1a;
+   flex-wrap: wrap;
+}
+
+.fila-jugador-avatar {
+   width: 42px;
+   height: 42px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+   background: #333;
+}
+
+.fila-jugador-info {
+   flex: 1;
+   min-width: 120px;
+}
+
+.fila-jugador-nombre {
+   font-size: 0.9rem;
+   font-weight: 600;
+   display: block;
+}
+
+.fila-jugador-usuario {
+   font-size: 0.75rem;
+   color: var(--texto-secundario);
+}
+
+.fila-jugador-badge {
+   padding: 4px 10px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.fila-jugador-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.fila-jugador-badge.badge-capitan {
+   background: rgba(var(--color-secundario-rgb), 0.15);
+   color: var(--color-secundario);
+}
+
+.fila-jugador-badge.badge-pendiente {
+   background: rgba(255, 200, 0, 0.15);
+   color: #ffcf40;
+}
+
+.fila-jugador-acciones {
+   display: flex;
+   gap: 8px;
+   flex-wrap: wrap;
+   width: 100%;
+}
+
+.fila-jugador-acciones button {
+   border: none;
+   padding: 8px 14px;
+   border-radius: 999px;
+   font-size: 0.75rem;
+   font-family: inherit;
+   font-weight: 600;
+   cursor: pointer;
+}
+
+.boton-hacer-capitan {
+   background: rgba(48, 245, 210, 0.12);
+   color: #30f5d2;
+}
+
+.boton-hacer-capitan:hover {
+   background: rgba(48, 245, 210, 0.22);
+}
+
+.boton-invitar {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.boton-invitar:hover {
+   filter: brightness(1.1);
+}
+
+.boton-cancelar-solicitud,
+.boton-quitar-miembro {
+   background: transparent;
+   border: 1px solid rgba(255, 80, 80, 0.4) !important;
+   color: #ff8080;
+}
+
+.boton-cancelar-solicitud:hover,
+.boton-quitar-miembro:hover {
+   background: rgba(255, 80, 80, 0.1);
+}
+
+.boton-simular-aceptar {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
+   border: 1px dashed rgba(48, 245, 210, 0.4) !important;
+}
+
+/* =========================================================
+   ESCRITORIO (min-width: 600px)
+========================================================= */
+
+@media (min-width: 600px) {
+
+   .fila-jugador {
+      flex-wrap: nowrap;
+   }
+
+   .fila-jugador-acciones {
+      width: auto;
+      flex-shrink: 0;
+   }
+}

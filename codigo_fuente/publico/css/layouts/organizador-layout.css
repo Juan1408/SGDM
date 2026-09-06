@@ -1,0 +1,828 @@
+﻿/*
+=====================================================
+   LAYOUT COMPARTIDO - ROL ORGANIZADOR
+   =====================================================
+   Este es el ÚNICO archivo que define estructura
+   (navbar, sidebar, wrapper de contenido, header
+   genérico, panel genérico). Ningún CSS de página
+   debe volver a declarar width/margin/padding sobre
+   estos selectores: .dashboard-organizador,
+   .dashboard-sidebar, .navbar-organizador,
+   .dashboard-header, .dashboard-panel.
+
+   Mobile first: todo lo que sigue es la base para
+   celular. Los @media (min-width: ...) van agregando
+   el layout de tablet/escritorio.
+=====================================================
+*/
+
+html {
+   background: var(--fondo-dashboard);
+   overflow-x: hidden;
+}
+
+body {
+   margin: 0;
+   font-family: 'Poppins', sans-serif;
+   background: var(--fondo-dashboard);
+   color: var(--texto-principal);
+
+   min-height: 100vh;
+   min-height: 100dvh;
+}
+
+/*
+=====================================================
+   NAVBAR
+=====================================================
+*/
+
+.logo-navbar {
+   height: 50px;
+   width: auto;
+   object-fit: contain;
+}
+
+.navbar-organizador {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   z-index: 1100;
+
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 1rem;
+
+   width: 100%;
+   height: var(--alto-navbar);
+
+   padding: 0 1rem;
+
+   background: rgba(10, 12, 22, 0.95);
+   backdrop-filter: blur(14px);
+   border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.navbar-organizador-logo {
+   display: flex;
+   align-items: center;
+   gap: .6rem;
+
+   text-decoration: none;
+   color: #fff;
+   font-size: 1.05rem;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.navbar-organizador-logo i {
+   color: var(--color-primario);
+   font-size: 1.2rem;
+}
+
+.navbar-organizador-buscar {
+   display: none; /* oculto en mobile, ver min-width:600px */
+}
+
+.navbar-organizador-acciones {
+   display: flex;
+   align-items: center;
+   gap: .6rem;
+   flex-shrink: 0;
+}
+
+.navbar-icono {
+   width: 40px;
+   height: 40px;
+   flex-shrink: 0;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border: none;
+   border-radius: 50%;
+   background: #171a2d;
+   color: #fff;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.navbar-icono:hover {
+   background: var(--color-primario);
+}
+
+/*
+=====================================================
+   NOTIFICACIONES (dropdown de la campana)
+=====================================================
+*/
+
+.navbar-notificaciones {
+   position: relative;
+}
+
+.navbar-notificaciones-contador {
+   position: absolute;
+   top: -2px;
+   right: -2px;
+
+   min-width: 16px;
+   height: 16px;
+   padding: 0 4px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 999px;
+   border: 2px solid var(--fondo-principal);
+   background: var(--color-primario);
+   color: #fff;
+   font-size: .62rem;
+   font-weight: 800;
+   line-height: 1;
+}
+
+.navbar-notificaciones-panel {
+   display: none;
+
+   position: absolute;
+   top: calc(100% + .75rem);
+   right: 0;
+   z-index: 1200;
+
+   width: min(360px, calc(100vw - 2rem));
+   max-height: min(420px, calc(100vh - var(--alto-navbar) - 1.5rem));
+
+   flex-direction: column;
+   overflow: hidden;
+
+   background: var(--fondo-panel);
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-lg);
+   box-shadow: 0 20px 45px rgba(0, 0, 0, .5);
+}
+
+.navbar-notificaciones.abierto .navbar-notificaciones-panel {
+   display: flex;
+}
+
+.navbar-notificaciones-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: .75rem;
+
+   padding: 1rem 1.1rem;
+   border-bottom: 1px solid var(--borde-suave);
+}
+
+.navbar-notificaciones-header h3 {
+   font-size: .95rem;
+}
+
+.navbar-notificaciones-marcar {
+   flex-shrink: 0;
+   border: none;
+   background: transparent;
+   color: var(--color-secundario);
+   font: inherit;
+   font-size: .72rem;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.navbar-notificaciones-marcar:hover {
+   text-decoration: underline;
+}
+
+.navbar-notificaciones-lista {
+   list-style: none;
+   margin: 0;
+   padding: .5rem;
+
+   display: flex;
+   flex-direction: column;
+   gap: .35rem;
+
+   overflow-y: auto;
+}
+
+.navbar-notificaciones-item {
+   display: flex;
+   align-items: flex-start;
+   gap: .75rem;
+   min-width: 0;
+
+   padding: .7rem;
+   border-radius: var(--radio-md);
+   transition: var(--transicion);
+}
+
+.navbar-notificaciones-item:hover {
+   background: rgba(255, 255, 255, .04);
+}
+
+.navbar-notificaciones-item-sin-leer {
+   background: rgba(0, 255, 238, .06);
+}
+
+.navbar-notificaciones-item > div {
+   min-width: 0;
+}
+
+.navbar-notificaciones-item p {
+   font-size: .82rem;
+   line-height: 1.4;
+   overflow-wrap: break-word;
+}
+
+.navbar-notificaciones-item span {
+   display: block;
+   margin-top: .25rem;
+   color: var(--texto-secundario);
+   font-size: .7rem;
+}
+
+.navbar-notificaciones-icono {
+   flex-shrink: 0;
+   width: 34px;
+   height: 34px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border-radius: 10px;
+   font-size: .85rem;
+}
+
+.navbar-notificaciones-icono-info {
+   background: rgba(32, 196, 255, .14);
+   color: #097AEC;
+}
+
+.navbar-notificaciones-icono--alerta {
+   background: rgba(255, 180, 0, .14);
+   color: #ffb400;
+}
+
+.navbar-notificaciones-icono--exito {
+   background: rgba(0, 255, 238, .14);
+   color: var(--color-secundario);
+}
+
+.navbar-notificaciones-ver-todas {
+   display: block;
+   padding: .85rem;
+   text-align: center;
+
+   border-top: 1px solid var(--borde-suave);
+   color: var(--color-secundario);
+   text-decoration: none;
+   font-size: .82rem;
+   font-weight: 700;
+}
+
+.navbar-notificaciones-ver-todas:hover {
+   background: rgba(255, 255, 255, .03);
+}
+
+@media (max-width: 420px) {
+
+   .navbar-notificaciones-panel {
+      position: fixed;
+      top: var(--alto-navbar);
+      right: .5rem;
+      left: .5rem;
+      width: auto;
+   }
+}
+
+/*
+=====================================================
+   SIDEBAR
+   Mobile: franja angosta de solo íconos (78px), que
+   se puede expandir tocando el botón hamburguesa.
+=====================================================
+*/
+
+.dashboard-sidebar {
+   position: fixed;
+   top: var(--alto-navbar);
+   left: 0;
+
+   width: 78px;
+   height: calc(100vh - var(--alto-navbar));
+   height: calc(100dvh - var(--alto-navbar));
+
+   padding: 1.25rem .5rem;
+
+   background: var(--fondo-panel);
+   border-right: 1px solid rgba(0, 255, 238, .16);
+
+   overflow-y: auto;
+   overflow-x: hidden;
+   scrollbar-width: none;
+
+   transition: width .3s ease, box-shadow .3s ease;
+   z-index: 900;
+}
+
+.dashboard-sidebar::-webkit-scrollbar {
+   width: 0;
+}
+
+.dashboard-sidebar.expanded {
+   width: 250px;
+   box-shadow: 12px 0 35px rgba(0, 0, 0, .5);
+}
+
+.sidebar-toggle {
+   width: 42px;
+   height: 42px;
+   margin: 0 auto 1.5rem;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border: 1px solid rgba(0, 255, 238, .25);
+   border-radius: 12px;
+   background: rgba(0, 255, 238, .12);
+   color: var(--color-secundario);
+   font-size: 1.1rem;
+   cursor: pointer;
+}
+
+.sidebar-usuario {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: .8rem;
+   margin-bottom: 1.5rem;
+}
+
+.sidebar-usuario img {
+   width: 40px;
+   height: 40px;
+   flex-shrink: 0;
+   border-radius: 50%;
+   border: 2px solid var(--color-secundario);
+}
+
+.sidebar-usuario-datos {
+   width: 0;
+   opacity: 0;
+   visibility: hidden;
+   overflow: hidden;
+   white-space: nowrap;
+   transition: opacity .2s ease, width .3s ease;
+}
+
+.dashboard-sidebar.expanded .sidebar-usuario {
+   justify-content: flex-start;
+   padding-left: .5rem;
+}
+
+.dashboard-sidebar.expanded .sidebar-usuario-datos {
+   width: auto;
+   opacity: 1;
+   visibility: visible;
+}
+
+.sidebar-lista {
+   display: flex;
+   flex-direction: column;
+   gap: .5rem;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.sidebar-link {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: .8rem;
+
+   padding: .8rem 0;
+   border-radius: 12px;
+
+   color: #d8d8e5;
+   text-decoration: none;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.sidebar-link i {
+   min-width: 24px;
+   text-align: center;
+   flex-shrink: 0;
+}
+
+.sidebar-link span {
+   width: 0;
+   opacity: 0;
+   visibility: hidden;
+   overflow: hidden;
+   white-space: nowrap;
+   transition: opacity .2s ease, width .3s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   color: #fff;
+}
+
+.dashboard-sidebar.expanded .sidebar-link {
+   justify-content: flex-start;
+   padding: .8rem .8rem;
+}
+
+.dashboard-sidebar.expanded .sidebar-link span {
+   width: auto;
+   opacity: 1;
+   visibility: visible;
+}
+
+/* Botón desplegable (ej: "Mis Torneos") - mismo look que un sidebar-link */
+
+.sidebar-desplegable-btn {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 0;
+
+   padding: .8rem 0;
+   border: none;
+   border-radius: 12px;
+   background: transparent;
+   color: #d8d8e5;
+   font-family: inherit;
+   font-size: 1rem;
+   text-align: left;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.sidebar-desplegable-btn:hover,
+.sidebar-item-desplegable.abierto .sidebar-desplegable-btn {
+   background: linear-gradient(90deg, rgba(0, 255, 238,.22), rgba(245, 17, 203,.2));
+   color: #fff;
+}
+
+.sidebar-desplegable-btn__contenido {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: .8rem;
+   min-width: 0;
+}
+
+.sidebar-desplegable-btn__contenido i {
+   min-width: 24px;
+   text-align: center;
+   flex-shrink: 0;
+}
+
+.sidebar-desplegable-btn__contenido span,
+.sidebar-flecha {
+   width: 0;
+   opacity: 0;
+   visibility: hidden;
+   overflow: hidden;
+   white-space: nowrap;
+}
+
+.dashboard-sidebar.expanded .sidebar-desplegable-btn {
+   justify-content: space-between;
+   padding: .8rem .8rem;
+   gap: .8rem;
+}
+
+.dashboard-sidebar.expanded .sidebar-desplegable-btn__contenido {
+   justify-content: flex-start;
+}
+
+.dashboard-sidebar.expanded .sidebar-desplegable-btn__contenido span {
+   width: auto;
+   opacity: 1;
+   visibility: visible;
+}
+
+.dashboard-sidebar.expanded .sidebar-flecha {
+   width: auto;
+   opacity: 1;
+   visibility: visible;
+   font-size: .75rem;
+   transition: transform .3s ease;
+}
+
+.sidebar-item-desplegable.abierto .sidebar-flecha {
+   transform: rotate(180deg);
+}
+
+.sidebar-submenu {
+   display: none;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.dashboard-sidebar.expanded .sidebar-submenu {
+   display: block;
+   max-height: 0;
+   overflow: hidden;
+   opacity: 0;
+   padding-left: 1.5rem;
+   transition: max-height .3s ease, opacity .25s ease, margin .3s ease;
+}
+
+.sidebar-item-desplegable.abierto .sidebar-submenu {
+   max-height: 220px;
+   opacity: 1;
+   margin: .5rem 0;
+}
+
+.sidebar-submenu a {
+   display: block;
+   padding: .6rem .8rem;
+   border-radius: 10px;
+   font-size: .85rem;
+   color: var(--texto-secundario);
+   text-decoration: none;
+}
+
+.sidebar-submenu a:hover {
+   color: var(--color-secundario);
+   background: rgba(0, 255, 238, .08);
+}
+
+/*
+=====================================================
+   CONTENIDO PRINCIPAL
+=====================================================
+*/
+
+.dashboard-organizador {
+   margin-left: 78px;
+   margin-top: var(--alto-navbar);
+   padding: 1.25rem 1rem 2.5rem;
+   min-height: calc(100vh - var(--alto-navbar));
+   min-height: calc(100dvh - var(--alto-navbar));
+   background: var(--fondo-dashboard);
+}
+
+.dashboard-header {
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   margin-bottom: 1.5rem;
+   min-width: 0;
+}
+
+.dashboard-header > div {
+   min-width: 0;
+}
+
+.dashboard-tag {
+   color: var(--color-secundario);
+   font-weight: 700;
+   letter-spacing: 2px;
+}
+
+.dashboard-header h1,
+.dashboard-header h2 {
+   font-size: clamp(1.5rem, 6vw, 2.1rem);
+   line-height: 1.2;
+   margin-top: .4rem;
+   overflow-wrap: break-word;
+   word-break: break-word;
+}
+
+.header-derecho {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) 44px;
+   gap: .75rem;
+}
+
+.buscador {
+   display: flex;
+   align-items: center;
+   gap: .6rem;
+   min-width: 0;
+   padding: .7rem 1rem;
+   background: var(--fondo-tarjeta);
+   border-radius: 14px;
+}
+
+.buscador input {
+   flex: 1;
+   min-width: 0;
+   background: none;
+   border: none;
+   color: #fff;
+   outline: none;
+}
+
+.dashboard-icon {
+   width: 44px;
+   height: 44px;
+   flex-shrink: 0;
+   border: none;
+   border-radius: 50%;
+   background: var(--fondo-tarjeta);
+   color: var(--color-secundario);
+}
+
+.boton-crear-torneo {
+   grid-column: 1 / -1;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+
+   padding: .8rem 1.4rem;
+   border: none;
+   border-radius: var(--radio-md);
+
+   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
+   color: #07101c;
+   font-weight: 700;
+   text-decoration: none;
+   white-space: nowrap;
+}
+
+/*
+=====================================================
+   PANEL GENÉRICO (se reusa en varias páginas)
+=====================================================
+*/
+
+.dashboard-panel {
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border-radius: var(--radio-lg);
+   border: 1px solid var(--borde-suave);
+}
+
+.panel-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: .75rem;
+   margin-bottom: 1.25rem;
+}
+
+.panel-header h2,
+.panel-header h3 {
+   font-size: 1.1rem;
+}
+
+.panel-header a {
+   color: var(--color-secundario);
+   text-decoration: none;
+   font-size: .9rem;
+   white-space: nowrap;
+}
+
+
+/*
+=====================================================
+   TABLET (min-width: 600px)
+=====================================================
+*/
+
+@media (min-width: 600px) {
+
+   .navbar-organizador-buscar {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      flex: 1;
+      max-width: 320px;
+      padding: .6rem 1rem;
+      background: #171a2d;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+   }
+
+   .navbar-organizador-buscar i {
+      color: #7d83a6;
+   }
+
+   .navbar-organizador-buscar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+   }
+
+   .navbar-organizador-buscar input::placeholder {
+      color: #7d83a6;
+   }
+
+   .dashboard-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+   }
+
+   .header-derecho {
+      width: auto;
+      display: flex;
+      align-items: center;
+   }
+
+   .buscador {
+      width: auto;
+   }
+}
+
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+=====================================================
+*/
+
+@media (min-width: 900px) {
+
+   .navbar-organizador {
+      padding: 0 2rem;
+   }
+
+   .navbar-organizador-buscar {
+      max-width: 480px;
+   }
+
+   .dashboard-sidebar {
+      width: 260px;
+      padding: 2rem 1.25rem;
+   }
+
+   .dashboard-sidebar.expanded {
+      width: 260px;
+      box-shadow: none;
+   }
+
+   .sidebar-toggle {
+      display: none;
+   }
+
+   .sidebar-usuario,
+   .sidebar-link,
+   .sidebar-desplegable-btn {
+      justify-content: flex-start;
+      padding-left: .5rem;
+      padding-right: .5rem;
+   }
+
+   .sidebar-desplegable-btn {
+      justify-content: space-between;
+   }
+
+   .sidebar-desplegable-btn__contenido {
+      justify-content: flex-start;
+   }
+
+   .sidebar-usuario-datos,
+   .sidebar-link span,
+   .sidebar-desplegable-btn__contenido span,
+   .sidebar-flecha {
+      width: auto;
+      opacity: 1;
+      visibility: visible;
+   }
+
+   .sidebar-submenu {
+      display: block;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      padding-left: 1.5rem;
+      transition: max-height .3s ease, opacity .25s ease, margin .3s ease;
+   }
+
+   .sidebar-item-desplegable.abierto .sidebar-submenu {
+      max-height: 220px;
+      opacity: 1;
+      margin: .5rem 0;
+   }
+
+   .dashboard-organizador {
+      margin-left: 260px;
+      padding: 2rem;
+   }
+
+   .dashboard-panel {
+      padding: 1.75rem;
+   }
+}
+

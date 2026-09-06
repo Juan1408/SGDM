@@ -1,0 +1,50 @@
+<section class="modulo-admin">
+    <h2 class="titulo-pantalla">Registro de Accesos y Seguridad</h2>
+    <p>Monitorea los intentos de inicio de sesión exitosos y fallidos para detectar actividad sospechosa.</p>
+    
+    <div class="filtros-tabla">
+        <input type="text" placeholder="Buscar por IP o correo..." class="campo-estandar campo-filtro-ancho">
+        <select class="campo-estandar">
+            <option value="todos">Todos los estados</option>
+            <option value="exito">Exitosos</option>
+            <option value="fallido">Fallidos</option>
+        </select>
+        <button type="button" class="boton-secundario">Filtrar</button>
+    </div>
+
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>Fecha y Hora</th>
+                <th>Correo Intentado</th>
+                <th>Estado</th>
+                <th>IP de Origen</th>
+                <th>Detalle / Error</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>15/07/2026 14:30:22</td>
+                <td>admin@ascend.com</td>
+                <td><span class="estado-exito">Éxito</span></td>
+                <td>192.168.1.100</td>
+                <td>Inicio de sesión normal</td>
+            </tr>
+            <tr>
+                <td>15/07/2026 10:15:00</td>
+                <td>hacker@mail.com</td>
+                <td><span class="estado-fallido">Fallido</span></td>
+                <td>45.22.19.112</td>
+                <td>Contraseña incorrecta</td>
+            </tr>
+            <tr>
+                <td>14/07/2026 09:00:10</td>
+                <td>michaelsoporte@ascend.com</td>
+                <td><span class="estado-fallido">Fallido</span></td>
+                <td>192.168.1.55</td>
+                <td>Usuario bloqueado</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+

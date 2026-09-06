@@ -1,0 +1,293 @@
+/* =========================================================
+   JUEGOS — Mobile first
+   Filtros: mismas reglas que torneo.css (.panel-filtros,
+   .chips-contenedor, .buscador, .seleccionar-filtros).
+   Tarjetas: mismas reglas que rankings.css (.tarjeta-juego,
+   .tarjeta-info, .tarjeta-overlay), pero como grilla propia
+   en vez de carrusel.
+========================================================= */
+
+.juegos-pagina {
+   padding: 0 0 60px;
+   background: var(--fondo-principal);
+}
+
+/* =========================================================
+   PANEL DE FILTROS (reutilizado de torneo.css)
+========================================================= */
+
+.panel-filtros {
+   width: 100vw;
+   margin-left: calc(50% - 50vw);
+   margin-right: calc(50% - 50vw);
+   padding: 24px 6%;
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   background: #fff;
+}
+
+.top-fila {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 14px;
+}
+
+.buscador {
+   height: 48px;
+   width: 100%;
+   min-width: 0;
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 0 16px;
+   background: #e8e8e8;
+}
+
+.buscador i {
+   color: #351080;
+}
+
+.buscador input {
+   width: 100%;
+   min-width: 0;
+   border: none;
+   outline: none;
+   background: transparent;
+   color: #111;
+   font-family: inherit;
+}
+
+.buscador input::placeholder {
+   color: #555;
+}
+
+.chips-contenedor {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.chip {
+   border: none;
+   background: transparent;
+   color: #351080;
+   font-size: 15px;
+   cursor: pointer;
+   padding: 10px;
+   white-space: nowrap;
+}
+
+.chip.active,
+.chip:hover {
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   color: #351080;
+   box-shadow: none;
+}
+
+.seleccionar-filtros {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 12px;
+}
+
+.seleccionar-filtros select {
+   width: 100%;
+   min-width: 0;
+   height: 46px;
+   border: none;
+   background: #e8e8e8;
+   color: #351080;
+   padding: 0 14px;
+   outline: none;
+   font-family: inherit;
+}
+
+@media (min-width: 480px) {
+   .seleccionar-filtros {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 900px) {
+
+   .panel-filtros {
+      padding: 35px 8%;
+   }
+
+   .top-fila {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .buscador {
+      width: auto;
+      min-width: 260px;
+      height: 52px;
+   }
+
+   .chip {
+      font-size: 17px;
+      padding: 12px;
+   }
+
+   .seleccionar-filtros {
+      max-width: 460px;
+      gap: 14px;
+   }
+
+   .seleccionar-filtros select {
+      height: 48px;
+   }
+}
+
+/* =========================================================
+   GRID DE JUEGOS (reutiliza .tarjeta-juego de rankings.css,
+   pero como grilla mobile-first, no como carrusel)
+========================================================= */
+
+.juegos-grilla-seccion {
+   padding: 40px 6% 0;
+}
+
+.juegos-grillas {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 18px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.juegos-sin-resultados {
+   text-align: center;
+   color: var(--texto-secundario);
+   padding: 40px 0;
+}
+
+.tarjeta-juego {
+   --background: linear-gradient(to right, #13b37f, #11a3c8);
+   width: 100%;
+   height: 200px;
+   padding: 1px;
+   border-radius: 0.7rem;
+   overflow: visible;
+   background: var(--background);
+   position: relative;
+   z-index: 1;
+   cursor: pointer;
+}
+
+.tarjeta-juego::after {
+   position: absolute;
+   content: "";
+   top: -16px;
+   left: 0;
+   right: 0;
+   z-index: -1;
+   height: 100%;
+   width: 100%;
+   transform: scale(0.76);
+   filter: blur(28px);
+   background: var(--background);
+   opacity: 0;
+   transition: opacity 0.5s;
+}
+
+.tarjeta-juego:hover::after {
+   opacity: 0.6;
+}
+
+.tarjeta-info {
+   background: #1f1a1d;
+   width: 100%;
+   height: 100%;
+   border-radius: 0.7rem;
+   overflow: hidden;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+}
+
+.tarjeta-info img {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.tarjeta-overlay {
+   position: relative;
+   z-index: 2;
+   background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+   padding: 14px 12px 12px;
+}
+
+.tarjeta-overlay h2 {
+   color: #fff;
+   font-size: 13px;
+   font-weight: 700;
+   margin-bottom: 3px;
+}
+
+.tarjeta-overlay p {
+   color: #ccc;
+   font-size: 11px;
+}
+
+.ver-mas-boton {
+   margin-top: 32px;
+   display: flex;
+   justify-content: center;
+}
+
+/* Colores por juego (los primeros 6 ya existían en rankings.css,
+   estos 4 son nuevos para completar el catálogo) */
+.tarjeta-juego.lol     { --background: linear-gradient(to right, #C89B3C, #785A28); }
+.tarjeta-juego.apex    { --background: linear-gradient(to right, #ff4500, #e91e8c); }
+.tarjeta-juego.cs      { --background: linear-gradient(to right, #4fc3f7, #1565c0); }
+.tarjeta-juego.wow     { --background: linear-gradient(to right, #00c6ff, #0050a0); }
+.tarjeta-juego.val     { --background: linear-gradient(to right, #ff4655, #8b0000); }
+.tarjeta-juego.chess   { --background: linear-gradient(to right, #b5935a, #5a3e1b); }
+.tarjeta-juego.truco   { --background: linear-gradient(to right, #2e8b57, #145a32); }
+.tarjeta-juego.uno     { --background: linear-gradient(to right, #e63946, #f1c40f); }
+.tarjeta-juego.basquet { --background: linear-gradient(to right, #e67e22, #6e2c00); }
+.tarjeta-juego.futbol5 { --background: linear-gradient(to right, #27ae60, #145a32); }
+
+@media (min-width: 500px) {
+   .juegos-grillas {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 700px) {
+   .juegos-grillas {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+   }
+
+   .tarjeta-juego {
+      height: 230px;
+   }
+
+   .tarjeta-overlay h2 {
+      font-size: 15px;
+   }
+
+   .tarjeta-overlay p {
+      font-size: 12px;
+   }
+}
+
+@media (min-width: 1100px) {
+   .juegos-grillas {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+   }
+}

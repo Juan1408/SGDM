@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>ASCEND | Calendario general</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+   <!-- Layout compartido de organizador -->
+   <!-- Página específica -->
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/botones.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/chips.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/organizador/calendario.css">
+</head>
+
+<body>
+
+   <div id="navbar-placeholder"></div>
+   <div id="sidebar-placeholder"></div>
+
+   <main class="dashboard-organizador calendario-pagina">
+
+      <!-- ENCABEZADO -->
+
+      <header class="calendario-header">
+
+         <div>
+            <span class="calendario-etiqueta">
+               Agenda general
+            </span>
+
+            <h1>Calendario de enfrentamientos</h1>
+
+            <p>
+               Consultá los partidos programados de todos tus
+               torneos desde un mismo lugar.
+            </p>
+         </div>
+
+         <a class="calendario-crear-enlace" href="crear-torneo.html">
+            <i class="fa-solid fa-plus"></i>
+            Crear torneo
+         </a>
+
+      </header>
+
+      <!-- RESUMEN -->
+
+      <section class="calendario-resumen">
+
+         <article class="calendario-resumen-tarjeta">
+            <span class="calendario-resumen-icono">
+               <i class="fa-solid fa-calendar-check"></i>
+            </span>
+
+            <div>
+               <strong id="totalPartidosCalendario">0</strong>
+               <span>Total de partidos</span>
+            </div>
+         </article>
+
+         <article class="calendario-resumen-tarjeta">
+            <span class="calendario-resumen-icono">
+               <i class="fa-solid fa-clock"></i>
+            </span>
+
+            <div>
+               <strong id="partidosPendientesCalendario">0</strong>
+               <span>Pendientes</span>
+            </div>
+         </article>
+
+         <article class="calendario-resumen-tarjeta">
+            <span class="calendario-resumen-icono">
+               <i class="fa-solid fa-flag-checkered"></i>
+            </span>
+
+            <div>
+               <strong id="partidosFinalizadosCalendario">0</strong>
+               <span>Finalizados</span>
+            </div>
+         </article>
+
+         <article class="calendario-resumen-tarjeta">
+            <span class="calendario-resumen-icono">
+               <i class="fa-solid fa-trofeo"></i>
+            </span>
+
+            <div>
+               <strong id="torneosConPartidosCalendario">0</strong>
+               <span>Torneos activos</span>
+            </div>
+         </article>
+
+      </section>
+
+      <!-- FILTROS -->
+
+      <section class="calendario-filtros">
+
+         <div class="calendario-filtro calendario-filtro--buscar">
+            <label for="buscarPartido">
+               Buscar participante
+            </label>
+
+            <div class="calendario-input-icono">
+               <i class="fa-solid fa-magnifying-glass"></i>
+
+               <input id="buscarPartido" type="search" placeholder="Equipo o jugador...">
+            </div>
+         </div>
+
+         <div class="calendario-filtro">
+            <label for="filtroTorneo">
+               Torneo
+            </label>
+
+            <select id="filtroTorneo">
+               <option value="todos">
+                  Todos los torneos
+               </option>
+            </select>
+         </div>
+
+         <div class="calendario-filtro">
+            <label for="filtroEstadoPartido">
+               Estado
+            </label>
+
+            <select id="filtroEstadoPartido">
+               <option value="todos">
+                  Todos
+               </option>
+
+               <option value="Pendiente">
+                  Pendientes
+               </option>
+
+               <option value="Finalizado">
+                  Finalizados
+               </option>
+            </select>
+         </div>
+
+         <div class="calendario-filtro">
+            <label for="filtroFechaPartido">
+               Fecha
+            </label>
+
+            <input id="filtroFechaPartido" type="date">
+         </div>
+
+         <button class="calendario-limpiar" id="limpiarFiltrosCalendario" type="button">
+            <i class="fa-solid fa-rotate-left"></i>
+            Limpiar
+         </button>
+
+      </section>
+
+      <!-- RESULTADOS -->
+
+      <section class="calendario-contenido">
+
+         <div class="calendario-contenido-header">
+            <div>
+               <span>Agenda</span>
+               <h2>Partidos programados</h2>
+            </div>
+
+            <strong id="cantidadResultadosCalendario">
+               0 enfrentamientos
+            </strong>
+         </div>
+
+         <div class="calendario-lista" id="calendarioLista"></div>
+
+      </section>
+
+   </main>
+
+   <script src="../../publico/js/organizador/includes.js"></script>
+   <script src="../../publico/js/organizador/sidebar.js"></script>
+
+   <script src="../../publico/js/organizador/utils.js"></script>
+   <script src="../../publico/js/organizador/calendario.js"></script>
+
+</body>
+
+</html>

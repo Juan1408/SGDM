@@ -1,0 +1,373 @@
+/* =========================================
+   COMPONENTES (PARA USAR EN CUALQUIER ARCHIVO)
+   ========================================= */
+.titulo-pantalla {
+  color: #2c3e50;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* MOBILE DEFAULT: Tabla responsiva con scroll */
+.tabla-estandar {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  background-color: var(--color-fondo-panel);
+  border-collapse: collapse;
+  box-shadow: var(--sombra-suave);
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+}
+
+.tabla-estandar th {
+  background-color: var(--color-fondo-principal);
+  color: var(--color-texto-secundario);
+  text-align: left;
+  padding: 14px 15px;
+  border-bottom: 2px solid var(--color-borde);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.tabla-estandar td {
+  padding: 14px 15px;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-texto-principal);
+  font-size: 0.9rem;
+}
+
+.tabla-estandar tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+
+.formulario-estandar fieldset {
+  background-color: var(--color-fondo-panel);
+  border: 1px solid var(--color-borde);
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+}
+
+.formulario-estandar label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.formulario-estandar input,
+.formulario-estandar select,
+.formulario-estandar textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 5px;
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: var(--color-fondo-panel);
+  color: var(--color-texto-principal);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formulario-estandar input:focus,
+.formulario-estandar select:focus,
+.formulario-estandar textarea:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(75, 101, 132, 0.15);
+}
+
+.encabezado-seccion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.encabezado-seccion .titulo-pantalla {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.acciones-tabla {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* =========================================
+   ELEMENTOS DE CABECERA (BUSCADOR)
+   ========================================= */
+.grupo-acciones-encabezado {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.formulario-busqueda {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.campo-busqueda {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* =========================================
+   COMPONENTES DEL DASHBOARD
+   ========================================= */
+.contenedor-tarjetas {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.tarjeta-estadistica {
+  background: var(--color-fondo-panel);
+  padding: 24px;
+  border-radius: var(--radio-borde);
+  flex: 1;
+  text-align: center;
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-estadistica:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+}
+
+.tarjeta-estadistica h3 {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tarjeta-estadistica p {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 10px 0 0;
+  color: var(--color-primario);
+}
+
+/* =========================================
+   MENÚS DESPLEGABLES NATIVOS (TABLAS)
+   ========================================= */
+.acciones-desplegables {
+  display: inline-block;
+  position: relative;
+}
+
+.acciones-desplegables summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.acciones-desplegables summary::-webkit-details-marker {
+  display: none;
+}
+
+.acciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* =========================================
+   ANIMACIÓN DEL DESPLEGABLE
+   ========================================= */
+details[open].acciones-desplegables .acciones-lista {
+  animation: desplegarSuave 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  transform-origin: top right;
+}
+
+@keyframes desplegarSuave {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.90);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   NOTIFICACIONES (TOAST)
+   ========================================= */
+.contenedor-notificaciones {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.notificacion-toast {
+  background-color: #2ecc71;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: deslizarArriba 0.3s forwards;
+  pointer-events: auto;
+}
+
+@keyframes deslizarArriba {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notificacion-toast.ocultar {
+  animation: desvanecer 0.3s forwards;
+}
+
+@keyframes desvanecer {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@media (min-width: 768px) {
+  .acciones-lista {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+/* =========================================
+   CLASES SEM�NTICAS PARA VISTAS (REPORTES, DASHBOARD, ETC)
+   ========================================= */
+
+.encabezado-descripcion { margin-top: -10px; }
+
+.tarjeta-reporte {
+  background: var(--color-fondo-panel);
+  padding: 24px;
+  border-radius: var(--radio-borde);
+  flex: 1;
+  text-align: left;
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+}
+
+.tarjeta-reporte-titulo {
+  color: var(--color-texto-principal);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.tarjeta-reporte-descripcion {
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario);
+  font-weight: normal;
+  margin: 5px 0 15px 0;
+}
+
+.formulario-reporte {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+.entrada-reporte { margin-bottom: 10px; }
+
+.grupo-botones-reporte { display: flex; gap: 10px; }
+
+.boton-expandido { flex: 1; text-align: center; justify-content: center; display: flex; align-items: center; }
+
+.subtitulo-panel {
+  font-size: 1.2rem;
+  border: none;
+  padding-bottom: 10px;
+  color: var(--color-texto-principal);
+  margin-bottom: 15px;
+}
+
+.seccion-espaciada { margin-top: 30px; }
+
+.opcion-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.entrada-checkbox { width: auto !important; margin: 0; }
+
+.mensaje-carga {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-texto-secundario);
+}
+
+.grupo-botones-superior {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.cuadricula-permisos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.seccion-oculta { display: none; }
+
+.avatar-rojo { background-color: #ff4655 !important; }
+.avatar-celeste { background-color: #0bc6e3 !important; }
+.avatar-verde { background-color: #27ae60 !important; }
+

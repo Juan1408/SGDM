@@ -1,0 +1,34 @@
+<section class="encabezado-seccion">
+    <h2 class="titulo-pantalla">Centro de Comunicaciones</h2>
+    <p class="texto-ayuda encabezado-descripcion">Envía correos o notificaciones masivas a los usuarios de la plataforma.</p>
+</section>
+
+<section class="contenido-seccion">
+    <form class="formulario-estandar">
+        <fieldset>
+            <legend>Redactar Mensaje</legend>
+            <label for="destinatarios">Enviar a:</label>
+            <select id="destinatarios" required>
+                <option value="">Seleccione el grupo de destinatarios...</option>
+                <option value="todos">Todos los usuarios registrados</option>
+                <option value="organizadores">Solo Organizadores de Torneos</option>
+                <option value="jugadores">Solo Jugadores y Participantes</option>
+                <option value="admin">Solo Administradores</option>
+            </select>
+
+            <label for="asunto">Asunto del Mensaje:</label>
+            <input type="text" id="asunto" placeholder="Ej. Actualización de Normativas 2026" required>
+
+            <label for="mensaje">Cuerpo del Mensaje:</label>
+            <textarea id="mensaje" rows="8" placeholder="Escribe el comunicado aquí..." required></textarea>
+            
+            <label class="opcion-checkbox">
+                <input type="checkbox" id="copia-oculta" class="entrada-checkbox"> Enviar también una copia a mi correo
+            </label>
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-exito">Enviar Comunicado</button>
+        </div>
+    </form>
+</section>

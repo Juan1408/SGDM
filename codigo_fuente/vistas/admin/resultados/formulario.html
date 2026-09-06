@@ -1,0 +1,32 @@
+<section class="modulo-admin">
+    <h2 class="titulo-pantalla">Cargar Resultado de Encuentro</h2>
+    <form action="/admin/resultados/guardar" method="POST" class="formulario-estandar validacion-activa">
+        <fieldset>
+            <legend>Selección de Encuentro</legend>
+            <label for="torneo">Torneo:</label>
+            <select id="torneo" name="torneo" class="campo-requerido">
+                <option value="1">Torneo de Verano</option>
+            </select>
+            
+            <label for="encuentro">Partido (Encuentro):</label>
+            <select id="encuentro" name="encuentro" class="campo-requerido">
+                <option value="1">Los Titanes vs. Equipo Beta</option>
+            </select>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Resultado Final</legend>
+            <label for="puntuacion_local">Puntuación Local (Los Titanes):</label>
+            <input type="number" id="puntuacion_local" name="puntuacion_local" class="campo-requerido" required min="0">
+            
+            <label for="puntuacion_visitante">Puntuación Visitante (Equipo Beta):</label>
+            <input type="number" id="puntuacion_visitante" name="puntuacion_visitante" class="campo-requerido" required min="0">
+        </fieldset>
+
+        <div class="grupo-botones">
+            <button type="submit" class="boton-accion">Guardar Resultado</button>
+            <a href="#resultados/lista" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>
+

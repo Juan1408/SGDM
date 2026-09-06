@@ -1,0 +1,52 @@
+<section class="modulo-admin">
+    <div class="encabezado-seccion">
+        <h2 class="titulo-pantalla">Historial de Torneos</h2>
+        <a href="#torneos/lista" class="boton-secundario">Volver a Torneos Activos</a>
+    </div>
+    <p>Consulta los torneos finalizados y cancelados, así como sus motivos de estado.</p>
+    
+    <div class="filtros-tabla">
+        <select class="campo-estandar">
+            <option value="todos">Todos los estados</option>
+            <option value="finalizado">Finalizados</option>
+            <option value="cancelado">Cancelados</option>
+        </select>
+        <button type="button" class="boton-secundario">Filtrar</button>
+    </div>
+
+    <table class="tabla-estandar">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Torneo</th>
+                <th>Estado Final</th>
+                <th>Fecha de Cierre</th>
+                <th>Motivo / Detalles</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>5</td>
+                <td>Copa de Invierno 2025</td>
+                <td><span class="estado-exito">Finalizado</span></td>
+                <td>20/12/2025</td>
+                <td>Terminado exitosamente. Ganador: Los Titanes</td>
+                <td>
+                    <a href="#resultados/lista?torneo=5" class="boton-accion">Ver Resultados</a>
+                </td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Liga Nocturna</td>
+                <td><span class="estado-cancelado">Cancelado</span></td>
+                <td>15/10/2025</td>
+                <td>Falta de inscriptos (Cupo mínimo no alcanzado)</td>
+                <td>
+                    <a href="#torneos/lista" class="boton-secundario">Ver Detalles</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+

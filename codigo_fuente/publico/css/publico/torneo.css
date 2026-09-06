@@ -1,0 +1,344 @@
+.torneos-pagina {
+   padding: 48px 6%;
+   background:
+      radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
+      var(--fondo-principal);
+   color: #fff;
+}
+
+.seccion-torneos {
+   width: 100vw;
+   position: relative;
+   margin-top: 4%;
+   margin-bottom: 0;
+   padding: 90px 6% 67px; /* el 67px de abajo es la altura del divisor SVG */
+}
+
+
+.header-pagina {
+   max-width: 780px;
+   margin-bottom: 32px;
+}
+
+.subtitulo-pagina {
+   color: var(--color-secundario);
+   text-transform: uppercase;
+   font-weight: 700;
+   letter-spacing: 2px;
+   margin-bottom: 10px;
+}
+
+.header-pagina h2 {
+   font-size: clamp(32px, 6vw, 70px);
+   line-height: 1.05;
+   margin-bottom: 18px;
+}
+
+.header-pagina p {
+   color: #c9c9dc;
+   line-height: 1.7;
+}
+
+.custom-shape-divider-bottom-1782780458 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    
+}
+
+.custom-shape-divider-bottom-1782780458 svg {
+    position: relative;
+    display: block;
+    width: calc(102% + 1.3px);
+    height: 67px;
+}
+
+.custom-shape-divider-bottom-1782780458 .shape-fill {
+    fill: var(--fondo-principal);
+}
+
+/****** PANEL DE FILTROS *********/
+/* Mobile first: todo apilado en 1 columna.
+   Desde 900px, buscador al lado de los chips
+   y los selects en más columnas. */
+
+.panel-filtros {
+   width: 100vw;
+   margin-left: calc(50% - 50vw);
+   margin-right: calc(50% - 50vw);
+   padding: 24px 6%;
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   background: #fff;
+}
+
+.top-fila {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 14px;
+}
+
+.buscador {
+   height: 48px;
+   width: 100%;
+   min-width: 0;
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 0 16px;
+   background: #e8e8e8;
+}
+
+.buscador i {
+   color: #351080;
+}
+
+.buscador input {
+   width: 100%;
+   min-width: 0;
+   border: none;
+   outline: none;
+   background: transparent;
+   color: #111;
+   font-family: inherit;
+}
+
+.buscador input::placeholder {
+   color: #555;
+}
+
+.chips-contenedor {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.chip {
+   border: none;
+   background: transparent;
+   color: #351080;
+   font-size: 15px;
+   cursor: pointer;
+   padding: 10px;
+   white-space: nowrap;
+}
+
+.chip.active,
+.chip:hover {
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   color: #351080;
+   box-shadow: none;
+}
+
+.seleccionar-filtros {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 12px;
+}
+
+.seleccionar-filtros select {
+   width: 100%;
+   min-width: 0;
+   height: 46px;
+   border: none;
+   background: #e8e8e8;
+   color: #351080;
+   padding: 0 14px;
+   outline: none;
+   font-family: inherit;
+}
+
+/* GRID DE TORNEOS - mobile first: 1 columna,
+   protegida con minmax para que no se desborde. */
+
+.torneos-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 24px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.torneo-tarjeta {
+   height: auto;
+   min-width: 0;
+   background: rgba(18, 18, 42, 0.86);
+   border-radius: 24px;
+   overflow: hidden;
+   backdrop-filter: none;
+   border: 1px solid rgba(var(--color-primario-rgb), 0.34);
+   box-shadow: 0 0 28px rgba(var(--color-primario-rgb), 0.16);
+   transition: 0.3s ease;
+}
+
+.torneo-tarjeta:hover {
+   transform: translateY(-8px);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 32px rgba(0, 255, 238, 0.28);
+}
+
+.torneo-tarjeta img {
+   width: 100%;
+   height: 190px;
+   object-fit: cover;
+}
+
+.tarjeta-contenido {
+   padding: 20px;
+   min-width: 0;
+}
+
+.tarjeta-contenido h4 {
+   font-size: 20px;
+   margin-bottom: 14px;
+   overflow-wrap: break-word;
+}
+
+.tarjeta-meta {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+   font-size: 12px;
+   color: #cfd0e6;
+   margin-bottom: 16px;
+}
+
+.tarjeta-meta i,
+.tarjeta-tipo i {
+   color: var(--color-secundario);
+   margin-right: 5px;
+}
+
+.tarjeta-tipo {
+   display: flex;
+   align-items: center;
+   color: #dcdcf0;
+   font-size: 14px;
+   margin-bottom: 16px;
+}
+
+.pie-tarjeta {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: center;
+   gap: 8px;
+   padding-top: 14px;
+   border-top: 1px solid rgba(255,255,255,0.1);
+   font-size: 13px;
+}
+
+.pie-tarjeta span {
+   color: #ff8be8;
+}
+
+.pie-tarjeta a {
+   color: var(--color-secundario);
+   text-decoration: none;
+   font-weight: 700;
+}
+
+.ver-mas-boton {
+   margin-top: 32px;
+   display: flex;
+   justify-content: center;
+}
+
+
+/*
+=====================================================
+   TABLET (min-width: 600px)
+===================================================== */
+
+@media (min-width: 600px) {
+
+   .seleccionar-filtros {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .tarjeta-meta {
+      flex-direction: row;
+      justify-content: space-between;
+   }
+}
+
+/*
+=====================================================
+   TABLET GRANDE (min-width: 700px)
+===================================================== */
+
+@media (min-width: 700px) {
+
+   .torneos-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+===================================================== */
+
+@media (min-width: 900px) {
+
+   .torneos-pagina {
+      padding: 90px 8%;
+   }
+
+   .seccion-torneos {
+      padding: 90px 8% 67px;
+   }
+
+   .panel-filtros {
+      padding: 35px 8%;
+   }
+
+   .top-fila {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .buscador {
+      width: auto;
+      min-width: 260px;
+      height: 52px;
+   }
+
+   .chip {
+      font-size: 17px;
+      padding: 12px;
+   }
+
+   .seleccionar-filtros {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+   }
+
+   .seleccionar-filtros select {
+      height: 48px;
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO GRANDE (min-width: 1000px)
+===================================================== */
+
+@media (min-width: 1000px) {
+
+   .torneos-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 34px;
+   }
+}

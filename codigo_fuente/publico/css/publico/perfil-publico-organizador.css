@@ -1,0 +1,606 @@
+/* =========================================================
+   PERFIL PÚBLICO DEL ORGANIZADOR — Mobile first
+   Misma estructura y clases que perfil-equipo.css (sin
+   tabs). Todo lo de acá abajo hasta el corte de "PÁGINA
+   ESPECÍFICA" es literal lo mismo que perfil-equipo.css,
+   para que ambos perfiles se vean idénticos.
+========================================================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.equipo-pagina {
+   background: #030205;
+   color: #fff;
+   font-family: 'Poppins', sans-serif;
+   padding-top: 80px; /* alto del navbar fijo */
+   padding-bottom: 40px;
+   overflow-x: hidden;
+}
+
+/* Ancho compartido por TODO el contenido — el banner del
+   header usa este mismo ancho, no va de punta a punta. */
+.equipo-card,
+.equipo-hero-banner,
+.equipo-identidad,
+.equipo-stats,
+.torneos-organiza-grid,
+.mis-equipos-grid,
+.section-title-gradient {
+   width: 92%;
+   max-width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.equipo-card {
+   margin-top: 24px;
+   padding: 24px 20px;
+   background: #101010;
+   border-radius: 20px;
+}
+
+.equipo-card h2 {
+   font-size: 1.4rem;
+   font-weight: 800;
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+/* =========================================================
+   HERO: banner + logo + datos + stats (sin tabs)
+========================================================= */
+
+.equipo-hero {
+   padding-bottom: 20px;
+}
+
+.equipo-hero-banner {
+   height: 190px;
+   margin-top: 16px;
+   border-radius: 16px;
+   overflow: hidden;
+}
+
+.equipo-hero-banner img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.equipo-identidad {
+   text-align: center;
+}
+
+.equipo-logo {
+   width: 110px;
+   height: 110px;
+   margin: -55px auto 14px;
+   border-radius: 50%;
+   overflow: hidden;
+   background: #d9d9d9;
+   border: 4px solid transparent;
+   background-image:
+      linear-gradient(#0a0a12, #0a0a12),
+      linear-gradient(180deg, #52228e, #30f5d2);
+   background-origin: border-box;
+   background-clip: content-box, border-box;
+   position: relative;
+   z-index: 2;
+}
+
+.equipo-logo img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.equipo-nombre {
+   font-size: 1.6rem;
+   font-weight: 800;
+   margin-bottom: 10px;
+}
+
+.equipo-descripcion {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+   line-height: 1.6;
+   margin-bottom: 18px;
+}
+
+.equipo-datos {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 22px;
+   padding-bottom: 18px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipo-dato {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   font-size: 0.85rem;
+   color: #eee;
+}
+
+.equipo-dato i {
+   color: #30f5d2;
+}
+
+.equipo-stats {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 14px;
+}
+
+.stat-card {
+   min-height: 120px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   text-align: center;
+   padding: 14px 10px;
+   border-radius: 12px;
+   background: linear-gradient(180deg, #52228e, #170928);
+}
+
+.stat-card strong {
+   font-size: 2rem;
+   font-weight: 800;
+}
+
+.stat-card span {
+   font-size: 0.85rem;
+   color: #e4e0f0;
+}
+
+@media (min-width: 900px) {
+
+   .equipo-hero-banner {
+      height: 400px;
+   }
+
+   .equipo-identidad {
+      display: flex;
+      align-items: flex-end;
+      gap: 28px;
+      text-align: left;
+   }
+
+   .equipo-logo {
+      flex-shrink: 0;
+      width: 170px;
+      height: 170px;
+      margin: -130px 0 0;
+   }
+
+   .equipo-info-texto {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 6px;
+   }
+
+   .equipo-nombre {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+   }
+
+   .equipo-descripcion {
+      max-width: 640px;
+      margin-bottom: 0;
+   }
+
+   .equipo-datos {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 40px;
+      margin-top: 18px;
+   }
+
+   .equipo-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+   }
+
+   .stat-card {
+      min-height: 150px;
+   }
+
+   .stat-card strong {
+      font-size: 2.6rem;
+   }
+}
+
+/* =========================================================
+   BOTÓN "SEGUIR" (misma tarjeta que Capitanes en
+   perfil-equipo, con la variante --solo-boton)
+========================================================= */
+
+.capitanes-fila {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 16px;
+   text-align: center;
+}
+
+.boton-solicitar-unirse {
+   border: none;
+   width: 100%;
+   max-width: 280px;
+   padding: 14px 20px;
+   border-radius: 8px;
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.9rem;
+   font-weight: 800;
+   letter-spacing: 0.5px;
+   cursor: pointer;
+}
+
+@media (min-width: 700px) {
+
+   .capitanes-fila--solo-boton {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+   }
+
+   .capitanes-fila--solo-boton .boton-solicitar-unirse {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+/* =========================================================
+   TÍTULO DE SECCIÓN (Torneos, Equipos)
+========================================================= */
+
+.team-members {
+   margin-top: 40px;
+}
+
+.section-title-gradient {
+   width: fit-content;
+   max-width: 92%;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 24px;
+   padding: 10px 24px;
+   font-size: 1.3rem;
+   font-weight: 700;
+   color: #fff;
+   text-align: center;
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   overflow-wrap: break-word;
+}
+
+@media (min-width: 650px) {
+   .section-title-gradient {
+      font-size: 1.7rem;
+      padding: 10px 40px;
+   }
+}
+
+@media (min-width: 900px) {
+   .section-title-gradient {
+      font-size: 2rem;
+      padding: 10px 60px;
+   }
+}
+
+/* =========================================================
+   EQUIPOS QUE GESTIONA — reutiliza el mismo código de
+   tarjeta que mis-equipos.html (.mis-equipos-grid /
+   .mi-equipo-card). Los títulos van en <h3> porque acá
+   "Equipos que gestiona" ya es el <h2> de la sección.
+========================================================= */
+
+.mis-equipos-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+   list-style: none;
+}
+
+.mi-equipo-card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 14px;
+   text-align: center;
+   padding: 20px;
+   background: #101010;
+   border-radius: 16px;
+}
+
+.mi-equipo-card img {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+}
+
+.mi-equipo-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.mi-equipo-badge {
+   display: inline-block;
+   padding: 4px 12px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+}
+
+.mi-equipo-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.mi-equipo-badge.badge-capitan {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
+}
+
+.mi-equipo-badge.badge-miembro {
+   background: rgba(255, 255, 255, 0.08);
+   color: #c7c7d8;
+}
+
+.boton-secundario {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(48, 245, 210, 0.35);
+   color: #fff;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 600;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.boton-secundario:hover {
+   background: rgba(48, 245, 210, 0.12);
+   border-color: #30f5d2;
+}
+
+@media (min-width: 700px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .mi-equipo-card {
+      flex-direction: row;
+      text-align: left;
+   }
+
+   .mi-equipo-info {
+      flex: 1;
+      min-width: 0;
+   }
+
+   .boton-secundario {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+@media (min-width: 900px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+
+   .mi-equipo-card {
+      flex-direction: column;
+      text-align: center;
+   }
+
+   .boton-secundario {
+      width: 100%;
+   }
+}
+
+/* =========================================================
+   TESTIMONIOS (reutilizado para "Opiniones")
+========================================================= */
+
+.testimonio-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+   gap: 10px;
+}
+
+.testimonio-avatar {
+   width: 80px;
+   height: 80px;
+   border-radius: 50%;
+   background: #d9d9d9;
+}
+
+.testimonio-nombre {
+   font-size: 1rem;
+   font-weight: 600;
+}
+
+.testimonio-estrellas {
+   color: #ffd700;
+   font-size: 1rem;
+   display: flex;
+   gap: 4px;
+}
+
+.testimonio-item p {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+   line-height: 1.7;
+   max-width: 560px;
+}
+
+/* =========================================================
+   PÁGINA ESPECÍFICA — lo que no existe en perfil-equipo
+========================================================= */
+
+.organizador-etiqueta {
+   display: inline-block;
+   margin-bottom: 8px;
+   padding: 6px 16px;
+   border-radius: 999px;
+   background: rgba(var(--color-secundario-rgb), 0.12);
+   color: var(--color-secundario);
+   font-size: 0.75rem;
+   font-weight: 700;
+   letter-spacing: 0.04em;
+}
+
+.perfil-organizador-cta-texto {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+}
+
+/* --- Torneos que organiza --- */
+
+.torneos-organiza-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 18px;
+   list-style: none;
+}
+
+.torneo-organiza-card {
+   display: block;
+   text-decoration: none;
+   color: inherit;
+   background: #101010;
+   border-radius: 16px;
+   overflow: hidden;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   transition: 0.25s ease;
+}
+
+.torneo-organiza-card:hover {
+   transform: translateY(-4px);
+   border-color: var(--color-secundario);
+}
+
+.torneo-organiza-card img {
+   width: 100%;
+   height: 160px;
+   object-fit: cover;
+   display: block;
+}
+
+.torneo-organiza-info {
+   padding: 14px 16px;
+}
+
+.torneo-organiza-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.torneo-organiza-info span {
+   font-size: 0.8rem;
+   color: var(--texto-secundario);
+}
+
+@media (min-width: 650px) {
+   .torneos-organiza-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 900px) {
+   .torneos-organiza-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+/* --- Opiniones --- */
+
+.opiniones-subtitulo {
+   text-align: center;
+   font-size: 0.85rem;
+   color: var(--texto-secundario);
+   margin-top: -12px;
+   margin-bottom: 24px;
+}
+
+.opiniones-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 20px;
+   list-style: none;
+}
+
+.testimonio-item--form {
+   align-items: stretch;
+   text-align: left;
+}
+
+.testimonio-item--form h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 12px;
+}
+
+.testimonio-item--form textarea {
+   width: 100%;
+   min-height: 90px;
+   resize: vertical;
+   padding: 12px 14px;
+   border-radius: 10px;
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   background: rgba(255, 255, 255, 0.04);
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.85rem;
+   margin-bottom: 14px;
+}
+
+.testimonio-item--form button {
+   border: none;
+   width: 100%;
+   padding: 12px;
+   border-radius: 8px;
+   background: linear-gradient(90deg, #52228e, #ed07ee);
+   color: #fff;
+   font-family: inherit;
+   font-size: 0.85rem;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+@media (min-width: 650px) {
+   .opiniones-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 1100px) {
+   .opiniones-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+}

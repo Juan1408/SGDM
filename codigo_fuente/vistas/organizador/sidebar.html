@@ -1,0 +1,97 @@
+﻿<aside class="dashboard-sidebar">
+
+   <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menú">
+      <i class="fa-solid fa-bars"></i>
+   </button>
+
+   <div class="sidebar-usuario">
+      <img src="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/img/logos/eagles.png" alt="Usuario">
+
+      <div class="sidebar-usuario-datos">
+         <h3>Valentina</h3>
+         <span>Organizador</span>
+      </div>
+   </div>
+
+   <nav class="sidebar-nav" aria-label="Menú del panel de organizador">
+
+      <ul class="sidebar-lista">
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=perfil" data-page="perfil">
+               <i class="fa-solid fa-user"></i>
+               <span>Mi perfil</span>
+            </a>
+         </li>
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=dashboard" data-page="dashboard">
+               <i class="fa-solid fa-house"></i>
+               <span>Inicio</span>
+            </a>
+         </li>
+
+         <li class="sidebar-item-desplegable">
+
+            <button class="sidebar-desplegable-btn" type="button" aria-expanded="false">
+               <span class="sidebar-desplegable-btn__contenido">
+                  <i class="fa-solid fa-trofeo"></i>
+                  <span>Mis torneos</span>
+               </span>
+
+               <i class="fa-solid fa-chevron-down sidebar-flecha"></i>
+            </button>
+
+            <ul class="sidebar-submenu">
+
+               <li>
+                     <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=misTorneos" data-page="mis-torneos">
+                     <i class="fa-solid fa-list"></i>
+                     <span>Ver mis torneos</span>
+                  </a>
+               </li>
+
+               <li>
+                     <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=crear" data-page="crear-torneo">
+                     <i class="fa-solid fa-plus"></i>
+                     <span>Crear torneo</span>
+                  </a>
+               </li>
+
+            </ul>
+
+         </li>
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=calendario" data-page="calendario">
+               <i class="fa-solid fa-calendar-days"></i>
+               <span>Calendario</span>
+            </a>
+         </li>
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=resultados" data-page="resultados">
+               <i class="fa-solid fa-chart-simple"></i>
+               <span>Resultados</span>
+            </a>
+         </li>
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=panelOrganizador&amp;a=historial" data-page="historial">
+               <i class="fa-solid fa-clock-rotate-left"></i>
+               <span>Historial</span>
+            </a>
+         </li>
+
+         <li>
+               <a class="sidebar-link" href="/ejerciciosUTU/SGDM-feat-backend-mvc/codigo_fuente/publico/index.php?c=auth&amp;a=logout" data-page="salir">
+               <i class="fa-solid fa-arrow-right-from-bracket"></i>
+               <span>Salir</span>
+            </a>
+         </li>
+
+      </ul>
+
+   </nav>
+
+</aside>

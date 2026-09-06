@@ -1,0 +1,334 @@
+/*
+=====================================================
+   ADMINISTRAR TORNEO - ESQUELETO
+   Header del torneo, menú interno (tabs + dropdowns),
+   contenedor genérico del panel, y la sección
+   "Información". El layout general (sidebar/navbar)
+   vive en organizador-layout.css.
+
+   Las reglas @media de esta página NO van acá:
+   están todas centralizadas en administrar-responsive.css
+=====================================================
+*/
+
+/*
+=====================================================
+   ADMINISTRAR TORNEO - shell + sección "Información"
+   El layout general vive en organizador-layout.css.
+
+   Esta página tiene VARIAS secciones internas que se
+   renderizan por JS (torneoVista.js). Acá solo están
+   el esqueleto (header/menú) y la sección Información.
+   Fixture, Resultados, Posiciones, Cronograma,
+   Participantes, Solicitudes y Editar se agregan en
+   próximas rondas, sumando reglas a este mismo archivo.
+=====================================================
+*/
+
+.administrar-torneo-pagina {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1.25rem;
+
+   /* Alias: el CSS de las secciones (Fixture, Participantes,
+      Resultados, Posiciones, Cronograma, Solicitudes) usa
+      estos nombres en inglés. Los mapeamos a los mismos
+      tokens del resto del proyecto para no duplicar colores. */
+   --border: var(--borde-suave);
+   --radius: var(--radio-lg);
+   --color-primary: var(--color-primario);
+   --text-secondary: var(--texto-secundario);
+   --background-card: var(--fondo-tarjeta);
+   --text: var(--texto-principal);
+   --color-success: var(--color-secundario);
+   --color-error: #ef4444;
+   --background-light: rgba(255, 255, 255, .04);
+   --transition: var(--transicion);
+}
+
+/* ============================
+   VOLVER
+============================= */
+
+.back-link {
+   display: inline-flex;
+   align-items: center;
+   gap: .5rem;
+
+   width: fit-content;
+   color: var(--texto-secundario);
+   text-decoration: none;
+   font-size: .85rem;
+}
+
+.back-link:hover {
+   color: var(--color-secundario);
+}
+
+/* ============================
+   HEADER DEL TORNEO
+============================= */
+
+.torneo-header {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   min-width: 0;
+
+   padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+   background: var(--fondo-tarjeta);
+   border: 1px solid var(--borde-suave);
+   border-left: 4px solid var(--color-primario);
+   border-radius: var(--radio-lg);
+}
+
+.torneo-header > div {
+   min-width: 0;
+}
+
+.torneo-header-label {
+   color: var(--color-secundario);
+   font-weight: 700;
+   letter-spacing: 1.5px;
+   font-size: .75rem;
+}
+
+.torneo-header h1 {
+   font-size: clamp(1.3rem, 6vw, 1.9rem);
+   margin: .4rem 0;
+   overflow-wrap: break-word;
+   word-break: break-word;
+}
+
+.torneo-header p {
+   color: var(--texto-secundario);
+   font-size: .85rem;
+}
+
+/* Reutiliza los mismos modificadores que .estado en mis-torneos,
+   pero acá se ve como texto simple (sin fondo tipo chip) */
+.estado {
+   display: inline-block;
+   width: fit-content;
+   font-size: .85rem;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.estado.abierta {
+   color: var(--color-secundario);
+}
+
+.estado.curso {
+   color: #ffb400;
+}
+
+.estado.finalizado {
+   color: #ff4c4c;
+}
+
+/* ============================
+   MENÚ INTERNO
+   Lista vertical de botones a todo el ancho.
+============================= */
+
+
+.torneo-menu {
+   position: relative;
+}
+
+.torneo-menu-boton {
+   width: auto;
+   min-height: 54px;
+
+   display: flex;
+   align-items: center;
+   gap: .5rem;
+
+   padding: .7rem 1rem;
+   border: 1px solid var(--borde-suave);
+   border-radius: var(--radio-md);
+
+   background: var(--fondo-tarjeta);
+   color: var(--texto-secundario);
+   font-family: inherit;
+   font-size: .85rem;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.torneo-menu-boton i:first-child {
+   color: var(--color-primario);
+}
+
+.torneo-menu-boton:hover {
+   color: #fff;
+   border-color: var(--color-secundario);
+}
+
+.torneo-menu-boton.active {
+   color: #fff;
+   background: rgba(245, 17, 203, .1);
+   border-color: var(--color-primario);
+}
+
+
+.torneo-menu-grupo {
+   position: relative;
+   width: auto;
+   min-width: 0;
+}
+
+.torneo-menu-grupo > .torneo-menu-boton {
+   width: auto;
+   min-height: 54px;
+}
+
+.torneo-menu-toggle i:last-child {
+   margin-left: auto;
+   font-size: .7rem;
+   transition: transform .25s ease;
+}
+
+.torneo-menu-grupo.open .torneo-menu-toggle i:last-child {
+   transform: rotate(180deg);
+}
+
+.torneo-menu-submenu {
+   display: none;
+   flex-direction: column;
+   gap: .35rem;
+
+
+   list-style: none;
+   margin: 0;
+   padding: .5rem;
+
+   position: absolute;
+   top: calc(100% + .5rem);
+   left: 0;
+   min-width: 200px;
+   z-index: 50;
+
+   padding: .5rem;
+   border-radius: var(--radio-md);
+   background: var(--fondo-panel);
+   border: 1px solid var(--borde-suave);
+   box-shadow: 0 14px 35px rgba(0, 0, 0, .45);
+}
+
+.torneo-menu-grupo.open .torneo-menu-submenu {
+   display: flex;
+}
+
+.torneo-menu-submenu button {
+   width: 100%;
+   min-height: 42px;
+   padding: .6rem .75rem;
+
+   border: 1px solid transparent;
+   border-radius: 9px;
+   background: transparent;
+   color: var(--texto-secundario);
+   font-family: inherit;
+   font-size: .85rem;
+   text-align: left;
+   cursor: pointer;
+   transition: var(--transicion);
+}
+
+.torneo-menu-submenu button:hover {
+   color: #fff;
+   background: rgba(0, 255, 238, .08);
+}
+
+.torneo-menu-submenu button.active {
+   color: #fff;
+   background: rgba(245, 17, 203, .1);
+   border-color: var(--color-primario);
+}
+
+.torneo-menu-lista {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   align-items: start;
+   gap: .5rem;
+
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+/* ============================
+   PANEL DE CONTENIDO (contenedor genérico
+   para todas las secciones)
+============================= */
+
+.torneo-panel {
+   min-width: 0;
+   padding: 1.1rem;
+   background: var(--fondo-tarjeta);
+   border-radius: var(--radio-lg);
+   border: 1px solid var(--borde-suave);
+}
+
+.panel-title {
+   font-size: 1.15rem;
+   margin-bottom: .4rem;
+}
+
+.panel-description {
+   color: var(--texto-secundario);
+   font-size: .85rem;
+   margin-bottom: 1.25rem;
+}
+
+/* ============================
+   SECCIÓN: INFORMACIÓN
+============================= */
+
+.information-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: .85rem;
+   margin-bottom: 1.5rem;
+}
+
+.information-card {
+   min-width: 0;
+   padding: .9rem;
+   background: rgba(255, 255, 255, .03);
+   border: 1px solid rgba(255, 255, 255, .06);
+   border-radius: var(--radio-md);
+}
+
+.information-card span {
+   display: block;
+   font-size: .72rem;
+   color: var(--texto-secundario);
+   margin-bottom: .3rem;
+}
+
+.information-card strong {
+   font-size: .95rem;
+   overflow-wrap: break-word;
+}
+
+.tournament-description {
+   margin-bottom: 1.1rem;
+}
+
+.tournament-description strong {
+   display: block;
+   margin-bottom: .4rem;
+   color: var(--color-secundario);
+   font-size: .85rem;
+}
+
+.tournament-description p {
+   font-size: .88rem;
+   color: #d8d8e5;
+   line-height: 1.5;
+   overflow-wrap: break-word;
+}

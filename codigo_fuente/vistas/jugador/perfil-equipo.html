@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ASCEND - Perfil de Equipo</title>
+
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/jugador/perfil-equipo.css">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+   <!-- NAVBAR PÚBLICO (este perfil se ve desde el rol público) -->
+   <header id="navbar-publico-placeholder"></header>
+
+   <main class="equipo-pagina">
+
+      <!-- ============================== -->
+      <!-- HEADER: banner, logo, stats    -->
+      <!-- ============================== -->
+      <header class="equipo-hero">
+
+         <div class="equipo-hero-banner">
+            <img src="../../publico/img/live.jpg" alt="Banner del equipo">
+         </div>
+
+         <div class="equipo-identidad">
+            <div class="equipo-logo">
+               <img src="../../publico/img/logos/logo.png" alt="Logo del equipo">
+            </div>
+
+            <div class="equipo-info-texto">
+               <h1 class="equipo-nombre">Nombre Equipo</h1>
+
+               <p class="equipo-descripcion">Lorem ipsum dolor sit amet consectetur adipiscing.</p>
+
+               <ul class="equipo-datos">
+                  <li class="equipo-dato">
+                     <i class="fa-solid fa-location-dot"></i>
+                     <span>Montevideo - Uruguay</span>
+                  </li>
+                  <li class="equipo-dato">
+                     <i class="fa-solid fa-building"></i>
+                     <span>Organización</span>
+                  </li>
+                  <li class="equipo-dato">
+                     <i class="fa-solid fa-envelope"></i>
+                     <span>contacto@gmail.com</span>
+                  </li>
+               </ul>
+            </div>
+         </div>
+
+         <nav class="equipo-tabs" aria-label="Secciones del equipo">
+            <ul class="equipo-tabs-lista">
+               <li><button type="button" class="equipo-tab active" data-tab="miembros">Miembros</button></li>
+               <li><button type="button" class="equipo-tab" data-tab="torneos">Torneos</button></li>
+               <li><button type="button" class="equipo-tab" data-tab="ranking">Ranking</button></li>
+               <li><button type="button" class="equipo-tab" data-tab="juegos">Juegos</button></li>
+            </ul>
+         </nav>
+
+         <dl class="equipo-estadisticas">
+            <div class="tarjeta-estadistica">
+               <dd>38</dd>
+               <dt>Partidas</dt>
+            </div>
+            <div class="tarjeta-estadistica">
+               <dd>24</dd>
+               <dt>Victorias</dt>
+            </div>
+            <div class="tarjeta-estadistica">
+               <dd>3</dd>
+               <dt>Torneos ganados</dt>
+            </div>
+            <div class="tarjeta-estadistica">
+               <dd>3.928</dd>
+               <dt>Puntos</dt>
+            </div>
+         </dl>
+
+      </header>
+
+      <!-- ============================== -->
+      <!-- CAPITANES / LÍDERES            -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-capitanes">
+
+         <div class="capitanes-encabezado">
+            <h2>Capitanes / Líderes</h2>
+         </div>
+
+         <div class="capitanes-fila">
+            <ul class="capitanes-lista">
+               <li>
+                  <article class="capitan-item">
+                     <img src="../../publico/img/avatars/a2.png" alt="Foto del capitán">
+                     <span>Nombre Apellido</span>
+                  </article>
+               </li>
+               <li>
+                  <article class="capitan-item">
+                     <img src="../../publico/img/avatars/a3.png" alt="Foto del capitán">
+                     <span>Nombre Apellido</span>
+                  </article>
+               </li>
+            </ul>
+
+            <button type="button" class="boton-solicitar-unirse">Solicitar Unirse</button>
+         </div>
+
+      </section>
+
+      <!-- ============================== -->
+      <!-- MIEMBROS DEL EQUIPO            -->
+      <!-- ============================== -->
+      <section class="equipo-miembros" id="miembros">
+
+         <h2 class="seccion-gradiente-titulo">Miembros del equipo</h2>
+
+         <div class="miembros-buscador">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar miembro...">
+         </div>
+
+         <ul class="miembros-grilla" id="miembros-grilla">
+
+            <li>
+               <article class="miembro-tarjeta">
+                  <div class="miembro-foto">
+                     <div class="miembro-fondo"></div>
+                     <img src="../../publico/img/black ferns/ayesha-leti.png" alt="Jugador">
+                  </div>
+                  <h3>Nombre Apellido</h3>
+               </article>
+            </li>
+
+            <li>
+               <article class="miembro-tarjeta">
+                  <div class="miembro-foto">
+                     <div class="miembro-fondo"></div>
+                     <img src="../../publico/img/black ferns/chelsea-brenmen.png" alt="Jugador">
+                  </div>
+                  <h3>Nombre Apellido</h3>
+               </article>
+            </li>
+
+            <li>
+               <article class="miembro-tarjeta">
+                  <div class="miembro-foto">
+                     <div class="miembro-fondo"></div>
+                     <img src="../../publico/img/black ferns/kate-henwood.png" alt="Jugador">
+                  </div>
+                  <h3>Nombre Apellido</h3>
+               </article>
+            </li>
+
+            <li>
+               <article class="miembro-tarjeta">
+                  <div class="miembro-foto">
+                     <div class="miembro-fondo"></div>
+                     <img src="../../publico/img/black ferns/portia-woodman.png" alt="Jugador">
+                  </div>
+                  <h3>Nombre Apellido</h3>
+               </article>
+            </li>
+
+         </ul>
+
+         <div class="ver-mas-miembros">
+            <button type="button" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold">Ver más</button>
+         </div>
+
+      </section>
+
+      <!-- ============================== -->
+      <!-- NOVEDADES                      -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-noticias">
+
+         <h2>Novedades</h2>
+
+         <ul class="noticias-lista">
+            <li>
+               <article class="noticia-item">
+                  <img src="../../publico/img/04.jpg" alt="Noticia sobre la cancha del Club FC">
+                  <div class="noticia-info">
+                     <h3>Noticia sobre la cancha del Club FC</h3>
+                     <span>Fecha: 20/06/2026</span>
+                  </div>
+               </article>
+            </li>
+
+            <li>
+               <article class="noticia-item">
+                  <img src="../../publico/img/basket.jpg" alt="El capitán del equipo Durazno lesionado">
+                  <div class="noticia-info">
+                     <h3>El capitán del equipo Durazno lesionado</h3>
+                     <span>Fecha: 20/06/2026</span>
+                  </div>
+               </article>
+            </li>
+         </ul>
+
+      </section>
+
+      <!-- ============================== -->
+      <!-- TESTIMONIOS                    -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-testimonios">
+
+         <h2>Testimonios</h2>
+
+         <article class="testimonio-item">
+            <div class="testimonio-avatar"></div>
+            <span class="testimonio-nombre">Nombre Usuario</span>
+            <div class="testimonio-estrellas">
+               <i class="fa-solid fa-star"></i>
+               <i class="fa-solid fa-star"></i>
+               <i class="fa-solid fa-star"></i>
+               <i class="fa-solid fa-star"></i>
+               <i class="fa-solid fa-star"></i>
+            </div>
+            <p>
+               Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet malesuada purus,
+               penatibus semper leo vitae habitasse natoque nascetur at nullam auctor.
+            </p>
+         </article>
+
+      </section>
+
+      <!-- ============================== -->
+      <!-- NEWSLETTER                     -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-newsletter">
+
+         <h2>Suscribirse al boletín de Noticias</h2>
+
+         <form class="newsletter-formulario" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="correo..." required>
+            <button type="submit">Suscribirse</button>
+         </form>
+
+      </section>
+
+   </main>
+
+   <!-- FOOTER PÚBLICO -->
+   <footer id="footer-publico-placeholder"></footer>
+
+   <script src="../../publico/js/includesPublicos.js"></script>
+   <script src="../../publico/js/navbar.js"></script>
+
+</body>
+</html>

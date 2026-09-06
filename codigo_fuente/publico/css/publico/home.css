@@ -1,0 +1,1409 @@
+/* =========================
+   RESET / BASE
+========================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+html {
+   scroll-behavior: smooth;
+   overflow-x: hidden; /* Evita desbordes horizontales accidentales en toda la web */
+}
+
+body {
+   font-family: 'Poppins', sans-serif;
+   background:
+      radial-gradient(circle at 15% 15%, rgba(var(--color-primario-rgb), 0.22), transparent 28%),
+      radial-gradient(circle at 85% 35%, rgba(0, 255, 220, 0.18), transparent 30%),
+      var(--fondo-principal);
+   color: var(--texto-principal);
+   min-height: 100vh;
+}
+
+
+
+/* =========================
+   HERO
+   Mobile first: apilado y centrado.
+   Desde 900px: layout original (izquierda, más alto).
+========================= */
+
+.hero {
+   min-height: 100vh;
+   position: relative;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   padding: 120px 5% 60px;
+   overflow: hidden;
+}
+
+.hero-overlay{
+   position:absolute;
+   inset:0;
+   z-index:1;
+
+   background:
+      linear-gradient(
+         to bottom,
+         transparent,
+         var(--fondo-principal) 95%
+      );
+}
+
+.hero-contenido{
+   position: relative;
+   z-index: 3;
+   width: 100%;
+   max-width: 520px;
+}
+
+.hero::before,
+.hero::after {
+   z-index: 2;
+   pointer-events: none;
+}
+
+.hero-subtitulo {
+   color: #00FFED;
+   font-size: 13px;
+   font-weight: 600;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   margin-bottom: 0px;
+   margin-top: 40px;
+   text-shadow: 0 0 18px rgba(var(--color-secundario-rgb), 0.7);
+}
+
+.hero-contenido h1 {
+   font-size: 34px;
+   line-height: 1.15;
+   font-weight: 700;
+   margin-bottom: -20px;
+   margin-top: 40px;
+
+   background: linear-gradient(var(--color-primario), var(--color-violeta));
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+   color: transparent;
+   
+   filter: drop-shadow(8px 10px 0 rgba(0,0,0,.35));
+
+}
+
+.hero-descripcion {
+   max-width: 580px;
+   color: #c9c9dc;
+   font-size: 14px;
+   line-height: 1.7;
+   margin-bottom: 60px;
+   margin-top: 50px;
+}
+
+.hero-botones {
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   width: 100%;
+   justify-content: center;
+}
+
+/* From Uiverse.io by BHARGAVPATEL1244 */
+.primary-btn {
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.18); /* igual que secundario */
+  padding: 14px 28px;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  font-family: inherit;
+  font-size: 1rem;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.05rem;
+  font-weight: 700;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06); /* igual que secundario */
+  backdrop-filter: blur(12px);           /* igual que secundario */
+  color: var(--texto-principal);
+  text-decoration: none;
+}
+
+.primary-btn span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+}
+
+.primary-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  z-index: 0;
+  background: #9D00C6;
+  transform: skew(30deg) translateX(-120%); /* empieza afuera */
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.primary-btn:hover::before {
+  transform: skew(30deg) translateX(0%); /* entra en hover */
+}
+
+.secondary-btn {
+   width: 100%;
+   text-align: center;
+   padding: 14px 28px;
+   border-radius: 8px;
+   text-decoration: none;
+   font-weight: 700;
+   color: var(--texto-principal);
+   border: 1px solid rgba(255, 255, 255, 0.18);
+   background: rgba(255, 255, 255, 0.06);
+   backdrop-filter: blur(12px);
+   font-size: 1rem;
+   cursor: pointer;
+}
+
+
+/* =========================
+   HERO SLIDER
+========================= */
+
+.hero-slider{
+   position:absolute;
+   inset:0;
+   overflow:hidden;
+}
+
+.hero-slide{
+   position:absolute;
+   inset:0;
+   opacity:0;
+   transition:opacity 1.3s ease;
+}
+
+.hero-slide.active{
+   opacity:1;
+}
+
+.hero-slide img{
+   width:100%;
+   height:100%;
+   object-fit:cover;
+}
+
+/* =========================
+   CATEGORÍAS
+   Mobile first: 1 columna, sin offsets.
+   Desde 900px: 3 columnas con el efecto
+   original de tarjeta activa "flotando".
+========================= */
+
+.categoria-tarjetas {
+   background-color: var(--fondo-principal);
+   width: 100%;
+   padding: 40px 6% 0;
+   position: relative;
+   z-index: 20;
+}
+
+.categoria-tarjetas-lista {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 24px;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.tarjetas {
+   min-height: 220px;
+   padding: 40px 32px;
+   background: #111;
+   border: 1px solid rgba(var(--color-primario-rgb), 0.35);
+   border-radius: 22px;
+   color: var(--texto-principal);
+   transition: 0.3s ease;
+}
+
+.tarjetas:hover {
+   transform: translateY(-8px);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 34px rgba(var(--color-secundario-rgb), 0.28);
+}
+
+.tarjeta-activa {
+   background: linear-gradient(135deg, #4b1fa8, #163f89);
+}
+
+.tarjetas i {
+   font-size: 48px;
+   margin-bottom: 22px;
+   color: var(--texto-principal);
+   display: block;
+}
+
+.tarjetas h2 {
+   font-size: 24px;
+   margin-bottom: 12px;
+}
+
+.tarjetas p {
+   color: #e0e0ea;
+   line-height: 1.5;
+}
+
+/* =========================
+   FUNCIONALIDADES
+   Mobile first: 1 columna.
+   Desde 900px: imagen + contenido lado a lado.
+========================= */
+
+.funcionalidades {
+   width: 100%;
+   padding: 80px 6%;
+   background: #110B19;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 45px;
+   align-items: center;
+}
+
+.funcionalidades-imagen img {
+   width: 100%;
+   height: 260px;
+   object-fit: cover;
+   border-radius: 22px;
+   border: 1px solid rgba(var(--color-primario-rgb), 0.35);
+   box-shadow:
+      0 0 35px rgba(var(--color-primario-rgb), 0.25),
+      0 0 60px rgba(var(--color-secundario-rgb), 0.12);
+}
+
+.caracteristica-tag {
+   color: var(--color-secundario);
+   font-weight: 800;
+   letter-spacing: 2px;
+   margin-bottom: 15px;
+}
+
+.funcionalidades-contenido h2 {
+   color: var(--texto-principal);
+   font-size: 34px;
+   line-height: 1.25;
+   margin-bottom: 30px;
+}
+
+.funcionalidades-contenido h2 span {
+   display: block;
+   color: transparent;
+   -webkit-text-stroke: 1px #fff;
+   text-shadow: 0 0 28px rgba(var(--color-primario-rgb), 0.55);
+}
+
+.funcionalidades-slider {
+   max-height: 310px;
+   overflow-y: auto;
+   padding-right: 10px;
+   scroll-behavior: smooth;
+}
+
+.funcionalidades-slider::-webkit-scrollbar {
+   width: 6px;
+}
+
+.funcionalidades-slider::-webkit-scrollbar-track {
+   background: rgba(255, 255, 255, 0.08);
+   border-radius: 20px;
+}
+
+.funcionalidades-slider::-webkit-scrollbar-thumb {
+   background: linear-gradient(var(--color-primario), var(--color-secundario));
+   border-radius: 20px;
+}
+
+.funcionalidades-item {
+   display: flex;
+   gap: 18px;
+   align-items: flex-start;
+   margin-bottom: 22px;
+   padding: 16px;
+   border-radius: 16px;
+   background: #101010;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   backdrop-filter: blur(12px);
+}
+
+.caracteristica-icon {
+   min-width: 52px;
+   height: 52px;
+   border-radius: 18px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 24px;
+   background: rgba(255, 255, 255, 0.06);
+}
+
+.caracteristica-icon.cyan {
+   color: var(--color-secundario);
+   border: 1px solid var(--color-secundario);
+   box-shadow: 0 0 10px rgba(var(--color-secundario-rgb), 0.25);
+}
+
+.caracteristica-icon.pink {
+   color: var(--color-primario);
+   border: 1px solid var(--color-primario);
+   box-shadow: 0 0 10px rgba(var(--color-primario-rgb), 0.25);
+}
+
+.funcionalidades-item h4 {
+   color: var(--texto-principal);
+   font-size: 17px;
+   margin-bottom: 6px;
+}
+
+.funcionalidades-item p {
+   color: #c9c9dc;
+   line-height: 1.6;
+   font-size: 14px;
+}
+
+/* =========================
+   TORNEOS DESTACADOS
+   Mobile first: título apilado. Desde 900px:
+   layout horizontal original.
+========================= */
+
+.torneos-destacados {
+   padding: 60px 6% 70px;
+   background: #080111;
+}
+
+
+.seccion-titulo {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 12px;
+   margin-bottom: 28px;
+}
+
+.seccion-titulo h2 {
+   font-size: 26px;
+}
+
+.seccion-titulo a {
+   color: var(--color-secundario);
+   text-decoration: none;
+   font-weight: 600;
+}
+
+/* grid */
+
+.torneo-tarjeta {
+   height: 410px;
+   background: #101010;
+   border: 1px solid rgba(var(--color-primario-rgb), 0.35);
+   border-radius: 22px;
+   overflow: hidden;
+   backdrop-filter: blur(14px);
+   box-shadow: 0 0 26px rgba(var(--color-primario-rgb), 0.18);
+   transition: 0.3s ease;
+}
+
+.torneo-tarjeta:hover {
+   transform: translateY(-8px);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 34px rgba(var(--color-secundario-rgb), 0.28);
+}
+
+.torneo-tarjeta img {
+   width: 100%;
+   height: 200px;
+   object-fit: cover;
+   display: block;
+}
+
+.tarjeta-contenido {
+   padding: 15px;
+}
+
+.tarjeta-contenido h4 {
+   font-size: 20px;
+   margin-bottom: 10px;
+}
+
+.tarjeta-meta {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 10px;
+   margin-bottom: 18px;
+}
+
+.tarjeta-meta span {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   color: #c8c8d8;
+   font-size: 14px;
+}
+
+.tarjeta-meta i,
+.tarjeta-tipo i {
+   color: var(--color-secundario);
+   margin-right: 8px;
+}
+
+.tarjeta-tipo {
+   display: flex;
+   align-items: center;
+   color: #c8c8d8;
+   font-size: 14px;
+   margin-bottom: 14px;
+}
+
+.tarjeta-fecha {
+   padding-top: 14px;
+   border-top: 1px solid rgba(255, 255, 255, 0.1);
+   color: #ff8be8;
+   font-weight: 600;
+   font-size: 14px;
+}
+
+/* ==========================================================================
+   CALENDARIO / ENFRENTAMIENTOS
+   Mobile first: tarjeta apilada en columna.
+   Desde 821px: layout "split" original con logos
+   sobresaliendo a los costados.
+   ========================================================================== */
+
+.calendario-vs {
+   padding: 60px 5%;
+   background:
+      url("../../img/bg3.jpg") no-repeat center top / cover;
+   color: var(--texto-principal);
+   overflow: visible;
+   position: relative;
+}
+
+.agenda-header {
+   text-align: center;
+   margin-bottom: 50px;
+}
+
+.agenda-header .seccion-subtitulo {
+   color: #00f0ff; /* Cian Cyberpunk brillante */
+   font-size: 15px;
+   font-weight: 800;
+   letter-spacing: 3px;
+   margin-bottom: 12px;
+   text-transform: uppercase;
+}
+
+.agenda-header h2 {
+   font-size: 32px;
+   font-weight: 700;
+   color: var(--texto-principal);
+   text-transform: none;
+   letter-spacing: 0.5px;
+}
+
+/* --- LISTA DE PARTIDOS --- */
+.vs-lista {
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   max-width: 1100px;
+   margin: 0 auto;
+}
+
+/* =========================
+   ENFRENTAMIENTO (banner compacto, efecto glass)
+   Mismos datos que el header de Detalle Torneo
+   (equipos + fecha + canal), en una sola tarjeta
+   chica que lleva al detalle. Mobile first: logos
+   y tipografía más chicos; crecen desde 600px.
+========================= */
+
+.enfrentamiento-tarjeta {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 12px;
+
+   width: 100%;
+   padding: 18px 20px;
+
+   background: rgba(255, 255, 255, 0.05);
+   border: 1px solid rgba(255, 255, 255, 0.12);
+   border-radius: 18px;
+   backdrop-filter: blur(16px);
+   -webkit-backdrop-filter: blur(16px);
+
+   text-decoration: none;
+   transition: 0.3s ease;
+}
+
+.enfrentamiento-tarjeta:hover {
+   transform: translateY(-4px);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 30px rgba(var(--color-secundario-rgb), 0.2);
+}
+
+.enfrentamiento-equipo {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 6px;
+   min-width: 0;
+   flex: 1;
+}
+
+.enfrentamiento-logo {
+   width: 48px;
+   height: 48px;
+   flex-shrink: 0;
+   object-fit: contain;
+}
+
+.enfrentamiento-nombre {
+   width: 100%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   text-align: center;
+
+   font-size: 0.7rem;
+   font-weight: 700;
+   color: var(--texto-principal);
+}
+
+.enfrentamiento-centro {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 4px;
+   min-width: 0;
+   flex-shrink: 0;
+}
+
+.enfrentamiento-vs {
+   font-size: 1.5rem;
+   font-weight: 800;
+   font-style: italic;
+   line-height: 1;
+   text-transform: uppercase;
+
+   color: transparent;
+   -webkit-text-stroke: 1px var(--texto-principal);
+}
+
+.enfrentamiento-fecha {
+   font-size: 0.65rem;
+   font-weight: 700;
+   letter-spacing: 0.5px;
+   text-transform: uppercase;
+   white-space: nowrap;
+   color: var(--color-secundario);
+}
+
+.enfrentamiento-canal {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   font-size: 0.62rem;
+   font-weight: 600;
+   letter-spacing: 0.3px;
+   text-transform: uppercase;
+   white-space: nowrap;
+   color: var(--texto-secundario);
+}
+
+.enfrentamiento-canal i {
+   color: var(--color-primario);
+}
+
+@media (min-width: 600px) {
+
+   .enfrentamiento-tarjeta {
+      padding: 24px 40px;
+      gap: 24px;
+   }
+
+   .enfrentamiento-logo {
+      width: 68px;
+      height: 68px;
+   }
+
+   .enfrentamiento-nombre {
+      font-size: 0.85rem;
+   }
+
+   .enfrentamiento-vs {
+      font-size: 2.2rem;
+   }
+
+   .enfrentamiento-fecha {
+      font-size: 0.75rem;
+   }
+
+   .enfrentamiento-canal {
+      font-size: 0.7rem;
+   }
+}
+
+
+
+/* COMUNIDAD Y NOTICIAS
+   Mobile first: 1 columna.
+   Desde 900px: contenido + grid de noticias.
+*/
+
+.comunidad-y-noticias {
+   padding: 80px 6%;
+   background:
+      radial-gradient(circle at 20% 30%, rgba(var(--color-primario-rgb), 0.14), transparent 28%),
+      radial-gradient(circle at 80% 60%, rgba(var(--color-secundario-rgb), 0.12), transparent 30%);
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 45px;
+   align-items: center;
+}
+
+.comunidad-contenido span,
+.noticias-tarjeta span {
+   color: var(--color-secundario);
+   font-weight: 800;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+}
+
+.comunidad-contenido h2 {
+   font-size: 32px;
+   line-height: 1.2;
+   margin: 16px 0 22px;
+}
+
+.comunidad-contenido h2 strong {
+   display: block;
+   color: transparent;
+   -webkit-text-stroke: 1px #fff;
+}
+
+.comunidad-contenido p {
+   color: #c9c9dc;
+   line-height: 1.8;
+   margin-bottom: 30px;
+}
+
+.comunidad-contenido a {
+   display: inline-block;
+   padding: 14px 32px;
+   border-radius: 999px;
+   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
+   color: #07101c;
+   text-decoration: none;
+   font-weight: 800;
+}
+
+.noticias-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 20px;
+}
+
+.noticias-tarjeta {
+   min-height: 190px;
+   padding: 24px;
+   background: linear-gradient(var(--color-primario), var(--color-violeta));
+   border: 1px solid rgba(var(--color-primario-rgb), 0.35);
+   box-shadow: 0 0 26px rgba(var(--color-primario-rgb), 0.18);
+   border-radius: 22px;
+   transition: 0.3s ease;
+}
+
+.noticias-tarjeta:hover {
+   transform: translateY(-8px);
+   border-color: var(--color-secundario);
+   box-shadow: 0 0 34px rgba(var(--color-secundario-rgb), 0.28);
+}
+
+.noticias-nuevas {
+   grid-row: auto;
+   padding: 0;
+   overflow: hidden;
+}
+
+.noticias-nuevas img {
+   width: 100%;
+   height: 220px;
+   object-fit: cover;
+}
+
+.noticias-nuevas div {
+   padding: 24px;
+}
+
+.noticias-tarjeta h3 {
+   font-size: 20px;
+   margin: 10px 0;
+}
+
+.noticias-tarjeta p {
+   color: #c9c9dc;
+   line-height: 1.6;
+}
+
+/* =========================
+   ESTADÍSTICAS (banner con foto de fondo)
+   Mobile first: 2 columnas. Desde 700px: 4
+   columnas en una sola fila, más alto.
+========================= */
+
+.estadisticas-banner {
+   position: relative;
+   min-height: 260px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+
+   background: url("../../img/banners/stats.jpg")no-repeat center center / cover;
+}
+
+.stats-overlay {
+   position: absolute;
+   inset: 0;
+
+   background: linear-gradient(
+      180deg,
+      rgba(var(--color-violeta-rgb), 0.4) 0%,
+      rgba(var(--color-violeta-rgb), 0.88) 55%,
+      var(--fondo-principal) 100%
+   );
+}
+
+.estadisticas-grid {
+   margin: 0;
+   position: relative;
+   z-index: 2;
+   width: 100%;
+
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 20px 16px;
+   padding: 24px 6%;
+}
+
+.estadisticas-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 2px;
+   min-width: 0;
+   text-align: center;
+}
+
+.estadisticas-item dd {
+   font-size: 1.6rem;
+   font-weight: 800;
+   color: var(--texto-principal);
+   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.estadisticas-item dt {
+   font-size: 0.85rem;
+   font-weight: 600;
+   color: var(--texto-principal);
+   opacity: 0.9;
+}
+
+@media (min-width: 700px) {
+
+   .estadisticas-banner {
+      min-height: 340px;
+   }
+
+   .estadisticas-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: 30px 8%;
+   }
+
+   .estadisticas-item strong {
+      font-size: 2.4rem;
+   }
+
+   .estadisticas-item span {
+      font-size: 1rem;
+   }
+}
+
+/* =========================
+   TOP JUGADORES
+   Mobile first: 1 columna, sin el efecto
+   zig-zag (que solo tiene sentido con
+   varias columnas). Desde 600px: 2 columnas
+   con zig-zag. Desde 1000px: 4 columnas.
+========================= */
+.top-jugadores {
+padding: 70px 6%;
+background:
+radial-gradient(circle at 15% 30%, rgba(180, 55, 255, 0.18), transparent 25%),
+radial-gradient(circle at 85% 70%, rgba(var(--color-primario-rgb), 0.14), transparent 26%),
+#171236;
+overflow: hidden;
+}
+
+.top-jugadores-header {
+text-align: center;
+margin-bottom: 50px;
+}
+
+.top-jugadores-header span {
+color: var(--color-secundario);
+text-transform: uppercase;
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 2px;
+}
+
+.top-jugadores-header h2 {
+font-size: 32px;
+margin-top: 8px;
+}
+
+.top-jugadores-header p {
+color: #c7c1ea;
+margin-top: 10px;
+}
+
+.top-jugadores-fila{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:50px;
+}
+
+.top-jugador-tarjeta{
+    position:relative;
+}
+
+.jugador-img{
+
+    width:100%;
+    height:240px;
+
+    display:block;
+    object-fit:cover;
+
+    clip-path:polygon(
+        0 0,
+        calc(100% - 34px) 0,
+        100% 34px,
+        100% 100%,
+        0 100%
+    );
+
+}
+
+.jugador-info{
+
+    position:relative;
+
+    left:0;
+    right:0;
+
+    bottom:38px;
+
+    padding:25px 25px 25px 35px;
+
+    background:linear-gradient(
+        115deg,
+        var(--color-violeta),
+        var(--color-primario)
+    );
+
+    clip-path:polygon(
+        0 0,
+        82% 0,
+        100% 28%,
+        100% 100%,
+        28% 100%,
+        0 68%
+    );
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35);
+
+}
+
+.jugador-info h3{
+
+    font-size:1rem;
+    font-weight:700;
+    text-transform:uppercase;
+
+    margin-bottom:6px;
+
+}
+
+.jugador-info p{
+
+    font-size:.9rem;
+    color:rgba(255,255,255,.85);
+
+}
+
+/* section tag verificar si es necesario borrar*/
+
+.section-tag {
+   display: inline-block;
+   background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
+   color: var(--texto-principal);
+   padding: 8px 18px;
+   font-weight: 800;
+   letter-spacing: 3px;
+   margin-bottom: 25px;
+   box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.35);
+}
+
+
+/* ==========================================
+   BOLETÍN DE NOTICIAS / NEWSLETTER
+   Mobile first: input y botón apilados.
+   Desde 700px: caja en fila, formulario en fila.
+   ========================================== */
+.newsletter-seccion {
+   background-color: #090714;
+   padding: 40px 6%;
+}
+
+.newsletter-caja {
+   background: linear-gradient(90deg, #131129 0%, #0d0a1b 100%);
+   border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
+   padding: 28px 22px;
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 20px;
+   text-align: center;
+   border-radius: 6px;
+}
+
+.newsletter-caja h2 {
+   font-size: 20px;
+   font-weight: 800;
+   color: #fff;
+   letter-spacing: 1px;
+}
+
+.newsletter-formulario {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   max-width: 100%;
+}
+
+.newsletter-formulario input {
+   width: 100%;
+   min-width: 0;
+   background: #18152e;
+   border: 1px solid rgba(255,255,255,0.1);
+   padding: 14px 16px;
+   color: #fff;
+   font-family: inherit;
+   font-size: 14px;
+   border-radius: 8px;
+   outline: none;
+   margin-bottom: 10px;
+}
+
+.newsletter-formulario button {
+   width: 100%;
+   background: var(--color-secundario);
+   color: #000;
+   font-weight: 700;
+   padding: 14px 0;
+   border: none;
+   cursor: pointer;
+   font-family: inherit;
+   font-size: 14px;
+   letter-spacing: 1px;
+   border-radius: 8px;
+   transition: 0.3s;
+}
+
+.newsletter-formulario button:hover {
+   background: var(--color-primario);
+   color: #fff;
+   box-shadow: 0 0 15px rgba(var(--color-primario-rgb), 0.4);
+}
+
+@media (min-width: 700px) {
+
+   .newsletter-seccion {
+      padding: 60px 8%;
+   }
+
+   .newsletter-caja {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      text-align: left;
+      padding: 40px 60px;
+   }
+
+   .newsletter-caja h2 {
+      font-size: 28px;
+   }
+
+   .newsletter-formulario {
+      flex-direction: row;
+      max-width: 500px;
+   }
+
+   .newsletter-formulario input {
+      flex: 1;
+      margin-bottom: 0;
+      border-radius: 4px 0 0 4px;
+   }
+
+   .newsletter-formulario button {
+      width: auto;
+      padding: 0 30px;
+      border-radius: 0 4px 4px 0;
+   }
+}
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+@keyframes slideTeamLeft {
+   from {
+      opacity: 0;
+      transform: translateX(-140px);
+   }
+
+   to {
+      opacity: 1;
+      transform: translateX(0);
+   }
+}
+
+@keyframes slideTeamRight {
+   from {
+      opacity: 0;
+      transform: translateX(140px);
+   }
+
+   to {
+      opacity: 1;
+      transform: translateX(0);
+   }
+}
+
+@keyframes popVs {
+   from {
+      opacity: 0;
+      transform: scale(0.7);
+   }
+
+   to {
+      opacity: 1;
+      transform: scale(1);
+   }
+}
+
+@keyframes showPlayer {
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+
+/* =====================================================
+   TABLET (min-width: 600px)
+===================================================== */
+
+@media (min-width: 600px) {
+
+   .hero-botones {
+      flex-direction: row;
+      justify-content: center;
+   }
+
+   .primary-btn,
+   .secondary-btn {
+      width: auto;
+   }
+
+   .top-jugadores-fila {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+}
+
+/* =====================================================
+   TABLET GRANDE (min-width: 700px)
+===================================================== */
+
+@media (min-width: 700px) {
+
+   .seccion-titulo {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .tarjeta-meta {
+      flex-wrap: nowrap;
+      align-items: center;
+   }
+}
+
+/* =====================================================
+   CALENDARIO: layout "split" (min-width: 821px)
+===================================================== */
+
+@media (min-width: 821px) {
+
+   .calendario-vs {
+      padding: 100px 10% 260px;
+   }
+
+   .agenda-header {
+      margin-bottom: 70px;
+   }
+
+   .agenda-header h2 {
+      font-size: 42px;
+   }
+
+   .vs-lista {
+      gap: 40px;
+   }
+
+   .agenda-extra-space {
+      height: 380px;
+      border-radius: 24px;
+      margin: -160px auto 0;
+   }
+
+   .bottom-dark-section {
+      padding: 0 10% 10px;
+   }
+}
+
+/* =====================================================
+   ESCRITORIO (min-width: 900px)
+===================================================== */
+
+@media (min-width: 900px) {
+
+   .hero {
+      min-height: 92vh;
+      padding: 120px 8%;
+      justify-content: flex-start;
+      text-align: left;
+   }
+
+   .hero-contenido {
+      max-width: none;
+   }
+
+   .hero-subtitulo {
+      font-size: 1rem;
+   }
+
+   .hero-contenido h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.05;
+   }
+
+   .hero-descripcion {
+      font-size: 1rem;
+   }
+
+   .hero-botones {
+      justify-content: flex-start;
+   }
+
+   .categoria-tarjetas { 
+      padding: 0 8%;
+      gap: 34px;
+   }
+
+   .categoria-tarjetas-lista {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+
+   .tarjetas {
+      min-height: 250px;
+      padding: 46px 42px;
+      margin-top: 40%;
+      margin-bottom: 50%;
+   }
+
+   .tarjetas i {
+      font-size: 56px;
+      margin-bottom: 26px;
+   }
+
+   .tarjetas h3 {
+      font-size: 27px;
+   }
+
+   .tarjeta-activa {
+      transform: translateY(18px);
+   }
+
+   .tarjeta-activa:hover {
+      transform: translateY(10px);
+   }
+
+   .funcionalidades {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      padding: 90px 15%;
+      gap: 70px;
+   }
+
+   .funcionalidades-imagen img {
+      height: 480px;
+      border-radius: 28px;
+   }
+
+   .funcionalidades-contenido h3 {
+      font-size: 2rem;
+      margin-bottom: 35px;
+   }
+
+   .funcionalidades-slider {
+      height: 310px;
+      padding-right: 15px;
+   }
+
+   .funcionalidades-item {
+      gap: 22px;
+      margin-bottom: 28px;
+      padding: 18px;
+      border-radius: 18px;
+   }
+
+   .caracteristica-icon {
+      min-width: 60px;
+      height: 60px;
+      border-radius: 22px;
+      font-size: 28px;
+   }
+
+   .funcionalidades-item h3 {
+      font-size: 20px;
+   }
+
+   .funcionalidades-item p {
+      font-size: 1rem;
+   }
+
+   .torneos-destacados {
+      padding: 70px 8% 90px;
+   }
+
+   .seccion-titulo h2 {
+      font-size: 34px;
+   }
+
+   .comunidad-y-noticias {
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      padding: 100px 8%;
+      gap: 70px;
+   }
+
+   .comunidad-contenido h2 {
+      font-size: 46px;
+   }
+
+   .noticias-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+   }
+
+   .noticias-nuevas {
+      grid-row: span 2;
+   }
+
+   .noticias-nuevas img {
+      height: 260px;
+   }
+
+   .noticias-tarjeta h4 {
+      font-size: 22px;
+   }
+
+   .top-jugadores {
+      padding: 100px 8%;
+   }
+
+   .top-jugadores-header {
+      margin-bottom: 70px;
+   }
+
+   .top-jugadores-header h2 {
+      font-size: 46px;
+   }
+
+   .top-jugadores-fila {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 36px;
+   }
+
+   .funcionalidades-slider,
+   .vs-lista,
+   .noticias-grid,
+   .top-jugadores-fila {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+}
+
+ .top-jugador-tarjeta {
+      min-height: 420px;
+   }
+
+   .jugador-info h4 {
+      font-size: 26px;
+   }
+
+}
+
+/* =====================================================
+   ESCRITORIO GRANDE (min-width: 1000px)
+===================================================== */
+
+@media (min-width: 1000px) {
+
+   .top-jugadores-fila {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+}
+
+/* en construccion */
+
+.pantalla-construccion { min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.pantalla-construccion i { font-size: 5rem; color: var(--color-primario); margin-bottom: 20px; }
+.pantalla-construccion .hero-buttons { margin-top: 30px; }

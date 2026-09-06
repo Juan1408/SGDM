@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>ASCEND | Crear torneo</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+   <!-- Layout compartido de organizador -->
+   <!-- Página específica -->
+   <link rel="stylesheet" href="../../publico/css/variables.css">
+   <link rel="stylesheet" href="../../publico/css/base.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/botones.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/tarjetas.css">
+   <link rel="stylesheet" href="../../publico/css/componentes/chips.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/organizador-layout.css">
+   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
+   <link rel="stylesheet" href="../../publico/css/organizador/crear-torneo.css">
+</head>
+
+<body>
+
+   <header id="navbar-placeholder"></header>
+   <aside id="sidebar-placeholder"></aside>
+
+   <main class="dashboard-organizador crear-torneo-pagina">
+
+      <header class="crear-torneo-header">
+         <div>
+            <p class="crear-torneo-etiqueta">
+               Gestión de torneos
+            </p>
+
+            <h1>Crear nuevo torneo</h1>
+
+            <p>
+               Completá la información principal para publicar
+               una nueva competencia.
+            </p>
+         </div>
+
+         <a class="crear-torneo-volver" href="mis-torneos.html">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Volver a Mis torneos</span>
+         </a>
+      </header>
+
+      <div id="crear-torneo-notificacion" class="crear-torneo-notificacion" aria-live="polite"></div>
+
+      <form id="crear-torneo-formulario" class="crear-torneo-grid" novalidate>
+
+
+         <!-- COLUMNA 1 -->
+         <section class="crear-torneo-bloque">
+
+            <h2>Información principal</h2>
+
+            <div class="crear-torneo-campo">
+               <label for="tournamentName">
+                  Nombre del torneo
+               </label>
+
+               <input id="tournamentName" name="nombre" type="text" minlength="3" maxlength="100"
+                  placeholder="Ej.: Copa ASCEND 2026" required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="diciplina">
+                  Disciplina
+               </label>
+
+               <select id="diciplina" name="disciplina" required>
+                  <option value="">
+                     Seleccionar disciplina
+                  </option>
+               </select>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="modality">
+                  Modalidad
+               </label>
+
+               <input id="modality" name="modalidad" type="text" placeholder="Se completa automáticamente" readonly>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="sistema-competicion">
+                  Sistema de competencia
+               </label>
+
+               <select id="sistema-competicion" name="sistema" required disabled>
+                  <option value="">
+                     Seleccioná primero una disciplina
+                  </option>
+               </select>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="participantes">
+                  Cupos máximos
+               </label>
+
+               <input id="participantes" name="cupos" type="number" min="2" max="64" step="1"
+                  placeholder="Cantidad de participantes" required>
+
+               <small id="ayuda-cupos">
+                  Indicá la cantidad máxima de equipos o jugadores.
+               </small>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="comunidad">
+                  Comunidad u organización
+               </label>
+
+               <input id="comunidad" name="comunidad" type="text" minlength="2" maxlength="80"
+                  placeholder="Ej.: Club ASCEND" required>
+            </div>
+
+         </section>
+
+         <!-- COLUMNA 2 -->
+         <section class="crear-torneo-bloque">
+
+            <h2>Fechas y ubicación</h2>
+
+            <div class="crear-torneo-campo">
+               <label for="comienzo-inscripcion">
+                  Inicio de inscripciones
+               </label>
+
+               <input id="comienzo-inscripcion" name="fechaInicioInscripcion" type="date" required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="final-inscripcion">
+                  Cierre de inscripciones
+               </label>
+
+               <input id="final-inscripcion" name="fechaCierre" type="date" required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="comienzo-torneo">
+                  Inicio del torneo
+               </label>
+
+               <input id="comienzo-torneo" name="fechaInicio" type="date" required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="final-torneo">
+                  Fin estimado del torneo
+               </label>
+
+               <input id="final-torneo" name="fechaFin" type="date" required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="evento">
+                  Lugar de los encuentros
+               </label>
+
+               <input id="evento" name="ubicacion" type="text" minlength="2" maxlength="100"
+                  placeholder="Online, estadio, club..." required>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="localidad">
+                  Localidad
+               </label>
+
+               <input id="localidad" name="localidad" type="text" minlength="2" maxlength="80"
+                  placeholder="Ciudad o departamento" required>
+            </div>
+
+         </section>
+
+         <!-- COLUMNA 3 -->
+         <section class="crear-torneo-bloque crear-torneo-bloque--ancho">
+
+            <h2>Detalles</h2>
+
+            <div class="crear-torneo-campo">
+               <label for="description">
+                  Descripción
+               </label>
+
+               <textarea id="description" name="descripcion" minlength="10" maxlength="500"
+                  placeholder="Describí la competencia..." required></textarea>
+            </div>
+
+            <div class="crear-torneo-campo">
+               <label for="rules">
+                  Reglamento
+               </label>
+
+               <textarea id="rules" name="reglamento" minlength="10" maxlength="1500"
+                  placeholder="Indicá las reglas principales..." required></textarea>
+            </div>
+
+         </section>
+
+         <section class="crear-banner-card">
+
+            <h2 id="titulo-banner">Identidad visual</h2>
+
+            <p>
+               Elegí un banner predeterminado o subí
+               una imagen personalizada.
+            </p>
+
+            <figure class="banner-preview">
+
+               <img id="previewBanner" src="../../publico/img/banners/header-torneo.jpg" alt="Banner del torneo">
+
+            </figure>
+
+            <h3>Banners predeterminados</h3>
+
+            <div class="banner-selector">
+
+               <!-- tarjetas -->
+
+            </div>
+
+            <div class="banner-divider">
+               <span>o</span>
+            </div>
+
+            <label class="banner-upload">
+
+               <i class="fa-solid fa-image"></i>
+
+               Subir imagen personalizada
+
+               <input type="file" id="bannerFile" accept="image/*" hidden>
+
+            </label>
+
+         </section>
+
+         <!-- EVENTOS -->
+         <aside class="crear-torneo-panel">
+
+            <section class="crear-evento-card">
+
+               <header class="crear-evento-header">
+                  <div>
+                     <span>Agenda inicial</span>
+                     <h2>Agregar actividad</h2>
+                  </div>
+
+                  <i class="fa-solid fa-calendar-plus"></i>
+               </header>
+
+               <div class="crear-torneo-campo">
+                  <label for="titulo-evento">
+                     Título
+                  </label>
+
+                  <input id="titulo-evento" type="text" maxlength="100" placeholder="Ej.: Reunión de capitanes">
+               </div>
+
+               <div class="crear-evento-fila">
+
+                  <div class="crear-torneo-campo">
+                     <label for="evento-tipo">
+                        Tipo
+                     </label>
+
+                     <select id="evento-tipo">
+                        <option value="administrativo">
+                           Administrativo
+                        </option>
+
+                        <option value="reunion">
+                           Reunión
+                        </option>
+
+                        <option value="competencia">
+                           Competencia
+                        </option>
+
+                        <option value="premiacion">
+                           Premiación
+                        </option>
+                     </select>
+                  </div>
+
+                  <div class="crear-torneo-campo">
+                     <label for="evento-fecha">
+                        Fecha
+                     </label>
+
+                     <input id="evento-fecha" type="date">
+                  </div>
+
+                  <div class="crear-torneo-campo">
+                     <label for="evento-horario">
+                        Hora
+                     </label>
+
+                     <input id="evento-horario" type="time">
+                  </div>
+
+               </div>
+
+               <button id="add-event-button" class="crear-evento-boton" type="button">
+                  <i class="fa-solid fa-plus"></i>
+                  Agregar actividad
+               </button>
+
+            </section>
+
+            <section class="crear-fechas-card">
+
+               <div class="crear-fechas-titulo">
+                  <i class="fa-solid fa-list-check"></i>
+                  Actividades agregadas
+               </div>
+
+               <div id="dates-list" class="crear-fechas-lista">
+                  Aún no se agregaron actividades.
+               </div>
+
+            </section>
+
+            <button class="crear-torneo-submit" type="submit">
+               <i class="fa-solid fa-trofeo"></i>
+               Crear torneo
+            </button>
+
+         </aside>
+
+      </form>
+
+   </main>
+
+   <script src="../../publico/js/organizador/includes.js"></script>
+   <script src="../../publico/js/organizador/sidebar.js"></script>
+
+   <!-- Debe cargarse antes de crear-torneo.js -->
+   <script src="../../publico/js/organizador/utils.js"></script>
+
+   <script src="../../publico/js/organizador/crearTorneo.js"></script>
+
+   <script>
+      // Cerrar selector de hora al seleccionar
+      const timeInput = document.getElementById('evento-horario');
+      if(timeInput) {
+         timeInput.addEventListener('change', function() {
+            this.blur();
+         });
+      }
+   </script>
+</body>
+
+</html>

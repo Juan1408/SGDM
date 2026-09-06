@@ -1,0 +1,851 @@
+/* =========================================================
+   PERFIL DE JUGADOR — Mobile first
+   Misma estructura y clases que perfil-equipo.css /
+   perfil-publico-organizador.css (sin tabs). Además tiene
+   edición en vivo (solo visible si sos el dueño del perfil,
+   controlado por perfil-jugador.js vía localStorage).
+========================================================= */
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.equipo-pagina {
+   background: #030205;
+   color: #fff;
+   font-family: 'Poppins', sans-serif;
+   padding-top: 80px; /* alto del navbar fijo */
+   padding-bottom: 40px;
+   overflow-x: hidden;
+}
+
+.tarjeta-equipo,
+.equipo-hero-banner,
+.equipo-identidad,
+.equipo-estadisticas,
+.torneos-organiza-grilla,
+.mis-equipos-grid,
+.juegos-grillas,
+.seccion-gradiente-titulo,
+.trofeos-fila,
+.logros-grilla {
+   width: 92%;
+   max-width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.tarjeta-equipo {
+   margin-top: 24px;
+   padding: 24px 20px;
+   background: #101010;
+   border-radius: 20px;
+}
+
+.tarjeta-equipo h2 {
+   font-size: 1.4rem;
+   font-weight: 800;
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+.equipo-datos,
+.mis-equipos-grid,
+.juegos-grillas,
+.torneos-organiza-grilla,
+.trofeos-fila,
+.logros-grilla {
+   list-style: none;
+   margin-top: 0;
+   margin-bottom: 0;
+   padding: 0;
+}
+
+/* =========================================================
+   HERO: banner + avatar + datos + edición + stats
+========================================================= */
+
+.equipo-hero {
+   position: relative;
+   padding-bottom: 20px;
+}
+
+.equipo-hero-banner {
+   height: 190px;
+   margin-top: 16px;
+   border-radius: 16px;
+   overflow: hidden;
+}
+
+.equipo-hero-banner img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.equipo-identidad {
+   text-align: center;
+}
+
+.equipo-logo {
+   position: relative;
+   width: 110px;
+   height: 110px;
+   margin: -55px auto 14px;
+   border-radius: 50%;
+   overflow: hidden;
+   background: #d9d9d9;
+   border: 4px solid transparent;
+   background-image:
+      linear-gradient(#0a0a12, #0a0a12),
+      linear-gradient(180deg, #52228e, #30f5d2);
+   background-origin: border-box;
+   background-clip: content-box, border-box;
+   z-index: 2;
+}
+
+.equipo-logo img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.perfil-nivel {
+   display: inline-block;
+   margin-bottom: 8px;
+   padding: 5px 14px;
+   border-radius: 999px;
+   background: rgba(var(--color-secundario-rgb), 0.12);
+   color: var(--color-secundario);
+   font-size: 0.75rem;
+   font-weight: 700;
+}
+
+.equipo-nombre {
+   font-size: 1.6rem;
+   font-weight: 800;
+   margin-bottom: 10px;
+}
+
+.equipo-descripcion {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+   line-height: 1.6;
+   margin-bottom: 18px;
+}
+
+.equipo-datos {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 20px;
+   padding-bottom: 18px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipo-dato {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   font-size: 0.85rem;
+   color: #eee;
+}
+
+.equipo-dato i {
+   color: #30f5d2;
+}
+
+.equipo-estadisticas {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 14px;
+   margin-top: 0;
+   margin-bottom: 0;
+}
+
+.tarjeta-estadistica {
+   margin: 0;
+   min-height: 120px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   text-align: center;
+   padding: 14px 10px;
+   border-radius: 12px;
+   background: linear-gradient(180deg, #52228e, #170928);
+}
+
+.tarjeta-estadistica dd {
+   margin: 0;
+   font-size: 2rem;
+   font-weight: 800;
+}
+
+.tarjeta-estadistica dt {
+   font-size: 0.85rem;
+   color: #e4e0f0;
+}
+
+@media (min-width: 900px) {
+
+   .equipo-hero-banner {
+      height: 400px;
+   }
+
+   .equipo-identidad {
+      display: flex;
+      align-items: flex-end;
+      gap: 28px;
+      text-align: left;
+   }
+
+   .equipo-logo {
+      flex-shrink: 0;
+      width: 170px;
+      height: 170px;
+      margin: -130px 0 0;
+   }
+
+   .equipo-info-texto {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 6px;
+   }
+
+   .equipo-nombre {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+   }
+
+   .equipo-descripcion {
+      max-width: 640px;
+      margin-bottom: 0;
+   }
+
+   .equipo-datos {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 40px;
+      margin-top: 18px;
+   }
+
+   .equipo-estadisticas {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+   }
+
+   .tarjeta-estadistica {
+      min-height: 150px;
+   }
+
+   .tarjeta-estadistica strong {
+      font-size: 2.6rem;
+   }
+}
+
+/* =========================================================
+   EDICIÓN EN VIVO (solo el dueño del perfil la ve)
+========================================================= */
+
+.perfil-acciones-edicion {
+   margin-top: 14px;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 10px;
+}
+
+.boton-editar-perfil {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   background: rgba(255, 255, 255, 0.08);
+   border: 1px solid rgba(48, 245, 210, 0.45);
+   color: #fff;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 14px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: 0.2s ease;
+}
+
+.boton-editar-perfil:hover {
+   background: rgba(48, 245, 210, 0.15);
+   border-color: #30f5d2;
+   box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
+}
+
+.grupo-guardar-cancelar {
+   display: flex;
+   gap: 10px;
+}
+
+.boton-cancelar-edicion {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   background: transparent;
+   border: 1px solid rgba(255, 255, 255, 0.25);
+   color: #c7c7d8;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 14px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: 0.2s ease;
+}
+
+.boton-cancelar-edicion:hover {
+   background: rgba(255, 80, 80, 0.1);
+   border-color: rgba(255, 80, 80, 0.5);
+   color: #ff8080;
+}
+
+.campo-en-edicion {
+   outline: 2px dashed rgba(0, 255, 238, 0.5);
+   outline-offset: 4px;
+   border-radius: 6px;
+   background: rgba(0, 255, 238, 0.05);
+}
+
+.boton-cambiar-avatar {
+   position: absolute;
+   right: 4px;
+   bottom: 4px;
+   width: 32px;
+   height: 32px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: rgba(0, 0, 0, 0.6);
+   border: 2px solid #30f5d2;
+   border-radius: 50%;
+   color: #fff;
+   font-size: 13px;
+   cursor: pointer;
+   z-index: 6;
+}
+
+.boton-cambiar-avatar:hover {
+   background: #30f5d2;
+   color: #06070d;
+}
+
+.boton-cambiar-banner {
+   position: absolute;
+   top: 28px;
+   right: 24px;
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   background: rgba(0, 0, 0, 0.55);
+   border: 1px solid rgba(255, 255, 255, 0.25);
+   color: #fff;
+   padding: 8px 16px;
+   border-radius: 999px;
+   font-size: 13px;
+   cursor: pointer;
+   backdrop-filter: blur(6px);
+   z-index: 6;
+}
+
+.boton-cambiar-banner:hover {
+   background: rgba(48, 245, 210, 0.25);
+   border-color: #30f5d2;
+}
+
+/* =========================================================
+   REDES SOCIALES
+========================================================= */
+
+.capitanes-fila {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 14px;
+   text-align: center;
+}
+
+.perfil-organizador-cta-texto {
+   font-size: 0.9rem;
+   color: #d8d8e0;
+}
+
+.perfil-redes {
+   display: flex;
+   gap: 12px;
+}
+
+.perfil-redes a {
+   width: 40px;
+   height: 40px;
+   border-radius: 10px;
+   background: #1a1a1a;
+   color: #fff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   transition: 0.25s ease;
+}
+
+.perfil-redes a:hover {
+   color: #30f5d2;
+   box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
+}
+
+@media (min-width: 700px) {
+   .capitanes-fila--solo-boton {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+   }
+}
+
+/* =========================================================
+   TÍTULO DE SECCIÓN (Equipos, Juegos, Torneos)
+========================================================= */
+
+.equipo-miembros {
+   margin-top: 40px;
+}
+
+.seccion-gradiente-titulo {
+   width: fit-content;
+   max-width: 92%;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 24px;
+   padding: 10px 24px;
+   font-size: 1.3rem;
+   font-weight: 700;
+   color: #fff;
+   text-align: center;
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   overflow-wrap: break-word;
+}
+
+@media (min-width: 650px) {
+   .seccion-gradiente-titulo {
+      font-size: 1.7rem;
+      padding: 10px 40px;
+   }
+}
+
+@media (min-width: 900px) {
+   .seccion-gradiente-titulo {
+      font-size: 2rem;
+      padding: 10px 60px;
+   }
+}
+
+/* =========================================================
+   EQUIPOS — reutiliza el mismo código de tarjeta que
+   mis-equipos.html (.mis-equipos-grid / .mi-tarjeta-equipo),
+   con los títulos en <h3> porque acá "Equipos" ya es el <h2>
+   de la sección.
+========================================================= */
+
+.mis-equipos-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+}
+
+.mi-tarjeta-equipo {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 14px;
+   text-align: center;
+   padding: 20px;
+   background: #101010;
+   border-radius: 16px;
+}
+
+.mi-tarjeta-equipo img {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   flex-shrink: 0;
+}
+
+.mi-equipo-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.mi-equipo-badge {
+   display: inline-block;
+   padding: 4px 12px;
+   border-radius: 999px;
+   font-size: 0.7rem;
+   font-weight: 700;
+}
+
+.mi-equipo-badge.badge-lider {
+   background: linear-gradient(90deg, #52228e, #f300ef);
+   color: #fff;
+}
+
+.mi-equipo-badge.badge-capitan {
+   background: rgba(48, 245, 210, 0.15);
+   color: #30f5d2;
+}
+
+.mi-equipo-badge.badge-miembro {
+   background: rgba(255, 255, 255, 0.08);
+   color: #c7c7d8;
+}
+
+.boton-secundario {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(48, 245, 210, 0.35);
+   color: #fff;
+   padding: 10px 18px;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 600;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.boton-secundario:hover {
+   background: rgba(48, 245, 210, 0.12);
+   border-color: #30f5d2;
+}
+
+@media (min-width: 700px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .mi-tarjeta-equipo {
+      flex-direction: row;
+      text-align: left;
+   }
+
+   .mi-equipo-info {
+      flex: 1;
+      min-width: 0;
+   }
+
+   .boton-secundario {
+      width: auto;
+      flex-shrink: 0;
+   }
+}
+
+@media (min-width: 900px) {
+   .mis-equipos-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+
+   .mi-tarjeta-equipo {
+      flex-direction: column;
+      text-align: center;
+   }
+
+   .boton-secundario {
+      width: 100%;
+   }
+}
+
+/* =========================================================
+   JUEGOS QUE PARTICIPA — reutiliza el mismo código de
+   tarjeta que juegos.html (.juegos-grillas / .tarjeta-juego), con
+   los títulos en <h3> porque acá "Juegos que participa" ya
+   es el <h2> de la sección.
+========================================================= */
+
+.juegos-grillas {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 18px;
+}
+
+.tarjeta-juego {
+   --background: linear-gradient(to right, #13b37f, #11a3c8);
+   width: 100%;
+   height: 200px;
+   padding: 1px;
+   border-radius: 0.7rem;
+   overflow: visible;
+   background: var(--background);
+   position: relative;
+   z-index: 1;
+}
+
+.tarjeta-juego::after {
+   position: absolute;
+   content: "";
+   top: -16px;
+   left: 0;
+   right: 0;
+   z-index: -1;
+   height: 100%;
+   width: 100%;
+   transform: scale(0.76);
+   filter: blur(28px);
+   background: var(--background);
+   opacity: 0;
+   transition: opacity 0.5s;
+}
+
+.tarjeta-juego:hover::after {
+   opacity: 0.6;
+}
+
+.tarjeta-info {
+   background: #1f1a1d;
+   width: 100%;
+   height: 100%;
+   border-radius: 0.7rem;
+   overflow: hidden;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+}
+
+.tarjeta-info img {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.tarjeta-overlay {
+   position: relative;
+   z-index: 2;
+   background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+   padding: 14px 12px 12px;
+}
+
+.tarjeta-overlay h3 {
+   color: #fff;
+   font-size: 13px;
+   font-weight: 700;
+   margin-bottom: 3px;
+}
+
+.tarjeta-overlay p {
+   color: #ccc;
+   font-size: 11px;
+}
+
+.tarjeta-juego.lol     { --background: linear-gradient(to right, #C89B3C, #785A28); }
+.tarjeta-juego.apex    { --background: linear-gradient(to right, #ff4500, #e91e8c); }
+.tarjeta-juego.cs      { --background: linear-gradient(to right, #4fc3f7, #1565c0); }
+.tarjeta-juego.wow     { --background: linear-gradient(to right, #00c6ff, #0050a0); }
+.tarjeta-juego.val     { --background: linear-gradient(to right, #ff4655, #8b0000); }
+.tarjeta-juego.chess   { --background: linear-gradient(to right, #b5935a, #5a3e1b); }
+.tarjeta-juego.truco   { --background: linear-gradient(to right, #2e8b57, #145a32); }
+.tarjeta-juego.uno     { --background: linear-gradient(to right, #e63946, #f1c40f); }
+.tarjeta-juego.basquet { --background: linear-gradient(to right, #e67e22, #6e2c00); }
+.tarjeta-juego.futbol5 { --background: linear-gradient(to right, #27ae60, #145a32); }
+
+@media (min-width: 650px) {
+   .juegos-grillas {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 900px) {
+   .juegos-grillas {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+   }
+
+   .tarjeta-juego {
+      height: 230px;
+   }
+
+   .tarjeta-overlay h3 {
+      font-size: 15px;
+   }
+
+   .tarjeta-overlay p {
+      font-size: 12px;
+   }
+}
+
+/* =========================================================
+   TORNEOS (reutiliza "Torneos que organiza" de
+   perfil-publico-organizador)
+========================================================= */
+
+.torneos-organiza-grilla {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 18px;
+}
+
+.torneos-organiza-tarjeta {
+   display: block;
+   text-decoration: none;
+   color: inherit;
+   background: #101010;
+   border-radius: 16px;
+   overflow: hidden;
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   transition: 0.25s ease;
+}
+
+.torneos-organiza-tarjeta:hover {
+   transform: translateY(-4px);
+   border-color: var(--color-secundario);
+}
+
+.torneos-organiza-tarjeta img {
+   width: 100%;
+   height: 160px;
+   object-fit: cover;
+   display: block;
+}
+
+.torneo-organiza-info {
+   padding: 14px 16px;
+}
+
+.torneo-organiza-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.torneo-organiza-info span {
+   font-size: 0.8rem;
+   color: var(--texto-secundario);
+}
+
+@media (min-width: 650px) {
+   .torneos-organiza-grilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 900px) {
+   .torneos-organiza-grilla {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+/* =========================================================
+   TROFEOS
+========================================================= */
+
+.trofeos-fila {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 14px;
+}
+
+.tarjeta-trofeo {
+   width: 80px;
+   height: 80px;
+   border-radius: 14px;
+   background: linear-gradient(145deg, #42147d, #10103a);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 0 22px rgba(245, 17, 203, 0.18);
+}
+
+.tarjeta-trofeo i {
+   color: #ffd000;
+   font-size: 34px;
+   text-shadow: 0 0 18px rgba(255, 208, 0, 0.45);
+}
+
+@media (min-width: 700px) {
+   .tarjeta-trofeo {
+      width: 95px;
+      height: 95px;
+   }
+
+   .tarjeta-trofeo i {
+      font-size: 44px;
+   }
+}
+
+/* =========================================================
+   LOGROS
+========================================================= */
+
+.logros-grilla {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 16px;
+}
+
+.logro-tarjeta {
+   min-height: 74px;
+   min-width: 0;
+   padding: 14px;
+   display: grid;
+   grid-template-columns: 48px minmax(0, 1fr) auto;
+   align-items: center;
+   gap: 14px;
+   border-radius: 10px;
+   background: linear-gradient(90deg, rgba(48, 245, 210, .25), rgba(245, 17, 203, .15));
+   box-shadow: 0 0 18px rgba(245, 17, 203, 0.12);
+}
+
+.logro-tarjeta.en-curso {
+   background: linear-gradient(90deg, rgba(255, 180, 80, .35), rgba(245, 17, 203, .15));
+}
+
+.logro-tarjeta.bloqueado {
+   background: linear-gradient(90deg, rgba(150, 150, 150, .3), rgba(40, 40, 40, .8));
+}
+
+.logro-icon {
+   width: 42px;
+   height: 42px;
+   border-radius: 12px;
+   background: #ddd;
+   flex-shrink: 0;
+}
+
+.logro-tarjeta h3 {
+   font-size: 14px;
+}
+
+.logro-tarjeta p {
+   font-size: 12px;
+   color: #eee;
+}
+
+.logro-tarjeta span {
+   padding: 4px 8px;
+   border-radius: 999px;
+   background: #fff;
+   color: #30f5d2;
+   font-size: 9px;
+   font-weight: 800;
+   white-space: nowrap;
+}
+
+@media (min-width: 650px) {
+   .logros-grilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}

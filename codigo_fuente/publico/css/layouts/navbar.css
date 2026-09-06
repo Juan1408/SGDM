@@ -1,0 +1,813 @@
+﻿/* ==========================================================================
+   ESTILOS GENERALES Y CONTENEDOR
+   Mobile first: la base es el menú hamburguesa /
+   panel lateral. Desde 881px se muestra el menú
+   horizontal completo (igual que antes).
+   ========================================================================== */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.navbar {
+   width: 100%;
+   height: 80px;
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 999;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   background: rgba(5, 5, 12, 0.85);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+   backdrop-filter: blur(14px);
+}
+
+.logo-navbar {
+   height: 50px;
+   width: auto;
+   object-fit: contain;
+}
+
+.navbar-contenedor {
+   width: 100%;
+   max-width: 1600px;
+   min-width: 0;
+   padding: 0 1.25rem;
+
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+/* --- LOGO --- */
+.logo-contenedor {
+   display: flex;
+   align-items: center;
+   gap: 9px;
+   min-width: 0;
+   color: #fff;
+   flex-shrink: 0;
+}
+
+.logo-contenedor i {
+   color: #00FFEE;
+   filter: drop-shadow(0 0 8px rgba(0, 255, 238, 0.6));
+}
+
+.logo-contenedor h1 {
+   font-size: 18px;
+   font-weight: 800;
+   letter-spacing: .5px;
+}
+
+/* --- BOTÓN HAMBURGUESA (visible por defecto en mobile) --- */
+.navbar-toggle {
+   display: block;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 5px;
+   z-index: 1010;
+   flex-shrink: 0;
+}
+
+.bar {
+   display: block;
+   width: 25px;
+   height: 3px;
+   margin: 5px auto;
+   background-color: #fff;
+   transition: all 0.3s ease-in-out;
+   border-radius: 2px;
+}
+
+/* Transformación de Hamburguesa a "X" */
+.navbar-toggle.active .bar:nth-child(2) {
+   opacity: 0;
+}
+
+.navbar-toggle.active .bar:nth-child(1) {
+   transform: translateY(8px) rotate(45deg);
+   background-color: #00FFEE;
+}
+
+.navbar-toggle.active .bar:nth-child(3) {
+   transform: translateY(-8px) rotate(-45deg);
+   background-color: #00FFEE;
+}
+
+/* --- MENÚ (panel lateral en mobile) --- */
+.navbar-menu {
+   position: fixed;
+   top: 0;
+   right: -100%; /* Escondido por defecto a la derecha */
+
+   width: min(270px, 80vw);
+   height: 100vh;
+   max-width: 100vw;
+
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 1.8rem;
+
+   padding: 100px 2rem 40px;
+   background: rgba(7, 8, 18, 0.96);
+   backdrop-filter: blur(12px);
+   border-left: 1px solid rgba(245, 17, 203, 0.2);
+   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+
+   list-style: none;
+   transition: right 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+   z-index: 1005;
+}
+
+.navbar-menu.active {
+   right: 0;
+}
+
+.navbar-menu li {
+   width: 100%;
+}
+
+.navbar-menu li a,
+.boton-desplegable {
+   display: block;
+   width: 100%;
+   text-align: left;
+
+   text-decoration: none;
+   color: #fff;
+   font-size: 17px;
+   font-weight: 600;
+   padding: 8px 0;
+   transition: all 0.3s ease;
+}
+
+.navbar-menu .auth-links a {
+   width: auto;
+}
+
+.navbar-menu li a:hover {
+   color: #00FFEE;
+}
+
+/* --- desplegable (TORNEOS) en mobile: acordeón dentro del panel --- */
+.desplegable {
+   position: relative;
+   width: 100%;
+}
+
+.boton-desplegable {
+   background: transparent;
+   border: none;
+   font-family: inherit;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   gap: 6px;
+}
+
+.boton-desplegable:hover {
+   color: #00FFEE;
+}
+
+.contenido-desplegable {
+   position: static;
+   width: 100%;
+   transform: none;
+
+   display: none;
+   margin-top: 5px;
+   padding: 6px;
+
+   background: rgba(255, 255, 255, 0.03);
+   border: 1px solid rgba(245, 17, 203, 0.15);
+   border-radius: 14px;
+   box-shadow: none;
+}
+
+.contenido-desplegable::before {
+   content: "";
+   position: absolute;
+   top: -14px;
+   left: 0;
+   width: 100%;
+   height: 14px;
+}
+
+.contenido-desplegable a {
+   display: block;
+   padding: 10px 12px;
+   color: #fff;
+   text-decoration: none;
+   border-radius: 10px;
+   font-size: 14px;
+   text-align: left;
+}
+
+.contenido-desplegable a:hover {
+   background: rgba(0, 255, 238, 0.12);
+   color: #00FFEE;
+}
+
+.desplegable.open .contenido-desplegable {
+   display: block;
+}
+
+.desplegable.open .boton-desplegable i {
+   transform: rotate(180deg);
+}
+
+/* --- BOTONES AUTH (dentro del panel en mobile) --- */
+.auth-links {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-wrap: wrap;
+   gap: 15px;
+   margin-top: 15px;
+   padding-top: 15px;
+   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.boton-login {
+   font-size: 14px;
+   font-weight: 500;
+   color: var(--color-texto);
+   text-decoration: none;
+   padding: 8px 16px;
+   border-radius: 6px;
+   transition: all 0.3s ease;
+   border: 1px solid transparent;
+}
+.boton-login:hover {
+   color: #00FFEE;
+   background: rgba(0, 255, 238, 0.05);
+   border-color: rgba(0, 255, 238, 0.2);
+}
+
+.boton-registro {
+   font-size: 14px;
+   font-weight: 600;
+   border: 1px solid rgba(245, 17, 203, 0.4);
+   background: rgba(245, 17, 203, 0.05);
+   border-radius: 6px;
+   padding: 8px 16px;
+}
+
+.boton-registro:hover {
+   background: #F511CB;
+   box-shadow: 0 0 15px rgba(245, 17, 203, 0.5);
+}
+
+
+/* ==========================================================================
+   ESCRITORIO (min-width: 881px)
+   Menú horizontal completo, sin panel lateral.
+   ========================================================================== */
+
+@media (min-width: 881px) {
+
+   .navbar-contenedor {
+      padding: 0 2rem;
+   }
+
+   .navbar-toggle {
+      display: none;
+   }
+
+   .navbar-menu {
+      position: static;
+      width: auto;
+      height: auto;
+      max-width: none;
+
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+
+      padding: 0;
+      background: transparent;
+      backdrop-filter: none;
+      border-left: none;
+      box-shadow: none;
+   }
+
+   .navbar-menu li {
+      width: auto;
+   }
+
+   .navbar-menu li a,
+   .boton-desplegable {
+      display: flex;
+      align-items: center;
+      width: auto;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 6px 12px;
+   }
+
+   .contenido-desplegable {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      display: none;
+      width: auto;
+      min-width: 220px;
+      margin-top: 0;
+      padding: 12px;
+
+      background: rgba(12, 12, 28, 0.98);
+      border: 1px solid rgba(245, 17, 203, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(245, 17, 203, 0.25);
+   }
+
+   .desplegable:hover .contenido-desplegable,
+   .desplegable.open .contenido-desplegable {
+      display: block;
+   }
+
+      .auth-links {
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 15px;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+   }
+}
+
+
+
+/* ===== Utilidad genérica ===== */
+.oculto {
+   display: none !important;
+}
+
+/* ===== NAVBAR: variante jugador logueado ===== */
+.auth-links--jugador {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+}
+
+.notificaciones-jugador {
+   position: relative;
+}
+
+.boton-campana {
+   position: relative;
+   background: transparent;
+   border: none;
+   color: #fff;
+   font-size: 1.1rem;
+   cursor: pointer;
+   padding: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.badge-notificaciones {
+   position: absolute;
+   top: 2px;
+   right: 2px;
+   background: var(--color-primario, #F511CB);
+   color: #fff;
+   font-size: 10px;
+   font-weight: 700;
+   min-width: 16px;
+   height: 16px;
+   border-radius: 999px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 0 3px;
+}
+
+.panel-notificaciones {
+   display: none;
+   position: absolute;
+   top: calc(100% + 12px);
+   right: 0;
+   width: 260px;
+   background: #14142b;
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   border-radius: 14px;
+   padding: 16px;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+   z-index: 1000;
+}
+/******/
+.notificaciones-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding-bottom: 10px;
+   margin-bottom: 8px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notificaciones-header h4 {
+   font-size: 0.85rem;
+   font-weight: 700;
+   margin: 0;
+}
+
+.notificaciones-header button {
+   border: none;
+   background: transparent;
+   color: var(--color-secundario);
+   font-size: 0.7rem;
+   font-family: inherit;
+   cursor: pointer;
+}
+
+.notificaciones-header button:hover {
+   text-decoration: underline;
+}
+
+.notificaciones-lista {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+   max-height: 320px;
+   overflow-y: auto;
+}
+
+.notificacion-item {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   padding: 10px 8px;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: 0.15s ease;
+}
+
+.notificacion-item:hover {
+   background: rgba(255, 255, 255, 0.05);
+}
+
+.notificacion-item.no-leida {
+   background: rgba(var(--color-secundario-rgb), 0.06);
+}
+
+.notificacion-icono {
+   width: 34px;
+   height: 34px;
+   flex-shrink: 0;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 13px;
+   background: rgba(var(--color-primario-rgb), 0.15);
+   color: var(--color-primario);
+}
+
+.notificacion-item[data-tipo="torneo"] .notificacion-icono {
+   background: rgba(var(--color-secundario-rgb), 0.15);
+   color: var(--color-secundario);
+}
+
+.notificacion-item[data-tipo="resultado"] .notificacion-icono {
+   background: rgba(255, 208, 0, 0.15);
+   color: #ffd000;
+}
+
+.notificacion-contenido {
+   flex: 1;
+   min-width: 0;
+}
+
+.notificacion-titulo {
+   font-size: 0.8rem;
+   font-weight: 700;
+   display: block;
+   margin-bottom: 2px;
+}
+
+.notificacion-mensaje {
+   font-size: 0.75rem;
+   color: var(--texto-secundario);
+   line-height: 1.4;
+}
+
+.notificacion-punto {
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   background: var(--color-secundario);
+   flex-shrink: 0;
+   margin-top: 6px;
+}
+/*******/
+
+.panel-notificaciones.open {
+   display: block;
+}
+
+.notificaciones-vacio {
+   color: #b8b8c9;
+   font-size: 13px;
+   text-align: center;
+   margin: 0;
+}
+
+.perfil-jugador-menu {
+   position: relative;
+}
+
+.boton-mi-perfil {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   color: #fff;
+   padding: 8px 14px;
+   border-radius: 999px;
+   cursor: pointer;
+   font-family: inherit;
+   font-size: 14px;
+}
+
+.boton-mi-perfil i:last-child {
+   font-size: 10px;
+   transition: transform 0.25s ease;
+}
+
+.boton-mi-perfil[aria-expanded="true"] i:last-child {
+   transform: rotate(180deg);
+}
+
+.dropdown-mi-perfil {
+   display: none;
+   position: absolute;
+   top: calc(100% + 12px);
+   right: 0;
+   min-width: 200px;
+   background: #14142b;
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   border-radius: 14px;
+   padding: 8px;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+   z-index: 1000;
+}
+
+.dropdown-mi-perfil.open {
+   display: block;
+}
+
+.dropdown-mi-perfil a,
+.dropdown-mi-perfil button {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   width: 100%;
+   background: transparent;
+   border: none;
+   color: #fff;
+   text-decoration: none;
+   font-family: inherit;
+   font-size: 14px;
+   padding: 10px 12px;
+   border-radius: 8px;
+   cursor: pointer;
+   text-align: left;
+}
+
+.dropdown-mi-perfil a:hover,
+.dropdown-mi-perfil button:hover {
+   background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-mi-perfil button {
+   color: #ff6b6b;
+}
+
+/* ===== Sidebar flotante (jugador logueado) ===== */
+/* ===== Sidebar flotante del jugador ===== */
+
+.sidebar-jugador-flotante {
+   position: fixed;
+   left: 18px;
+   top: 100px;      /* deja libre el alto de la navbar fija */
+   bottom: 100px;    /* deja libre el alto del footer */
+   margin: auto 0;   /* centra verticalmente DENTRO de ese rango, no en toda la pantalla */
+   height: fit-content;
+   max-height: calc(100vh - 200px);
+   overflow-y: auto;
+   z-index: 900;
+
+   display: flex;
+   flex-direction: column;
+
+   background: rgba(15, 15, 35, 0.9);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   border-radius: 20px;
+   padding: 12px 8px;
+
+   backdrop-filter: blur(10px);
+}
+
+
+/* Lista principal */
+
+.sidebar-flotante-lista {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+
+
+/* Cada elemento */
+
+.sidebar-flotante-lista li {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+
+/* Botones/enlaces */
+
+.sidebar-flotante-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 4px;
+
+   width: 56px;
+   padding: 10px 4px;
+
+   border-radius: 14px;
+
+   color: #b8b8c9;
+   text-decoration: none;
+
+   font-size: 10px;
+   text-align: center;
+
+   transition: 0.2s ease;
+}
+
+
+.sidebar-flotante-item i {
+   font-size: 18px;
+}
+
+
+.sidebar-flotante-item:hover {
+   background: rgba(255, 255, 255, 0.08);
+   color: #fff;
+}
+
+
+/* ===== EQUIPOS (link + botón toggle separados,       ===== */
+/* ===== un <a> no puede ir anidado dentro de <button>) ===== */
+
+.sidebar-flotante-desplegable {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.sidebar-flotante-toggle {
+   width: 28px;
+   height: 18px;
+   margin-top: -4px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border: none;
+   background: transparent;
+   color: #8a8a9e;
+   font-size: 10px;
+   cursor: pointer;
+
+   transition: 0.2s ease;
+}
+
+.sidebar-flotante-toggle:hover {
+   color: #fff;
+}
+
+
+/* Submenú */
+
+.sidebar-flotante-submenu {
+   list-style: none;
+   margin: 4px 0 0;
+   padding: 0;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+
+.sidebar-flotante-submenu li {
+   list-style: none;
+}
+
+
+.sidebar-flotante-submenu a {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   width: 56px;
+   padding: 7px 3px;
+
+   color: #b8b8c9;
+   text-decoration: none;
+
+   font-size: 9px;
+   text-align: center;
+
+   border-radius: 10px;
+}
+
+
+.sidebar-flotante-submenu a i {
+   font-size: 13px;
+}
+
+
+.sidebar-flotante-submenu a:hover {
+   background: rgba(255, 255, 255, 0.08);
+   color: #00FFEE;
+}
+
+
+/* En mobile se mantiene oculto,
+   igual que antes */
+
+@media (max-width: 860px) {
+
+   .sidebar-jugador-flotante {
+      display: none;
+   }
+
+}
+/* ===== Botón "Volver arriba" ===== */
+
+#boton-volver-arriba {
+   position: fixed;
+   right: 20px;
+   bottom: 20px;
+   z-index: 950;
+
+   width: 48px;
+   height: 48px;
+   border: none;
+   border-radius: 50%;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   background: var(--color-primario);
+   color: snow;
+   font-size: 18px;
+   cursor: pointer;
+
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(10px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+#boton-volver-arriba.visible {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
+}
+
+#boton-volver-arriba:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 10px 26px rgba(var(--color-primario-rgb), 0.5);
+}

@@ -1,0 +1,39 @@
+/*
+=====================================================
+   CHIP - Etiqueta de estado reutilizable
+   Uso: <span class="chip chip--exito">En curso</span>
+=====================================================
+*/
+
+.chip {
+   display: inline-block;
+   width: fit-content;
+
+   padding: 0.3rem 0.75rem;
+
+   border-radius: 999px;
+
+   font-size: 0.75rem;
+   font-weight: 800;
+   white-space: nowrap;
+}
+
+.chip-exito {
+   color: var(--color-secundario);
+   background: rgba(0, 255, 238, 0.13);
+}
+
+.chip-alerta {
+   color: #ffb400;
+   background: rgba(255, 180, 0, 0.13);
+}
+
+.chip-peligro {
+   color: #ff4c4c;
+   background: rgba(255, 76, 76, 0.13);
+}
+
+.chip-info {
+   color: #097AEC;
+   background: rgba(32, 196, 255, 0.13);
+}
