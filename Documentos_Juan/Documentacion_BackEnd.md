@@ -193,3 +193,16 @@ Arquitectura Base (CRUD Completo): Se construyó el modelo Juego.php y JuegoCont
 Valores por Defecto para Simplificación: En el método crearJuego() del modelo, se decidió fijar (quemar) los valores de los puntos (3 para victoria, 1 para empate, 0 para derrota) y el estado activo directamente en la consulta SQL. Esto redujo drásticamente la complejidad del formulario frontend (juegos_crear.php), mejorando la usabilidad al pedirle al usuario únicamente 3 datos clave: Nombre, Categoría y Formato de Equipo.
 Baja Lógica (Switch de Estado): Se implementó el método cambiarEstado() utilizando un operador ternario para alternar entre 1 y 0. Esto permite "apagar" un juego para que no se puedan crear nuevos torneos con él, pero preservando el historial de torneos pasados (integridad de datos).
 Edición Dinámica: Se desarrollaron los métodos obtenerJuegoPorId() y actualizarJuego(). En la vista de edición (juegos_editar.php), se utilizaron condicionales ternarios en línea (`$juego['categoria'] === 'esport' ? 'selected' : ''`) para auto-completar los selectores desplegables `<select>` con los datos previos del registro.
+
+30. Módulo de Políticas de Seguridad y Contraseñas (politicas_contrasenas - ADM-07)
+Objetivo: Permitir al Administrador General parametrizar dinámicamente las reglas de complejidad, expiración y reutilización de contraseñas para todos los usuarios del sistema.
+
+Arquitectura MVC e Infraestructura:
+- Modelo (PoliticaContrasena.php): Administra la lectura y persistencia de la fila activa (id = 1) en la tabla `politicas_contrasenas`. Implementa el método `obtenerPoliticaVigente()`, el cual auto-inicializa los valores por defecto si la tabla estuviera vacía.
+- Controlador (PoliticaContrasenaControlador.php): Protegido con `Sesion::validarAdmin()`. La acción `guardar()` sanitiza los parámetros POST (longitud mínima, días de expiración, historial), actualiza el registro en la BD asociando el ID del administrador actualizador (`actualizado_por`), dispara la notificación Toast y registra la auditoría en `logs_actividad` mediante `Auditoria::registrar()`.
+- Vista Administrable (politicas_contrasenas.php): Interfaz responsiva integrada al layout `dashboard.php` que expone campos numéricos, checkboxes de complejidad y metadatos de última modificación.
+
+Funcionamiento y Lógica de Validación del Algoritmo (`validarPassword()`):
+- Evaluación Independiente de Reglas: La regla de longitud mínima (`longitud_minima`) es totalmente independiente de los tipos de caracteres seleccionados (mayúsculas, minúsculas, números, caracteres especiales).
+- Criterio de Presencia Mínima: Al activar los 4 requisitos de tipo de carácter con una longitud mínima de 10, el algoritmo NO exige una distribución equitativa o porcentual por cada tipo. Simplemente requiere que la contraseña cumpla con la longitud total global y que posea AL MENOS 1 carácter del tipo solicitado. Por ejemplo, una clave como `Aa1!aaaaaa` es 100% válida (cumple los 10 caracteres y contiene al menos 1 mayúscula, 1 minúscula, 1 número y 1 especial, siendo los caracteres restantes libres).
+- Alineación con Estándares Internacionales (OWASP / NSI): Esta lógica independiente preserva la usabilidad del sistema evitando confusiones al usuario y promoviendo el uso de frases de contraseña largas (passphrases), altamente seguras por su longitud.

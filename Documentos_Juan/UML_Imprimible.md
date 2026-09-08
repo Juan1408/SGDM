@@ -3,63 +3,66 @@
 ```mermaid
 classDiagram
 class Usuario {
-  <<Entity Model>>
+  <<Entity>>
   #int id
   #int rolId
   #string nombreCompleto
   #string email
   #string contrasenaHash
   #bool estaActivo
-  #DateTime fechaCreacion
-  +obtenerPorId(int $id) Usuario
-  +obtenerPorEmail(string $email) Usuario
-  +crear(array $datos) int
-  +actualizar(int $id, array $datos) bool
-  +cambiarEstado(int $id, bool $activo) bool
-  +verificarPassword(string $passwordPlana) bool
+  #DateTime fechaRegistro
+  +obtenerPorId(id) Usuario
+  +buscarPorEmail(email) array
+  +crear(datos) int
+  +actualizarUsuario(id, datos) bool
+  +cambiarEstadoUsuario(id, estado) bool
+  +eliminarUsuario(id) bool
+  +obtenerTodosUsuariosConRoles() array
 }
-Usuario --|> PerfilJugador : Herencia 1:1 (Subtipo Jugador)
-Usuario --|> PerfilOrganizador : Herencia 1:1 (Subtipo Organizador)
-Usuario o-- Rol : Asignado a 1 Rol (N:1)
-Usuario ..> Auditoria : Dispara registro en Auditoría
+PerfilJugador --|> Usuario : "Subtipo Jugador"
+PerfilOrganizador --|> Usuario : "Subtipo Organizador"
+Usuario o-- Rol : "Asignado a Rol"
+Usuario ..> Auditoria : "Registra en Auditoria"
+
 class PerfilJugador {
-  <<Subtype Entity>>
+  <<Subtype>>
   -int usuarioId
-  -string gamertag
+  -string apodoGamertag
   -string biografia
   -string nivelHabilidad
   -int puntosExperiencia
   -string pais
-  +obtenerPerfil(int $usuarioId) array
-  +actualizarGamertag(int $usuarioId, string $tag) bool
-  +sumarExperiencia(int $usuarioId, int $xp) bool
+  +obtenerPerfil(usuarioId) array
+  +actualizarGamertag(usuarioId, tag) bool
+  +sumarExperiencia(usuarioId, xp) bool
 }
-PerfilJugador --|> Usuario : Hereda de Usuario (1:1)
-PerfilJugador *-- EquipoMiembro : Integra Equipos (1:N)
+PerfilJugador *-- EquipoMiembro : "Integra Equipos"
+
 class PerfilOrganizador {
-  <<Subtype Entity>>
+  <<Subtype>>
   -int usuarioId
   -string razonSocial
   -string sitioWeb
   -string telefono
   -string localidad
   -bool esVerificado
-  +obtenerOrganizador(int $usuarioId) array
-  +solicitarVerificacion(int $usuarioId) bool
+  +obtenerOrganizador(usuarioId) array
+  +solicitarVerificacion(usuarioId) bool
 }
-PerfilOrganizador --|> Usuario : Hereda de Usuario (1:1)
-PerfilOrganizador *-- Torneo : Crea y Organiza Torneos (1:N)
+PerfilOrganizador *-- Torneo : "Organiza Torneos"
+
 class Rol {
-  <<Catalog Entity>>
+  <<Catalog>>
   #int id
   #string nombreRol
   #int nivelPermiso
   +obtenerTodos() array
-  +obtenerPermisos(int $rolId) array
+  +obtenerPermisos(rolId) array
 }
-Rol o-- Usuario : Asigna Rol a Usuario (1:N)
+Rol o-- Usuario : "Asigna Rol a Usuario"
+
 class Torneo {
-  <<Aggregate Root Entity>>
+  <<AggregateRoot>>
   #int id
   #int organizadorId
   #int juegoId
@@ -68,48 +71,52 @@ class Torneo {
   #enum tipoFormato
   #enum estado
   #int maxParticipantes
-  +crearTorneo(array $datos) int
-  +cambiarEstado(int $id, string $estado) bool
-  +obtenerParticipantes(int $id) array
-  +generarFixture(int $id) bool
+  +crearTorneo(datos) int
+  +cambiarEstado(id, estado) bool
+  +contarTorneosActivos() int
+  +obtenerUltimosTorneosCreados(limite) array
 }
-Torneo o-- PerfilOrganizador : Organizado por 1 Organizador
-Torneo o-- Juego : Basado en 1 Juego
-Torneo *-- Encuentro : Contiene N Encuentros (1:N)
-Torneo *-- PosicionTorneo : Tiene 1 Tabla de Posiciones
-Torneo *-- ParticipanteTorneo : Tiene N Participantes
-Torneo ..> ModuloLiga : Usa Estrategia Liga
-Torneo ..> ModuloEliminacion : Usa Estrategia Eliminación
-Torneo ..> ModuloSuizo : Usa Estrategia Suizo
+Torneo o-- PerfilOrganizador : "Organizado por"
+Torneo o-- Juego : "Basado en Juego"
+Torneo *-- Encuentro : "Contiene Encuentros"
+Torneo *-- PosicionTorneo : "Tiene Tabla Posiciones"
+Torneo *-- ParticipanteTorneo : "Tiene Participantes"
+Torneo ..> ModuloLiga : "Usa Estrategia Liga"
+Torneo ..> ModuloEliminacion : "Usa Estrategia Eliminacion"
+Torneo ..> ModuloSuizo : "Usa Estrategia Suizo"
+
 class ModuloLiga {
-  <<Tournament Engine>>
-  -int=3 puntosVictoria
-  -int=1 puntosEmpate
-  -int=0 puntosDerrota
-  +generarFixtureTodosContraTodos(int $torneoId) bool
-  +recalcularTablaPosiciones(int $torneoId) bool
+  <<Engine>>
+  -float puntosVictoria
+  -float puntosEmpate
+  -float puntosDerrota
+  +generarFixtureTodosContraTodos(torneoId) bool
+  +recalcularTablaPosiciones(torneoId) bool
 }
-ModuloLiga ..> Torneo : Ejecuta reglas para Torneo
-ModuloLiga ..> PosicionTorneo : Actualiza Posiciones
+ModuloLiga ..> Torneo : "Reglas de Torneo"
+ModuloLiga ..> PosicionTorneo : "Actualiza Posiciones"
+
 class ModuloEliminacion {
-  <<Tournament Engine>>
+  <<Engine>>
   -int totalRondas
   -bool tieneTercerPuesto
-  +generarArbolLlaves(int $torneoId) bool
-  +avanzarGanador(int $encuentroId, int $ganadorId) bool
+  +generarArbolLlaves(torneoId) bool
+  +avanzarGanador(encuentroId, ganadorId) bool
 }
-ModuloEliminacion ..> Torneo : Ejecuta reglas para Torneo
-ModuloEliminacion ..> Encuentro : Crea y conecta Encuentros
+ModuloEliminacion ..> Torneo : "Reglas de Torneo"
+ModuloEliminacion ..> Encuentro : "Conecta Encuentros"
+
 class ModuloSuizo {
-  <<Tournament Engine>>
+  <<Engine>>
   -int totalRondas
-  -string='Buchholz' criterioDesempate
-  +generarRondaSuiza(int $torneoId, int $rondaNumero) bool
-  +calcularBuchholz(int $torneoId, int $participanteId) float
+  -string criterioDesempate
+  +generarRondaSuiza(torneoId, rondaNumero) bool
+  +calcularBuchholz(torneoId, participanteId) float
 }
-ModuloSuizo ..> Torneo : Ejecuta reglas para Torneo
+ModuloSuizo ..> Torneo : "Reglas de Torneo"
+
 class Encuentro {
-  <<Entity Model>>
+  <<Entity>>
   #int id
   #int torneoId
   #int rondaNumero
@@ -119,183 +126,197 @@ class Encuentro {
   #int marcadorVisita
   #int ganadorId
   #enum estado
-  +registrarMarcador(int $id, int $local, int $visita) bool
-  +validarResultado(int $id, int $arbitroId) bool
+  +registrarMarcador(id, local, visita) bool
+  +validarResultado(id, arbitroId) bool
 }
-Encuentro *-- Torneo : Pertenece a 1 Torneo
-Encuentro o-- ParticipanteTorneo : Enfrenta a 2 Participantes
+Encuentro *-- Torneo : "Pertenece a Torneo"
+Encuentro o-- ParticipanteTorneo : "Enfrenta Participantes"
+
 class PosicionTorneo {
-  <<Entity Model>>
+  <<Entity>>
   #int id
   #int torneoId
   #int participanteId
-  #int=0 partidosJugados
-  #int=0 victorias
-  #int=0 empates
-  #int=0 derrotas
-  #int=0 puntos
-  #int=0 diferenciaGoles
-  +obtenerTablaOrdenada(int $torneoId) array
+  #int partidosJugados
+  #int victorias
+  #int empates
+  #int derrotas
+  #int puntos
+  #int diferenciaGoles
+  +obtenerTablaOrdenada(torneoId) array
 }
-PosicionTorneo *-- Torneo : Tabla oficial de 1 Torneo
+PosicionTorneo *-- Torneo : "Tabla del Torneo"
+
 class ParticipanteTorneo {
-  <<Association Entity>>
+  <<Association>>
   #int id
   #int torneoId
   #int usuarioId
   #int equipoId
   #enum estadoInscripcion
   #int semillaRank
-  +inscribir(int $torneoId, int $userId, int $teamId) bool
-  +confirmarInscripcion(int $id) bool
+  +inscribir(torneoId, userId, teamId) bool
+  +confirmarCupo(id, confirmadoPor) bool
 }
-ParticipanteTorneo *-- Torneo : Inscripto en Torneo
-ParticipanteTorneo o-- Usuario : Jugador Individual
-ParticipanteTorneo o-- Equipo : Equipo Grupal
+ParticipanteTorneo *-- Torneo : "Inscripto en Torneo"
+ParticipanteTorneo o-- Usuario : "Jugador Individual"
+ParticipanteTorneo o-- Equipo : "Equipo Grupal"
+
 class Equipo {
-  <<Entity Model>>
+  <<Entity>>
   #int id
   #int capitanId
   #string nombre
   #string tag
   #string logoUrl
-  +crearEquipo(array $datos) int
-  +transferirCapitania(int $equipoId, int $nuevoCapitanId) bool
+  +crearEquipo(datos) int
+  +transferirCapitania(equipoId, nuevoCapitanId) bool
+  +contarTotalEquipos() int
 }
-Equipo o-- PerfilJugador : Capitán del Equipo
-Equipo *-- EquipoMiembro : Tiene N Miembros (1:N)
+Equipo o-- PerfilJugador : "Capitan de Equipo"
+Equipo *-- EquipoMiembro : "Tiene Miembros"
+
 class EquipoMiembro {
-  <<Association Entity>>
+  <<Association>>
   #int id
   #int equipoId
   #int jugadorId
   #enum rolEnEquipo
-  +agregarMiembro(int $equipoId, int $jugadorId) bool
-  +removerMiembro(int $equipoId, int $jugadorId) bool
+  +agregarMiembro(equipoId, jugadorId) bool
+  +removerMiembro(equipoId, jugadorId) bool
 }
-EquipoMiembro *-- Equipo : Roster del Equipo
+EquipoMiembro *-- Equipo : "Roster de Equipo"
+
 class Juego {
-  <<Catalog Entity>>
+  <<Catalog>>
   #int id
   #string nombre
   #enum categoria
-  +listarJuegos() array
-  +crearJuego(array $datos) int
+  +obtenerTodos() array
+  +crearJuego(datos) bool
+  +actualizarJuego(id, datos) bool
+  +cambiarEstado(id) bool
 }
-Juego o-- Torneo : Catálogo para Torneo
+Juego o-- Torneo : "Catalogo para Torneo"
+
+class PoliticaContrasena {
+  <<Entity>>
+  #int id
+  #int longitudMinima
+  #int expiracionDias
+  #int historialCantidad
+  +obtenerPoliticaVigente() array
+  +guardarPolitica(datos, usuarioId) bool
+  +validarPassword(password) array
+}
+
 class Auditoria {
-  <<Security Entity (OWASP)>>
+  <<Security>>
   -int id
   -int usuarioId
-  -string tablaAfectada
-  -int registroId
-  -enum accion
-  -string datosPreviosJson
-  -string datosNuevosJson
-  -string direccionIp
-  -DateTime fechaRegistro
-  +registrar(string $tabla, int $regId, string $accion, array $previo, array $nuevo) bool
-  +listarLogs(int $limit = 100) array
+  -string accion
+  -string descripcion
+  -string ipOrigen
+  -DateTime fechaHora
+  +registrar(accion, descripcion) void
+  +obtenerTodos() array
 }
-Auditoria o-- Usuario : Registra acciones de Usuarios
-class ControladorBase {
-  <<Abstract Controller>>
-  #renderizar(string $vista, array $datos = []) void
-  #responderJson(array $datos, int $status = 200) void
-  #parametro(string $clave, $default = null)
-}
-ControladorBase --|> AuthControlador : Hereda ControladorBase
-ControladorBase --|> AdminControlador : Hereda ControladorBase
-ControladorBase --|> TorneoControlador : Hereda ControladorBase
-class AuthControlador {
-  <<Controller>>
-  +login() void
-  +autenticar() void
-  +registro() void
-  +logout() void
-}
-AuthControlador --|> ControladorBase : Hereda de ControladorBase
-AuthControlador ..> Usuario : Usa Modelo Usuario
-AuthControlador ..> Sesion : Inicia Sesión
-AuthControlador ..> Validador : Valida Inputs
+Auditoria o-- Usuario : "Registra Acciones"
+
 class AdminControlador {
   <<Controller>>
   +dashboard() void
-  +configuracion() void
-  +exportarReporte() void
+  +obtenerUltimosJugadores(limite) array
+  +obtenerUltimosOrganizadores(limite) array
 }
-AdminControlador --|> ControladorBase : Hereda de ControladorBase
-AdminControlador ..> Sesion : Valida Sesion::requerirRol('admin')
-AdminControlador ..> Auditoria : Consulta Logs
-class TorneoControlador {
+
+class UsuarioControlador {
   <<Controller>>
   +index() void
   +crear() void
-  +generarFixture() void
+  +guardar() void
+  +editar(id) void
+  +actualizarUsuario() void
+  +cambiarEstado() void
+  +eliminar() void
+  +verComo() void
+  +volverAdmin() void
 }
-TorneoControlador --|> ControladorBase : Hereda de ControladorBase
-TorneoControlador ..> Torneo : Usa Modelo Torneo
+UsuarioControlador ..> Usuario : "Gestiona Usuario"
+
+class JuegoControlador {
+  <<Controller>>
+  +index() void
+  +crear() void
+  +editar() void
+  +actualizar() void
+  +cambiarEstado() void
+}
+JuegoControlador ..> Juego : "Gestiona Juego"
+
+class PoliticaContrasenaControlador {
+  <<Controller>>
+  +index() void
+  +guardar() void
+}
+PoliticaContrasenaControlador ..> PoliticaContrasena : "Gestiona Politica"
+
+class AuditoriaControlador {
+  <<Controller>>
+  +index() void
+}
+AuditoriaControlador ..> Auditoria : "Consulta Logs"
+
 class Permiso {
-  <<Catalog Entity>>
+  <<Catalog>>
   #int id
   #string nombrePermiso
   #string descripcion
   +listarPermisos() array
 }
-Permiso o-- Rol : Asociado a Roles (N:M)
+Permiso o-- Rol : "Asociado a Rol"
+
 class Modalidad {
-  <<Catalog Entity>>
+  <<Catalog>>
   #int id
   #string nombreModalidad
   #int minJugadoresPorEquipo
-  +obtenerPorJuego(int $juegoId) array
+  +obtenerPorJuego(juegoId) array
 }
-Modalidad o-- Juego : Pertenece a Juego
+Modalidad o-- Juego : "Pertenece a Juego"
+
 class SolicitudEquipo {
-  <<Workflow Entity>>
+  <<Workflow>>
   #int id
   #int equipoId
   #int jugadorId
   #enum estado
-  +enviarInvitacion(int $eqId, int $jugId) bool
-  +responder(int $solId, bool $aceptar) bool
+  +enviarInvitacion(eqId, jugId) bool
+  +responder(solId, aceptar) bool
 }
-SolicitudEquipo *-- Equipo : Solicitud para Equipo
-class UsuarioControlador {
-  <<Controller>>
-  +index() void
-  +crear() void
-  +cambiarEstado() void
-}
-UsuarioControlador --|> ControladorBase : Hereda de ControladorBase
-UsuarioControlador ..> Usuario : Gestiona Modelo Usuario
-class EncuentroControlador {
-  <<Controller>>
-  +guardarMarcador() void
-  +validarArbitraje() void
-}
-EncuentroControlador --|> ControladorBase : Hereda de ControladorBase
-EncuentroControlador ..> Encuentro : Usa Modelo Encuentro
+SolicitudEquipo *-- Equipo : "Solicitud para Equipo"
+
 class Conexion {
-  <<Singleton Pattern>>
-  -Conexion=null instancia
+  <<Singleton>>
+  -Conexion instancia
   -PDO pdo
-  +getInstancia() Conexion
-  +getDb() PDO
+  +getInstance() Conexion
+  +getBD() PDO
 }
+
 class Sesion {
-  <<Security Service>>
-  +iniciar(array $usuario) void
-  +getUsuarioId() int
+  <<Service>>
+  +iniciarLogin(usuario) void
+  +validarAdmin() void
   +esAdmin() bool
-  +requerirRol(string $rol) void
-  +destruir() void
+  +destruirSesion() void
 }
+
 class Validador {
-  <<Validation Service>>
-  +requerido(string $valor) bool
-  +emailValido(string $email) bool
-  +enteroEnRango(int $v, int $min, int $max) bool
-  +sanitizar(string $cadena) string
+  <<Service>>
+  +requerido(valor) bool
+  +emailValido(email) bool
+  +enteroEnRango(v, min, max) bool
+  +sanitizar(cadena) string
 }
 ```

@@ -1097,3 +1097,27 @@ INSERT INTO
 VALUES (3, 1, 'desbloqueado', 1, 1),
     (3, 2, 'desbloqueado', 1, 1),
     (3, 3, 'en_curso', 6, 10);
+
+-- =============================================================================
+-- 10. DECLARACIONES DCL (Data Control Language - Seguridad y Permisos)
+-- =============================================================================
+-- Implementación del Principio de Mínimo Privilegio (Least Privilege)
+
+-- 10.1 Creación del Usuario de Producción para la Aplicación Web (PHP Backend)
+CREATE USER IF NOT EXISTS 'ascend_app'@'localhost' IDENTIFIED BY 'AscendSecure2026!';
+
+-- Concesión de permisos operacionales CRUD sobre todas las tablas del sistema
+GRANT SELECT, INSERT, UPDATE, DELETE ON ascend.* TO 'ascend_app'@'localhost';
+
+-- 10.2 Creación del Usuario de Auditoría y Reportes (Solo Lectura)
+CREATE USER IF NOT EXISTS 'ascend_audit'@'localhost' IDENTIFIED BY 'AscendAuditReadOnly2026!';
+
+-- Concesión de privilegios exclusivos de lectura sobre logs y tablas de reporte
+GRANT SELECT ON ascend.logs_acceso TO 'ascend_audit'@'localhost';
+GRANT SELECT ON ascend.auditoria_cambios TO 'ascend_audit'@'localhost';
+GRANT SELECT ON ascend.logs_actividad TO 'ascend_audit'@'localhost';
+GRANT SELECT ON ascend.torneos TO 'ascend_audit'@'localhost';
+GRANT SELECT ON ascend.torneo_posiciones TO 'ascend_audit'@'localhost';
+
+-- 10.3 Refresco y aplicación inmediata de permisos en el motor de base de datos
+FLUSH PRIVILEGES;

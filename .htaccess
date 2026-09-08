@@ -1,0 +1,18 @@
+# =============================================================================
+# CONFIGURACIÓN APACHE - FRONT CONTROLLER Y ENRUTADO LIMPIO (SGDM ASCEND)
+# =============================================================================
+
+# Habilitar el motor de reescritura de URLs de Apache
+RewriteEngine On
+
+# Prevenir el listado de directorios cuando no hay un index.php/index.html
+Options -Indexes +FollowSymLinks
+
+# Si la petición es para un archivo existente (imágenes, CSS, JS), servirlo directamente
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Si la petición es para un directorio existente, servirlo directamente
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirigir todas las demás peticiones al Front Controller index.php en la raíz
+RewriteRule ^ index.php [QSA,L]

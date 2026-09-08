@@ -34,7 +34,7 @@
             </button>
             <div class="dropdown-content" id="menuPerfilAdmin">
                 <a href="#perfil/editar-perfil">Editar Perfil</a>
-                <a href="#configuracion/general">Configuración</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index">Configuración</a>
                 <a href="../organizador/dashboard.html" class="enlace-destacado">Mis Torneos (Modo
                     Organizador)</a>
                 <a href="<?php echo URL_BASE; ?>auth/login.html" class="enlace-salir">Cerrar Sesión</a>
