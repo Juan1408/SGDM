@@ -39,6 +39,10 @@ class Torneo {
         $torneos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $torneos;
     }
+
+    public function obtenerUltimosTorneos(int $limite = 5){
+        return $this->obtenerUltimosTorneosCreados($limite);
+    }
     
     //Metodo para obtener todos los torneos
     public function obtenerTorneos(){
@@ -51,8 +55,6 @@ class Torneo {
         $torneos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $torneos;
     }   
-<<<<<<< HEAD
-=======
 
     public function obtenerEstadisticasOrganizador(int $organizadorId): array {
         $sql = "SELECT

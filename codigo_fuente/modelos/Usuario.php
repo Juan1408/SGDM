@@ -97,7 +97,7 @@ class Usuario {
     }
 
     //Metodo para obtener todos los usuarios registrados junto con el rol
-    public function obtenerTodosUsuariosConRoles(int $rolFiltro = null){
+    public function obtenerTodosUsuariosConRoles(?int $rolFiltro = null){
         $sql = "SELECT 
         u.id,
         u.nombre_completo,
@@ -106,9 +106,12 @@ class Usuario {
         u.esta_activo,
         u.fecha_registro,
         u.rol_id,
-        r.nombre_rol
+        r.nombre_rol,
+        COALESCE(p.nombre_organizacion, 'Organizador Independiente') AS nombre_organizacion,
+        COALESCE(p.verificado_oficial, 0) AS verificado_oficial
         FROM usuarios u
-        INNER JOIN roles r ON u.rol_id = r.id";
+        INNER JOIN roles r ON u.rol_id = r.id
+        LEFT JOIN perfiles_organizadores p ON p.usuario_id = u.id";
 
         if ($rolFiltro){
             $sql .= " WHERE u.rol_id = :rolFiltro";
@@ -125,6 +128,26 @@ class Usuario {
         }
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Metodo para alternar el estado de verificación oficial de un organizador
+    public function cambiarVerificacionOrganizador(int $usuarioId): bool {
+        // Verificar o crear perfil de organizador en la tabla hija
+        $sqlActual = "SELECT verificado_oficial FROM perfiles_organizadores WHERE usuario_id = :id LIMIT 1";
+        $stmtActual = $this->bd->prepare($sqlActual);
+        $stmtActual->execute([':id' => $usuarioId]);
+        $perfil = $stmtActual->fetch(PDO::FETCH_ASSOC);
+
+        $nuevoEstado = ($perfil && $perfil['verificado_oficial']) ? 0 : 1;
+
+        $sqlUpsert = "INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, verificado_oficial)
+                      VALUES (:id, 'Organizador Independiente', :nuevoEstado)
+                      ON DUPLICATE KEY UPDATE verificado_oficial = VALUES(verificado_oficial)";
+        $stmtUpsert = $this->bd->prepare($sqlUpsert);
+        return $stmtUpsert->execute([
+            ':id' => $usuarioId,
+            ':nuevoEstado' => $nuevoEstado
+        ]);
     }
 
     //Metodo para cambiar el estado (Activo/Bloqueado) de un usuario

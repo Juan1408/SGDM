@@ -21,11 +21,24 @@ class OrganizadorControlador {
         $listaOrganizador = $this->modeloUsuario->obtenerTodosUsuariosConRoles(2);
         
         $datos = [
-            'organizadores' => $listaOrganizador
+            'organizadores' => $listaOrganizador,
+            'mensaje' => $_SESSION['mensaje'] ?? null
         ];
+        unset($_SESSION['mensaje']);
 
         $vistaInyectada = 'organizadores/organizador_index.php';
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }
 
+    public function cambiarVerificacion() {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id > 0) {
+            $exito = $this->modeloUsuario->cambiarVerificacionOrganizador($id);
+            $_SESSION['mensaje'] = $exito 
+                ? "Estado de aprobación/verificación del organizador actualizado correctamente."
+                : "No se pudo actualizar el estado de aprobación del organizador.";
+        }
+        header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
+        exit;
+    }
 }

@@ -6,17 +6,24 @@
 
 
 <section class="modulo-admin">
-    <h2 class="titulo-pantalla">Organizadores Registrados</h2>
+    <h2 class="titulo-pantalla">Gestión y Aprobación de Organizadores</h2>
+
+    <?php if (!empty($datos['mensaje'])): ?>
+        <div class="alerta alerta-exito" style="padding: 10px; margin-bottom: 15px; background-color: #d1fae5; color: #065f46; border-radius: 6px;">
+            <?php echo htmlspecialchars($datos['mensaje']); ?>
+        </div>
+    <?php endif; ?>
 
     <section>
         <table class="tabla-estandar">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
+                    <th>Nombre / Organización</th>
                     <th>Email</th>
                     <th>Teléfono</th>
-                    <th>Estado</th>
+                    <th>Estado Cuenta</th>
+                    <th>Aprobación Admin</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -24,27 +31,41 @@
                 <?php foreach ($datos['organizadores'] as $organizador): ?>
                     <tr>
                         <td><?php echo $organizador['id']; ?></td>
-                        <td><?php echo $organizador['nombre_completo']; ?></td>
-                        <td><?php echo $organizador['email']; ?></td>
-                        <td><?php echo $organizador['telefono']; ?></td>
-                        <td><?php echo $organizador['esta_activo']; ?></td>
                         <td>
+                            <strong><?php echo htmlspecialchars($organizador['nombre_completo']); ?></strong><br>
+                            <small class="texto-secundario"><?php echo htmlspecialchars($organizador['nombre_organizacion']); ?></small>
+                        </td>
+                        <td><?php echo htmlspecialchars($organizador['email']); ?></td>
+                        <td><?php echo htmlspecialchars($organizador['telefono'] ?? 'N/A'); ?></td>
+                        <td>
+                            <span class="<?php echo $organizador['esta_activo'] ? 'estado-exito' : 'estado-fallido'; ?>">
+                                <?php echo $organizador['esta_activo'] ? 'Activo' : 'Bloqueado'; ?>
+                            </span>
+                        </td>
+                        <td>
+                            <?php if ($organizador['verificado_oficial']): ?>
+                                <span class="estado-exito"><i class="fa-solid fa-circle-check"></i> Habilitado</span>
+                            <?php else: ?>
+                                <span class="estado-pendiente"><i class="fa-solid fa-clock"></i> Pendiente</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=cambiarVerificacion&id=<?php echo $organizador['id']; ?>" 
+                               class="<?php echo $organizador['verificado_oficial'] ? 'boton-secundario' : 'boton-exito'; ?>">
+                                <?php echo $organizador['verificado_oficial'] ? 'Revocar Habilitación' : 'Aprobar Organizador'; ?>
+                            </a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" class="boton-accion">Ver Como</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $organizador['id']; ?>" class="boton-secundario">
-                                <?php echo $organizador['esta_activo'] ? 'Activar' : 'Bloquear'; ?>
+                                <?php echo $organizador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
                             </a>
-                            <!--Añadir un modal confirmando si desea eliminar la cuenta-->
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-peligro">Eliminar Cuenta</a>
-                            <!--En caso de eliminar cuenta, hay que validar que no tenga ningun evento registrado con suelta de ficha. Si tiene, mostramos un error y no le dejamos eliminarla-->
-                            <!--FUNCION PENDIENTE A PROGRAMAR-->
                         </td>
                     </tr>
                 <?php endforeach; ?>
 
                 <?php if (empty($datos['organizadores'])): ?>
                     <tr>
-                        <td colspan="6" class="celda-vacia">No se encontraron organizadores registrados.</td>
+                        <td colspan="7" class="celda-vacia">No se encontraron organizadores registrados.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
