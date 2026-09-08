@@ -25,9 +25,9 @@
     <div class="login-panel">
       <div class="formulario-contenido active" id="formulario-registro">
         
-        <a href="<?php echo URL_BASE; ?>index.html" class="btn-volver-inicio"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+        <a href="<?php echo URL_BASE; ?>index.php" class="btn-volver-inicio"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
         <div class="formulario-logo">
-          <a href="<?php echo URL_BASE; ?>index.html">
+          <a href="<?php echo URL_BASE; ?>index.php">
             <img src="<?php echo URL_BASE; ?>img/logos/ascend-png.png" alt="Logo de ASCEND">
           </a>
         </div>
