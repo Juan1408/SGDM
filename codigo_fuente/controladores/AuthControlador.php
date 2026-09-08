@@ -70,6 +70,105 @@ class AuthControlador {
     }   
 }
 
+    //Accion para mostrar la pantalla del formulario de registro
+    public function mostrarRegistro() {
+        if (Sesion::estaLogueado()) {
+            $this->redirigirPorRol($_SESSION['rol_id']);
+        }
+        require __DIR__ . '/../vistas/auth/registro.php';
+    }
+
+    //Accion para procesar el envio del formulario de registro (POST)
+    public function procesarRegistro() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . URL_BASE . 'index.php?c=auth&a=mostrarRegistro');
+            exit;
+        }
+
+        $nombre = trim($_POST['nombre_completo'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $contrasena = $_POST['contrasena'] ?? '';
+        $contrasenaConfirmar = $_POST['contrasena_confirmar'] ?? '';
+        $rolInput = $_POST['rol'] ?? 'jugador';
+        $rolId = ($rolInput === 'organizador' || $rolInput === '2') ? 2 : 3;
+
+        if (empty($nombre) || empty($email) || empty($contrasena) || empty($contrasenaConfirmar)) {
+            $error = "Por favor, completa todos los campos requeridos.";
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
+        if ($contrasena !== $contrasenaConfirmar) {
+            $error = "Las contraseñas no coinciden.";
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
+        if (strlen($contrasena) < 8) {
+            $error = "La contraseña debe tener al menos 8 caracteres conforme a las políticas de seguridad.";
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
+        $datos = [
+            'nombre_completo' => $nombre,
+            'email' => $email,
+            'telefono' => $telefono,
+            'contrasena' => $contrasena,
+            'rol_id' => $rolId,
+            'nombre_organizacion' => trim($_POST['nombre_organizacion'] ?? ($nombre . ' Org'))
+        ];
+
+        $resultado = $this->modeloUsuario->registrarUsuario($datos);
+
+        if (!$resultado['exito']) {
+            $error = $resultado['mensaje'];
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
+        // Generar enlace de activación para entorno de desarrollo local (Opción A)
+        $urlVerificacion = URL_BASE . "index.php?c=auth&a=verificarEmail&token=" . $resultado['token'];
+
+        // Guardar registro simulado en archivo de log local
+        $dirLog = __DIR__ . '/../logs';
+        if (!is_dir($dirLog)) {
+            @mkdir($dirLog, 0777, true);
+        }
+        $lineaLog = "[" . date('Y-m-d H:i:s') . "] EMAIL SIMULADO -> Para: " . $email . " | Enlace: " . $urlVerificacion . PHP_EOL;
+        @file_put_contents($dirLog . '/emails_simulados.log', $lineaLog, FILE_APPEND);
+
+        // Notificación de éxito con simulación de enlace para desarrollo local
+        $mensajeExito = "¡Cuenta creada exitosamente! <br>"
+            . ($rolId === 2 ? "<b>Nota para Organizadores:</b> Tu cuenta ha sido registrada y está pendiente de aprobación por el Administrador.<br>" : "")
+            . "<br><div style='margin-top:10px; padding:10px; background:#e0f2fe; color:#0369a1; border-radius:6px; font-size:0.88rem;'>"
+            . "<i class='fa-solid fa-flask'></i> <b>Entorno de Desarrollo Local:</b> Simulación de envío de correo activada.<br>"
+            . "<a href='" . $urlVerificacion . "' style='color:#0284c7; font-weight:bold; text-decoration:underline;'>Haz clic aquí para verificar tu correo electrónico ahora</a>"
+            . "</div>";
+
+        require __DIR__ . '/../vistas/auth/login.php';
+    }
+
+    //Accion para procesar la verificacion de email via token URL
+    public function verificarEmail() {
+        $token = trim($_GET['token'] ?? '');
+        if (empty($token)) {
+            $error = "Token de verificación no proporcionado.";
+            require __DIR__ . '/../vistas/auth/login.php';
+            return;
+        }
+
+        $resultado = $this->modeloUsuario->verificarTokenEmail($token);
+        if ($resultado['exito']) {
+            $mensajeExito = $resultado['mensaje'];
+        } else {
+            $error = $resultado['mensaje'];
+        }
+
+        require __DIR__ . '/../vistas/auth/login.php';
+    }
+
     public function logout(){
         Sesion::destruir();
         header("Location: " . URL_BASE . "index.php?c=auth&a=mostrarLogin");

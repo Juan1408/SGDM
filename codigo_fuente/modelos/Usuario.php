@@ -275,4 +275,119 @@ class Usuario {
         $stmt = $this->bd->prepare($sql);
         return $stmt->execute([':id' => $usuarioId]);
     }
+
+    //Metodo para registrar un nuevo usuario en el sistema con generacion de token de verificacion por email
+    public function registrarUsuario(array $datos): array {
+        $email = trim(strtolower($datos['email'] ?? ''));
+        if ($this->buscarPorEmail($email)) {
+            return ['exito' => false, 'mensaje' => 'El correo electrónico ya se encuentra registrado.'];
+        }
+
+        try {
+            $this->bd->beginTransaction();
+
+            $hash = password_hash($datos['contrasena'], PASSWORD_BCRYPT);
+            $rolId = (int) ($datos['rol_id'] ?? 3); // 3 = Jugador por defecto
+
+            $sqlUsuario = "INSERT INTO usuarios (nombre_completo, email, contrasena_hash, telefono, rol_id, esta_activo, email_verificado)
+                           VALUES (:nombre, :email, :hash, :telefono, :rol_id, 1, 0)";
+            $stmtUsuario = $this->bd->prepare($sqlUsuario);
+            $stmtUsuario->execute([
+                ':nombre' => trim($datos['nombre_completo']),
+                ':email' => $email,
+                ':hash' => $hash,
+                ':telefono' => trim($datos['telefono'] ?? ''),
+                ':rol_id' => $rolId
+            ]);
+
+            $usuarioId = (int) $this->bd->lastInsertId();
+
+            // Especialización en tabla hija según rol
+            if ($rolId === 2) {
+                // Organizador: verificado_oficial = 0 (requiere aprobación del Administrador)
+                $sqlPerfil = "INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, verificado_oficial)
+                              VALUES (:usuario_id, :organizacion, 0)";
+                $stmtPerfil = $this->bd->prepare($sqlPerfil);
+                $stmtPerfil->execute([
+                    ':usuario_id' => $usuarioId,
+                    ':organizacion' => trim($datos['nombre_organizacion'] ?? 'Organizador Independiente')
+                ]);
+            } else {
+                // Jugador
+                $sqlPerfil = "INSERT INTO perfiles_jugadores (usuario_id, apodo_gamertag)
+                              VALUES (:usuario_id, :apodo)";
+                $stmtPerfil = $this->bd->prepare($sqlPerfil);
+                $stmtPerfil->execute([
+                    ':usuario_id' => $usuarioId,
+                    ':apodo' => trim($datos['apodo'] ?? explode('@', $email)[0])
+                ]);
+            }
+
+            // Generación de token aleatorio de verificación por email (24 horas de validez)
+            $token = bin2hex(random_bytes(32));
+            $sqlToken = "INSERT INTO tokens_verificacion_email (usuario_id, token, expira_en, usado)
+                         VALUES (:usuario_id, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)";
+            $stmtToken = $this->bd->prepare($sqlToken);
+            $stmtToken->execute([
+                ':usuario_id' => $usuarioId,
+                ':token' => $token
+            ]);
+
+            $this->bd->commit();
+
+            return [
+                'exito' => true,
+                'usuario_id' => $usuarioId,
+                'email' => $email,
+                'rol_id' => $rolId,
+                'token' => $token,
+                'mensaje' => 'Registro completado con éxito.'
+            ];
+        } catch (\Throwable $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            return ['exito' => false, 'mensaje' => 'Error al registrar el usuario: ' . $e->getMessage()];
+        }
+    }
+
+    //Metodo para verificar token de activacion de correo electronico
+    public function verificarTokenEmail(string $token): array {
+        $sql = "SELECT id, usuario_id, expira_en, usado 
+                FROM tokens_verificacion_email 
+                WHERE token = :token AND usado = 0 
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':token' => $token]);
+        $registroToken = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$registroToken) {
+            return ['exito' => false, 'mensaje' => 'El enlace de verificación es inválido o ya ha sido utilizado.'];
+        }
+
+        if (strtotime($registroToken['expira_en']) < time()) {
+            return ['exito' => false, 'mensaje' => 'El enlace de verificación ha expirado. Solicita uno nuevo.'];
+        }
+
+        try {
+            $this->bd->beginTransaction();
+
+            // Marcar token como usado
+            $stmtUsado = $this->bd->prepare("UPDATE tokens_verificacion_email SET usado = 1 WHERE id = :id");
+            $stmtUsado->execute([':id' => $registroToken['id']]);
+
+            // Activar email_verificado en el usuario
+            $stmtUsuario = $this->bd->prepare("UPDATE usuarios SET email_verificado = 1 WHERE id = :id");
+            $stmtUsuario->execute([':id' => $registroToken['usuario_id']]);
+
+            $this->bd->commit();
+
+            return ['exito' => true, 'mensaje' => '¡Correo electrónico verificado exitosamente! Ya puedes iniciar sesión.'];
+        } catch (\Throwable $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            return ['exito' => false, 'mensaje' => 'Error al verificar el token: ' . $e->getMessage()];
+        }
+    }
 }

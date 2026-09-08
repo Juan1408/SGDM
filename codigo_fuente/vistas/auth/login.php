@@ -43,10 +43,18 @@
       </div>
       <h1>Iniciar Sesión</h1>
 
-      <!--Muestra el error de login si existe-->
-      <?php if (isset($error)): ?>
-        <?php echo $error; ?>
-        <?php endif; ?>
+      <!--Muestra mensaje de exito o error si existen-->
+      <?php if (!empty($mensajeExito)): ?>
+        <div class="alerta alerta-exito" style="padding: 12px; margin-bottom: 15px; background-color: #d1fae5; color: #065f46; border-radius: 6px; font-size: 0.9rem;">
+          <i class="fa-solid fa-circle-check"></i> <?php echo $mensajeExito; ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if (!empty($error)): ?>
+        <div class="alerta alerta-error" style="padding: 12px; margin-bottom: 15px; background-color: #fee2e2; color: #991b1b; border-radius: 6px; font-size: 0.9rem;">
+          <i class="fa-solid fa-triangle-exclamation"></i> <?php echo $error; ?>
+        </div>
+      <?php endif; ?>
       
       <!--Formulario de login-->
       <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarLogin" method="POST">
@@ -66,7 +74,7 @@
         </div>
         <button type="submit" class="auth-btn">Ingresar</button>
       </form>
-      <p class="switch-text">¿No tienes cuenta? <a href="<?php echo URL_BASE; ?>registro.html">Registrarse</a></p>
+      <p class="switch-text">¿No tienes cuenta? <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarRegistro">Registrarse</a></p>
     </div>
 
   </div>
