@@ -50,10 +50,21 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=cambiarVerificacion&id=<?php echo $organizador['id']; ?>" 
-                               class="<?php echo $organizador['verificado_oficial'] ? 'boton-secundario' : 'boton-exito'; ?>">
-                                <?php echo $organizador['verificado_oficial'] ? 'Revocar Habilitación' : 'Aprobar Organizador'; ?>
-                            </a>
+                            <?php if ($organizador['verificado_oficial']): ?>
+                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=revocar" 
+                                   class="boton-secundario">
+                                    <i class="fa-solid fa-ban"></i> Revocar Habilitación
+                                </a>
+                            <?php else: ?>
+                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=aprobar" 
+                                   class="boton-exito">
+                                    <i class="fa-solid fa-check"></i> Aprobar
+                                </a>
+                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=rechazar" 
+                                   class="boton-peligro">
+                                    <i class="fa-solid fa-xmark"></i> Rechazar
+                                </a>
+                            <?php endif; ?>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" class="boton-accion">Ver Como</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $organizador['id']; ?>" class="boton-secundario">

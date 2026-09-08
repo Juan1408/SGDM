@@ -41,4 +41,21 @@ class OrganizadorControlador {
         header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
         exit;
     }
+
+    public function responderSolicitud() {
+        $id = (int) ($_GET['id'] ?? 0);
+        $decision = $_GET['decision'] ?? ''; // 'aprobar', 'rechazar', 'revocar'
+        if ($id > 0 && in_array($decision, ['aprobar', 'rechazar', 'revocar'], true)) {
+            $exito = $this->modeloUsuario->responderSolicitudOrganizador($id, $decision);
+            if ($decision === 'aprobar') {
+                $_SESSION['mensaje'] = "Solicitud aprobada: El organizador ha sido habilitado oficialmente para crear torneos.";
+            } elseif ($decision === 'rechazar') {
+                $_SESSION['mensaje'] = "Solicitud rechazada: El organizador permanece en estado no habilitado.";
+            } else {
+                $_SESSION['mensaje'] = "Habilitación oficial revocada correctamente.";
+            }
+        }
+        header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
+        exit;
+    }
 }

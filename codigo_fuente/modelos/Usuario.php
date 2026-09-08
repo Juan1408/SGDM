@@ -130,6 +130,20 @@ class Usuario {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Metodo para responder (Aprobar, Rechazar o Revocar) a la solicitud de un organizador
+    public function responderSolicitudOrganizador(int $usuarioId, string $decision): bool {
+        $estado = ($decision === 'aprobar') ? 1 : 0;
+
+        $sqlUpsert = "INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, verificado_oficial)
+                      VALUES (:id, 'Organizador Independiente', :estado)
+                      ON DUPLICATE KEY UPDATE verificado_oficial = VALUES(verificado_oficial)";
+        $stmtUpsert = $this->bd->prepare($sqlUpsert);
+        return $stmtUpsert->execute([
+            ':id' => $usuarioId,
+            ':estado' => $estado
+        ]);
+    }
+
     //Metodo para alternar el estado de verificación oficial de un organizador
     public function cambiarVerificacionOrganizador(int $usuarioId): bool {
         // Verificar o crear perfil de organizador en la tabla hija
