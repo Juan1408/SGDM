@@ -1,6 +1,3 @@
-﻿// =========================================================
-// SIMULACIÓN DE LOGIN MULTI-ROL (MOCKUP)
-// =========================================================
 document.addEventListener('DOMContentLoaded', function () {
    const formLogin = document.querySelector('#login-form form');
 
@@ -8,11 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
       formLogin.addEventListener('submit', function (e) {
          e.preventDefault();
 
-         const email = this.querySelector('input[type=\"email\"]').value.toLowerCase();
+         const email = this.querySelector('input[type="email"]').value.toLowerCase();
          // No validamos la contraseña en la simulación, solo el email
 
          if (email === 'jugador@ascend.com') {
-              localStorage.setItem("sesionActiva", "jugador");   // <-- AGREGAR ESTA LÍNEA
+            localStorage.setItem("sesionActiva", "jugador");
             window.location.href = '../jugador/perfil-jugador.html';
          } else if (email === 'organizador@ascend.com') {
             window.location.href = '../organizador/dashboard.html';
@@ -25,7 +22,15 @@ document.addEventListener('DOMContentLoaded', function () {
       });
    }
 
+   const botonMostrarContrasena = document.querySelector('.btn-mostrar-contrasena');
+   const campoContrasena = document.querySelector('#login-password');
 
+   if (botonMostrarContrasena && campoContrasena) {
+      botonMostrarContrasena.addEventListener('click', function () {
+         const visible = campoContrasena.type === 'text';
+         campoContrasena.type = visible ? 'password' : 'text';
+         this.querySelector('i')?.classList.toggle('fa-eye', !visible);
+         this.querySelector('i')?.classList.toggle('fa-eye-slash', visible);
+      });
+   }
 });
-
-

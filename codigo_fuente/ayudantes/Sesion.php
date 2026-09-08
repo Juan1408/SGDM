@@ -10,6 +10,7 @@
  */
 
 namespace App\Ayudantes;
+
 use App\Ayudantes\Auditoria;
 
 require_once __DIR__ . '/../ayudantes/Auditorias.php';
@@ -42,7 +43,9 @@ class Sesion {
         $_SESSION['expiracion_sesion'] = time() + 1800; //30 minutos
 
         //Registramos el login en la auditoria
-        Auditoria::registrar('LOGIN_EXITOSO', "El usuaurio " . $_SESSION['email'] . " realizó inicio de sesión");
+        if (class_exists('App\Ayudantes\Auditoria')) {
+            Auditoria::registrar('LOGIN_EXITOSO', "El usuario " . $_SESSION['email'] . " realizó inicio de sesión");
+        }
     }
 
     //Verifica si el usuario está logueado
@@ -55,7 +58,7 @@ class Sesion {
     public static function requerirLogin() {
         if (!self::estaLogueado()) {
             //Redirigimos al login
-            header("Location: " . URL_BASE);
+            header("Location: " . (defined('URL_BASE') ? URL_BASE : '/'));
             //Detenemos la ejecución del script
             exit;
         }
@@ -67,9 +70,19 @@ class Sesion {
         self::requerirLogin();
 
         //Consultamos que el rol sea de administrador
-        if ($_SESSION['rol_id'] !== 1) {
+        if ((int)($_SESSION['rol_id'] ?? 0) !== 1) {
             //si no es el administrador lo mandamos al inicio
-            header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
+            header("Location: " . (defined('URL_BASE') ? URL_BASE : '/') . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
+            exit;
+        }
+    }
+
+    // Verifica que el usuario tenga el rol de organizador.
+    public static function validarOrganizador(){
+        self::requerirLogin();
+
+        if ((int) ($_SESSION['rol_id'] ?? 0) !== 2) {
+            header("Location: " . (defined('URL_BASE') ? URL_BASE : '/') . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
             exit;
         }
     }
@@ -87,4 +100,3 @@ class Sesion {
         }
     }
 }
-

@@ -24,7 +24,6 @@
             <a href="#dashboard" class="enlace-logo">
                 <img src="<?php echo URL_BASE; ?>img/logos/ascend-logo01.png" alt="Logotipo del Sistema">
             </a>
-           
         </div>
 
         <div class="perfil-admin dropdown">
@@ -35,9 +34,8 @@
             <div class="dropdown-content" id="menuPerfilAdmin">
                 <a href="#perfil/editar-perfil">Editar Perfil</a>
                 <a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index">Configuración</a>
-                <a href="../organizador/dashboard.html" class="enlace-destacado">Mis Torneos (Modo
-                    Organizador)</a>
-                <a href="<?php echo URL_BASE; ?>auth/login.html" class="enlace-salir">Cerrar Sesión</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=dashboard" class="enlace-destacado">Mis Torneos (Modo Organizador)</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=destruirSesion" class="enlace-salir">Cerrar Sesión</a>
             </div>
         </div>
     </header>
@@ -53,7 +51,7 @@
         <main class="area-contenido" id="area-contenido">
             <!--Aca le vamos a dar la bienvenida al administrador con el nombre que traiga de la base de datos-->
             <h1 class="titulo-pantalla">
-                Bienvenido, <?php echo $_SESSION['usuario_nombre']; ?>!
+                Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Administrador'); ?>!
             </h1>
 
             <!-- Aca inyectamos las tarjetas y tablas de la vista -->
@@ -95,4 +93,3 @@
 </body>
 
 </html>
-

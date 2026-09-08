@@ -16,12 +16,9 @@
             <!-- 1. GESTIÓN HUMANA -->
             <li><a href="#" class="menu-enlace">Gestión de Usuarios</a>
                 <ul class="menu-sublista">
-                    <li><a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="menu-enlace">Usuarios
-                            Administrativos</a></li>
-                    <li><a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=index" class="menu-enlace">Organizadores
-                            Registrados</a></li>
-                    <li><a href="<?php echo URL_BASE; ?>index.php?c=jugador&a=index" class="menu-enlace">Jugadores
-                            Registrados</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="menu-enlace">Usuarios Administrativos</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=index" class="menu-enlace">Organizadores Registrados</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=jugador&a=index" class="menu-enlace">Jugadores Registrados</a></li>
                 </ul>
             </li>
 
@@ -42,7 +39,7 @@
 
             <li><a href="#" class="menu-enlace">Administrar Torneos</a>
                 <ul class="menu-sublista">
-                    <li><a href="#torneos/lista" class="menu-enlace">Ver y Configurar</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=index" class="menu-enlace">Ver y Configurar</a></li>
                     <li><a href="#torneos/historial" class="menu-enlace">Historial de Torneos</a></li>
                 </ul>
             </li>

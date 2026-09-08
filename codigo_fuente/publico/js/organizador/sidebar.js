@@ -1,4 +1,4 @@
-﻿document.addEventListener('partialsListos', () => {
+document.addEventListener('partialsListos', () => {
 
    /* SUBMENÚS DEL SIDEBAR */
    const botonesDesplegables = document.querySelectorAll('.sidebar-desplegable-btn');
@@ -7,7 +7,7 @@
       boton.addEventListener('click', () => {
          const item = boton.closest('.sidebar-item-desplegable');
          if (!item) return;
-                  const sidebar = document.querySelector('.dashboard-sidebar');
+          const sidebar = document.querySelector('.dashboard-sidebar');
          if (sidebar && !sidebar.classList.contains('expanded')) {
             // Expandir el sidebar automáticamente
             sidebar.classList.add('expanded');
@@ -16,6 +16,7 @@
          } else {
             item.classList.toggle('abierto');
          }
+         boton.setAttribute('aria-expanded', item.classList.contains('abierto') ? 'true' : 'false');
       });
    });
 
@@ -81,27 +82,41 @@
    }
 
    /* MARCAR LINK ACTIVO SEGÚN LA PÁGINA ACTUAL */
- /* MARCAR LINK ACTIVO SEGÚN LA PÁGINA ACTUAL */
-const paginaActual = window.location.pathname
-   .split('/')
-   .pop()
-   .replace('.html', '');
+   const paginaActual = window.location.pathname
+      .split('/')
+      .pop()
+      .replace('.html', '');
 
-const equivalenciasPaginas = {
-   'administrar-torneo': 'mis-torneos'
-};
+   const accionMvc = new URLSearchParams(window.location.search).get('a');
+   const paginaMvc = {
+      perfil: 'perfil',
+      dashboard: 'dashboard',
+      misTorneos: 'mis-torneos',
+      crear: 'crear-torneo',
+      gestionar: 'mis-torneos',
+      resultados: 'resultados',
+      historial: 'historial',
+      calendario: 'calendario'
+   };
 
-const paginaSidebar = equivalenciasPaginas[paginaActual] || paginaActual;
+   const equivalenciasPaginas = {
+      'administrar-torneo': 'mis-torneos'
+   };
 
-document.querySelectorAll('.sidebar-link').forEach((link) => {
-   if (link.dataset.page === paginaSidebar) {
-      link.classList.add('active');
+   const paginaSidebar = paginaMvc[accionMvc]
+      || equivalenciasPaginas[paginaActual]
+      || paginaActual;
 
-      const submenuPadre = link.closest('.sidebar-item-desplegable');
+   document.querySelectorAll('.sidebar-link').forEach((link) => {
+      if (link.dataset.page === paginaSidebar) {
+         link.classList.add('active');
 
-      if (submenuPadre) {
-         submenuPadre.classList.add('abierto');
+         const submenuPadre = link.closest('.sidebar-item-desplegable');
+
+         if (submenuPadre) {
+            submenuPadre.classList.add('abierto');
+            submenuPadre.querySelector('.sidebar-desplegable-btn')?.setAttribute('aria-expanded', 'true');
+         }
       }
-   }
-})
-})
+   });
+});

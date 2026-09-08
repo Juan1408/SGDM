@@ -499,7 +499,7 @@ CREATE TABLE torneo_posiciones (
     puntos_favor DECIMAL(10, 2) DEFAULT 0.00 COMMENT 'Goles/Puntos/Rondas a favor',
     puntos_contra DECIMAL(10, 2) DEFAULT 0.00 COMMENT 'Goles/Puntos/Rondas en contra',
     diferencia_goles DECIMAL(10, 2) GENERATED ALWAYS AS (puntos_favor - puntos_contra) STORED,
-    puntos INT DEFAULT 0,
+    puntos DECIMAL(10, 2) DEFAULT 0.00,
     sanciones_puntos INT DEFAULT 0,
     ultima_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (torneo_id, participante_id),

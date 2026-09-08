@@ -1,11 +1,11 @@
-﻿<aside class="dashboard-sidebar">
+<aside class="dashboard-sidebar">
 
    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menú">
       <i class="fa-solid fa-bars"></i>
    </button>
 
    <div class="sidebar-usuario">
-      <img src="../../publico/img/logos/eagles.png" alt="Usuario">
+      <img src="<?php echo URL_BASE; ?>img/logos/eagles.png" alt="Usuario">
 
       <div class="sidebar-usuario-datos">
          <h3>Valentina</h3>
@@ -18,14 +18,14 @@
       <ul class="sidebar-lista">
 
          <li>
-            <a class="sidebar-link" href="perfil.html" data-page="perfil">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=perfil" data-page="perfil">
                <i class="fa-solid fa-user"></i>
                <span>Mi perfil</span>
             </a>
          </li>
 
          <li>
-            <a class="sidebar-link" href="dashboard.html" data-page="dashboard">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=dashboard" data-page="dashboard">
                <i class="fa-solid fa-house"></i>
                <span>Inicio</span>
             </a>
@@ -45,14 +45,14 @@
             <ul class="sidebar-submenu">
 
                <li>
-                  <a class="sidebar-link" href="mis-torneos.html" data-page="mis-torneos">
+                  <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos" data-page="mis-torneos">
                      <i class="fa-solid fa-list"></i>
                      <span>Ver mis torneos</span>
                   </a>
                </li>
 
                <li>
-                  <a class="sidebar-link" href="crear-torneo.html" data-page="crear-torneo">
+                  <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=crear" data-page="crear-torneo">
                      <i class="fa-solid fa-plus"></i>
                      <span>Crear torneo</span>
                   </a>
@@ -63,28 +63,28 @@
          </li>
 
          <li>
-            <a class="sidebar-link" href="calendario.html" data-page="calendario">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=calendario" data-page="calendario">
                <i class="fa-solid fa-calendar-days"></i>
                <span>Calendario</span>
             </a>
          </li>
 
          <li>
-            <a class="sidebar-link" href="resultados.html" data-page="resultados">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=resultados" data-page="resultados">
                <i class="fa-solid fa-chart-simple"></i>
                <span>Resultados</span>
             </a>
          </li>
 
          <li>
-            <a class="sidebar-link" href="historial.html" data-page="historial">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=historial" data-page="historial">
                <i class="fa-solid fa-clock-rotate-left"></i>
                <span>Historial</span>
             </a>
          </li>
 
          <li>
-            <a class="sidebar-link" href="../auth/login.html" data-page="salir">
+            <a class="sidebar-link" href="<?php echo URL_BASE; ?>index.php?c=auth&amp;a=logout" data-page="salir">
                <i class="fa-solid fa-arrow-right-from-bracket"></i>
                <span>Salir</span>
             </a>

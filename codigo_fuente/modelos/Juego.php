@@ -7,7 +7,7 @@ class Juego {
     private $bd;
 
     //Constructor para usar la instancia singleton de la base de datos
-    private function __construct() {
+    public function __construct() {
         $this->bd = Conexion::getInstance()->getBD();
     }
 
@@ -18,11 +18,26 @@ class Juego {
 
     //1. Obtenemos todos los juegos para mostrarlos en las tablas 
     public function obtenerTodosLosJuegos(){
-        
         $sql = "SELECT * FROM juegos ORDER BY nombre ASC";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerJuegosActivos(): array {
+        $sql = "SELECT id, nombre, categoria, formato_equipo_defecto
+                FROM juegos
+                WHERE activo = 1
+                ORDER BY nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function estaActivo(int $juegoId): bool {
+        $stmt = $this->bd->prepare('SELECT COUNT(*) FROM juegos WHERE id = :id AND activo = 1');
+        $stmt->execute([':id' => $juegoId]);
+        return (int) $stmt->fetchColumn() === 1;
     }
     
     //2. Crear un nuevo juego
