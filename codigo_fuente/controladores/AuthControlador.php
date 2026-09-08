@@ -142,9 +142,9 @@ class AuthControlador {
         // Notificación de éxito con simulación de enlace para desarrollo local
         $mensajeExito = "¡Cuenta creada exitosamente! <br>"
             . ($rolId === 2 ? "<b>Nota para Organizadores:</b> Tu cuenta ha sido registrada y está pendiente de aprobación por el Administrador.<br>" : "")
-            . "<br><div style='margin-top:10px; padding:10px; background:#e0f2fe; color:#0369a1; border-radius:6px; font-size:0.88rem;'>"
+            . "<br><div class='alerta-simulacion'>"
             . "<i class='fa-solid fa-flask'></i> <b>Entorno de Desarrollo Local:</b> Simulación de envío de correo activada.<br>"
-            . "<a href='" . $urlVerificacion . "' style='color:#0284c7; font-weight:bold; text-decoration:underline;'>Haz clic aquí para verificar tu correo electrónico ahora</a>"
+            . "<a href='" . $urlVerificacion . "'>Haz clic aquí para verificar tu correo electrónico ahora</a>"
             . "</div>";
 
         require __DIR__ . '/../vistas/auth/login.php';

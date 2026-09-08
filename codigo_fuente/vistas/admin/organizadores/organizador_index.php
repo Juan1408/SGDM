@@ -9,7 +9,7 @@
     <h2 class="titulo-pantalla">Gestión y Aprobación de Organizadores</h2>
 
     <?php if (!empty($datos['mensaje'])): ?>
-        <div class="alerta alerta-exito" style="padding: 10px; margin-bottom: 15px; background-color: #d1fae5; color: #065f46; border-radius: 6px;">
+        <div class="alerta alerta-exito">
             <?php echo htmlspecialchars($datos['mensaje']); ?>
         </div>
     <?php endif; ?>

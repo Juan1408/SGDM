@@ -45,13 +45,13 @@
 
       <!--Muestra mensaje de exito o error si existen-->
       <?php if (!empty($mensajeExito)): ?>
-        <div class="alerta alerta-exito" style="padding: 12px; margin-bottom: 15px; background-color: #d1fae5; color: #065f46; border-radius: 6px; font-size: 0.9rem;">
+        <div class="alerta alerta-exito">
           <i class="fa-solid fa-circle-check"></i> <?php echo $mensajeExito; ?>
         </div>
       <?php endif; ?>
 
       <?php if (!empty($error)): ?>
-        <div class="alerta alerta-error" style="padding: 12px; margin-bottom: 15px; background-color: #fee2e2; color: #991b1b; border-radius: 6px; font-size: 0.9rem;">
+        <div class="alerta alerta-error">
           <i class="fa-solid fa-triangle-exclamation"></i> <?php echo $error; ?>
         </div>
       <?php endif; ?>

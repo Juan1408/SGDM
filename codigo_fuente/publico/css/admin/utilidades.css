@@ -186,3 +186,23 @@
 .col-lg {
   width: 200px;
 }
+
+/* CAJAS DE ALERTA Y MENSAJES */
+.alerta {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: var(--radio-borde, 6px);
+  font-size: 0.9rem;
+}
+
+.alerta-exito {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.alerta-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}

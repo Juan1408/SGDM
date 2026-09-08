@@ -34,7 +34,7 @@
         <h1>Crear Cuenta</h1>
 
         <?php if (!empty($error)): ?>
-          <div class="alerta alerta-error" style="padding: 10px; margin-bottom: 15px; background-color: #fee2e2; color: #991b1b; border-radius: 6px; font-size: 0.9rem;">
+          <div class="alerta alerta-error">
             <i class="fa-solid fa-triangle-exclamation"></i> <?php echo $error; ?>
           </div>
         <?php endif; ?>
