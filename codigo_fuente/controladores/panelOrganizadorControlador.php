@@ -35,6 +35,7 @@ class PanelOrganizadorControlador {
     }
 
     public function crear() {
+        Sesion::validarOrganizadorVerificado();
         $datos = [
             'etapa' => max(1, min(3, (int) ($_GET['etapa'] ?? 1))),
             'torneo' => null,
@@ -228,6 +229,7 @@ class PanelOrganizadorControlador {
     }
 
     public function guardarEtapa() {
+        Sesion::validarOrganizadorVerificado();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=crear');
             exit;

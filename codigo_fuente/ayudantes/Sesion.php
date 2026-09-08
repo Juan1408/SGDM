@@ -88,6 +88,24 @@ class Sesion {
         }
     }
 
+    // Verifica que el usuario organizador esté aprobado/verificado oficialmente por el Administrador
+    public static function validarOrganizadorVerificado(){
+        self::validarOrganizador();
+        $usuarioId = (int) ($_SESSION['usuario_id'] ?? 0);
+        
+        require_once __DIR__ . '/../modelos/Conexion.php';
+        $bd = \App\Modelos\Conexion::getInstance()->getBD();
+        $stmt = $bd->prepare("SELECT verificado_oficial FROM perfiles_organizadores WHERE usuario_id = :id LIMIT 1");
+        $stmt->execute([':id' => $usuarioId]);
+        $perfil = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$perfil || !(bool) $perfil['verificado_oficial']) {
+            $_SESSION['mensaje'] = "Tu cuenta de Organizador aún no ha sido aprobada por el Administrador General. No puedes crear torneos hasta ser verificado.";
+            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=panelOrganizador&a=dashboard");
+            exit;
+        }
+    }
+
     //cerrar sesión
     public static function destruir(){
         self::iniciarSesion();
