@@ -10,9 +10,6 @@
  */
 
 namespace App\Ayudantes;
-use App\Ayudantes\Auditoria;
-
-require_once __DIR__ . '/../ayudantes/Auditorias.php';
 
 class Sesion {
 
@@ -25,7 +22,7 @@ class Sesion {
         }
     }
 
-    public static function iniciarLogin(array $usuarioBD) {
+    public static function iniciarLogin($usuarioBD) {
         self::iniciarSesion();
 
         //Ciberseguridad OWASP - Regeneración de ID de sesión
@@ -40,9 +37,6 @@ class Sesion {
 
         //Control de tiempo de expiración (Timeboxing)
         $_SESSION['expiracion_sesion'] = time() + 1800; //30 minutos
-
-        //Registramos el login en la auditoria
-        Auditoria::registrar('LOGIN_EXITOSO', "El usuaurio " . $_SESSION['email'] . " realizó inicio de sesión");
     }
 
     //Verifica si el usuario está logueado
@@ -69,6 +63,19 @@ class Sesion {
         //Consultamos que el rol sea de administrador
         if ($_SESSION['rol_id'] !== 1) {
             //si no es el administrador lo mandamos al inicio
+            header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
+            exit;
+        }
+    }
+
+    //Verifica que el usuario sea jugador (rol_id 3)
+    public static function validarJugador(){
+        //primero verifica que este logueado
+        self::requerirLogin();
+ 
+        //Consultamos que el rol sea de jugador
+        if ($_SESSION['rol_id'] !== 3) {
+            //si no es jugador lo mandamos al inicio
             header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
             exit;
         }
