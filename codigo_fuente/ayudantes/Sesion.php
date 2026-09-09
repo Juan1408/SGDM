@@ -27,7 +27,7 @@ class Sesion {
         }
     }
 
-    public static function iniciarLogin(array $usuarioBD) {
+    public static function iniciarLogin($usuarioBD) {
         self::iniciarSesion();
 
         //Ciberseguridad OWASP - Regeneración de ID de sesión
@@ -102,6 +102,19 @@ class Sesion {
         if (!$perfil || !(bool) $perfil['verificado_oficial']) {
             $_SESSION['mensaje'] = "Tu cuenta de Organizador aún no ha sido aprobada por el Administrador General. No puedes crear torneos hasta ser verificado.";
             header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=panelOrganizador&a=dashboard");
+            exit;
+        }
+    }
+
+    //Verifica que el usuario sea jugador (rol_id 3)
+    public static function validarJugador(){
+        //primero verifica que este logueado
+        self::requerirLogin();
+ 
+        //Consultamos que el rol sea de jugador
+        if ($_SESSION['rol_id'] !== 3) {
+            //si no es jugador lo mandamos al inicio
+            header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
             exit;
         }
     }
