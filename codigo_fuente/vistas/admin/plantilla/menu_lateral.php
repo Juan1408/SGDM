@@ -62,5 +62,10 @@
             </li>
 
         </ul>
+        <div style="margin-top: 2rem; padding: 0 1rem;">
+            <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=logout" class="menu-enlace" style="color: #ff4d4d; font-weight: bold;">
+                Salir / Cerrar Sesión
+            </a>
+        </div>
     </nav>
 </aside>

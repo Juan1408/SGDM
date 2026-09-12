@@ -20,6 +20,10 @@ class Torneo {
         $this->bd = Conexion::getInstance()->getBD();   
     }
 
+    // ============================================================================
+    // METODOS DEL DASHBOARD DEL ORGANIZADOR
+    // ============================================================================
+
     //Metodo para obtener todos los torneos en curso o abiertos
     public function contarTorneosActivos(){
         //Sentencia SQL para obtener todos los torneos activos
@@ -899,10 +903,14 @@ class Torneo {
             }
             return false;
         }
-    }
     }   
 
-        //Metodo interno: encuentra los IDs de participacion de un jugador (directa o via sus equipos)
+
+    //====================================================================================================
+    // DESDE ACA SON METODOS PARA EL DASHBOARD DEL JUGADOR
+    //====================================================================================================
+
+    //Metodo interno: encuentra los IDs de participacion de un jugador (directa o via sus equipos)
     private function obtenerParticipacionesDelJugador(int $usuarioId, array $equipoIds): array {
         $condiciones = ["(tipo = 'usuario' AND referencia_id = :usuarioId)"];
         $parametros = [':usuarioId' => $usuarioId];

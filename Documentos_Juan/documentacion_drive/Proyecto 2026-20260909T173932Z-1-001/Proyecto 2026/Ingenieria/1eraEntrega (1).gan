@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2026-04-20" view-index="0" gantt-divider-location="348" resource-divider-location="300" version="3.3.3322" locale="es_ES">
+    <description/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Nombre" width="192" order="0"/>
+        <field id="tpd4" name="Fecha de inicio" width="57" order="1"/>
+        <field id="tpd5" name="Fecha de fin" width="83" order="2"/>
+        <field id="tpd15" name="Notas" width="20" order="3"/>
+        <option id="filter.completedTasks" value="false"/>
+        <option id="filter.dueTodayTasks" value="false"/>
+        <option id="filter.overdueTasks" value="false"/>
+        <option id="filter.inProgressTodayTasks" value="false"/>
+        <option id="color.recent"><![CDATA[#ccffff #e6ccff #ffcce6 #e6b3e6 #808080 #669966 #336633 #003300 #999900 #994d00]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nombre" width="210" order="0"/>
+        <field id="1" name="Función" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="0" mon="0" tue="0" wed="0" thu="0" fri="0" sat="0"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" uid="7984f3af8f6f424dae13cdbe4851c4c0" name="Análisis" color="#003333" meeting="false" start="2026-05-11" duration="10" complete="0" expand="true">
+            <notes><![CDATA[- Lectura de la propuesta.
+- Identificación de entregables.
+- Definición del alcance general.
+- Identificación de módulos requeridos.]]></notes>
+            <depend id="1" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="1" uid="99d2f424819f446a966cd43a418fb255" name="Organizacion" color="#001a80" meeting="false" start="2026-05-21" duration="10" complete="0" expand="true">
+            <notes><![CDATA[- Organización del equipo.
+- Normas de trabajo.
+- Modelo en Cascada.
+- Roles del equipo.
+- Planificación inicial.]]></notes>
+            <depend id="2" type="2" difference="0" hardness="Strong"/>
+            <depend id="4" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="2" uid="a20fab61dc824ef6ab52c2e92d3bacef" name="Relevamiento" color="#990000" meeting="false" start="2026-05-31" duration="14" complete="0" expand="true">
+            <notes><![CDATA[- Diseño de entrevista semiestructurada.
+- Diseño de encuesta.
+- Implementación en Google Forms.
+- Aplicación de entrevistas.
+- Aplicación de encuesta.]]></notes>
+            <depend id="8" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="4" uid="c0ff2bc1a3574995993c4fc5abe6825a" name="Diseño UX/UI" color="#4d001a" meeting="false" start="2026-05-31" duration="14" complete="0" expand="true">
+            <notes><![CDATA[- Arquitectura del sitio.
+- Identidad visual.
+- Flujo de navegación.
+- Mockups de todas las páginas.]]></notes>
+            <depend id="5" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="5" uid="47dd70a7d31b4afda4c9cfb4ebf129d8" name="Front end" color="#994d00" meeting="false" start="2026-06-14" duration="16" complete="0" expand="true">
+            <notes><![CDATA[- Componentes reutilizables.
+- Página principal.
+- Login.
+- Registro.
+- Perfil.
+- Búsqueda de torneos.
+- Detalle de torneo.
+- Adaptación Mobile First.]]></notes>
+            <depend id="6" type="2" difference="0" hardness="Strong"/>
+            <depend id="7" type="2" difference="0" hardness="Strong"/>
+            <depend id="16" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="8" uid="2164f59620cd4f22af6918828c33d7c9" name="ESRE" color="#999900" meeting="false" start="2026-06-14" duration="16" complete="0" expand="true">
+            <notes><![CDATA[- Propósito
+- Alcance
+- Descripción general
+- Requisitos funcionales
+- Requisitos no funcionales]]></notes>
+        </task>
+        <task id="6" uid="12554d63dc24424b90bb3aafeb5f3fcc" name="Dash admin" color="#669966" meeting="false" start="2026-06-30" duration="15" complete="0" expand="true">
+            <notes><![CDATA[- Panel principal.
+- Gestión de usuarios.
+- Gestión de torneos.
+- Navegación administrativa.]]></notes>
+            <depend id="12" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="7" uid="92b65c01aaf24062bddadf6cb6ba9799" name="Dash organizador" color="#336633" meeting="false" start="2026-06-30" duration="15" complete="0" expand="true">
+            <notes><![CDATA[- Inicio
+- Mis torneos
+- Crear torneo
+- Administrar torneo
+- Perfil
+- Navegación del organizador]]></notes>
+            <depend id="12" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="16" uid="73ef608fcaa441e18330435e8f6db56c" name="maquetado final" color="#cc8033" meeting="true" start="2026-06-30" duration="0" complete="0" expand="true"/>
+        <task id="11" uid="12785520fa2640b1b99c860b05201a9c" name="Utulab y sistemas" color="#e6b3e6" meeting="false" start="2026-07-15" duration="9" complete="0" expand="true">
+            <notes><![CDATA[- SCAMPER
+- Actas
+- Fundamentación
+- Usuarios y permisos
+- Script de administración]]></notes>
+            <depend id="17" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="12" uid="d17a8fb34fc3453fb9166191f5168cb0" name="integración y pruebas" color="#e6ccff" meeting="false" start="2026-07-15" duration="10" complete="0" expand="true">
+            <notes><![CDATA[- Integración del Front End
+- Revisión de documentación
+- Corrección de errores
+- Verificación responsive
+- Revisión final]]></notes>
+        </task>
+        <task id="17" uid="a5676989a2154856820da2dfe142b244" name="Documentación" color="#cc8033" meeting="true" start="2026-07-24" duration="0" complete="0" expand="true">
+            <notes><![CDATA[- Documentacion final utulab
+- Documentación final ingeniería de software]]></notes>
+        </task>
+        <task id="13" uid="eb5d01bfdaf84d0baf4e06323d7b8363" name="gestion del proyecto" color="#808080" meeting="false" start="2026-05-21" duration="67" complete="0" expand="true">
+            <notes><![CDATA[Coordinación del equipo
+Distribución de tareas
+Organización de reuniones
+Elaboración de actas
+Coordinación de la entrega final]]></notes>
+            <depend id="14" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="14" uid="d61f88aac12a4bd6b2e5511a00176abd" name="Primera entrega" color="#e6804d" meeting="true" start="2026-07-27" duration="0" complete="0" expand="true"/>
+    </tasks>
+    <resources>
+        <resource id="0" name="Juan Fernandez" function="3" contacts="" phone=""/>
+        <resource id="1" name="Michael Barnetto" function="Default:1" contacts="" phone=""/>
+        <resource id="2" name="Valentina Passeli" function="2" contacts="" phone=""/>
+        <resource id="3" name="Mauricio Pedrozo" function="4" contacts="" phone=""/>
+    </resources>
+    <allocations>
+        <allocation task-id="0" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="1" resource-id="0" function="3" responsible="false" load="100.0"/>
+        <allocation task-id="6" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="1" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="1" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="7" resource-id="1" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="12" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="11" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="13" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="2" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="1" resource-id="2" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="2" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="2" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="2" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="3" function="4" responsible="true" load="100.0"/>
+        <allocation task-id="1" resource-id="3" function="4" responsible="false" load="100.0"/>
+        <allocation task-id="2" resource-id="3" function="4" responsible="true" load="100.0"/>
+        <allocation task-id="7" resource-id="3" function="4" responsible="true" load="100.0"/>
+        <allocation task-id="8" resource-id="3" function="4" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="3" function="4" responsible="true" load="100.0"/>
+    </allocations>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles>
+        <role id="1" name="Coordinador del proyecto"/>
+        <role id="2" name="Diseñdor UX/ UI"/>
+        <role id="3" name="Desarrollador"/>
+        <role id="4" name="Tester/ QA"/>
+    </roles>
+</project>
