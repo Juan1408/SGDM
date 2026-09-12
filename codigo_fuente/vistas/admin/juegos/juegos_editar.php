@@ -1,4 +1,12 @@
-<?php /** @var array $juego */ ?>
+<?php 
+/** 
+ * @var array $juego 
+ * @var array $todas_modalidades
+ * @var array $ids_permitidas
+ * @var array $todos_formatos
+ * @var array $ids_formatos_permitidos
+ */ 
+?>
 
 <section class="modulo-admin">
     <div class="encabezado-seccion">
@@ -28,8 +36,49 @@
         </div>
 
         <div class="grupo-formulario">
-            <label for="formato_equipo">Formato del Equipo (Jugadores por equipo) <span class="requerido">*</span></label>
-            <input type="number" name="formato_equipo" id="formato_equipo" class="campo-requerido" min="1" max="15" value="<?php echo $juego['formato_equipo_defecto']; ?>" required>
+            <h3>Sistema de Puntuación Base</h3>
+            <label for="puntos_victoria">Puntos por Victoria</label>
+            <input type="number" step="0.01" id="puntos_victoria" name="puntos_victoria" value="<?php echo $juego['puntos_victoria']; ?>" required>
+            
+            <label for="puntos_empate">Puntos por Empate</label>
+            <input type="number" step="0.01" id="puntos_empate" name="puntos_empate" value="<?php echo $juego['puntos_empate']; ?>" required>
+            
+            <label for="puntos_derrota">Puntos por Derrota</label>
+            <input type="number" step="0.01" id="puntos_derrota" name="puntos_derrota" value="<?php echo $juego['puntos_derrota']; ?>" required>
+        </div>
+
+        <div class="grupo-formulario">
+            <h3>Modalidad de Juego Permitida</h3>
+            <p><small>¿Se juega individual o en equipos?</small></p>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <?php if(isset($todas_modalidades) && !empty($todas_modalidades)): ?>
+                    <?php foreach($todas_modalidades as $mod): ?>
+                        <label class="opcion-checkbox" style="margin-top: 5px;">
+                            <input class="entrada-checkbox" type="radio" name="modalidades[]" value="<?php echo $mod['id']; ?>" <?php echo (in_array($mod['id'], $ids_permitidas)) ? 'checked' : ''; ?> required> 
+                            <?php echo htmlspecialchars($mod['nombre']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No hay modalidades registradas en el sistema.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="grupo-formulario">
+            <h3>Formatos de Torneo Permitidas</h3>
+            <p><small>Selecciona los sistemas de competencia que soporta.</small></p>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <?php if(isset($todos_formatos) && !empty($todos_formatos)): ?>
+                    <?php foreach($todos_formatos as $formato): ?>
+                        <label class="opcion-checkbox" style="margin-top: 5px;">
+                            <input class="entrada-checkbox" type="checkbox" name="formatos[]" value="<?php echo htmlspecialchars($formato['codigo']); ?>" <?php echo (in_array($formato['codigo'], $ids_formatos_permitidos)) ? 'checked' : ''; ?>> 
+                            <?php echo htmlspecialchars($formato['nombre']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No hay formatos registrados en el sistema.</p>
+                <?php endif; ?>
+            </div>
         </div>
 
         <div class="acciones-formulario">

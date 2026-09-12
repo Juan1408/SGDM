@@ -4,6 +4,8 @@ use App\Ayudantes\Sesion;
 use App\Modelos\Juego;
 
 require_once __DIR__ . '/../modelos/Juego.php';
+require_once __DIR__ . '/../modelos/Formato.php';
+require_once __DIR__ . '/../modelos/Modalidad.php';
 require_once __DIR__ . '/../ayudantes/Sesion.php';
 
 class JuegoControlador {
@@ -26,6 +28,12 @@ class JuegoControlador {
 
     //Metodo para mostrar el formulario de crear
     public function crear(){
+        $modeloModalidad = new \App\Modelos\Modalidad();
+        $modalidades = $modeloModalidad->obtenerTodas();
+        
+        $modeloFormato = new \App\Modelos\Formato();
+        $formatos = $modeloFormato->obtenerTodas();
+        
         $vistaInyectada = 'juegos/juegos_crear.php';
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }
@@ -36,12 +44,18 @@ class JuegoControlador {
             //Recoleccion de datos
             $nombre = trim($_POST['nombre'] ?? '');
             $categoria = trim($_POST['categoria'] ?? '');
-            $formato_equipo = trim($_POST['formato_equipo'] ?? '');
+            
+            $pts_vic = isset($_POST['puntos_victoria']) ? (float)$_POST['puntos_victoria'] : 3.00;
+            $pts_emp = isset($_POST['puntos_empate']) ? (float)$_POST['puntos_empate'] : 1.00;
+            $pts_der = isset($_POST['puntos_derrota']) ? (float)$_POST['puntos_derrota'] : 0.00;
+            
+            $modalidades = $_POST['modalidades'] ?? [];
+            $formatos = $_POST['formatos'] ?? [];
 
             //Validacion simple de datos, para la entrega final la seguimos mejorando
-            if (!empty($nombre) && !empty($categoria) && !empty($formato_equipo)){
+            if (!empty($nombre) && !empty($categoria)){
                 //Llamamos al modelo
-                if ($this->modeloJuego->crearJuego($nombre, $categoria, $formato_equipo)){
+                if ($this->modeloJuego->crearJuego($nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos)){
                     $_SESSION['mensaje'] = "Juego creado exitosamente y añadido al catalogo";
                 } else {
                     $_SESSION['mensaje'] = "Error al guardar el juego";
@@ -80,6 +94,16 @@ class JuegoControlador {
             $juegoId = (int)$_GET['id'];
             $juego = $this->modeloJuego->obtenerJuegoPorId($juegoId);
             if ($juego){
+                $modeloModalidad = new \App\Modelos\Modalidad();
+                $todas_modalidades = $modeloModalidad->obtenerTodas();
+                $permitidas = $this->modeloJuego->obtenerModalidadesPermitidas($juegoId);
+                $ids_permitidas = array_column($permitidas, 'id');
+                
+                $modeloFormato = new \App\Modelos\Formato();
+                $todos_formatos = $modeloFormato->obtenerTodas();
+                $formatos_permitidos = $this->modeloJuego->obtenerFormatosPermitidos($juegoId);
+                $ids_formatos_permitidos = array_column($formatos_permitidos, 'codigo');
+
                 $vistaInyectada = 'juegos/juegos_editar.php';
                 require_once __DIR__ . '/../vistas/admin/dashboard.php';
             }else{
@@ -101,12 +125,18 @@ class JuegoControlador {
             $juegoId = (int)$_POST['id'];
             $nombre = trim($_POST['nombre'] ?? '');
             $categoria = trim($_POST['categoria'] ?? '');
-            $formato_equipo = trim($_POST['formato_equipo'] ?? '');
+            
+            $pts_vic = isset($_POST['puntos_victoria']) ? (float)$_POST['puntos_victoria'] : 3.00;
+            $pts_emp = isset($_POST['puntos_empate']) ? (float)$_POST['puntos_empate'] : 1.00;
+            $pts_der = isset($_POST['puntos_derrota']) ? (float)$_POST['puntos_derrota'] : 0.00;
+            
+            $modalidades = $_POST['modalidades'] ?? [];
+            $formatos = $_POST['formatos'] ?? [];
 
             //Validacion simple de datos, para la entrega final la seguimos mejorando
-            if (!empty($nombre) && !empty($categoria) && !empty($formato_equipo)){
+            if (!empty($nombre) && !empty($categoria)){
                 //Llamamos al modelo
-                if ($this->modeloJuego->actualizarJuego($juegoId, $nombre, $categoria, $formato_equipo)){
+                if ($this->modeloJuego->actualizarJuego($juegoId, $nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos)){
                     $_SESSION['mensaje'] = "Juego actualizado exitosamente";
                 } else {
                     $_SESSION['mensaje'] = "Error al actualizar el juego";

@@ -163,12 +163,37 @@ CREATE TABLE juegos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL,
     categoria VARCHAR(50) NOT NULL COMMENT 'esport-shooter, esport-moba, deporte-fisico, juego-mesa',
-    formato_equipo_defecto INT DEFAULT 1 COMMENT 'Cantidad habitual de integrantes por equipo',
     puntos_victoria DECIMAL(5, 2) DEFAULT 3.00,
     puntos_empate DECIMAL(5, 2) DEFAULT 1.00,
     puntos_derrota DECIMAL(5, 2) DEFAULT 0.00,
     activo BOOLEAN DEFAULT TRUE,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE = InnoDB;
+
+-- 1.7 juego_modalidades_permitidas: Relación N:M para definir qué formatos soporta cada deporte
+CREATE TABLE juego_modalidades_permitidas (
+    juego_id INT NOT NULL,
+    modalidad_id INT NOT NULL,
+    PRIMARY KEY (juego_id, modalidad_id),
+    CONSTRAINT fk_jmp_juego FOREIGN KEY (juego_id) REFERENCES juegos (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_jmp_modalidad FOREIGN KEY (modalidad_id) REFERENCES modalidades (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+-- 1.8 formatos_torneo: Formatos de competencia disponibles (Feature Flags para mantenimiento)
+CREATE TABLE formatos_torneo (
+    codigo VARCHAR(50) PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    activo BOOLEAN DEFAULT TRUE
+) ENGINE = InnoDB;
+
+-- 1.9 juego_formatos_permitidos: Relación N:M (Juegos y Formatos)
+CREATE TABLE juego_formatos_permitidos (
+    juego_id INT NOT NULL,
+    formato_codigo VARCHAR(50) NOT NULL,
+    PRIMARY KEY (juego_id, formato_codigo),
+    CONSTRAINT fk_jfp_juego FOREIGN KEY (juego_id) REFERENCES juegos (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_jfp_formato FOREIGN KEY (formato_codigo) REFERENCES formatos_torneo (codigo) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- =============================================================================
@@ -330,6 +355,7 @@ CREATE TABLE solicitudes_equipo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     equipo_id INT NOT NULL,
     usuario_id INT NOT NULL,
+    iniciado_por INT NOT NULL,
     mensaje TEXT,
     estado VARCHAR(20) DEFAULT 'pendiente' CHECK (
         estado IN (
@@ -345,6 +371,7 @@ CREATE TABLE solicitudes_equipo (
     UNIQUE KEY unique_solicitud (equipo_id, usuario_id),
     CONSTRAINT fk_solicitud_equipo FOREIGN KEY (equipo_id) REFERENCES equipos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_solicitud_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_solicitud_iniciado FOREIGN KEY (iniciado_por) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_solicitud_respondido FOREIGN KEY (respondido_por) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
@@ -999,6 +1026,12 @@ VALUES (
         1,
         1
     );
+
+-- Formatos de Torneo
+INSERT INTO formatos_torneo (codigo, nombre, descripcion) VALUES 
+('liga', 'Fase de Grupos / Liga', 'Todos juegan contra todos y suman puntos.'),
+('eliminacion_directa', 'Eliminatoria Directa', 'El que pierde queda eliminado del torneo.'),
+('suizo', 'Sistema Suizo', 'Emparejamientos por rondas según el puntaje acumulado.');
 
 -- Usuario Organizador Inicial
 INSERT INTO

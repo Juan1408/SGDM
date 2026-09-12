@@ -82,7 +82,7 @@
                   <span>Explorar Torneos</span>
                </a>
 
-               <a href="../auth/registro.html" class="secondary-btn">
+               <a href="../../publico/index.php?c=auth&a=mostrarRegistro" class="secondary-btn">
                   Comenzar
                </a>
 

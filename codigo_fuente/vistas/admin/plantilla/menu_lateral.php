@@ -54,6 +54,7 @@
             <!-- 3. CONFIGURACIÓN DEL SISTEMA -->
             <li><a href="#" class="menu-enlace">Configuración del Sistema</a>
                 <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=formato&a=index" class="menu-enlace">Gestión de Módulos</a></li>
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index" class="menu-enlace">Políticas de Contraseña</a></li>
                     <li><a href="#roles/lista" class="menu-enlace">Roles y Permisos</a></li>
                     <li><a href="#comunicaciones/enviar" class="menu-enlace">Enviar Alertas Globales</a></li>

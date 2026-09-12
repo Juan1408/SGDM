@@ -1,13 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
-   const botonMostrarContrasena = document.querySelector('.btn-mostrar-contrasena');
-   const campoContrasena = document.querySelector('#login-password');
+   const botonesMostrarContrasena = document.querySelectorAll('.btn-mostrar-contrasena');
 
-   if (botonMostrarContrasena && campoContrasena) {
-      botonMostrarContrasena.addEventListener('click', function () {
-         const visible = campoContrasena.type === 'text';
-         campoContrasena.type = visible ? 'password' : 'text';
-         this.querySelector('i')?.classList.toggle('fa-eye', !visible);
-         this.querySelector('i')?.classList.toggle('fa-eye-slash', visible);
+   botonesMostrarContrasena.forEach(boton => {
+      boton.addEventListener('click', function () {
+         const campoContrasena = this.closest('.password-group').querySelector('input');
+         
+         if (campoContrasena) {
+            const visible = campoContrasena.type === 'text';
+            campoContrasena.type = visible ? 'password' : 'text';
+            
+            const icono = this.querySelector('i');
+            if (icono) {
+               icono.classList.toggle('fa-eye', !visible);
+               icono.classList.toggle('fa-eye-slash', visible);
+            }
+         }
       });
-   }
+   });
 });

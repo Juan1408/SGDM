@@ -25,7 +25,7 @@ class Juego {
     }
 
     public function obtenerJuegosActivos(): array {
-        $sql = "SELECT id, nombre, categoria, formato_equipo_defecto
+        $sql = "SELECT id, nombre, categoria
                 FROM juegos
                 WHERE activo = 1
                 ORDER BY nombre ASC";
@@ -41,16 +41,46 @@ class Juego {
     }
     
     //2. Crear un nuevo juego
-    public function crearJuego(string $nombre, string $categoria, string $formato_equipo){
-        $sql = "INSERT INTO juegos(nombre, categoria, formato_equipo_defecto, puntos_victoria,
-        puntos_empate, puntos_derrota, activo) 
-        VALUES (:nombre, :categoria, :formato_equipo, 3.00, 1.00, 0.00, 1)";
-        $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([
-           ':nombre' => $nombre,
-           ':categoria' => $categoria,
-           ':formato_equipo' => $formato_equipo 
-        ]);
+    public function crearJuego(string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = []){
+        try {
+            $this->bd->beginTransaction();
+
+            $sql = "INSERT INTO juegos(nombre, categoria, puntos_victoria, puntos_empate, puntos_derrota, activo) 
+                    VALUES (:nombre, :categoria, :p_vic, :p_emp, :p_der, 1)";
+            $stmt = $this->bd->prepare($sql);
+            $stmt->execute([
+               ':nombre' => $nombre,
+               ':categoria' => $categoria,
+               ':p_vic' => $pts_victoria,
+               ':p_emp' => $pts_empate,
+               ':p_der' => $pts_derrota
+            ]);
+
+            $juegoId = $this->bd->lastInsertId();
+
+            if (!empty($modalidades)) {
+                $sqlMod = "INSERT INTO juego_modalidades_permitidas (juego_id, modalidad_id) VALUES (:j_id, :m_id)";
+                $stmtMod = $this->bd->prepare($sqlMod);
+                foreach ($modalidades as $mod_id) {
+                    $stmtMod->execute([':j_id' => $juegoId, ':m_id' => $mod_id]);
+                }
+            }
+            
+            if (!empty($formatos)) {
+                $sqlForm = "INSERT INTO juego_formatos_permitidos (juego_id, formato_codigo) VALUES (:j_id, :f_cod)";
+                $stmtForm = $this->bd->prepare($sqlForm);
+                foreach ($formatos as $f_cod) {
+                    $stmtForm->execute([':j_id' => $juegoId, ':f_cod' => $f_cod]);
+                }
+            }
+
+            $this->bd->commit();
+            return true;
+        } catch (\PDOException $e) {
+            $this->bd->rollBack();
+            error_log("Error creando juego: " . $e->getMessage());
+            return false;
+        }
     }
 
     //Metodo para cambiar el estado de un juego
@@ -86,15 +116,75 @@ class Juego {
     }
 
     //Actualizar los datos de un juego
-    public function actualizarJuego(int $juegoId, string $nombre, string $categoria, string $formato_equipo){
-        $sql = "UPDATE juegos SET nombre = :nombre, categoria = :categoria, formato_equipo_defecto = :formato_equipo 
-        WHERE id = :id";
+    public function actualizarJuego(int $juegoId, string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = []){
+        try {
+            $this->bd->beginTransaction();
+
+            $sql = "UPDATE juegos SET nombre = :nombre, categoria = :categoria, 
+                    puntos_victoria = :p_vic, puntos_empate = :p_emp, puntos_derrota = :p_der 
+                    WHERE id = :id";
+            $stmt = $this->bd->prepare($sql);
+            $stmt->execute([
+               ':nombre' => $nombre,
+               ':categoria' => $categoria,
+               ':p_vic' => $pts_victoria,
+               ':p_emp' => $pts_empate,
+               ':p_der' => $pts_derrota,
+               ':id' => $juegoId
+            ]);
+
+            // Eliminar antiguas
+            $stmtDelMod = $this->bd->prepare("DELETE FROM juego_modalidades_permitidas WHERE juego_id = :id");
+            $stmtDelMod->execute([':id' => $juegoId]);
+            
+            $stmtDelForm = $this->bd->prepare("DELETE FROM juego_formatos_permitidos WHERE juego_id = :id");
+            $stmtDelForm->execute([':id' => $juegoId]);
+
+            // Insertar nuevas
+            if (!empty($modalidades)) {
+                $sqlMod = "INSERT INTO juego_modalidades_permitidas (juego_id, modalidad_id) VALUES (:j_id, :m_id)";
+                $stmtMod = $this->bd->prepare($sqlMod);
+                foreach ($modalidades as $mod_id) {
+                    $stmtMod->execute([':j_id' => $juegoId, ':m_id' => $mod_id]);
+                }
+            }
+            
+            if (!empty($formatos)) {
+                $sqlForm = "INSERT INTO juego_formatos_permitidos (juego_id, formato_codigo) VALUES (:j_id, :f_cod)";
+                $stmtForm = $this->bd->prepare($sqlForm);
+                foreach ($formatos as $f_cod) {
+                    $stmtForm->execute([':j_id' => $juegoId, ':f_cod' => $f_cod]);
+                }
+            }
+
+            $this->bd->commit();
+            return true;
+        } catch (\PDOException $e) {
+            $this->bd->rollBack();
+            error_log("Error actualizando juego: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Obtener las modalidades permitidas para un juego
+    public function obtenerModalidadesPermitidas(int $juegoId) {
+        $sql = "SELECT m.id, m.nombre
+                FROM modalidades m
+                INNER JOIN juego_modalidades_permitidas jmp ON m.id = jmp.modalidad_id
+                WHERE jmp.juego_id = :id";
         $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([
-           ':nombre' => $nombre,
-           ':categoria' => $categoria,
-           ':formato_equipo' => $formato_equipo,
-           ':id' => $juegoId
-        ]);
+        $stmt->execute([':id' => $juegoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Obtener los formatos permitidos para un juego
+    public function obtenerFormatosPermitidos(int $juegoId) {
+        $sql = "SELECT f.codigo, f.nombre, f.activo 
+                FROM formatos_torneo f
+                INNER JOIN juego_formatos_permitidos jfp ON f.codigo = jfp.formato_codigo
+                WHERE jfp.juego_id = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $juegoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

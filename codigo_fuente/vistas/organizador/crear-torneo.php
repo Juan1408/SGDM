@@ -118,10 +118,7 @@ $formatoAyuda = [
                 <div class="crear-torneo-campo">
                     <label for="formato">Formato de competencia</label>
                     <select id="formato" name="formato" required>
-                        <option value="">Seleccionar formato</option>
-                        <?php foreach ($etiquetasEstado as $codigo => $etiqueta): ?>
-                            <option value="<?php echo $codigo; ?>"><?php echo $etiqueta; ?></option>
-                        <?php endforeach; ?>
+                        <option value="">Selecciona un juego primero</option>
                     </select>
                     <small id="ayuda-formato">Selecciona un formato para ver cómo se organizará la competencia.</small>
                 </div>
@@ -195,6 +192,73 @@ $formatoAyuda = [
         formato?.addEventListener('change', () => {
             ayudaFormato.textContent = ayudasFormato[formato.value] || 'Selecciona un formato para ver cómo se organizará la competencia.';
         });
+
+        // AJAX para cargar modalidades y formatos permitidos por el juego
+        const selectJuego = document.getElementById('juego_id');
+        const selectModalidad = document.getElementById('modalidad_id');
+        const selectFormato = document.getElementById('formato');
+
+        if (selectJuego && selectModalidad && selectFormato) {
+            selectJuego.addEventListener('change', function() {
+                const juegoId = this.value;
+                
+                // Limpiamos los selects actuales
+                selectModalidad.innerHTML = '<option value="">Cargando modalidades...</option>';
+                selectFormato.innerHTML = '<option value="">Cargando formatos...</option>';
+                
+                if (!juegoId) {
+                    selectModalidad.innerHTML = '<option value="">Seleccionar modalidad</option>';
+                    selectFormato.innerHTML = '<option value="">Seleccionar formato</option>';
+                    return;
+                }
+
+                fetch('<?php echo URL_BASE; ?>index.php?c=formato&a=obtenerPermitidasJSON&juego_id=' + juegoId)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Error al obtener datos dinámicos');
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Poblar modalidades
+                        selectModalidad.innerHTML = '<option value="">Seleccionar modalidad</option>';
+                        if (data.modalidades && data.modalidades.length > 0) {
+                            data.modalidades.forEach(mod => {
+                                const option = document.createElement('option');
+                                option.value = mod.id;
+                                option.textContent = mod.nombre.charAt(0).toUpperCase() + mod.nombre.slice(1);
+                                selectModalidad.appendChild(option);
+                            });
+                        } else {
+                            selectModalidad.innerHTML = '<option value="">No hay modalidades para este juego</option>';
+                        }
+
+                        // Poblar formatos
+                        selectFormato.innerHTML = '<option value="">Seleccionar formato</option>';
+                        if (data.formatos && data.formatos.length > 0) {
+                            let formatosActivos = 0;
+                            data.formatos.forEach(f => {
+                                // Solo agregamos los formatos que están activos (Feature Flags)
+                                if (f.activo == 1) {
+                                    const option = document.createElement('option');
+                                    option.value = f.codigo;
+                                    option.textContent = f.nombre;
+                                    selectFormato.appendChild(option);
+                                    formatosActivos++;
+                                }
+                            });
+                            if (formatosActivos === 0) {
+                                selectFormato.innerHTML = '<option value="">Formatos en mantenimiento</option>';
+                            }
+                        } else {
+                            selectFormato.innerHTML = '<option value="">No hay formatos activos para este juego</option>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        selectModalidad.innerHTML = '<option value="">Error al cargar modalidades</option>';
+                        selectFormato.innerHTML = '<option value="">Error al cargar formatos</option>';
+                    });
+            });
+        }
     </script>
     <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
     <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>

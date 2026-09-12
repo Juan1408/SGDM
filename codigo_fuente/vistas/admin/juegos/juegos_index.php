@@ -14,7 +14,6 @@
                 <th>ID</th>
                 <th>Nombre del Juego</th>
                 <th>Categoría</th>
-                <th>Jugadores</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -22,7 +21,7 @@
         <tbody>
             <?php if (empty($juegos)): ?> 
                 <tr>
-                    <td colspan="6" class="text-center">No hay juegos registrados.</td>
+                    <td colspan="5" class="text-center">No hay juegos registrados.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($juegos as $juego): ?>
@@ -30,7 +29,6 @@
                     <td><?php echo $juego['id']; ?></td>
                     <td><?php echo $juego['nombre']; ?></td>
                     <td><?php echo $juego['categoria']; ?></td>
-                    <td><?php echo $juego['formato_equipo_defecto']; ?></td>
                     <td><?php if ($juego['activo']): ?>
                         <span class="estado-activo">Activo</span>
                     <?php else: ?>
