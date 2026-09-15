@@ -45,3 +45,15 @@ if (file_exists($rutaArchivo)) {
 } else {
     echo "<h1>Error 404</h1><p>El controlador no existe</p>";
 }
+
+// ============================================================================
+// INYECCIÓN GLOBAL: Banner de Suplantación (Modo "Ver Como")
+// ============================================================================
+if (isset($_SESSION['admin_antes_suplantar'])) {
+    $urlRestaurar = (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=usuario&a=restaurarSesion";
+    $rutaScript = (\defined('URL_BASE') ? \URL_BASE : '/') . "js/admin/suplantacion.js";
+    
+    // Inyectamos solo la variable global y el enlace al archivo estático JS
+    echo "<script>window.URL_RESTAURAR_SESION = '" . $urlRestaurar . "';</script>";
+    echo "<script src=\"" . $rutaScript . "\"></script>";
+}

@@ -6,7 +6,7 @@
 
 <!--Tabla de torneos-->
 <div class="tarjeta-datos">
-    <table class="tabla-admin">
+    <table class="tabla-estandar">
         <thead>
             <tr>
                 <th>ID</th>
@@ -45,7 +45,7 @@
                                 <i class="fa-solid fa-pen"></i>
                             </a>
 
-                            <a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=eliminar&id=<?php echo $torneo['id']; ?>" class="btn-icono" title="Eliminar">
+                            <a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=eliminar&id=<?php echo $torneo['id']; ?>" class="btn-icono" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este torneo? Esta acción es totalmente irreversible y eliminará todos los partidos asociados.');">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>

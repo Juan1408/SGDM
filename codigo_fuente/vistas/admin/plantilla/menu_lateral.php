@@ -24,7 +24,7 @@
 
             <li><a href="#" class="menu-enlace">Equipos y Solicitudes</a>
                 <ul class="menu-sublista">
-                    <li><a href="#equipos/lista" class="menu-enlace">Directorio de Equipos</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=index" class="menu-enlace">Directorio de Equipos</a></li>
                     <li><a href="#equipos/solicitudes" class="menu-enlace">Aprobar Solicitudes</a></li>
                 </ul>
             </li>

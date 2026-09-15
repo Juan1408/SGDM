@@ -371,3 +371,319 @@ details[open].acciones-desplegables .acciones-lista {
 .avatar-celeste { background-color: #0bc6e3 !important; }
 .avatar-verde { background-color: #27ae60 !important; }
 
+/* =========================================
+   ESTILOS COMPLEMENTARIOS (FILTROS Y BADGES)
+   ========================================= */
+
+.formulario-filtros {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.grupo-formulario-en-linea {
+  margin: 0;
+  flex: 1;
+  min-width: 150px;
+}
+
+.img-escudo-tabla {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ccc;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.badge-success {
+  background-color: #27ae60;
+  color: #ffffff;
+}
+
+.badge-danger {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
+
+/* =========================================
+   NOTIFICACIONES (TOAST)
+   ========================================= */
+.contenedor-notificaciones {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.notificacion-toast {
+  background-color: #2ecc71;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: deslizarArriba 0.3s forwards;
+  pointer-events: auto;
+}
+
+@keyframes deslizarArriba {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notificacion-toast.ocultar {
+  animation: desvanecer 0.3s forwards;
+}
+
+@keyframes desvanecer {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@media (min-width: 768px) {
+  .acciones-lista {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+/* =========================================
+   CLASES SEMNTICAS PARA VISTAS (REPORTES, DASHBOARD, ETC)
+   ========================================= */
+
+.encabezado-descripcion { margin-top: -10px; }
+
+.tarjeta-reporte {
+  background: var(--color-fondo-panel);
+  padding: 24px;
+  border-radius: var(--radio-borde);
+  flex: 1;
+  text-align: left;
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+}
+
+.tarjeta-reporte-titulo {
+  color: var(--color-texto-principal);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.tarjeta-reporte-descripcion {
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario);
+  font-weight: normal;
+  margin: 5px 0 15px 0;
+}
+
+.formulario-reporte {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+.entrada-reporte { margin-bottom: 10px; }
+
+.grupo-botones-reporte { display: flex; gap: 10px; }
+
+.boton-expandido { flex: 1; text-align: center; justify-content: center; display: flex; align-items: center; }
+
+.subtitulo-panel {
+  font-size: 1.2rem;
+  border: none;
+  padding-bottom: 10px;
+  color: var(--color-texto-principal);
+  margin-bottom: 15px;
+}
+
+.seccion-espaciada { margin-top: 30px; }
+
+.opcion-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.entrada-checkbox { width: auto !important; margin: 0; }
+
+.mensaje-carga {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-texto-secundario);
+}
+
+.grupo-botones-superior {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.cuadricula-permisos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.seccion-oculta { display: none; }
+
+.avatar-rojo { background-color: #ff4655 !important; }
+.avatar-celeste { background-color: #0bc6e3 !important; }
+.avatar-verde { background-color: #27ae60 !important; }
+
+/* =========================================
+   ESTILOS COMPLEMENTARIOS (FILTROS Y BADGES)
+   ========================================= */
+
+.formulario-filtros {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.grupo-formulario-en-linea {
+  margin: 0;
+  flex: 1;
+  min-width: 150px;
+}
+
+.img-escudo-tabla {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ccc;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.badge-success {
+  background-color: #27ae60;
+  color: #ffffff;
+}
+
+.badge-danger {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
+
+.btn-deshabilitado {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.texto-centrado {
+  text-align: center;
+  padding: 20px;
+}
+
+.texto-negrita {
+  font-weight: bold;
+}
+
+/* =========================================
+   DISEÑO PROFESIONAL (FILTROS)
+   ========================================= */
+
+.caja-filtros-profesional {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.caja-filtros-profesional .formulario-filtros {
+  margin-bottom: 0;
+}
+
+.label-profesional {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.select-profesional {
+  width: 100%;
+  padding: 10px 35px 10px 15px;
+  font-size: 0.9rem;
+  color: #334155;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: all 0.2s ease-in-out;
+}
+
+.select-profesional:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-filtro-pro {
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}

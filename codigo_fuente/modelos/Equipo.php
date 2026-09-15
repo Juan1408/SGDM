@@ -474,4 +474,50 @@ class Equipo {
         }
     }
 
+    // ============================================================================
+    // METODOS DEL ADMINISTRADOR GENERAL
+    // ============================================================================
+
+    public function obtenerDirectorioAdmin(?int $juegoId, string $orden): array {
+        $sql = "SELECT e.id, e.nombre_equipo, e.fecha_creacion, e.activo, e.escudo_url,
+                       u.nombre_completo AS lider_nombre,
+                       (SELECT COUNT(*) FROM equipo_miembros em WHERE em.equipo_id = e.id AND em.es_activo = 1) AS total_miembros
+                FROM equipos e
+                INNER JOIN usuarios u ON u.id = e.creado_por
+                WHERE 1=1";
+
+        $parametros = [];
+
+        // Filtro por disciplina (infiriendo desde torneos)
+        if ($juegoId) {
+            $sql .= " AND EXISTS (
+                        SELECT 1 FROM participantes_torneo pt
+                        INNER JOIN torneos t ON t.id = pt.torneo_id
+                        WHERE pt.tipo = 'equipo' AND pt.referencia_id = e.id AND t.juego_id = :juegoId
+                      )";
+            $parametros[':juegoId'] = $juegoId;
+        }
+
+        // Ordenamiento dinámico
+        switch ($orden) {
+            case 'antiguos':
+                $sql .= " ORDER BY e.fecha_creacion ASC";
+                break;
+            case 'az':
+                $sql .= " ORDER BY e.nombre_equipo ASC";
+                break;
+            case 'za':
+                $sql .= " ORDER BY e.nombre_equipo DESC";
+                break;
+            case 'nuevos':
+            default:
+                $sql .= " ORDER BY e.fecha_creacion DESC";
+                break;
+        }
+
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

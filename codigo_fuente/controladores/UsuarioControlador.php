@@ -14,13 +14,14 @@ class UsuarioControlador {
     private Usuario $modeloUsuario;
 
     public function __construct(){
-        //Validamos que solo el administrador ingrese
-        Sesion::validarAdmin();
+        // Nota: La validacion de admin se movio a los metodos individuales
+        // para permitir que restaurarSesion funcione estando con rol de Jugador/Organizador.
         $this->modeloUsuario = new Usuario();
     }
 
     //Metodo para mostrar el menu
     public function index() {
+        Sesion::validarAdmin();
         //Obtenemos todos los usuarios con sus roles
         $listaUsuarios = $this->modeloUsuario->obtenerTodosUsuariosConRoles(1);
         
@@ -37,6 +38,7 @@ class UsuarioControlador {
 
     //Metodo para cambiar el estado (Activo/Bloqueado) de un usuario
     public function cambiarEstadoUsuario() {
+        Sesion::validarAdmin();
         //Validamos que venga un ID en la URL y que sea un numero
         if (isset($_GET['id']) && is_numeric($_GET['id'])){
             //Obtenemos el ID del usuario
@@ -56,6 +58,7 @@ class UsuarioControlador {
 
     //Metodo para cargar la pantalla de edicion de un usuario
     public function editarUsuario(){
+        Sesion::validarAdmin();
         //Validamos que venga un ID en la URL y que sea un numero
         if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $usuarioId = (int)$_GET['id'];
@@ -87,6 +90,7 @@ class UsuarioControlador {
 
     //Metodo para obtener el id de un jugador y usarlo en la accion de suplantacion de identidad
     public function verComo (){
+        Sesion::validarAdmin();
         //Capturamos el id del jugador
         $usuarioId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
@@ -103,11 +107,18 @@ class UsuarioControlador {
             $_SESSION['usuario_nombre'] = $usuario['nombre_completo'];
             $_SESSION['rol_id'] = $usuario['rol_id'];
 
-            //Mensaje de feedback
+            // Mensaje de feedback
             $_SESSION['mensaje'] = "Estás viendo el perfil como: " . $usuario['nombre_completo'];
 
-            //Redirigimos a la vista del usuario
-            header("Location: " . URL_BASE . "index.php?c=inicio&a=index");
+            // Redirigimos a la vista correcta segun el rol del usuario suplantado
+            if ($usuario['rol_id'] == 2) { // Organizador
+                header("Location: " . URL_BASE . "index.php?c=panelOrganizador&a=dashboard");
+            } else if ($usuario['rol_id'] == 3) { // Jugador
+                header("Location: " . URL_BASE . "index.php?c=panelJugador&a=dashboard");
+            } else {
+                // Por defecto (aunque un admin no deberia suplantar a otro admin)
+                header("Location: " . URL_BASE . "index.php?c=admin&a=dashboard");
+            }
             exit;
             
         } else {
@@ -129,8 +140,41 @@ class UsuarioControlador {
 
     }
 
+    // Metodo para deshacer la suplantacion (Ver Como) y volver al usuario Administrador original
+    public function restaurarSesion() {
+        // Necesitamos iniciar la sesion para poder leer $_SESSION
+        Sesion::requerirLogin();
+        
+        // Verificamos si existe la variable de sesion original
+        if (isset($_SESSION['admin_antes_suplantar'])) {
+            $adminId = (int)$_SESSION['admin_antes_suplantar'];
+            
+            // Traemos los datos del administrador
+            $admin = $this->modeloUsuario->obtenerUsuarioPorId($adminId);
+
+            if ($admin && $admin['rol_id'] == 1) {
+                // Restauramos la sesion
+                $_SESSION['usuario_id'] = $admin['id'];
+                $_SESSION['usuario_nombre'] = $admin['nombre_completo'];
+                $_SESSION['rol_id'] = $admin['rol_id'];
+                
+                // Borramos la variable temporal
+                unset($_SESSION['admin_antes_suplantar']);
+
+                $_SESSION['mensaje'] = "Has vuelto a tu sesión de Administrador original.";
+                header("Location: " . URL_BASE . "index.php?c=admin&a=dashboard");
+                exit;
+            }
+        }
+
+        // Si falla o no estaba suplantando, lo mandamos al inicio por seguridad
+        header("Location: " . URL_BASE . "index.php");
+        exit;
+    }
+
     //Metodo para recibir los datos del formulario POST y guardarlos en la base de datos
     public function actualizarUsuario(){
+        Sesion::validarAdmin();
         //Comprobar si los datos se envian por el metodo POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuarioId = (int)$_POST['id'];

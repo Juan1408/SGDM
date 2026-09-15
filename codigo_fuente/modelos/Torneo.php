@@ -995,4 +995,33 @@ class Torneo {
         ];
     }
     
+    // ============================================================================
+    // METODOS DEL ADMINISTRADOR GENERAL
+    // ============================================================================
+
+    public function eliminarPorAdmin(int $torneoId): bool {
+        try {
+            $stmt = $this->bd->prepare("DELETE FROM torneos WHERE id = :id");
+            return $stmt->execute([':id' => $torneoId]);
+        } catch (\Throwable $th) {
+            error_log("Error eliminando torneo por admin: " . $th->getMessage());
+            return false;
+        }
+    }
+
+    public function actualizarPorAdmin(int $torneoId, array $datos): bool {
+        try {
+            $sql = "UPDATE torneos SET nombre = :nombre, estado = :estado WHERE id = :id";
+            $stmt = $this->bd->prepare($sql);
+            return $stmt->execute([
+                ':nombre' => $datos['nombre'],
+                ':estado' => $datos['estado'],
+                ':id' => $torneoId
+            ]);
+        } catch (\Throwable $th) {
+            error_log("Error actualizando torneo por admin: " . $th->getMessage());
+            return false;
+        }
+    }
+
 }
