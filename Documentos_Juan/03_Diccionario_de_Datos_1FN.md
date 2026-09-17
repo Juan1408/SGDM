@@ -43,6 +43,8 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 - **torneo_posiciones_1fn** (<u>*`torneo_id`*</u>, <u>*`participante_id`*</u>, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `puntos_favor`, `puntos_contra`, `diferencia_goles`, `puntos`, `sanciones_puntos`)
 - **logros_1fn** (<u>`id`</u>, `codigo`, `nombre`, `descripcion`, `icono`, `puntos_recompensa`)
 - **usuario_logros_1fn** (<u>*`usuario_id`*</u>, <u>*`logro_id`*</u>, `estado`, `progreso_actual`, `progreso_objetivo`, `fecha_desbloqueo`)
+- **guardados_1fn** (<u>`id`</u>, *`usuario_id`*, `tipo`, `referencia_id`, `fecha_guardado`)
+- **juego_modalidades_permitidas_1fn** (<u>*`juego_id`*</u>, <u>*`modalidad_id`*</u>)
 
 ---
 

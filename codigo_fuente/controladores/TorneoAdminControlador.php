@@ -5,30 +5,45 @@ namespace App\Controladores;
 use App\Modelos\Torneo;
 use App\Ayudantes\Sesion;
 use App\Ayudantes\Auditoria;
+use Juego;
 
 require_once __DIR__ . '/../ayudantes/Sesion.php';
 require_once __DIR__ . '/../modelos/Torneo.php';
 require_once __DIR__ . '/../ayudantes/Auditorias.php';
+require_once __DIR__ . '/../modelos/Juego.php';
 
 class TorneoAdminControlador {
     private Torneo $modeloTorneo;
+    private \Juego $modeloJuego;
 
     public function __construct() {
         // Validamos que el usuario sea administrador
         Sesion::validarAdmin();
 
         $this->modeloTorneo = new Torneo();
+        $this->modeloJuego = new \Juego();
     }
 
     public function index() {
-        $listaTorneos = method_exists($this->modeloTorneo, 'obtenerTorneos')
-            ? $this->modeloTorneo->obtenerTorneos()
-            : (method_exists($this->modeloTorneo, 'obtenerUltimosTorneos')
-                ? $this->modeloTorneo->obtenerUltimosTorneos()
-                : []);
+        // Capturar los parámetros de filtro de la URL
+        $juegoId = isset($_GET['juego_id']) && is_numeric($_GET['juego_id']) ? (int)$_GET['juego_id'] : null;
+        $estado = $_GET['estado'] ?? 'todos';
+        $orden = $_GET['orden'] ?? 'nuevos';
+
+        // Obtener el catálogo de juegos para el select del filtro
+        $juegos = $this->modeloJuego->obtenerTodosLosJuegos();
+
+        // Obtener la lista de torneos filtrada y ordenada
+        $listaTorneos = $this->modeloTorneo->obtenerDirectorioAdmin($juegoId, $estado, $orden);
 
         // Empaquetando los datos en un array
-        $datos = ['torneos' => $listaTorneos];
+        $datos = [
+            'torneos' => $listaTorneos,
+            'juegos' => $juegos,
+            'filtro_juego' => $juegoId,
+            'filtro_estado' => $estado,
+            'filtro_orden' => $orden
+        ];
 
         // Lo inyectamos en la vista
         $vistaInyectada = 'torneos/torneos_index.php';

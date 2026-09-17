@@ -98,6 +98,14 @@ DROP TABLE IF EXISTS tokens_verificacion_email;
 
 DROP TABLE IF EXISTS usuarios;
 
+DROP TABLE IF EXISTS guardados;
+
+DROP TABLE IF EXISTS juego_formatos_permitidos;
+
+DROP TABLE IF EXISTS formatos_torneo;
+
+DROP TABLE IF EXISTS juego_modalidades_permitidas;
+
 DROP TABLE IF EXISTS sistemas_puntuacion;
 
 DROP TABLE IF EXISTS modalidades;

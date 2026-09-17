@@ -150,6 +150,11 @@ erDiagram
         string formato_codigo PK, FK
     }
 
+    JUEGO_MODALIDADES_PERMITIDAS {
+        int juego_id PK, FK
+        int modalidad_id PK, FK
+    }
+
     MODALIDADES {
         int id PK
         string nombre UK
@@ -375,6 +380,14 @@ erDiagram
         datetime fecha_hora
     }
 
+    GUARDADOS {
+        int id PK
+        int usuario_id FK
+        string tipo
+        int referencia_id
+        datetime fecha_guardado
+    }
+
     %% ==========================================
     %% RELACIONES ENTRE TABLAS
     %% ==========================================
@@ -402,6 +415,8 @@ erDiagram
     JUEGOS ||--o{ TORNEOS : "es juego de"
     JUEGOS ||--o{ JUEGO_FORMATOS_PERMITIDOS : "permite formato"
     FORMATOS_TORNEO ||--o{ JUEGO_FORMATOS_PERMITIDOS : "es permitido por"
+    JUEGOS ||--o{ JUEGO_MODALIDADES_PERMITIDAS : "permite modalidad"
+    MODALIDADES ||--o{ JUEGO_MODALIDADES_PERMITIDAS : "es permitida por"
     MODALIDADES ||--o{ TORNEOS : "define modalidad de"
     SISTEMAS_PUNTUACION ||--o{ TORNEOS : "aplica puntaje a"
     PERFILES_ORGANIZADORES ||--o{ TORNEOS : "organiza torneos"
@@ -423,6 +438,7 @@ erDiagram
     USUARIOS ||--o{ HISTORIAL_CONTRASENAS : "guarda historial clave"
     USUARIOS ||--o{ LOGS_ACTIVIDAD : "registra actividad usuario"
     USUARIOS ||--o{ AUDITORIA_CAMBIOS : "audita cambios"
+    USUARIOS ||--o{ GUARDADOS : "tiene elementos guardados"
 ```
 
 ---

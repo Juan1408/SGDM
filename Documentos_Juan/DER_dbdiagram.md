@@ -152,6 +152,15 @@ Table juego_formatos_permitidos [headercolor: #8E24AA] {
   }
 }
 
+Table juego_modalidades_permitidas [headercolor: #8E24AA] {
+  juego_id int [not null]
+  modalidad_id int [not null]
+
+  indexes {
+    (juego_id, modalidad_id) [pk]
+  }
+}
+
 Table modalidades [headercolor: #8E24AA] {
   id int [pk, increment]
   nombre varchar [unique]
@@ -170,6 +179,7 @@ TableGroup Catalogos_Base {
   juegos
   formatos_torneo
   juego_formatos_permitidos
+  juego_modalidades_permitidas
   modalidades
   sistemas_puntuacion
 }
@@ -476,6 +486,8 @@ Ref: solicitudes_equipo.iniciado_por > usuarios.id
 // Módulo Catálogos
 Ref: juego_formatos_permitidos.juego_id > juegos.id
 Ref: juego_formatos_permitidos.formato_codigo > formatos_torneo.codigo
+Ref: juego_modalidades_permitidas.juego_id > juegos.id
+Ref: juego_modalidades_permitidas.modalidad_id > modalidades.id
 
 // Módulo Torneos
 Ref: torneos.juego_id > juegos.id
@@ -503,4 +515,18 @@ Ref: resultados_detalle.encuentro_id > torneo_encuentros.id
 // Módulo Gamificación
 Ref: usuario_logros.logro_id > logros.id
 Ref: usuario_logros.usuario_id > usuarios.id
+
+Table guardados [headercolor: #4CAF50] {
+  id int [pk, increment]
+  usuario_id int [not null]
+  tipo varchar [not null, note: "torneo o equipo"]
+  referencia_id int [not null]
+  fecha_guardado timestamp
+
+  indexes {
+    (usuario_id, tipo, referencia_id) [unique]
+  }
+}
+
+Ref: guardados.usuario_id > usuarios.id
 ```

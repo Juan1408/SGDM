@@ -19,7 +19,7 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 
 ---
 
-## 🏛️ 3. Esquema de las Relaciones (35 Tablas en 3FN)
+## 🏛️ 3. Esquema de las Relaciones (37 Tablas en 3FN)
 
 ### Base de datos "ASCEND"
 
@@ -60,6 +60,8 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 33. **politicas_contrasenas** (<u>`id`</u>, `longitud_minima`, `requiere_mayuscula`, `requiere_minuscula`, `requiere_numero`, `requiere_caracter_especial`, `expiracion_dias`, `historial_cantidad`, `actualizado_en`, *`actualizado_por`*)
 34. **historial_contrasenas** (<u>`id`</u>, *`usuario_id`*, `hash_anterior`, `fecha_cambio`)
 35. **logs_actividad** (<u>`id`</u>, *`usuario_id`*, `accion`, `descripcion`, `ip_origen`, `user_agent`, `fecha_hora`)
+38. **guardados** (<u>`id`</u>, *`usuario_id`*, `tipo`, `referencia_id`, `fecha_guardado`)
+39. **juego_modalidades_permitidas** (<u>*`juego_id`*</u>, <u>*`modalidad_id`*</u>)
 
 ---
 

@@ -169,6 +169,14 @@ erDiagram
 
 ---
 
+### Tabla: `juego_modalidades_permitidas`
+| Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `juego_id` | `int(11)` | No | **PK/FK** | `NULL` |  |
+| `modalidad_id` | `int(11)` | No | **PK/FK** | `NULL` |  |
+
+---
+
 ### Tabla: `logros`
 | Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
 | :--- | :--- | :---: | :---: | :--- | :--- |
@@ -206,6 +214,15 @@ erDiagram
 | `ip_origen` | `varchar(45)` | Sí | - | NULL |  |
 | `user_agent` | `text` | Sí | - | NULL |  |
 | `fecha_hora` | `timestamp` | No | - | current_timestamp() |  |
+
+### Tabla: `guardados`
+| Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id` | `int(11)` | No | **PK** | `NULL` | auto_increment |
+| `usuario_id` | `int(11)` | No | **FK/IDX** | `NULL` | |
+| `tipo` | `varchar(20)` | No | - | `NULL` | ENUM('torneo', 'equipo') |
+| `referencia_id` | `int(11)` | No | **IDX** | `NULL` | Polimórfico |
+| `fecha_guardado` | `timestamp` | No | - | current_timestamp() | |
 
 ---
 

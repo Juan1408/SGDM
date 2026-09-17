@@ -1024,4 +1024,46 @@ class Torneo {
         }
     }
 
+    public function obtenerDirectorioAdmin(?int $juegoId, ?string $estado, string $orden): array {
+        $sql = "SELECT t.id, t.nombre, t.estado, t.formato, t.fecha_inicio, t.fecha_creacion,
+                       j.nombre AS nombre_juego,
+                       u.nombre_completo AS organizador_nombre
+                FROM torneos t
+                INNER JOIN juegos j ON t.juego_id = j.id
+                INNER JOIN usuarios u ON t.organizador_id = u.id
+                WHERE 1=1";
+        
+        $parametros = [];
+
+        if ($juegoId) {
+            $sql .= " AND t.juego_id = :juegoId";
+            $parametros[':juegoId'] = $juegoId;
+        }
+
+        if ($estado && $estado !== 'todos') {
+            $sql .= " AND t.estado = :estado";
+            $parametros[':estado'] = $estado;
+        }
+
+        switch ($orden) {
+            case 'antiguos':
+                $sql .= " ORDER BY t.fecha_creacion ASC";
+                break;
+            case 'az':
+                $sql .= " ORDER BY t.nombre ASC";
+                break;
+            case 'za':
+                $sql .= " ORDER BY t.nombre DESC";
+                break;
+            case 'nuevos':
+            default:
+                $sql .= " ORDER BY t.fecha_creacion DESC";
+                break;
+        }
+
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

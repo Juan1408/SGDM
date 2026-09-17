@@ -54,10 +54,10 @@
 ---
 
 ## 🏆 5. Administrar y Moderar Torneos
-- [ ] **5.1 Historial y Directorio Global de Torneos**:
-  - [ ] Listar todos los torneos del sistema creados por los organizadores.
-  - [ ] Filtros dinámicos por disciplina, fecha y estado (borrador, inscripciones abiertas, en curso, finalizados, cancelados).
-  - [ ] Modificación de emergencia / moderación administrativa de torneos con nombres o reglas inadecuadas.
+- [x] **5.1 Historial y Directorio Global de Torneos**:
+  - [x] Listar todos los torneos del sistema creados por los organizadores.
+  - [x] Filtros dinámicos por disciplina, fecha y estado (borrador, inscripciones abiertas, en curso, finalizados, cancelados).
+  - [x] Modificación de emergencia / moderación administrativa de torneos con nombres o reglas inadecuadas.
 
 ---
 
