@@ -906,7 +906,6 @@ INSERT INTO
         id,
         nombre,
         categoria,
-        formato_equipo_defecto,
         puntos_victoria,
         puntos_empate,
         puntos_derrota
@@ -915,7 +914,6 @@ VALUES (
         1,
         'Valorant',
         'esport-shooter',
-        5,
         3.00,
         1.00,
         0.00
@@ -924,7 +922,6 @@ VALUES (
         2,
         'League of Legends',
         'esport-moba',
-        5,
         3.00,
         0.00,
         0.00
@@ -933,7 +930,6 @@ VALUES (
         3,
         'Rugby 7s',
         'deporte-fisico',
-        7,
         4.00,
         2.00,
         0.00
@@ -942,7 +938,6 @@ VALUES (
         4,
         'Fútbol 5',
         'deporte-fisico',
-        5,
         3.00,
         1.00,
         0.00
@@ -951,7 +946,6 @@ VALUES (
         5,
         'Ajedrez',
         'juego-mesa',
-        1,
         1.00,
         0.50,
         0.00
