@@ -1025,7 +1025,7 @@ class Torneo {
     }
 
     public function obtenerDirectorioAdmin(?int $juegoId, ?string $estado, string $orden): array {
-        $sql = "SELECT t.id, t.nombre, t.estado, t.formato, t.fecha_inicio, t.fecha_creacion,
+        $sql = "SELECT t.id, t.nombre, t.estado, t.formato, t.fecha_inicio,
                        j.nombre AS nombre_juego,
                        u.nombre_completo AS organizador_nombre
                 FROM torneos t
@@ -1047,7 +1047,7 @@ class Torneo {
 
         switch ($orden) {
             case 'antiguos':
-                $sql .= " ORDER BY t.fecha_creacion ASC";
+                $sql .= " ORDER BY t.id ASC";
                 break;
             case 'az':
                 $sql .= " ORDER BY t.nombre ASC";
@@ -1057,7 +1057,7 @@ class Torneo {
                 break;
             case 'nuevos':
             default:
-                $sql .= " ORDER BY t.fecha_creacion DESC";
+                $sql .= " ORDER BY t.id DESC";
                 break;
         }
 
