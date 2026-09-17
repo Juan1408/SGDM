@@ -488,13 +488,9 @@ class Equipo {
 
         $parametros = [];
 
-        // Filtro por disciplina (infiriendo desde torneos)
+        // Filtro por disciplina directo desde la tabla equipos
         if ($juegoId) {
-            $sql .= " AND EXISTS (
-                        SELECT 1 FROM participantes_torneo pt
-                        INNER JOIN torneos t ON t.id = pt.torneo_id
-                        WHERE pt.tipo = 'equipo' AND pt.referencia_id = e.id AND t.juego_id = :juegoId
-                      )";
+            $sql .= " AND e.juego_id = :juegoId";
             $parametros[':juegoId'] = $juegoId;
         }
 

@@ -312,6 +312,7 @@ CREATE TABLE logs_acceso (
 CREATE TABLE equipos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_equipo VARCHAR(100) UNIQUE NOT NULL,
+    juego_id INT NULL,
     escudo_url TEXT,
     banner_url TEXT,
     descripcion TEXT,
@@ -321,6 +322,7 @@ CREATE TABLE equipos (
     creado_por INT NOT NULL,
     activo BOOLEAN DEFAULT TRUE,
     codigo_invitacion VARCHAR(20) UNIQUE,
+    CONSTRAINT fk_equipo_juego FOREIGN KEY (juego_id) REFERENCES juegos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_equipo_creador FOREIGN KEY (creado_por) REFERENCES usuarios (id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
