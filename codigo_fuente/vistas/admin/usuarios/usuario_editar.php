@@ -16,6 +16,7 @@ $esAdmin = $datos['es_admin'];
     <form action="<?php echo URL_BASE; ?>index.php?c=usuario&a=actualizarUsuario" method="POST" class="formulario-estandar">
         <fieldset>
     <!-- Campos ocultos-->
+    <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
     <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
 
     <!-- Campo para el nombre completo -->

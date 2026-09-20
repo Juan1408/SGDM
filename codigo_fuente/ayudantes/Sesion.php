@@ -23,6 +23,14 @@ class Sesion {
      */
     private static function iniciarSesion(){
         if (session_status() === PHP_SESSION_NONE) {
+            // Seguridad: Configurar parámetros de cookie antes de iniciar la sesión
+            session_set_cookie_params([
+                'lifetime' => 1800,
+                'path'     => '/',
+                'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on', // Solo en HTTPS si está activo
+                'httponly' => true,      // Inaccesible desde JavaScript (mitiga XSS)
+                'samesite' => 'Lax'      // Protección básica anti-CSRF
+            ]);
             session_start();
         }
     }
@@ -52,6 +60,19 @@ class Sesion {
     //Verifica si el usuario está logueado
     public static function estaLogueado(){
         self::iniciarSesion();
+        
+        // Validar expiración real de la sesión (Timeboxing)
+        if (isset($_SESSION['expiracion_sesion'])) {
+            if (time() > $_SESSION['expiracion_sesion']) {
+                // Sesión expirada por inactividad
+                self::destruir();
+                return false;
+            } else {
+                // Renovar la ventana de tiempo de inactividad
+                $_SESSION['expiracion_sesion'] = time() + 1800; // +30 minutos
+            }
+        }
+        
         return isset($_SESSION['usuario_id']);
     }
 
@@ -122,6 +143,12 @@ class Sesion {
     //cerrar sesión
     public static function destruir(){
         self::iniciarSesion();
+        
+        // Registrar en auditoría antes de vaciar la sesión
+        if (isset($_SESSION['email']) && class_exists('App\Ayudantes\Auditoria')) {
+            Auditoria::registrar('LOGOUT_EXITOSO', "El usuario " . $_SESSION['email'] . " cerró su sesión");
+        }
+        
         $_SESSION = []; //Vaciamos el array
         session_destroy(); //Elimina completamente la sesión
 
@@ -130,5 +157,31 @@ class Sesion {
             $params = session_get_cookie_params();
             setcookie(session_name(), "", time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
         }
+    }
+
+    // ========================================================================
+    // PREVENCIÓN CSRF (Cross-Site Request Forgery)
+    // ========================================================================
+
+    /**
+     * Genera un token CSRF seguro y lo almacena en la sesión.
+     */
+    public static function generarTokenCSRF(): string {
+        self::iniciarSesion();
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    /**
+     * Compara un token recibido (ej. por POST) con el almacenado en la sesión.
+     */
+    public static function validarTokenCSRF(?string $token): bool {
+        self::iniciarSesion();
+        if (empty($token) || empty($_SESSION['csrf_token'])) {
+            return false;
+        }
+        return hash_equals($_SESSION['csrf_token'], $token);
     }
 }

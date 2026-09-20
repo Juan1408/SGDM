@@ -26,8 +26,6 @@ require_once __DIR__ . '/../modelos/Equipo.php';
 class AdminControlador {
 
     public function __construct(){
-        //En el futuro aca vamos a bloquear el paso a los que no sean administradores
-        //Por ahora solo verificamos que la persona esté logueada en el sistema
         Sesion::validarAdmin();
     }
 
@@ -103,13 +101,13 @@ class AdminControlador {
         return $ultimosEquipos;
     }
 
-    public function obtenerUltimosJugadores(int $limite){
+    private function obtenerUltimosJugadores(int $limite){
         $modeloUsuario = new Usuario();
         $ultimosJugadores = $modeloUsuario->obtenerUltimosJugadoresRegistrados($limite);
         return $ultimosJugadores;
     }
 
-    public function obtenerUltimosOrganizadores(int $limite){
+    private function obtenerUltimosOrganizadores(int $limite){
         $modeloUsuario = new Usuario();
         $ultimosOrganizadores = $modeloUsuario->obtenerUltimosOrganizadoresRegistrados($limite);
         return $ultimosOrganizadores;
@@ -125,6 +123,14 @@ class AdminControlador {
         
         // Si el formulario fue enviado por POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Seguridad: Validar Token CSRF
+            if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+                $_SESSION['mensaje'] = "Error: Petición inválida (CSRF).";
+                $_SESSION['mensaje_tipo'] = "error";
+                header("Location: index.php?c=admin&a=editarPerfil");
+                exit;
+            }
+
             $nombre = trim($_POST['nombre_completo'] ?? '');
             $telefono = trim($_POST['telefono'] ?? '');
             

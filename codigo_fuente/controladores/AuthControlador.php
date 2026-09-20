@@ -32,6 +32,24 @@ class AuthControlador {
     public function procesarLogin() {
         //Verificamos si realmente se envio el formulario mediante el metodo POST
         if ($_SERVER['REQUEST_METHOD'] ==='POST'){
+            // Seguridad: Validar Token CSRF
+            if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+                $error = "Petición no válida (CSRF Token incorrecto). Intente nuevamente.";
+                require_once __DIR__ . '/../vistas/auth/login.php';
+                return;
+            }
+
+            // Seguridad: Rate Limiting Profesional (Bloqueo IP)
+            require_once __DIR__ . '/../modelos/SeguridadAuth.php';
+            $seguridadAuth = new \App\Modelos\SeguridadAuth();
+            $ipUsuario = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+            if ($seguridadAuth->estaIpBloqueada($ipUsuario)) {
+                $error = "Por seguridad, su dirección IP ha sido bloqueada temporalmente debido a múltiples intentos fallidos. Intente nuevamente en 5 minutos.";
+                require_once __DIR__ . '/../vistas/auth/login.php';
+                return;
+            }
+
             //A los datos ingresados les sacamos los espacios en blanco que puedan ser ingresados accidentalmente
             $email = trim($_POST['email'] ?? '');
             $contrasena = $_POST['contrasena'] ?? '';
@@ -58,11 +76,15 @@ class AuthControlador {
 
             //Iniciamos sesion con el usuario y redirigimos al dashboard
             Sesion::iniciarLogin($usuarioEncontrado);
+            
+            // Login exitoso, reseteamos los intentos fallidos de esta IP
+            $seguridadAuth->limpiarIntentos($ipUsuario);
 
             //Lo enviamos a la pantalla correspondiente
             $this->redirigirPorRol($usuarioEncontrado['rol_id']);
         } else {
             // Si algo falla recargamos la vista de login con un mensaje de error
+            $seguridadAuth->registrarIntentoFallido($ipUsuario);
             $error = "Credenciales incorrectas. Verifique su email y contraseña.";
             require_once __DIR__ . '/../vistas/auth/login.php';
             return; 
@@ -75,6 +97,12 @@ class AuthControlador {
         if (Sesion::estaLogueado()) {
             $this->redirigirPorRol($_SESSION['rol_id']);
         }
+
+        // Obtener la política de contraseñas para enviarla a la vista
+        require_once __DIR__ . '/../modelos/PoliticaContrasena.php';
+        $politicaModelo = new \App\Modelos\PoliticaContrasena();
+        $politica = $politicaModelo->obtenerPoliticaVigente();
+
         require __DIR__ . '/../vistas/auth/registro.php';
     }
 
@@ -83,6 +111,13 @@ class AuthControlador {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: ' . URL_BASE . 'index.php?c=auth&a=mostrarRegistro');
             exit;
+        }
+
+        // Seguridad: Validar Token CSRF
+        if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+            $error = "Petición no válida (CSRF Token incorrecto). Intente nuevamente.";
+            require_once __DIR__ . '/../vistas/auth/registro.php';
+            return;
         }
 
         $nombre = trim($_POST['nombre_completo'] ?? '');
@@ -105,8 +140,13 @@ class AuthControlador {
             return;
         }
 
-        if (strlen($contrasena) < 8) {
-            $error = "La contraseña debe tener al menos 8 caracteres conforme a las políticas de seguridad.";
+        // Validación dinámica contra Políticas de Contraseñas
+        require_once __DIR__ . '/../modelos/PoliticaContrasena.php';
+        $politicaModelo = new \App\Modelos\PoliticaContrasena();
+        $validacion = $politicaModelo->validarPassword($contrasena);
+        
+        if (!$validacion['valido']) {
+            $error = implode('<br>', $validacion['errores']);
             require __DIR__ . '/../vistas/auth/registro.php';
             return;
         }

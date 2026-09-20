@@ -177,6 +177,13 @@ class UsuarioControlador {
         Sesion::validarAdmin();
         //Comprobar si los datos se envian por el metodo POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Seguridad: Validar Token CSRF
+            if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+                $_SESSION['mensaje'] = "Error de seguridad (CSRF). Petición denegada.";
+                header("Location: " . URL_BASE . "index.php?c=usuario&a=index");
+                exit();
+            }
+
             $usuarioId = (int)$_POST['id'];
             
             $datosActualizar = [

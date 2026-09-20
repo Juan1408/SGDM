@@ -237,3 +237,35 @@ Objetivo: Implementar un panel administrativo ("Directorio de Equipos") que perm
 Manejo de Estructuras Multigaming: La tabla `equipos` fue diseñada para soportar organizaciones "Multigaming" (E-sports), por lo que no contiene la columna restrictiva `juego_id`. Un mismo equipo puede participar en torneos de distintos juegos simultáneamente. 
 Inferencia de Filtros mediante JOINs: Para suplir el requerimiento administrativo de "Filtrar por Disciplina" sin romper el esquema Multigaming, el método `obtenerDirectorioAdmin()` en el modelo `Equipo.php` utiliza la técnica de "Inferencia por Participación". Mediante la cláusula `EXISTS`, el sistema busca si el equipo posee registros en la tabla `participantes_torneo` (cruzando con `torneos`) para la disciplina seleccionada. Esto preserva la normalización de la base de datos mientras cumple estrictamente los requisitos de interfaz de usuario.
 Agregación de Miembros (Subqueries): En la misma consulta del Directorio, se incluyó una subconsulta `(SELECT COUNT(*) FROM equipo_miembros...)` como columna virtual para calcular en tiempo real el tamaño de cada equipo, evitando redundancia de datos (desnormalización de contadores).
+
+36. Autogestión de Perfil Administrativo (Seguridad en Interfaz)
+Objetivo: Habilitar la edición de datos básicos (Nombre y Teléfono) del Administrador General, blindando metadatos sensibles contra modificaciones accidentales o maliciosas.
+
+Lógica de Exclusión Visual y Backend: En la vista de edición (`editar_perfil.php`), los campos críticos como `Correo Electrónico` (credencial de login) y `Rol` (Nivel de Permisos) se renderizan con el atributo `disabled` y estilos visuales de solo lectura. En el Backend, el método `actualizarPerfil()` del modelo `Usuario.php` está rigurosamente escrito para ejecutar el comando `UPDATE` afectando exclusivamente a las columnas `nombre_completo` y `telefono`, imposibilitando la escalada de privilegios o el secuestro de la cuenta (Account Takeover) a través del envío de peticiones POST manipuladas.
+Actualización de Sesión en Tiempo Real: Tras guardar los cambios exitosamente en la BD, el controlador sobreescribe la variable `$_SESSION['usuario_nombre']` para que la cabecera responsiva de navegación refleje el nuevo nombre instantáneamente sin requerir que el administrador vuelva a iniciar sesión.
+
+37. Patrón "Read-Only Dashboard": Historial de Torneos
+Objetivo: Exhibir un registro auditable de los ciclos competitivos concluidos sin comprometer la base de datos de producción.
+
+Filtro de Ciclo de Vida: El modelo `Torneo.php` fue dotado del método `obtenerHistorialTorneos()` el cual filtra drásticamente los registros con la cláusula `WHERE estado IN ('finalizado', 'cancelado')`. Esto garantiza que los torneos activos nunca se crucen con los registros archivados, protegiendo la integridad de la interfaz administrativa de gestión viva.
+
+38. Integridad Analítica: Salón de la Fama Dinámico (Resultados Globales)
+Objetivo: Proveer un Ranking (Top 10) de los mejores jugadores y equipos históricos, resolviendo el desafío arquitectónico que supone cruzar puntuaciones de juegos con sistemas de medición drásticamente distintos (ej. Goles vs Rondas).
+
+Descarte del Modelo "One-Size-Fits-All": Originalmente se pensó en un único Top 10 global. Se detectó que esto corrompería las métricas al sumar puntos de sistemas heterogéneos. 
+Solución Dinámica Iterativa: En el `ResultadoGlobalControlador.php`, se programó un enfoque dinámico. Primero se invoca `obtenerJuegosConResultados()` para determinar qué disciplinas (juegos) tienen competencias finalizadas. Posteriormente, a través de un bucle `foreach`, se consulta individualmente el Top 10 específico por cada juego (`obtenerTop10PorJuego($juegoId)`). La vista (`globales.php`) recibe este arreglo multidimensional e itera renderizando una tabla independiente para cada Salón de la Fama, preservando la integridad competitiva al 100%.
+
+39. Pureza Arquitectónica (MVC) y Desacoplamiento de UI: Data Attributes vs Inline Scripts
+Objetivo: Erradicar la mezcla de lógica de servidor (PHP) con interactividad de cliente (JS) en las vistas de presentación, purificando la adhesión al patrón Modelo-Vista-Controlador.
+
+Refactorización de Flash Messages: Originalmente, las notificaciones emergentes (Toasts) se disparaban imprimiendo una etiqueta `<script>` vía PHP al pie de `dashboard.php`. Esto rompía la responsabilidad del Controlador y ensuciaba el DOM.
+Implementación de Data-Attributes: La vista maestra `dashboard.php` fue sanitizada. Ahora, PHP únicamente inyecta silenciosamente los metadatos en la etiqueta Body: `<body data-flash-mensaje="..." data-flash-tipo="...">`.
+Escucha Centralizada: El archivo estático `admin.js` fue dotado de un "Event Listener" global que se ejecuta tras el `DOMContentLoaded`. Este algoritmo lee nativamente el DOM y dispara las notificaciones Toast de forma autónoma. Con esta refactorización, se logra un 100% de aislamiento técnico entre PHP y JS para la lógica de negocios.
+
+40. Auditoría Avanzada y Reforzamiento de Seguridad Perimetral (Fase 3)
+Objetivo: Blindar la aplicación a nivel corporativo mitigando vulnerabilidades críticas detectadas (OWASP Top 10) relativas a sesiones, inyección cruzada y fuerza bruta.
+
+Seguridad de Sesiones (Timeboxing y Flags): Se actualizó la clase `Sesion.php` inyectando `session_set_cookie_params()` antes del inicio de sesión. Esto asegura que la cookie de identidad viaje protegida con los flags `HttpOnly` (inaccesible para JavaScript, previniendo secuestros XSS) y `SameSite=Lax`. Adicionalmente, se programó un motor de validación estricta de caducidad (Timeboxing) que expulsa al usuario del servidor si `$_SESSION['expiracion_sesion']` es superado, destruyendo el mito de las sesiones "infinitas".
+Políticas HTTP de Seguridad (Security Headers): Se creó el módulo núcleo `CabecerasSeguridad.php` y se inyectó en el Front Controller (`index.php`). Desde este momento, cualquier respuesta enviada al navegador incluye directivas estrictas (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`), protegiendo a la plataforma contra Clickjacking y Sniffing de manera nativa.
+Protección de Fuerza Bruta (Rate Limiting Profesional): Se desestimó la protección endeble basada en sesiones a favor de un bloqueo riguroso por Base de Datos. Se estructuró la tabla `intentos_login` administrada por el nuevo modelo `SeguridadAuth.php`. El Controlador de Autenticación ahora interroga a este modelo; si una IP registra 5 fallos consecutivos, es bloqueada automáticamente a nivel lógico por 5 minutos, garantizando la integridad de los accesos.
+Inmunidad Transaccional (Tokens CSRF): Se implementó el patrón *Synchronizer Token* en `Sesion.php`. Las áreas sensibles de Autenticación y el panel del Administrador General exigen ahora que los formularios envíen un `csrf_token` oculto validado por el servidor, haciendo matemáticamente imposible la falsificación de peticiones en nombre del usuario legítimo.

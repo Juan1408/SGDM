@@ -13,6 +13,7 @@
     <div class="tarjeta-formulario" style="background-color: var(--color-fondo-panel); border: 1px solid var(--color-borde); border-radius: var(--radio-borde); padding: 2rem; box-shadow: var(--sombra-suave); max-width: 800px;">
         
         <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=alerta&a=enviar" onsubmit="return confirm('¿Estás seguro de enviar esta alerta masiva a los usuarios seleccionados?');">
+            <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 

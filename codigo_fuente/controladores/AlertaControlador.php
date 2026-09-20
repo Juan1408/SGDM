@@ -45,6 +45,14 @@ class AlertaControlador {
             exit;
         }
 
+        // Seguridad: Validar Token CSRF
+        if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+            $_SESSION['mensaje'] = "Error de seguridad (CSRF). Petición denegada.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header('Location: index.php?c=alerta&a=index');
+            exit;
+        }
+
         $titulo = trim($_POST['titulo'] ?? '');
         $mensaje = trim($_POST['mensaje'] ?? '');
         $tipo = $_POST['tipo'] ?? 'info';

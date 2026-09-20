@@ -21,6 +21,7 @@ $politica = $datos['politica'] ?? [];
     </div>
 
     <form action="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=guardar" method="POST" class="formulario-estandar validacion-activa">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         
         <!-- BLOQUE 1: COMPLEJIDAD DE LA CLAVE -->
         <fieldset class="mb-4">

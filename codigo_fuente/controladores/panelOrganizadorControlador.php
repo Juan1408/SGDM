@@ -104,6 +104,11 @@ class PanelOrganizadorControlador {
     }
 
     public function guardarPerfil() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=perfil');
+            exit;
+        }
+
         $datos = [
             'nombre_completo' => trim($_POST['nombre_completo'] ?? ''),
             'telefono' => trim($_POST['telefono'] ?? ''),

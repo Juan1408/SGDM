@@ -58,6 +58,7 @@
       
       <!--Formulario de login-->
       <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarLogin" method="POST">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         <div class="input-group">
           <input name="email" type="email" id="login-email" required>
           <label for="login-email">Correo electrónico</label>

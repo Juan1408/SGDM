@@ -40,6 +40,7 @@
         <?php endif; ?>
 
         <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarRegistro" method="POST">
+          <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
           <div class="input-group">
             <input type="text" name="nombre_completo" id="registro-nombre" required value="<?php echo htmlspecialchars($_POST['nombre_completo'] ?? ''); ?>">
             <label for="registro-nombre">Nombre completo</label>
@@ -68,7 +69,7 @@
 
           <div class="input-group password-group">
             <input type="password" name="contrasena" id="registro-password" required>
-            <label for="registro-password">Contraseña (Mínimo 8 caracteres)</label>
+            <label for="registro-password">Contraseña (Mínimo <?php echo isset($politica['longitud_minima']) ? $politica['longitud_minima'] : 8; ?> caracteres)</label>
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
               <i class="fa-regular fa-eye-slash"></i>
             </button>

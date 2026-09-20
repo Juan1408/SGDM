@@ -53,6 +53,13 @@ class PoliticaContrasenaControlador {
             exit;
         }
 
+        // Seguridad: Validar Token CSRF
+        if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
+            $_SESSION['mensaje'] = "Error de seguridad (CSRF). Petición denegada.";
+            header('Location: ' . URL_BASE . 'index.php?c=politicaContrasena&a=index');
+            exit;
+        }
+
         // Sanitización y armado del payload
         $longitudMinima = (int) ($_POST['longitud_minima'] ?? 8);
         $expiracionDias = (int) ($_POST['expiracion_dias'] ?? 90);

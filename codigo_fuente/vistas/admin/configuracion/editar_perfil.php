@@ -5,6 +5,7 @@
 
 <div class="tarjeta" style="max-width: 600px;">
     <form action="<?php echo URL_BASE; ?>index.php?c=admin&a=editarPerfil" method="POST" class="formulario-estandar validacion-activa">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         
         <div class="grupo-formulario">
             <label for="nombre_completo">Nombre Completo <span style="color: red;">*</span></label>

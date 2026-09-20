@@ -23,6 +23,12 @@ use App\Core\ManejadorErrores;
 set_exception_handler([ManejadorErrores::class, 'capturarExcepcion']);
 set_error_handler([ManejadorErrores::class, 'capturarErrorPhp']);
 
+// ============================================================================
+// POLÍTICAS HTTP DE SEGURIDAD (Security Headers)
+// ============================================================================
+require_once __DIR__ . '/../core/CabecerasSeguridad.php';
+\App\Core\CabecerasSeguridad::aplicar();
+
 //Definimos el controlador y la accion por defecto si no se especifican
 $controlador = $_GET['c'] ?? 'auth';
 $accion = $_GET['a'] ?? 'mostrarLogin';
