@@ -130,6 +130,23 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Método para obtener el historial global de torneos (Finalizados o Cancelados)
+    public function obtenerHistorialTorneos(): array {
+        $sql = "SELECT t.id, t.nombre AS torneo_nombre, t.estado, t.formato, 
+                       t.fecha_inicio, t.fecha_fin,
+                       j.nombre AS juego_nombre,
+                       u.nombre_completo AS organizador_nombre,
+                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'aprobado') AS total_participantes
+                FROM torneos t
+                INNER JOIN juegos j ON t.juego_id = j.id
+                INNER JOIN usuarios u ON t.organizador_id = u.id
+                WHERE t.estado IN ('finalizado', 'cancelado')
+                ORDER BY t.fecha_fin DESC, t.id DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function crearBorrador(array $datos, int $organizadorId): int {
         $sql = "INSERT INTO torneos
                     (nombre, juego_id, formato, estado, cupo_max_equipos, organizador_id,

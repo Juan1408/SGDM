@@ -16,9 +16,33 @@
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/utilidades.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/perfil.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Script Anti-FOUC (Flash of Unstyled Content): Aplica el tema oscuro antes de renderizar el DOM -->
+    <script>
+        if (localStorage.getItem('admin_tema') === 'dark') {
+            document.documentElement.classList.add('tema-dark-fouc'); // Opcional, pero usaremos el body luego
+        }
+    </script>
 </head>
 
-<body class="tema-admin en-inicio">
+<body class="tema-admin en-inicio" 
+      data-flash-mensaje="<?php echo htmlspecialchars($_SESSION['mensaje'] ?? ''); ?>"
+      data-flash-tipo="<?php echo htmlspecialchars($_SESSION['mensaje_tipo'] ?? 'info'); ?>">
+    <?php 
+        // Limpiamos los mensajes de la sesión una vez inyectados en el DOM
+        if (isset($_SESSION['mensaje'])) {
+            unset($_SESSION['mensaje']);
+            unset($_SESSION['mensaje_tipo']);
+        }
+    ?>
+
+    <!-- Aplicamos la clase dark-mode inmediatamente si estaba guardado, para no parpadear -->
+    <script>
+        if (localStorage.getItem('admin_tema') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+
     <header class="cabecera-principal">
         <div class="contenedor-logo">
             <a href="#dashboard" class="enlace-logo">
@@ -26,18 +50,30 @@
             </a>
         </div>
 
-        <div class="perfil-admin dropdown">
-            <button class="dropdown-btn" id="btnPerfilAdmin">
-                <span class="avatar-placeholder">A</span>
-                <span>Administrador General ▾</span>
+        <div class="acciones-cabecera" style="display: flex; align-items: center; gap: 1rem;">
+            <!-- Selector de Tema Claro/Oscuro -->
+            <button id="btnToggleTema" class="btn-tema" aria-label="Cambiar Tema" title="Cambiar a Modo Oscuro" style="background: none; border: none; cursor: pointer; color: var(--color-texto-principal); font-size: 1.3rem; transition: transform 0.3s ease;">
+                <i class="fa-solid fa-moon"></i>
             </button>
-            <div class="dropdown-content" id="menuPerfilAdmin">
-                <a href="#perfil/editar-perfil">Editar Perfil</a>
+
+            <div class="perfil-admin dropdown">
+                <button class="dropdown-btn" id="btnPerfilAdmin">
+                    <span class="avatar-placeholder"><?php echo strtoupper(substr($_SESSION['usuario_nombre'] ?? 'A', 0, 1)); ?></span>
+                    <span class="nombre-admin-pc">
+                        <?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario'); ?> 
+                        <span class="etiqueta-rol">(Administrador General)</span> ▾
+                    </span>
+                    <span class="nombre-admin-movil" style="display: none;">
+                        <?php echo htmlspecialchars(explode(' ', $_SESSION['usuario_nombre'] ?? 'Usuario')[0]); ?> ▾
+                    </span>
+                </button>
+                <div class="dropdown-content" id="menuPerfilAdmin">
+                <a href="<?php echo URL_BASE; ?>index.php?c=admin&a=editarPerfil">Editar Perfil</a>
                 <a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index">Configuración</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=dashboard" class="enlace-destacado">Mis Torneos (Modo Organizador)</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=destruirSesion" class="enlace-salir">Cerrar Sesión</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=logout" class="enlace-salir">Cerrar Sesión</a>
             </div>
-        </div>
+            </div> <!-- CIERRE DE .perfil-admin -->
+        </div> <!-- CIERRE DE .acciones-cabecera -->
     </header>
 
     <div class="barra-movil">
@@ -77,19 +113,9 @@
     <div class="contenedor-notificaciones" id="contenedorNotificaciones"></div>
 
     <script src="<?php echo URL_BASE; ?>js/admin/admin.js"></script>
+    <script src="<?php echo URL_BASE; ?>js/admin/tema.js"></script>
     <script src="<?php echo URL_BASE; ?>js/admin/reportes.js"></script>
-    
-    <?php if (isset($_SESSION['mensaje'])): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof mostrarNotificacionToast === 'function') {
-                    // El mensaje se muestra y se borra de la sesión (Flash Message)
-                    mostrarNotificacionToast("<?php echo $_SESSION['mensaje']; ?>");
-                }
-            });
-        </script>
-        <?php unset($_SESSION['mensaje']); ?>
-    <?php endif; ?>
+
 </body>
 
 </html>

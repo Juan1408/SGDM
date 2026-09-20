@@ -96,6 +96,8 @@ DROP TABLE IF EXISTS tokens_recuperacion;
 
 DROP TABLE IF EXISTS tokens_verificacion_email;
 
+DROP TABLE IF EXISTS errores_sistema;
+
 DROP TABLE IF EXISTS usuarios;
 
 DROP TABLE IF EXISTS guardados;
@@ -310,6 +312,26 @@ CREATE TABLE logs_acceso (
     mensaje_error TEXT,
     fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_log_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+-- 2.8 errores_sistema: Monitoreo de Errores y Excepciones
+CREATE TABLE errores_sistema (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    hash_error VARCHAR(64) UNIQUE NOT NULL,
+    tipo_error VARCHAR(50) DEFAULT 'codigo',
+    mensaje TEXT NOT NULL,
+    archivo VARCHAR(255) NOT NULL,
+    linea INT NOT NULL,
+    stack_trace TEXT NOT NULL,
+    contexto_json JSON,
+    usuario_id INT NULL,
+    rol_usuario VARCHAR(50) NULL,
+    cantidad_ocurrencias INT DEFAULT 1,
+    primera_vez TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultima_vez TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    estado ENUM('nuevo', 'revision', 'resuelto') DEFAULT 'nuevo',
+    detalles_resolucion TEXT NULL,
+    CONSTRAINT fk_error_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- =============================================================================

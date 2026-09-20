@@ -396,3 +396,11 @@
   }
 }
 
+
+/* Enlace para cerrar sesión en el menú lateral */
+.menu-enlace-salir { color: var(--color-peligro) !important; font-weight: bold; }
+.menu-enlace-salir:hover { color: var(--color-peligro-hover) !important; background-color: rgba(224, 93, 93, 0.1); }
+
+/* Responsive Perfil */
+@media (max-width: 768px) { .nombre-admin-pc { display: none !important; } .nombre-admin-movil { display: inline !important; } .etiqueta-rol { display: none; } }
+@media (min-width: 769px) { .nombre-admin-movil { display: none !important; } .etiqueta-rol { font-size: 0.8rem; color: var(--color-texto-secundario); font-weight: normal; margin-left: 5px; } }

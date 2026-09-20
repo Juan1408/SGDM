@@ -283,6 +283,21 @@ class Usuario {
         ]);
     }
 
+    //Metodo para actualizar perfil (nombre y teléfono unicamente)
+    public function actualizarPerfil(int $usuarioId, string $nombre, string $telefono) {
+        $sql = "UPDATE usuarios
+            SET nombre_completo = :nombre,
+                telefono = :telefono
+            WHERE id = :id";
+
+        $stmt = $this->bd->prepare($sql);
+        return $stmt->execute([
+            ':nombre' => $nombre,
+            ':telefono' => $telefono,
+            ':id' => $usuarioId
+        ]);
+    }
+
     //Metodo para eliminar un usuario (Baja fisica)
     public function eliminarUsuario(int $usuarioId){
         $sql = "DELETE FROM usuarios WHERE id = :id";

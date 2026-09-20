@@ -1,0 +1,77 @@
+.container {
+    width: 95%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 1rem;
+}
+
+.header h1 { margin: 0; font-size: 1.5rem; color: var(--color-peligro); font-family: monospace; word-break: break-all; }
+.header p { margin: 0.5rem 0 0 0; color: var(--color-texto-secundario); }
+
+.btn-back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    font-weight: 500;
+}
+.btn-back:hover { color: var(--color-texto-principal); }
+
+.section {
+    background-color: var(--color-fondo-panel);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: var(--sombra-suave);
+}
+
+.section-title {
+    background-color: #f1f5f9; /* Gris suave para modo claro */
+    padding: 1rem 1.5rem;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-texto-principal);
+}
+
+/* En modo oscuro, que use el fondo oscuro estricto */
+body.tema-admin.dark-mode .section-title {
+    background-color: #0f172a;
+}
+
+.code-block {
+    margin: 0;
+    padding: 1.5rem;
+    background-color: #0f172a; /* Terminal siempre oscura */
+    color: #e2e8f0; /* Texto claro */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-bottom-left-radius: var(--radio-borde);
+    border-bottom-right-radius: var(--radio-borde);
+}
+
+/* Detalles para resaltar partes del código si fuera necesario */
+.code-block .string { color: #a5b4fc; }
+
+.grid-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.info-box p { margin: 0; font-size: 0.85rem; color: var(--color-texto-secundario); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.info-box strong { font-size: 1.1rem; color: var(--color-texto-principal); word-break: break-all; margin-top: 0.3rem; display: block; }

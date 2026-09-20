@@ -10,6 +10,18 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     /* ========================================================================
+       -1. SISTEMA DE NOTIFICACIONES (Flash Messages / Data Attributes)
+       ======================================================================== */
+    const flashMensaje = document.body.getAttribute('data-flash-mensaje');
+    const flashTipo = document.body.getAttribute('data-flash-tipo');
+    
+    if (flashMensaje && flashMensaje.trim() !== '') {
+        if (typeof mostrarNotificacionToast === 'function') {
+            mostrarNotificacionToast(flashMensaje, flashTipo);
+        }
+    }
+
+    /* ========================================================================
        0. MENÚ HAMBURGUESA (MÓVILES)
        ======================================================================== */
     const btnMenuMovil = document.getElementById('btnMenuMovil');

@@ -114,4 +114,44 @@ class AdminControlador {
         $ultimosOrganizadores = $modeloUsuario->obtenerUltimosOrganizadoresRegistrados($limite);
         return $ultimosOrganizadores;
     }
+
+    /**
+     * Muestra y procesa la vista para editar el perfil del administrador
+     */
+    public function editarPerfil() {
+        // Obtenemos los datos actuales del usuario
+        $modeloUsuario = new Usuario();
+        $idUsuario = $_SESSION['usuario_id'];
+        
+        // Si el formulario fue enviado por POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nombre = trim($_POST['nombre_completo'] ?? '');
+            $telefono = trim($_POST['telefono'] ?? '');
+            
+            if (empty($nombre)) {
+                $_SESSION['mensaje'] = "Error: El nombre completo es obligatorio.";
+                $_SESSION['mensaje_tipo'] = "error";
+            } else {
+                $resultado = $modeloUsuario->actualizarPerfil($idUsuario, $nombre, $telefono);
+                if ($resultado) {
+                    $_SESSION['usuario_nombre'] = $nombre; // Actualizamos la sesión en vivo
+                    $_SESSION['mensaje'] = "¡Perfil actualizado exitosamente!";
+                    $_SESSION['mensaje_tipo'] = "exito";
+                } else {
+                    $_SESSION['mensaje'] = "Error: No se pudo actualizar el perfil en la base de datos.";
+                    $_SESSION['mensaje_tipo'] = "error";
+                }
+            }
+            // Evitar reenvío de formulario (PRG pattern)
+            header("Location: index.php?c=admin&a=editarPerfil");
+            exit;
+        }
+
+        // Si es GET, traemos los datos de la base de datos
+        $datosUsuario = $modeloUsuario->obtenerUsuarioPorId($idUsuario);
+        
+        // Inyectamos la vista
+        $vistaInyectada = 'configuracion/editar_perfil.php';
+        require_once __DIR__ . '/../vistas/admin/dashboard.php';
+    }
 }

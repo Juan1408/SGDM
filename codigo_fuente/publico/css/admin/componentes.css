@@ -41,7 +41,7 @@
 }
 
 .tabla-estandar tbody tr:hover {
-  background-color: #f1f3f5;
+  background-color: var(--color-hover-fila);
 }
 
 
@@ -687,3 +687,146 @@ details[open].acciones-desplegables .acciones-lista {
   gap: 8px;
   transition: all 0.2s ease;
 }
+
+/* ==========================================================================
+   CABECERAS DE MÓDULOS
+   ========================================================================== */
+.header-modulo {
+  border-bottom: 1px solid var(--color-borde);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+.titulo-modulo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.titulo-modulo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-texto-principal);
+}
+.header-modulo p {
+  margin: 0.5rem 0 0 1.5rem;
+  color: var(--color-texto-secundario);
+  font-size: 0.95rem;
+}
+.pulse-primario {
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-primario);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-primario);
+}
+
+/* ==========================================================================
+   MÓDULO: RESULTADOS GLOBALES (SALÓN DE LA FAMA)
+   ========================================================================== */
+.resultados-vacio {
+  background: var(--color-fondo-panel);
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  color: var(--color-texto-secundario);
+  border: 1px solid var(--color-borde);
+}
+.resultados-vacio i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+.resultados-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+.disciplina-bloque {
+  background: var(--color-fondo-panel);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  border: 1px solid var(--color-borde);
+}
+.disciplina-cabecera {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-borde);
+  background: rgba(0,0,0,0.02);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.disciplina-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.disciplina-titulo i {
+  color: var(--color-texto-secundario);
+}
+.disciplina-titulo h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--color-texto-principal);
+}
+.disciplina-etiqueta {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  color: var(--color-texto-secundario);
+}
+.tabla-minimalista {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+.tabla-minimalista th {
+  padding: 0.75rem 1rem;
+  color: var(--color-texto-secundario);
+  font-weight: 600;
+}
+.tabla-minimalista td {
+  padding: 0.75rem 1rem;
+  color: var(--color-texto-secundario);
+}
+.tabla-minimalista tr {
+  border-bottom: 1px solid var(--color-borde);
+  transition: background 0.2s;
+}
+.tabla-minimalista tr:hover {
+  background-color: var(--color-hover-fila);
+}
+.tabla-minimalista th.col-rank, 
+.tabla-minimalista td.col-rank {
+  width: 60px;
+  text-align: center;
+}
+.tabla-minimalista th.col-center,
+.tabla-minimalista td.col-center {
+  text-align: center;
+}
+.tabla-minimalista th.col-right,
+.tabla-minimalista td.col-right {
+  text-align: right;
+}
+.td-rank-top {
+  font-weight: bold;
+}
+.td-participante {
+  font-weight: 500;
+  color: var(--color-texto-principal) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.td-puntos {
+  font-weight: 600;
+  color: var(--color-texto-principal) !important;
+}
+.icono-oro { color: #f1c40f; font-size: 0.85rem; }
+.icono-plata { color: #bdc3c7; font-size: 0.85rem; }
+.icono-bronce { color: #cd7f32; font-size: 0.85rem; }

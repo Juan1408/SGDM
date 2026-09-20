@@ -13,7 +13,15 @@ require_once __DIR__ . '/../configuracion/constantes.php';
 require_once __DIR__ . '/../configuracion/base_de_datos.php';
 
 require_once __DIR__ . '/../ayudantes/Sesion.php';
+require_once __DIR__ . '/../modelos/Conexion.php'; // Requerido por el manejador
+require_once __DIR__ . '/../core/ManejadorErrores.php';
+
 use App\Ayudantes\Sesion;
+use App\Core\ManejadorErrores;
+
+// Registrar el Manejador de Errores Global
+set_exception_handler([ManejadorErrores::class, 'capturarExcepcion']);
+set_error_handler([ManejadorErrores::class, 'capturarErrorPhp']);
 
 //Definimos el controlador y la accion por defecto si no se especifican
 $controlador = $_GET['c'] ?? 'auth';

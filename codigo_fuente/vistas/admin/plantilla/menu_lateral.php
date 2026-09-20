@@ -40,31 +40,36 @@
             <li><a href="#" class="menu-enlace">Administrar Torneos</a>
                 <ul class="menu-sublista">
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=index" class="menu-enlace">Ver y Configurar</a></li>
-                    <li><a href="#torneos/historial" class="menu-enlace">Historial de Torneos</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=torneoHistorial&a=index" class="menu-enlace">Historial de Torneos</a></li>
                 </ul>
             </li>
 
             <li><a href="#" class="menu-enlace">Resultados Globales</a>
                 <ul class="menu-sublista">
-                    <li><a href="#resultados/lista" class="menu-enlace">Ver Todos</a></li>
-                    <li><a href="#resultados/formulario" class="menu-enlace">Registrar o Corregir</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=resultadoGlobal&a=index" class="menu-enlace">Ver Todos</a></li>
                 </ul>
             </li>
 
-            <!-- 3. CONFIGURACIÓN DEL SISTEMA -->
+            <!-- 3. SOPORTE Y AUDITORÍA -->
+            <li><a href="#" class="menu-enlace">Soporte y Auditoría</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=errorTracking&a=dashboard" class="menu-enlace">Monitoreo de Errores</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=auditoria&a=index" class="menu-enlace">Logs de Auditoría</a></li>
+                </ul>
+            </li>
+
+            <!-- 4. CONFIGURACIÓN DEL SISTEMA -->
             <li><a href="#" class="menu-enlace">Configuración del Sistema</a>
                 <ul class="menu-sublista">
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=formato&a=index" class="menu-enlace">Gestión de Módulos</a></li>
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index" class="menu-enlace">Políticas de Contraseña</a></li>
-                    <li><a href="#roles/lista" class="menu-enlace">Roles y Permisos</a></li>
-                    <li><a href="#comunicaciones/enviar" class="menu-enlace">Enviar Alertas Globales</a></li>
-                    <li><a href="<?php echo URL_BASE; ?>index.php?c=auditoria&a=index" class="menu-enlace">Logs de Auditoría</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=alerta&a=index" class="menu-enlace">Enviar Alertas Globales</a></li>
                 </ul>
             </li>
 
         </ul>
         <div style="margin-top: 2rem; padding: 0 1rem;">
-            <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=logout" class="menu-enlace" style="color: #ff4d4d; font-weight: bold;">
+            <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=logout" class="menu-enlace enlace-salir">
                 Salir / Cerrar Sesión
             </a>
         </div>
