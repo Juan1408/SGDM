@@ -10,6 +10,7 @@
 
 <div class="tarjeta-datos">
     <form action="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=actualizar" method="POST" class="formulario-estandar">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($datos['torneo']['id']); ?>">
         
         <div class="grupo-formulario">

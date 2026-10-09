@@ -33,10 +33,11 @@ class CabecerasSeguridad {
         // Permite recursos internos, scripts inline (para la lógica visual y Toasts), 
         // imágenes en base64 (data:) y librerías desde CDNs confiables como Cloudflare/FontAwesome.
         $csp = "default-src 'self'; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " .
-               "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " .
-               "font-src 'self' https://cdnjs.cloudflare.com; " .
-               "img-src 'self' data: https:;";
+               "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " .
+               "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " .
+               "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; " .
+               "img-src 'self' data: https:;" .
+               "object-src 'none'; base-uri 'self'; frame-ancestors 'self';";
 
         header("Content-Security-Policy: " . $csp);
     }

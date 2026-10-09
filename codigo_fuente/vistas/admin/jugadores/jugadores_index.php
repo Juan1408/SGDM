@@ -1,8 +1,9 @@
 <?php
-    /**
-     * @var array $datos Contiene los datos pasados desde el AdminControlador
-     * Sin esta declaracion en la linea 18 $datos nos daria error al intentar acceder a $datos['totalUsuarios'];
-     */
+
+/**
+ * @var array $datos Contiene los datos pasados desde el AdminControlador
+ * Sin esta declaracion en la linea 18 $datos nos daria error al intentar acceder a $datos['totalUsuarios'];
+ */
 ?>
 
 <section class="modulo-admin">
@@ -22,7 +23,7 @@
             </thead>
 
             <tbody>
-                <?php foreach ($datos['jugadores'] as $jugador):?>
+                <?php foreach ($datos['jugadores'] as $jugador): ?>
                     <tr>
                         <td><?php echo $jugador['id']; ?></td>
                         <td><?php echo $jugador['nombre_completo']; ?></td>
@@ -36,20 +37,39 @@
                         </td>
                         <td><?php echo $jugador['fecha_registro']; ?></td>
                         <td>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $jugador['id']; ?>" class="boton-accion">Ver como</a>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $jugador['id']; ?>" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <button type="submit" class="boton-accion">Ver como</button>
+                            </form>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $jugador['id']; ?>" class="boton-accion">Editar</a>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $jugador['id']; ?>" class="boton-secundario">
-                                <?php echo $jugador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
-                            </a>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="id" value="<?php echo $jugador['id']; ?>">
+                                <button type="submit" class="boton-secundario">
+                                    <?php echo $jugador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
+                                </button>
+                            </form>
                             <!--Añadir un modal confirmando si desea eliminar la cuenta-->
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario&id=<?php echo $jugador['id']; ?>&rol_id=<?php echo $jugador['rol_id']; ?>" class="boton-peligro">Eliminar Cuenta</a>
+                            <form method="POST"
+                                action="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario"
+                                onsubmit="return confirm('¿Eliminar este usuario?');">
+                                <input type="hidden" name="id" value="<?php echo (int) $jugador['id']; ?>">
+                                <input type="hidden" name="csrf_token"
+                                    fix.md 2026-10-07
+                                    6 / 11
+                                    value="<?php echo
+                                            htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8');
+                                            ?>">
+                                <button type="submit" class="boton-peligro">Eliminar cuenta</button>
+                            </form>
+
                             <!--En caso de eliminar cuenta, hay que validar que no tenga ningun evento registrado con suelta de ficha. Si tiene, mostramos un error y no le dejamos eliminarla-->
                             <!--FUNCION PENDIENTE A PROGRAMAR-->
                         </td>
                     </tr>
                 <?php endforeach; ?>
 
-                <?php if(empty($datos['jugadores'])):?>
+                <?php if (empty($datos['jugadores'])): ?>
                     <tr>
                         <td colspan="6" class="celda-vacia">No se encontraron jugadores registrados.</td>
                     </tr>

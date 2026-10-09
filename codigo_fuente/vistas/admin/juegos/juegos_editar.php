@@ -17,6 +17,7 @@
     </div>
 
     <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=actualizar" method="POST" class="formulario-estandar validacion-activa">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         <fieldset>
         <!-- ID Oculto para que el controlador sepa cuál actualizar -->
         <input type="hidden" name="id" value="<?php echo $juego['id']; ?>">

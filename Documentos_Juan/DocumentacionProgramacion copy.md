@@ -168,6 +168,18 @@ Durante la ejecución, tomamos decisiones que marcaron la identidad del sistema:
 
 ---
 
+## 3.3 Arquitectura de Ciberseguridad y Políticas SecDevOps (Fase 3)
+
+En respuesta a las auditorías internas de calidad, y en estricta alineación con los lineamientos del **OWASP Top 10** y las mejores prácticas de **SecDevOps**, la plataforma ASCEND fue sometida a un proceso riguroso de fortificación perimetral y lógica (Hardening), elevando su postura de seguridad a estándares corporativos:
+
+- **Prevención de Fuerza Bruta (Rate Limiting persistente):** Se desestimaron las defensas volátiles (memoria) para implementar un control determinista. Se estructuró la tabla `intentos_login`, administrada por el modelo `SeguridadAuth.php`, el cual registra vectores de ataque por dirección IP. Al superar el umbral algorítmico de 5 intentos fallidos, el sistema bloquea activamente el acceso desde dicha IP temporalmente, mitigando ataques automatizados y *Credential Stuffing*.
+- **Políticas HTTP de Seguridad (Security Headers):** Se diseñó el componente core `CabecerasSeguridad.php`, inyectado como precondición en el *Front Controller* (`index.php`). Esta pieza maestra aplica una Política de Seguridad de Contenido (CSP) equilibrada y envía directivas estrictas (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`). Esto neutraliza de forma nativa amenazas de *Clickjacking* y *MIME Sniffing* directamente en la capa de red del navegador del cliente.
+- **Inmunidad Transaccional (Synchronizer Token Pattern - CSRF):** Para salvaguardar la integridad de las operaciones de mutación de estado, se integró una arquitectura de tokens criptográficamente seguros generados vía `random_bytes()`. Estos tokens, orquestados por el helper `Sesion.php` y verificados mediante `hash_equals()` (mitigando *Timing Attacks*), validan el origen de las peticiones en los formularios críticos (Autenticación, configuraciones de Administrador), erradicando vectores de *Cross-Site Request Forgery*.
+- **Gestión Estricta del Ciclo de Vida de Sesión (Timeboxing y Flags HTTP):** Se reestructuró la inicialización del manejador de sesiones. Mediante `session_set_cookie_params()`, se impusieron obligatoriamente los atributos `HttpOnly` (impidiendo la exfiltración del token de sesión vía XSS) y `SameSite=Lax`. Simultáneamente, se implementó un motor de *Timeboxing* de 30 minutos en el backend: el servidor valida matemáticamente el timestamp de inactividad, destruyendo la sesión y registrando la caducidad en el motor de auditoría de forma proactiva.
+- **Políticas Dinámicas de Credenciales (Secure by Default):** La validación de credenciales fue completamente desacoplada de reglas estáticas. El sistema backend y la interfaz frontend interactúan ahora con el modelo `PoliticaContrasena.php`, leyendo dinámicamente los parámetros de complejidad criptográfica definidos en la base de datos por el DBA/Administrador General, garantizando políticas adaptativas y centralizadas.
+
+---
+
 # FASE 4 — MONITOREO Y CONTROL
 
 ---
@@ -234,6 +246,9 @@ Para facilitar la lectura y comprensión de nuestra documentación técnica y ar
 | **Class Table Inheritance** | Patrón de modelado de bases de datos donde una jerarquía de herencia orientada a objetos (ej. Usuario -> Jugador/Organizador) se mapea a múltiples tablas con relaciones de uno a uno (1:1). |
 | **CR** | *(Change Request - Solicitud de Cambio)*. Documentación formal de cualquier alteración al alcance original del software que requiere análisis de impacto en tiempos y costos. |
 | **SMTP** | *(Simple Mail Transfer Protocol)*. Protocolo estándar de red utilizado para el envío de correos electrónicos. En ASCEND se implementó una simulación de este servicio para validar la autenticidad y propiedad de las cuentas de correo durante el registro. |
+| **CSRF** | *(Cross-Site Request Forgery)*. Vector de ataque web donde un sitio malicioso induce al navegador del usuario a ejecutar una acción no deseada en un sitio en el que está autenticado. Mitigado en ASCEND mediante el patrón *Synchronizer Token*. |
+| **SecDevOps** | *(Security, Development, and Operations)*. Metodología de ingeniería de software que integra prácticas de ciberseguridad corporativa en cada etapa del ciclo de vida del desarrollo. |
+| **Timeboxing (Sesiones)** | Práctica de seguridad que impone un límite de tiempo absoluto o de inactividad (TTL - Time To Live) a una sesión autenticada, forzando la re-validación de identidad para minimizar la ventana de exposición. |
 
 ---
 > **Fin del Documento — Versión Oficial 2.0 (Segunda Entrega)**  

@@ -1,5 +1,5 @@
-/* =========================================
-   PERFIL Y MENÚ DESPLEGABLE (DROPDOWN)
+﻿/* =========================================
+   PERFIL Y MENÃš DESPLEGABLE (DROPDOWN)
    ========================================= */
 .perfil-admin {
   position: relative;
@@ -57,21 +57,15 @@
   display: block;
 }
 
-.dropdown-content a {
-  color: #333;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  transition: background-color 0.2s;
-}
+.dropdown-content a { color: var(--color-texto-principal); padding: 12px 16px; text-decoration: none; display: block; transition: background-color 0.2s; }
 
-.dropdown-content a:hover { background-color: #f1f1f1; }
-.dropdown-content a.enlace-destacado { color: #2c3e50; font-weight: bold; border-top: 1px solid #eee; background-color: #f8f9fa; }
-.dropdown-content a.enlace-destacado:hover { background-color: #e2e6ea; }
-.dropdown-content a.enlace-salir { color: #e74c3c; border-top: 1px solid #eee; }
+.dropdown-content a:hover { background-color: var(--color-hover-fila); }
+.dropdown-content a.enlace-destacado { color: var(--color-primario); font-weight: bold; border-top: 1px solid var(--color-borde); background-color: var(--color-fondo-principal); }
+.dropdown-content a.enlace-destacado:hover { background-color: var(--color-hover-fila); }
+.dropdown-content a.enlace-salir { color: var(--color-peligro); border-top: 1px solid var(--color-borde); }
 
 .dropdown-content a.enlace-salir:hover {
-  background-color: #fadbd8;
+  background-color: var(--bg-peligro-translucido);
 }
 
 /* =========================================
@@ -119,7 +113,7 @@
    object-fit: contain;
 }
 
-/* BARRA MÓVIL (VISIBLE POR DEFECTO EN MOBILE FIRST) */
+/* BARRA MÃ“VIL (VISIBLE POR DEFECTO EN MOBILE FIRST) */
 .barra-movil {
   display: block;
   background-color: #ecf0f1;
@@ -133,7 +127,7 @@
   border: none;
   font-size: 1.2rem;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--color-primario);
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 4px;
@@ -144,7 +138,7 @@
 }
 
 .boton-salir {
-  background-color: #e74c3c;
+  background-color: var(--color-peligro);
   color: white;
   text-decoration: none;
   padding: 8px 15px;
@@ -158,7 +152,7 @@
 }
 
 /* =========================================
-   ESTRUCTURA CENTRAL (MENÚ + CONTENIDO)
+   ESTRUCTURA CENTRAL (MENÃš + CONTENIDO)
    ========================================= */
 .cuerpo-admin {
   display: flex;
@@ -172,7 +166,7 @@
   width: 100%;
   display: none;
   padding-top: 0;
-  background-color: #212529; /* Gris muy oscuro, casi negro, elegante para el menú */
+  background-color: #212529; /* Gris muy oscuro, casi negro, elegante para el menÃº */
   color: #f8f9fa;
   transition: transform 0.3s ease;
 }
@@ -208,7 +202,7 @@
   padding-left: 30px;
   margin: 0;
   font-size: 0.85rem;
-  background-color: #1a1d20; /* Ligeramente más oscuro que el fondo del sidebar para profundidad */
+  background-color: #1a1d20; /* Ligeramente mÃ¡s oscuro que el fondo del sidebar para profundidad */
 }
 
 .area-contenido {
@@ -219,7 +213,7 @@
 }
 
 /* =========================================
-   CABECERA DINÁMICA (MOBILE DEFAULTS)
+   CABECERA DINÃMICA (MOBILE DEFAULTS)
    ========================================= */
 .en-interna .titulo-cabecera,
 .en-interna .perfil-admin {
@@ -258,7 +252,7 @@
 }
 
 /* =========================================
-   FOOTER (PIE DE PÁGINA)
+   FOOTER (PIE DE PÃGINA)
    ========================================= */
 .pie-pagina {
   background-color: var(--color-fondo-panel);
@@ -303,12 +297,12 @@
 }
 
 /* =========================================
-   DISEÑO RESPONSIVO (ESCRITORIO - TABLET)
+   DISEÃ‘O RESPONSIVO (ESCRITORIO - TABLET)
    ========================================= */
 
 @media (min-width: 768px) {
   
-  /* 1. Ocultar la barra del menú hamburguesa */
+  /* 1. Ocultar la barra del menÃº hamburguesa */
   .barra-movil {
     display: none;
   }
@@ -324,27 +318,27 @@
     flex-direction: row;
   }
 
-  /* 4. Mostrar menú lateral fijo de 250px */
+  /* 4. Mostrar menÃº lateral fijo de 250px */
   .menu-lateral {
     display: block;
     width: 250px;
     padding-top: 20px;
   }
 
-  /* 5. Restaurar área de contenido */
+  /* 5. Restaurar Ã¡rea de contenido */
   .area-contenido {
     padding: 20px 30px;
     overflow-x: visible;
   }
 
-  /* Restaurar elementos ocultos dinámicos */
+  /* Restaurar elementos ocultos dinÃ¡micos */
   .en-interna .titulo-cabecera,
   .en-interna .perfil-admin {
-    display: block; /* o flex/inline-block según corresponda */
+    display: block; /* o flex/inline-block segÃºn corresponda */
   }
 
   .en-interna .contenedor-logo {
-    background-color: #f8f9fa;
+    background-color: var(--color-fondo-principal);
     padding: 5px 15px 5px 5px;
     justify-content: flex-start;
     margin-bottom: 0;
@@ -397,10 +391,11 @@
 }
 
 
-/* Enlace para cerrar sesi�n en el men� lateral */
+/* Enlace para cerrar sesión en el menú lateral */
 .menu-enlace-salir { color: var(--color-peligro) !important; font-weight: bold; }
 .menu-enlace-salir:hover { color: var(--color-peligro-hover) !important; background-color: rgba(224, 93, 93, 0.1); }
 
 /* Responsive Perfil */
 @media (max-width: 768px) { .nombre-admin-pc { display: none !important; } .nombre-admin-movil { display: inline !important; } .etiqueta-rol { display: none; } }
 @media (min-width: 769px) { .nombre-admin-movil { display: none !important; } .etiqueta-rol { font-size: 0.8rem; color: var(--color-texto-secundario); font-weight: normal; margin-left: 5px; } }
+

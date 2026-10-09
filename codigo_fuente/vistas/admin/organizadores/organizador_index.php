@@ -51,21 +51,36 @@
                         </td>
                         <td>
                             <?php if ($organizador['verificado_oficial']): ?>
-                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=revocar" 
-                                   class="boton-secundario">
+                                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int) $organizador['id']; ?>">
+                                    <input type="hidden" name="decision" value="revocar">
+                                    <button type="submit" class="boton-secundario">
                                     <i class="fa-solid fa-ban"></i> Revocar Habilitación
-                                </a>
+                                    </button>
+                                </form>
                             <?php else: ?>
-                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=aprobar" 
-                                   class="boton-exito">
+                                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int) $organizador['id']; ?>">
+                                    <input type="hidden" name="decision" value="aprobar">
+                                    <button type="submit" class="boton-exito">
                                     <i class="fa-solid fa-check"></i> Aprobar
-                                </a>
-                                <a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud&id=<?php echo $organizador['id']; ?>&decision=rechazar" 
-                                   class="boton-peligro">
+                                    </button>
+                                </form>
+                                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=organizador&a=responderSolicitud">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int) $organizador['id']; ?>">
+                                    <input type="hidden" name="decision" value="rechazar">
+                                    <button type="submit" class="boton-peligro">
                                     <i class="fa-solid fa-xmark"></i> Rechazar
-                                </a>
+                                    </button>
+                                </form>
                             <?php endif; ?>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" class="boton-accion">Ver Como</a>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <button type="submit" class="boton-accion">Ver Como</button>
+                            </form>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $organizador['id']; ?>" class="boton-secundario">
                                 <?php echo $organizador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>

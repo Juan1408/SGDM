@@ -80,6 +80,13 @@ $formatoAyuda = [
 
         <?php if ($etapa === 1): ?>
             <form class="crear-torneo-bloque" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarEtapa">
+                <input type="hidden"
+       name="csrf_token"
+       value="<?php echo htmlspecialchars(
+           \App\Ayudantes\Sesion::generarTokenCSRF(),
+           ENT_QUOTES,
+           'UTF-8'
+       ); ?>">
                 <input type="hidden" name="etapa" value="1">
                 <h2>Datos basicos</h2>
                 <div class="crear-torneo-campo">
@@ -133,6 +140,13 @@ $formatoAyuda = [
             </form>
         <?php elseif ($etapa === 2 && $torneo): ?>
             <form class="crear-torneo-bloque" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarEtapa">
+                <input type="hidden"
+       name="csrf_token"
+       value="<?php echo htmlspecialchars(
+           \App\Ayudantes\Sesion::generarTokenCSRF(),
+           ENT_QUOTES,
+           'UTF-8'
+       ); ?>">
                 <input type="hidden" name="etapa" value="2">
                 <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                 <h2>Fechas, reglas y ubicacion</h2>
@@ -175,6 +189,7 @@ $formatoAyuda = [
                     <div><dt>Competencia</dt><dd><?php echo $valor('fecha_inicio'); ?> a <?php echo $valor('fecha_fin'); ?></dd></div>
                 </dl>
                 <form class="wizard-acciones" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarEtapa">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="etapa" value="3">
                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                     <a class="boton" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=crear&etapa=2&id=<?php echo (int) $torneo['id']; ?>">Anterior</a>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vista: perfil-equipo.php
  * Requiere que vengan cargados desde EquipoControlador::verPerfil():
@@ -51,9 +52,12 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
       <!-- ============================== -->
       <header class="equipo-hero">
 
-            <div class="equipo-hero-banner">
+         <div class="equipo-hero-banner">
             <img src="<?php echo htmlspecialchars($bannerUrl); ?>" alt="Banner del equipo">
- <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $equipoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-equipo">
+            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $equipoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-equipo">
+               <input type="hidden"
+                  name="csrf_token"
+                  value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                <input type="hidden" name="tipo" value="equipo">
                <input type="hidden" name="referencia_id" value="<?php echo (int) $equipo['id']; ?>">
                <input type="hidden" name="volver_a" value="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $equipo['id']; ?>">
@@ -61,7 +65,7 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
                   <i class="<?php echo $equipoGuardado ? 'fa-solid' : 'fa-regular'; ?> fa-bookmark"></i>
                </button>
             </form>
-           
+
          </div>
 
          <div class="equipo-identidad">
@@ -143,6 +147,9 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
                <span class="ya-eres-miembro">Solicitud enviada, esperando respuesta del capitán</span>
             <?php else: ?>
                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitarUnion">
+                  <input type="hidden"
+                     name="csrf_token"
+                     value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                   <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                   <button type="submit" class="boton-solicitar-unirse">Solicitar Unirse</button>
                </form>
@@ -150,7 +157,7 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
          </div>
 
       </section>
-      
+
 
       <!-- ============================== -->
       <!-- MIEMBROS DEL EQUIPO            -->
@@ -218,4 +225,5 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
 
 
 </body>
+
 </html>

@@ -109,6 +109,8 @@ class PanelOrganizadorControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $datos = [
             'nombre_completo' => trim($_POST['nombre_completo'] ?? ''),
             'telefono' => trim($_POST['telefono'] ?? ''),
@@ -159,6 +161,9 @@ class PanelOrganizadorControlador {
             header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=dashboard');
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
+
         $torneoId = (int) ($_POST['torneo_id'] ?? 0);
         $organizadorId = (int) $_SESSION['usuario_id'];
         $datos = [
@@ -186,6 +191,13 @@ class PanelOrganizadorControlador {
     }
 
     public function cambiarEstado() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
         $torneoId = (int) ($_POST['torneo_id'] ?? $_GET['id'] ?? 0);
         $estado = $_POST['estado'] ?? $_GET['estado'] ?? '';
         $correcto = $this->modeloTorneo->cambiarEstado($torneoId, (int) $_SESSION['usuario_id'], $estado);
@@ -195,6 +207,13 @@ class PanelOrganizadorControlador {
     }
 
     public function responderInscripcion() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
         $inscripcionId = (int) ($_POST['inscripcion_id'] ?? 0);
         $respuesta = $_POST['respuesta'] ?? '';
         $torneoId = (int) ($_POST['torneo_id'] ?? 0);
@@ -211,6 +230,13 @@ class PanelOrganizadorControlador {
     }
 
     public function generarFixture() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
         $torneoId = (int) ($_POST['torneo_id'] ?? 0);
         $resultado = $this->modeloTorneo->generarFixture($torneoId, (int) $_SESSION['usuario_id']);
         $_SESSION['mensaje'] = $resultado['mensaje'];
@@ -219,6 +245,13 @@ class PanelOrganizadorControlador {
     }
 
     public function guardarResultado() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
         $encuentroId = (int) ($_POST['encuentro_id'] ?? 0);
         $torneoId = (int) ($_POST['torneo_id'] ?? 0);
         $local = filter_var($_POST['resultado_local'] ?? null, FILTER_VALIDATE_FLOAT);
@@ -239,6 +272,8 @@ class PanelOrganizadorControlador {
             header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=crear');
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
 
         $organizadorId = (int) $_SESSION['usuario_id'];
         $etapa = (int) ($_POST['etapa'] ?? 1);

@@ -5,6 +5,7 @@
     </div>
 
     <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=guardar" method="POST" class="formulario-estandar validacion-activa">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
         <fieldset>
             <div class="grupo-formulario">
         <label for="nombre">Nombre del Juego / Disciplina <span class="requerido">*</span></label>

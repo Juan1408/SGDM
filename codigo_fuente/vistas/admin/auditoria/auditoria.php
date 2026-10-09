@@ -4,9 +4,21 @@
  */
 ?>
 
-<section class="encabezado-seccion">
-    <h2 class="titulo-pantalla">Auditoría</h2>
-    <p class="texto-ayuda encabezado-descripcion">Gestión de auditoría del sistema</p>
+<section class="encabezado-seccion" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 class="titulo-pantalla">Auditoría</h2>
+        <p class="texto-ayuda encabezado-descripcion">Gestión de auditoría del sistema</p>
+    </div>
+    <form method="GET" action="index.php" style="display: flex; gap: 10px; align-items: center;">
+        <input type="hidden" name="c" value="auditoria">
+        <input type="hidden" name="a" value="index">
+        <label for="fecha">Filtrar por fecha:</label>
+        <input type="date" id="fecha" name="fecha" value="<?php echo htmlspecialchars($datos['fechaFiltro'] ?? ''); ?>" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+        <button type="submit" class="boton-primario">Buscar</button>
+        <?php if (!empty($datos['fechaFiltro'])): ?>
+            <a href="index.php?c=auditoria&a=index" class="boton-secundario">Limpiar</a>
+        <?php endif; ?>
+    </form>
 </section>
 
 <div>

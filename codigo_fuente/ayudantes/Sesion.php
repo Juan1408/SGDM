@@ -21,7 +21,7 @@ class Sesion {
     /**
      * Inicia la sesión si no está activa
      */
-    private static function iniciarSesion(){
+    public static function iniciarSesion(){
         if (session_status() === PHP_SESSION_NONE) {
             // Seguridad: Configurar parámetros de cookie antes de iniciar la sesión
             session_set_cookie_params([
@@ -183,5 +183,14 @@ class Sesion {
             return false;
         }
         return hash_equals($_SESSION['csrf_token'], $token);
+    }
+
+    public static function requerirTokensCSRF (): void {
+        $token = $_POST['csrf_token'] ?? '';
+
+        if (!self::validarTokenCSRF($token)) { 
+            http_response_code(419);
+            exit('Peticion rechazada por proteccion CSRF');
+        }
     }
 }

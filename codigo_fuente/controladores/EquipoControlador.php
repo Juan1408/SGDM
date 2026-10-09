@@ -40,6 +40,8 @@ class EquipoControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $usuarioId = $_SESSION['usuario_id'];
 
         $nombreEquipo = trim($_POST['nombre_equipo'] ?? '');
@@ -114,6 +116,8 @@ class EquipoControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
 
@@ -149,6 +153,8 @@ class EquipoControlador {
             header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes");
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $solicitudId = (int) ($_POST['solicitud_id'] ?? 0);
@@ -188,6 +194,8 @@ class EquipoControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
         $solicitudId = (int) ($_POST['solicitud_id'] ?? 0);
@@ -214,6 +222,8 @@ class EquipoControlador {
             header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
@@ -243,6 +253,8 @@ class EquipoControlador {
             header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
@@ -293,6 +305,8 @@ class EquipoControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
         $miembroAExpulsar = (int) ($_POST['usuario_id'] ?? 0);
@@ -340,6 +354,8 @@ class EquipoControlador {
             exit;
         }
 
+        Sesion::requerirTokensCSRF();
+
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);
         $miembroId = (int) ($_POST['usuario_id'] ?? 0);
@@ -359,6 +375,8 @@ class EquipoControlador {
             header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
             exit;
         }
+
+        Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $equipoId = (int) ($_POST['equipo_id'] ?? 0);

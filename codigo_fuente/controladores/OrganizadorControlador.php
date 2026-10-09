@@ -31,7 +31,14 @@ class OrganizadorControlador {
     }
 
     public function cambiarVerificacion() {
-        $id = (int) ($_GET['id'] ?? 0);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $id = (int) ($_POST['id'] ?? 0);
         if ($id > 0) {
             $exito = $this->modeloUsuario->cambiarVerificacionOrganizador($id);
             $_SESSION['mensaje'] = $exito 
@@ -40,11 +47,20 @@ class OrganizadorControlador {
         }
         header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
         exit;
+
+        
     }
 
     public function responderSolicitud() {
-        $id = (int) ($_GET['id'] ?? 0);
-        $decision = $_GET['decision'] ?? ''; // 'aprobar', 'rechazar', 'revocar'
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $decision = $_POST['decision'] ?? ''; // 'aprobar', 'rechazar', 'revocar'
         if ($id > 0 && in_array($decision, ['aprobar', 'rechazar', 'revocar'], true)) {
             $exito = $this->modeloUsuario->responderSolicitudOrganizador($id, $decision);
             if ($decision === 'aprobar') {

@@ -71,12 +71,12 @@
   - [x] Controlador y vista para consultar historial de operaciones del sistema.
 - [ ] **6.3 Feature Flags / Módulos del Sistema**:
   - [ ] Crear interfaz para activar/desactivar módulos dinámicos (Sistema Suizo, Eliminatoria, Ligas) en tiempo real.
-- [ ] **6.4 Monitoreo de Errores (Error Tracking)**:
-  - [ ] Manejador global de excepciones (`set_exception_handler`) que guarde errores y trazabilidad en la BD.
+- [x] **6.4 Monitoreo de Errores (Error Tracking)**:
+  - [x] Manejador global de excepciones (`set_exception_handler`) que guarde errores y trazabilidad en la BD (Implementado en `ManejadorErrores.php`).
 
 ---
 
 ## 🧠 7. Motores Matemáticos de Torneos (Backend Core)
-- [ ] **7.1 Motor de Eliminación Directa**: Algoritmo para generar llaves (brackets) y avanzar ganadores.
-- [ ] **7.2 Motor de Sistema Suizo**: Algoritmo de emparejamiento por puntuación garantizando no repetición de parejas (`torneo_suizo_parejas`).
-- [ ] **7.3 Motor de Ligas**: Algoritmo Round-Robin (todos contra todos).
+- [x] **7.1 Motor de Eliminación Directa**: Algoritmo para generar llaves (brackets) y avanzar ganadores.
+- [x] **7.2 Motor de Sistema Suizo**: Algoritmo de emparejamiento por puntuación garantizando no repetición de parejas (`torneo_suizo_parejas`).
+- [x] **7.3 Motor de Ligas**: Algoritmo Round-Robin (todos contra todos).

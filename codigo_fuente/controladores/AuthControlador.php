@@ -176,7 +176,14 @@ class AuthControlador {
         if (!is_dir($dirLog)) {
             @mkdir($dirLog, 0777, true);
         }
-        $lineaLog = "[" . date('Y-m-d H:i:s') . "] EMAIL SIMULADO -> Para: " . $email . " | Enlace: " . $urlVerificacion . PHP_EOL;
+        $tokenVisible = substr($resultado['token'], 0, 8) . '...';
+        $lineaLog = sprintf(
+            "[%s] EMAIL SIMULADO -> Para: %s | Token: %s%s",
+            date('Y-m-d H:i:s'),
+            $email,
+            $tokenVisible,
+            PHP_EOL
+        );
         @file_put_contents($dirLog . '/emails_simulados.log', $lineaLog, FILE_APPEND);
 
         // Notificación de éxito con simulación de enlace para desarrollo local

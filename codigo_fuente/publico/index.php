@@ -33,6 +33,49 @@ require_once __DIR__ . '/../core/CabecerasSeguridad.php';
 $controlador = $_GET['c'] ?? 'auth';
 $accion = $_GET['a'] ?? 'mostrarLogin';
 
+$rutasPermitidas = [
+    'admin' => ['dashboard', 'editarPerfil'],
+    'alerta' => ['index', 'enviar'],
+    'auth' => ['mostrarLogin', 'procesarLogin', 'mostrarRegistro', 'procesarRegistro', 'verificarEmail', 'logout'],
+    'equipoAdmin' => ['index'],
+    'equipo' => ['crear', 'index', 'procesarCreacion', 'verPerfil', 'solicitarUnion', 'solicitudes', 'responderInvitacion', 'gestionar', 'responderSolicitudRecibida', 'invitarJugador', 'actualizarEquipo', 'expulsarMiembro', 'buscarJugadoresAjax', 'hacerCapitan', 'dejarEquipo'],
+    'auditoria' => ['index'],
+    'errorTracking' => ['dashboard', 'verDetalle', 'accionError'],
+    'formato' => ['index', 'guardarEstados', 'obtenerPermitidasJSON'],
+    'guardados' => ['index', 'guardar', 'quitar'],
+    'juego' => ['index', 'crear', 'guardar', 'cambiarEstado', 'editar', 'actualizar'],
+    'jugador' => ['index'],
+    'organizador' => ['index', 'cambiarVerificacion', 'responderSolicitud'],
+    'panelJugador' => ['dashboard', 'perfil', 'actualizarPerfil'],
+    'panelOrganizador' => ['dashboard', 'crear', 'misTorneos', 'resultados', 'calendario', 'historial', 'perfil', 'guardarPerfil', 'gestionar', 'guardarGestion', 'cambiarEstado', 'responderInscripcion', 'generarFixture', 'guardarResultado', 'guardarEtapa'],
+    'politicaContrasena' => ['index', 'guardar'],
+    'resultadoGlobal' => ['index'],
+    'torneoAdmin' => ['index', 'editar', 'actualizar', 'eliminar'],
+    'torneoHistorial' => ['index'],
+    'usuario' => ['index', 'cambiarEstadoUsuario', 'editarUsuario', 'verComo', 'restaurarSesion', 'actualizarUsuario', 'eliminarUsuario']
+];
+
+if (!isset($rutasPermitidas[$controlador]) ||
+    !in_array($accion, $rutasPermitidas[$controlador], true)) {
+    http_response_code(404);
+    exit('Ruta no disponible');
+}
+
+// ============================================================================
+// BLOQUEO DE ESCRITURA EN MODO SUPLANTACIÓN (READ-ONLY MODE)
+// ============================================================================
+Sesion::iniciarSesion();
+if (isset($_SESSION['admin_antes_suplantar']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Permitimos unicamente la accion de restaurar la sesion
+    if (!($controlador === 'usuario' && $accion === 'restaurarSesion')) {
+        $_SESSION['mensaje'] = "Acción bloqueada: Modo Suplantación es de Solo Lectura.";
+        $_SESSION['mensaje_tipo'] = "error";
+        $referer = $_SERVER['HTTP_REFERER'] ?? URL_BASE . 'index.php?c=admin&a=dashboard';
+        header("Location: " . $referer);
+        exit;
+    }
+}
+
 //Ponemos en mayuscula la primera letra para que coincida con el nombre del archivo controlador
 $nombreClaseControlador = ucfirst($controlador) . 'Controlador'; //ucfirst pone la primera letra en mayuscula
 

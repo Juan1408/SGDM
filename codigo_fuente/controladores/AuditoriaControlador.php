@@ -16,8 +16,12 @@ class AuditoriaControlador {
     }
     
     public function index() {
-        $logs = Auditoria::obtenerTodos();
-        $datos = ['auditoria' => $logs];
+        $fechaFiltro = $_GET['fecha'] ?? null;
+        $logs = Auditoria::obtenerTodos($fechaFiltro);
+        $datos = [
+            'auditoria' => $logs,
+            'fechaFiltro' => $fechaFiltro
+        ];
 
         // Cargamos la vista de auditoría
         $vistaInyectada = 'auditoria/auditoria.php';

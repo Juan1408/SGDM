@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vista: solicitudes.php
  * Requiere que $invitaciones venga cargado por EquipoControlador::solicitudes()
@@ -65,11 +66,17 @@
 
                         <div class="fila-jugador-acciones">
                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=responderInvitacion">
+                              <input type="hidden"
+                                 name="csrf_token"
+                                 value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                               <input type="hidden" name="solicitud_id" value="<?php echo (int) $invitacion['id']; ?>">
                               <input type="hidden" name="respuesta" value="aceptar">
                               <button type="submit" class="boton-aceptar-solicitud">Aceptar</button>
                            </form>
                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=responderInvitacion">
+                              <input type="hidden"
+                                 name="csrf_token"
+                                 value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                               <input type="hidden" name="solicitud_id" value="<?php echo (int) $invitacion['id']; ?>">
                               <input type="hidden" name="respuesta" value="rechazar">
                               <button type="submit" class="boton-rechazar-solicitud">Rechazar</button>
@@ -93,4 +100,5 @@
    <!-- solicitudes.js NO se carga: la lista se arma del lado del servidor -->
 
 </body>
+
 </html>

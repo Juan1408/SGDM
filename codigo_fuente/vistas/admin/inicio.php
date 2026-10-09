@@ -45,10 +45,10 @@
                 <tbody>
                     <?php foreach ($datos['ultimosTorneos'] as $torneo): ?>
                     <tr>
-                        <td><?php echo $torneo['nombre']; ?></td>
-                        <td><?php echo $torneo['estado']; ?></td>
-                        <td><?php echo $torneo['fecha_inicio']; ?></td>
-                        <td><a href="#torneos/configurar" class="boton-accion">Ver Detalles</a></td>
+                        <td><?php echo htmlspecialchars($torneo['nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($torneo['estado']); ?></td>
+                        <td><?php echo htmlspecialchars($torneo['fecha_inicio'] ?? '—'); ?></td>
+                        <td><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=index" class="boton-accion">Ver Directorio</a></td>
                     </tr>
                     <?php endforeach; ?>
 
@@ -63,7 +63,7 @@
 
         <!--SECCION DE EQUIPOS REGISTRADOS-->
         <section class="seccion-espaciada">
-            <h3 class="subtitulo-panel">Ultimos Equipos Registrados</h3>
+            <h3 class="subtitulo-panel">Últimos Equipos Registrados</h3>
             <table class="tabla-estandar">
                 <thead>
                     <tr>
@@ -74,17 +74,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                        <?php foreach ($datos['ultimosEquipos'] as $equipo): ?>
+                    <?php foreach ($datos['ultimosEquipos'] as $equipo): ?>
                     <tr>
-                        <td><?php echo $equipo['nombre_equipo']; ?></td>
-                        <td><?php echo $equipo['creado_por']; ?></td>
-                        <td><?php echo $equipo['total_miembros']; ?></td>
-                        <td><a href="#" class="boton-accion">Ver como</a></td>
+                        <td><?php echo htmlspecialchars($equipo['nombre_equipo']); ?></td>
+                        <td><?php echo htmlspecialchars($equipo['creado_por']); ?></td>
+                        <td><?php echo (int)$equipo['total_miembros']; ?></td>
+                        <td><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=index" class="boton-accion">Ver Directorio</a></td>
                     </tr>
                     <?php endforeach; ?>
 
                     <?php if (empty($datos['ultimosEquipos'])): ?>
-
                     <tr>
                         <td colspan="4">No hay equipos registrados.</td>
                     </tr>
@@ -95,7 +94,7 @@
 
         <!--SECCION DE JUGADORES REGISTRADOS-->
         <section class="seccion-espaciada">
-            <h3 class="subtitulo-panel">Ultimos Jugadores Registrados</h3>
+            <h3 class="subtitulo-panel">Últimos Jugadores Registrados</h3>
             <table class="tabla-estandar">
                 <thead>
                     <tr>
@@ -108,10 +107,15 @@
                 <tbody>
                     <?php foreach ($datos['ultimosJugadores'] as $jugador): ?>
                     <tr>
-                        <td><?php echo $jugador['nombre_completo']; ?></td>
-                        <td><?php echo $jugador['email']; ?></td>
-                        <td><?php echo $jugador['fecha_registro']; ?></td>
-                        <td><a href="../jugador/perfil-jugador.html" class="boton-accion">Ver como</a></td>
+                        <td><?php echo htmlspecialchars($jugador['nombre_completo']); ?></td>
+                        <td><?php echo htmlspecialchars($jugador['email']); ?></td>
+                        <td><?php echo htmlspecialchars($jugador['fecha_registro']); ?></td>
+                        <td>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo (int)$jugador['id']; ?>" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <button type="submit" class="boton-accion">Ver como</button>
+                            </form>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
 
@@ -126,7 +130,7 @@
 
         <!--SECCION DE ULTIMOS ORGANIZADORES REGISTRADOS-->
         <section class="seccion-espaciada">
-            <h3 class="subtitulo-panel">Ultimos Organizadores Registrados</h3>
+            <h3 class="subtitulo-panel">Últimos Organizadores Registrados</h3>
             <table class="tabla-estandar">
                 <thead>
                     <tr>
@@ -139,10 +143,15 @@
                 <tbody>
                     <?php foreach ($datos['ultimosOrganizadores'] as $organizador): ?>
                     <tr>
-                        <td><?php echo $organizador['nombre_completo']; ?></td>
-                        <td><?php echo $organizador['email']; ?></td>
-                        <td><?php echo $organizador['fecha_registro']; ?></td>
-                        <td><a href="../organizador/dashboard.html" class="boton-accion">Ver como</a></td>
+                        <td><?php echo htmlspecialchars($organizador['nombre_completo']); ?></td>
+                        <td><?php echo htmlspecialchars($organizador['email']); ?></td>
+                        <td><?php echo htmlspecialchars($organizador['fecha_registro']); ?></td>
+                        <td>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo (int)$organizador['id']; ?>" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <button type="submit" class="boton-accion">Ver como</button>
+                            </form>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
 

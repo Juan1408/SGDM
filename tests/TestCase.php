@@ -19,6 +19,9 @@ abstract class TestCase extends BaseTestCase {
         $this->bd->query("TRUNCATE TABLE torneos");
         $this->bd->query("TRUNCATE TABLE juegos");
         $this->bd->query("TRUNCATE TABLE usuarios");
+        $this->bd->query("TRUNCATE TABLE errores_sistema");
+        $this->bd->query("TRUNCATE TABLE notificaciones");
+        $this->bd->query("TRUNCATE TABLE auditoria_cambios");
         $this->bd->query("SET FOREIGN_KEY_CHECKS = 1;");
     }
 }

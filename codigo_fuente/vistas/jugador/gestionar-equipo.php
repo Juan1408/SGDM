@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vista: gestionar-equipo.php
  * Requiere que vengan cargados desde EquipoControlador (gestionar() / actualizarEquipo()):
@@ -17,7 +18,7 @@ $codigoInvitacion = $equipo['codigo_invitacion'] ?? '----';
 
 //Chequeamos rapido, para cada miembro, si tambien es capitan (para mostrar la insignia en vez de los botones)
 $idsCapitanes = array_column($capitanes, 'id');
-$esCapitanFn = function($usuarioId) use ($idsCapitanes) {
+$esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
    return in_array($usuarioId, $idsCapitanes);
 };
 ?>
@@ -45,7 +46,7 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
 <body>
 
    <!-- NAVBAR ---------------------------->
-    <?php include __DIR__ . '/../componentes/navbar-jugador.php'; ?>
+   <?php include __DIR__ . '/../componentes/navbar-jugador.php'; ?>
 
    <main class="crear-equipo-pagina">
 
@@ -71,6 +72,9 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
             <!-- EDITAR DATOS DEL EQUIPO        -->
             <!-- ============================== -->
             <form class="tarjeta-equipo" method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=actualizarEquipo">
+               <input type="hidden"
+                  name="csrf_token"
+                  value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                <h2>Datos del equipo</h2>
 
                <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
@@ -132,6 +136,7 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
                </div>
             </form>
 
+
             <!-- ============================== -->
             <!-- MIEMBROS DEL EQUIPO            -->
             <!-- ============================== -->
@@ -159,11 +164,17 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
                            <?php else: ?>
                               <div class="fila-jugador-acciones">
                                  <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=hacerCapitan">
+                                    <input type="hidden"
+                                       name="csrf_token"
+                                       value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                                     <input type="hidden" name="usuario_id" value="<?php echo (int) $miembro['id']; ?>">
                                     <button type="submit" class="boton-hacer-capitan">Hacer Capitán</button>
                                  </form>
                                  <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=expulsarMiembro">
+                                    <input type="hidden"
+                                       name="csrf_token"
+                                       value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                                     <input type="hidden" name="usuario_id" value="<?php echo (int) $miembro['id']; ?>">
                                     <button type="submit" class="boton-quitar-miembro">Quitar</button>
@@ -223,12 +234,18 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
 
                            <div class="fila-jugador-acciones">
                               <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=responderSolicitudRecibida">
+                                 <input type="hidden"
+                                    name="csrf_token"
+                                    value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                  <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                                  <input type="hidden" name="solicitud_id" value="<?php echo (int) $solicitud['id']; ?>">
                                  <input type="hidden" name="respuesta" value="aceptar">
                                  <button type="submit" class="boton-invitar">Aceptar</button>
                               </form>
                               <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=responderSolicitudRecibida">
+                                 <input type="hidden"
+                                    name="csrf_token"
+                                    value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                  <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                                  <input type="hidden" name="solicitud_id" value="<?php echo (int) $solicitud['id']; ?>">
                                  <input type="hidden" name="respuesta" value="rechazar">
@@ -255,6 +272,9 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
 
                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=dejarEquipo"
                   onsubmit="return confirm('¿Seguro que querés dejar este equipo?');">
+                  <input type="hidden"
+                     name="csrf_token"
+                     value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                   <input type="hidden" name="equipo_id" value="<?php echo (int) $equipo['id']; ?>">
                   <button type="submit" class="boton-quitar-miembro">Dejar el equipo</button>
                </form>
@@ -269,8 +289,11 @@ $esCapitanFn = function($usuarioId) use ($idsCapitanes) {
    <!-- FOOTER ---------------------------->
    <?php include __DIR__ . '/../componentes/footer.html'; ?>
 
-   <script>window.URL_BASE_JS = "<?php echo URL_BASE; ?>";</script>
+   <script>
+      window.URL_BASE_JS = "<?php echo URL_BASE; ?>";
+   </script>
    <script src="<?php echo URL_BASE; ?>js/buscar-jugadores-vivo.js"></script>
 
 </body>
+
 </html>

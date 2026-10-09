@@ -39,10 +39,16 @@ class UsuarioControlador {
     //Metodo para cambiar el estado (Activo/Bloqueado) de un usuario
     public function cambiarEstadoUsuario() {
         Sesion::validarAdmin();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+        Sesion::requerirTokensCSRF();
+
         //Validamos que venga un ID en la URL y que sea un numero
-        if (isset($_GET['id']) && is_numeric($_GET['id'])){
+        if (isset($_POST['id']) && is_numeric($_POST['id'])){
             //Obtenemos el ID del usuario
-            $usuarioId = (int)$_GET['id'];
+            $usuarioId = (int)$_POST['id'];
 
             //Aca evitamos que el administrador se autobloquee 
             if ($usuarioId !== $_SESSION['usuario_id']) {
@@ -92,6 +98,17 @@ class UsuarioControlador {
     public function verComo (){
         Sesion::validarAdmin();
         //Capturamos el id del jugador
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+        Sesion::requerirTokensCSRF();
+
+        $_SESSION['admin_antes_suplantar'] = [
+            'usuario_id' => $_SESSION['usuario_id'],
+            'usuario_nombre' => $_SESSION['usuario_nombre'],
+            'rol_id' => $_SESSION['rol_id']
+        ];
         $usuarioId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
         //Traemos todos los datos del jugador desde el modelo con el metodo ya creado
@@ -225,10 +242,17 @@ class UsuarioControlador {
     public function eliminarUsuario() {
         //Validamos que el usuario este logueado y sea admin
         Sesion::validarAdmin();
-        //Recibimos el ID
-        $usuarioId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        //Recibimos los datos del formulario POST
+        $usuarioId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         //Capturamos el rol para redirigir despues de eliminar
-        $rolId = isset($_GET['rol_id']) ? (int)$_GET['rol_id'] : 0;
+        $rolId = isset($_POST['rol_id']) ? (int) $_POST['rol_id'] : 0;
         //Ejecutamos la funcion eliminarUsuario del modelo
         $this->modeloUsuario->eliminarUsuario($usuarioId);
         //Mandamos un mensaje de feedback

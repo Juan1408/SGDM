@@ -53,10 +53,14 @@
             <p>Armá tu equipo para anotarte a torneos y sumar miembros. El código de invitación se genera automáticamente al crearlo.</p>
          </div>
 
-         <form class="crear-equipo-formulario" id="form-crear-equipo"
-            action="<?php echo URL_BASE; ?>index.php?c=equipo&a=procesarCreacion" method="POST">
+          <form class="crear-equipo-formulario" id="form-crear-equipo"
+             action="<?php echo URL_BASE; ?>index.php?c=equipo&a=procesarCreacion" method="POST">
 
-            <div class="tarjeta-equipo crear-equipo-imagenes">
+             <input type="hidden"
+                name="csrf_token"
+                value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+
+             <div class="tarjeta-equipo crear-equipo-imagenes">
                <div class="campo-imagen campo-banner">
                   <div class="preview-banner" id="preview-banner-crear">
                      <span class="placeholder-texto">Sin banner todavía</span>

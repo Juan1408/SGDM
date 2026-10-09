@@ -269,3 +269,242 @@ Seguridad de Sesiones (Timeboxing y Flags): Se actualizó la clase `Sesion.php` 
 Políticas HTTP de Seguridad (Security Headers): Se creó el módulo núcleo `CabecerasSeguridad.php` y se inyectó en el Front Controller (`index.php`). Desde este momento, cualquier respuesta enviada al navegador incluye directivas estrictas (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`), protegiendo a la plataforma contra Clickjacking y Sniffing de manera nativa.
 Protección de Fuerza Bruta (Rate Limiting Profesional): Se desestimó la protección endeble basada en sesiones a favor de un bloqueo riguroso por Base de Datos. Se estructuró la tabla `intentos_login` administrada por el nuevo modelo `SeguridadAuth.php`. El Controlador de Autenticación ahora interroga a este modelo; si una IP registra 5 fallos consecutivos, es bloqueada automáticamente a nivel lógico por 5 minutos, garantizando la integridad de los accesos.
 Inmunidad Transaccional (Tokens CSRF): Se implementó el patrón *Synchronizer Token* en `Sesion.php`. Las áreas sensibles de Autenticación y el panel del Administrador General exigen ahora que los formularios envíen un `csrf_token` oculto validado por el servidor, haciendo matemáticamente imposible la falsificación de peticiones en nombre del usuario legítimo.
+ 
+41. Implementacion detallada de proteccion CSRF en formularios de jugador
+Objetivo: Evitar que un sitio externo pueda enviar acciones POST en nombre de un usuario que ya tiene una sesion abierta en SGDM.
+
+Patron utilizado: Se aplico el patron Synchronizer Token. El servidor genera un valor aleatorio por sesion y la vista lo incluye como campo oculto dentro de cada formulario POST:
+
+~~~php
+<input type="hidden"
+       name="csrf_token"
+       value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+~~~
+
+Flujo del token:
+
+1. `Sesion::generarTokenCSRF()` inicia la sesion y, si no existe un token, genera 32 bytes aleatorios con `random_bytes(32)`. El resultado se representa en hexadecimal mediante `bin2hex()` y se guarda en `$_SESSION['csrf_token']`.
+2. La vista imprime el token en un campo oculto. El usuario no lo ve, pero el navegador lo envia con el formulario.
+3. El controlador recibe el valor en `$_POST['csrf_token']`.
+4. `Sesion::requerirTokensCSRF()` llama a `validarTokenCSRF()` y compara el token recibido con el token de la sesion mediante `hash_equals()`.
+5. Si la comparacion falla, se responde con HTTP 419 y se detiene la accion antes de leer o modificar datos.
+
+Decisiones de implementacion:
+
+- El campo usa el nombre fijo `csrf_token` para que todas las vistas y controladores compartan el mismo contrato.
+- Se usa `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')` al imprimir el valor dentro de HTML.
+- Cada formulario POST tiene su propio campo porque el navegador solo envia los controles que estan dentro del formulario enviado.
+- La proteccion se coloca despues de comprobar que el metodo HTTP es POST y antes de procesar los datos recibidos.
+- CSRF no sustituye la autenticacion ni la autorizacion. El controlador sigue validando que el usuario este logueado y tenga permisos.
+
+Aplicacion en equipos:
+
+- `crear-equipo.php`: formulario de creacion de equipo.
+- `gestionar-equipo.php`: actualizacion, designacion de capitan, expulsion, solicitudes y salida del equipo.
+- `EquipoControlador.php`: valida el token con `Sesion::requerirTokensCSRF()` en cada accion POST sensible.
+
+Justificacion para la defensa: El token vincula el formulario con la sesion legitima. Un atacante puede intentar provocar una peticion desde otro sitio, pero no puede leer el token aleatorio de la sesion. Por eso la peticion falsa es rechazada antes de ejecutar cambios.
+ 
+42. Proteccion CSRF en acciones del panel del organizador
+Objetivo: Asegurar que las acciones POST que modifican torneos solo se ejecuten mediante formularios legitimos de la sesion activa.
+
+En `PanelOrganizadorControlador` se distinguieron dos casos:
+
+- `guardarPerfil()`, `guardarGestion()` y `guardarEtapa()` ya comprobaban que el metodo HTTP fuera POST. Se mantuvo esa validacion y se dejo `Sesion::requerirTokensCSRF()` inmediatamente despues.
+- `cambiarEstado()`, `responderInscripcion()`, `generarFixture()` y `guardarResultado()` no comprobaban el metodo HTTP. Se agrego primero una respuesta HTTP 405 para cualquier metodo distinto de POST y luego la validacion CSRF.
+
+El orden aplicado es intencional:
+
+~~~php
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Metodo no permitido');
+}
+
+Sesion::requerirTokensCSRF();
+
+// ReciÃ©n despues se leen $_POST y se llama al modelo.
+~~~
+
+Esto evita procesar datos enviados por GET y evita procesar datos POST sin un
+token asociado a la sesion. La proteccion no reemplaza `Sesion::validarOrganizador`
+o `Sesion::validarOrganizadorVerificado()`: esas validaciones siguen determinando
+quien esta autenticado y autorizado; el CSRF verifica que la peticion provenga
+de un formulario generado para esa sesion.
+
+Se verifico la sintaxis de `panelOrganizadorControlador.php` con `php -l` y no se
+detectaron errores.
+
+Justificacion para la defensa: Las acciones de cambiar estados, responder
+inscripciones, generar fixtures y guardar resultados modifican informacion del
+torneo. Por eso no deben aceptar GET y deben exigir el token CSRF antes de
+llamar al modelo o modificar la base de datos.
+ 
+43. CSRF en la vista de gestion de torneos
+Objetivo: Alinear todos los formularios POST de gestion de torneos con las validaciones del controlador.
+
+La vista gestionar-torneo.php contiene seis formularios POST:
+
+- Guardar la configuracion general del torneo.
+- Cambiar el estado del torneo.
+- Aprobar una inscripcion.
+- Rechazar una inscripcion.
+- Generar o regenerar el fixture.
+- Guardar el resultado de un partido.
+
+Cada formulario incluye su propio campo oculto csrf_token. Los formularios de
+aprobacion y rechazo se generan dentro de un bucle, pero cada boton envia un
+formulario diferente; por eso cada formulario recibe un token independiente.
+El formulario de resultado tambien puede repetirse por cada partido y debe
+mantener el token dentro de cada instancia.
+
+La vista y el controlador deben estar alineados:
+
+1. La vista envia csrf_token dentro del formulario.
+2. El controlador rechaza metodos diferentes de POST.
+3. El controlador valida el token mediante Sesion::requerirTokensCSRF().
+4. Solo despues se leen los datos y se ejecuta la operacion del modelo.
+
+Justificacion para la defensa: Se protege cada accion que cambia el torneo,
+incluyendo acciones repetidas dentro de bucles. Asi no queda un formulario
+administrativo sin la misma garantia de autenticidad de la sesion.
+ 
+44. Acciones administrativas de organizadores: migracion de GET a POST
+Objetivo: Evitar que aprobar, rechazar o revocar la habilitacion de un organizador pueda ejecutarse mediante un enlace GET.
+
+Antes del cambio, la vista organizador_index.php utilizaba enlaces con id y
+decision en la URL. El controlador leia esos valores desde $_GET y ejecutaba
+una modificacion de estado. Se reemplazaron esas acciones por formularios POST.
+
+El controlador OrganizadorControlador ahora:
+
+1. Rechaza metodos distintos de POST con HTTP 405.
+2. Valida el token de la sesion mediante Sesion::requerirTokensCSRF().
+3. Lee id y decision desde $_POST.
+4. Acepta unicamente las decisiones aprobar, rechazar y revocar.
+5. Ejecuta el modelo y redirecciona al listado.
+
+La vista genera un formulario independiente para cada accion y envia tres
+valores: csrf_token, id y decision. El boton visible ya no es un enlace que
+modifica datos, sino un submit POST.
+
+Justificacion para la defensa: Aprobar o revocar un organizador cambia sus
+permisos dentro del sistema. Las acciones con efectos secundarios no deben
+ejecutarse por GET, porque un navegador puede disparar un enlace sin una
+confirmacion explicita. POST mas CSRF obliga a enviar una peticion intencional
+y vinculada a la sesion del administrador.
+
+Las acciones verComo, editarUsuario y cambiarEstadoUsuario quedan fuera de este
+cambio y deben revisarse en sus respectivos controladores.
+ 
+45. Proteccion de la eliminacion de usuarios
+Objetivo: Evitar que la baja fisica de un usuario pueda ejecutarse mediante un
+enlace GET o una peticion falsificada.
+
+Antes, eliminarUsuario() leia id y rol_id desde $_GET. Esto significaba que una
+URL podia provocar una accion destructiva si el administrador tenia una sesion
+abierta. La vista jugadores_index.php usaba un enlace para eliminar la cuenta.
+
+El cambio aplicado conserva la logica del modelo, pero cambia el contrato HTTP:
+
+1. Solo se acepta el metodo POST.
+2. Se exige una sesion de administrador.
+3. Se valida el token CSRF.
+4. id y rol_id se leen desde $_POST.
+5. El modelo recibe el mismo id que antes.
+
+La vista ahora utiliza un formulario POST con un boton y una confirmacion
+JavaScript. El formulario envia csrf_token, id y rol_id. rol_id no identifica
+la seguridad de la operacion; se conserva para que el controlador redirija al
+listado de jugadores u organizadores correspondiente despues de la operacion.
+
+La confirmacion visual no reemplaza las validaciones del servidor. La proteccion
+real esta en la combinacion de autorizacion de administrador, metodo POST y
+token CSRF.
+
+No se elimino ningun usuario durante este cambio. Se validaron la sintaxis del
+controlador y de la vista con php -l.
+ 
+46. Entregables DevOps para despliegue y defensa
+Objetivo: Preparar un procedimiento repetible para levantar ASCEND en una VM
+Linux dentro de Proxmox, operar Docker, conservar logs y recuperar la base.
+
+Se agregaron tres documentos operativos:
+
+- Guia_Despliegue_10_Minutos.md: secuencia rapida de preparacion, copia,
+  validacion, build, arranque y prueba HTTP.
+- Guia_DevOps_Servidor_Linux.md: responsabilidades del operador, usuarios,
+  permisos, firewall, hora, actualizaciones y monitoreo.
+- Guia_Backup_Restauracion_Logs.md: backup MySQL, checksum, retencion,
+  restauracion controlada, logs y hashes de archivos PHP.
+
+Los comandos destructivos se separaron de los comandos de operacion diaria. La
+restauracion y la eliminacion de volumenes exigen una decision explicita, un
+backup previo y una verificacion del objetivo.
+
+Durante la validacion se detecto que el Compose actual no pasa la comprobacion
+porque la condicion de depends_on no esta expresada como un mapeo YAML. Este
+control se mantiene en la guia de despliegue para que la presentacion no
+continue con una configuracion invalida.
+ 
+47. Auditoria real de conectividad y despliegue dual
+Objetivo: comprobar que ASCEND funciona tanto en XAMPP como en Docker y separar
+los errores de conexion de los problemas de esquema.
+
+Pruebas realizadas:
+
+- XAMPP MySQL responde con root y la base ascend existe.
+- XAMPP responde HTTP 200 en la URL local.
+- Docker Compose valida su configuracion.
+- sgdm_db queda en estado healthy.
+- El usuario de aplicacion ascend_usuario@% conecta con permisos CRUD limitados.
+- sgdm_web responde HTTP 200 en el puerto 8080.
+- phpMyAdmin y Grafana responden en sus puertos locales.
+- Todos los archivos PHP pasan php -l.
+
+Correcciones de conexion:
+
+1. La configuracion PHP ahora lee DB_PASSWORD desde variables de entorno.
+   En XAMPP el fallback sigue siendo contraseña vacia; en Docker se usa
+   ascend_password.
+2. Se corrigio depends_on para que web espere a que db este saludable.
+3. Se corrigio el healthcheck para expandir MYSQL_ROOT_PASSWORD dentro del
+   shell del contenedor.
+4. Se creo el usuario Docker de aplicacion que faltaba en el volumen existente,
+   sin modificar tablas ni datos.
+
+Hallazgo de integracion:
+
+XAMPP contiene 39 tablas, mientras que Docker contiene 26 y no tiene
+politicas_contrasenas. Por lo tanto, HTTP 200 y una conexion exitosa no
+significan que los dos entornos tengan el mismo esquema. La sincronizacion del
+esquema queda como una tarea separada y no debe resolverse ejecutando una
+migracion destructiva sobre datos existentes.
+
+La comparacion de nombres identifico 13 tablas presentes en XAMPP y ausentes en
+Docker: auditoria_cambios, historial_contrasenas, logros, logs_actividad,
+newsletter_subscriptores, notificaciones, politicas_contrasenas,
+resultados_detalle, torneo_actividades, torneo_comentarios, torneo_config,
+torneo_suizo_parejas y usuario_logros.
+
+48. Reinicializacion reproducible de la base Docker
+
+Para eliminar la desincronizacion se genero primero un respaldo del volumen
+Docker en `Documentos_Juan/backups_docker_reset/ascend_docker_antes_reset.sql`.
+Su SHA-256 es `BDD805A84E7D0D20B210BF5A766EA4821B08C86B2EAD912AE23DDCD41D73DAAC`.
+Luego se detuvo el Compose y se elimino exclusivamente el volumen
+`docker_sgdm_datos`. La base de XAMPP no fue modificada.
+
+El primer arranque desde cero revelo una incompatibilidad real de MySQL 8 en
+`base_de_datos/migraciones/001_ascend.sql`: el `CHECK distintos` de
+`torneo_suizo_parejas` usa columnas que tambien poseen claves foraneas con
+acciones referenciales. MySQL rechazo la tabla completa. Se corrigio el
+script de migracion retirando solamente ese `CHECK`; la validacion equivalente
+queda en el flujo de creacion de parejas del modelo `Torneo`.
+
+Tras corregir la migracion, el segundo arranque ejecuto 001 y 002 correctamente.
+Docker quedo con 39 tablas, igual que XAMPP, `politicas_contrasenas` presente,
+usuario de aplicacion funcional y todos los servicios principales activos.
+La portada de Docker y XAMPP respondieron HTTP 200. Docker contiene usuarios
+de ejemplo por la migracion 002, mientras XAMPP no; esa diferencia es de datos
+iniciales y no de estructura.

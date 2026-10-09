@@ -14,8 +14,13 @@ class Auditoria {
         //Obtenemos la instancia de la base de datos
         $bd = Conexion::getInstance()->getBD();
 
-        //Obtenemos el ID del usuario si está logueado de lo contrario será null
-        $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
+        //Obtenemos el ID del usuario. Si está suplantando, registramos al verdadero autor (el admin)
+        if (isset($_SESSION['admin_antes_suplantar'])) {
+            $usuario_id = $_SESSION['admin_antes_suplantar'];
+            $descripcion = "[Modo Suplantación] " . $descripcion;
+        } else {
+            $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
+        }
 
         //Obtenemos la IP del usuario
         $ip_origen = $_SERVER['REMOTE_ADDR'] ?? 'Desconocida';
@@ -37,16 +42,23 @@ class Auditoria {
     }
 
     //Metodo estatico para traer todos los logs y mostrarlos en la tabla
-    public static function obtenerTodos(){
+    public static function obtenerTodos($fecha = null){
         $bd = Conexion::getInstance()->getBD();
         
         //Hacemos un JOIN con usuarios para saber quien realizo la accion
         $sql = "SELECT l.*, u.email AS usuario_email 
         FROM logs_actividad l
-        LEFT JOIN usuarios u ON l.usuario_id = u.id
-        ORDER BY l.fecha_hora DESC";
+        LEFT JOIN usuarios u ON l.usuario_id = u.id";
+        
+        $params = [];
+        if ($fecha) {
+            $sql .= " WHERE DATE(l.fecha_hora) = :fecha";
+            $params[':fecha'] = $fecha;
+        }
+
+        $sql .= " ORDER BY l.fecha_hora DESC";
         $stmt = $bd->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -50,14 +50,11 @@ classDiagram
     -int usuarioId
     -string apodoGamertag
     -string bio
-    -int nivel
-    -int experienciaPuntos
     -string pais
     -string ciudad
     -string discordTag
     +obtenerPerfil(usuarioId) array
     +actualizarPerfil(usuarioId, datos) bool
-    +sumarExperiencia(usuarioId, xp) bool
   }
 
   class PerfilOrganizador {
@@ -107,6 +104,7 @@ classDiagram
     +obtenerHistorialOrganizador(organizadorId) array
     +obtenerCalendarioOrganizador(organizadorId) array
     +obtenerInscripciones(torneoId, organizadorId) array
+    +inscribirParticipante(torneoId, participanteId, tipo) bool
     +obtenerFixture(torneoId, organizadorId) array
     +generarFixture(torneoId, organizadorId) array
     +guardarResultado(encuentroId, organizadorId, local, visitante) array
@@ -273,6 +271,18 @@ classDiagram
     #Time hora
   }
 
+  class Guardado {
+    <<Domain>>
+    #int id
+    #int usuarioId
+    #string tipoEntidad
+    #int entidadId
+    #DateTime fechaGuardado
+    +estaGuardado(usuarioId, tipoEntidad, entidadId) bool
+    +alternarGuardado(usuarioId, tipoEntidad, entidadId) array
+    +obtenerGuardados(usuarioId) array
+  }
+
   %% =========================================================================
   %% CATÁLOGOS Y ESTRUCTURAS AUXILIARES
   %% =========================================================================
@@ -322,6 +332,16 @@ classDiagram
     +logout() void
   }
 
+  class PublicoControlador {
+    <<Controller>>
+    +inicio() void
+    +torneos() void
+    +detalleTorneo() void
+    +rankings() void
+    +nosotros() void
+    +contacto() void
+  }
+
   class AdminControlador {
     <<Controller>>
     +dashboard() void
@@ -369,6 +389,33 @@ classDiagram
     +eliminarUsuario() void
     +verComo() void
     +volverAdmin() void
+  }
+
+  class PanelJugadorControlador {
+    <<Controller>>
+    +dashboard() void
+    +perfil() void
+    +actualizarPerfil() void
+    +explorarTorneos() void
+    +inscribirseTorneo() void
+  }
+
+  class EquipoControlador {
+    <<Controller>>
+    +index() void
+    +crear() void
+    +procesarCreacion() void
+    +verPerfil() void
+    +solicitarUnion() void
+    +solicitudes() void
+    +responderInvitacion() void
+    +gestionar() void
+    +responderSolicitudRecibida() void
+    +invitarJugador() void
+    +actualizarEquipo() void
+    +expulsarMiembro() void
+    +hacerCapitan() void
+    +dejarEquipo() void
   }
 
   class TorneoAdminControlador {
@@ -453,11 +500,15 @@ classDiagram
 
   AuthControlador ..> Usuario : "Autentica y Registra"
   AuthControlador ..> Sesion : "Gestiona Estado Sesion"
+  PublicoControlador ..> Torneo : "Explora Catálogo"
   AdminControlador ..> Usuario : "Estadisticas Usuarios"
   AdminControlador ..> Torneo : "Estadisticas Torneos"
   AdminControlador ..> Equipo : "Estadisticas Equipos"
   PanelOrganizadorControlador ..> Torneo : "Gestiona Ciclo Torneo"
   PanelOrganizadorControlador ..> Juego : "Consulta Catalogo Activo"
+  PanelJugadorControlador ..> PerfilJugador : "Gestiona Perfil"
+  PanelJugadorControlador ..> Torneo : "Inscribe a Torneos"
+  EquipoControlador ..> Equipo : "CRUD Roster"
   OrganizadorControlador ..> Usuario : "Aaprueba / Revoca Organizador"
   UsuarioControlador ..> Usuario : "CRUD General Cuentas"
   JuegoControlador ..> Juego : "CRUD Catalogo Juegos"
@@ -468,6 +519,7 @@ classDiagram
   Usuario ..> Conexion : "Acceso Datos via PDO"
   Torneo ..> Conexion : "Acceso Datos via PDO"
   Juego ..> Conexion : "Acceso Datos via PDO"
+  Guardado o-- Usuario : "Pertenece a Usuario"
 
   %% =========================================================================
   %% ESTILOS DE COLORIZACIÓN Y APARIENCIA MERMAID
@@ -480,10 +532,10 @@ classDiagram
   classDef catalog fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#ffffff
   classDef service fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#ffffff
 
-  class AuthControlador,AdminControlador,PanelOrganizadorControlador,OrganizadorControlador,UsuarioControlador,TorneoAdminControlador,JuegoControlador,PoliticaContrasenaControlador,AuditoriaControlador controller
+  class AuthControlador,PublicoControlador,AdminControlador,PanelOrganizadorControlador,PanelJugadorControlador,EquipoControlador,OrganizadorControlador,UsuarioControlador,TorneoAdminControlador,JuegoControlador,PoliticaContrasenaControlador,AuditoriaControlador controller
   class Usuario,Torneo,Equipo,Juego,Auditoria,PoliticaContrasena model
   class PerfilJugador,PerfilOrganizador subtype
-  class ParticipanteTorneo,Encuentro,PosicionTorneo,EquipoMiembro,SolicitudEquipo,TorneoSuizoPareja,TorneoCambioEstado,TorneoActividad domain
+  class ParticipanteTorneo,Encuentro,PosicionTorneo,EquipoMiembro,SolicitudEquipo,TorneoSuizoPareja,TorneoCambioEstado,TorneoActividad,Guardado domain
   class Rol,Permiso,Modalidad,SistemaPuntuacion catalog
   class Conexion,Sesion service
 ```

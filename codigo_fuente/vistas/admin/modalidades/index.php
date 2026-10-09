@@ -20,6 +20,7 @@
     <?php endif; ?>
 
     <form action="<?php echo URL_BASE; ?>index.php?c=formato&a=guardarEstados" method="POST">
+        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         <div class="modalidades-list">
             <?php foreach ($formatos as $f): ?>
                 <div class="modalidad-card">

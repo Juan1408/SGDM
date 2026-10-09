@@ -66,6 +66,9 @@ if (!empty($fechaNacimiento)) {
       <?php endif; ?>
 
       <form action="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=actualizarPerfil" method="POST" id="form-perfil-jugador">
+         <input type="hidden" 
+                  name="csrf_token"
+                  value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
 
          <!-- ============================== -->
          <!-- HEADER: banner, avatar, stats  -->
