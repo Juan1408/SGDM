@@ -24,7 +24,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador perfil-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">CUENTA DEL ORGANIZADOR</p><h1>Mi perfil</h1><p>Actualiza tus datos personales y los de tu organización.</p></div></header>

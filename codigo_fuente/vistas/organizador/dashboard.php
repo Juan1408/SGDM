@@ -30,7 +30,7 @@
 
 <body>
 
-   <?php require_once __DIR__ . '/navbar.html'; ?>
+   <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
    <?php require_once __DIR__ . '/sidebar.html'; ?>
 
    <?php
@@ -138,8 +138,7 @@
                         </div>
                         <?php $rutaGestion = $torneo['estado'] === 'borrador'
                            ? URL_BASE . 'index.php?c=panelOrganizador&a=crear&etapa=2&id=' . (int) $torneo['id']
-                           : URL_BASE . 'index.php?c=panelOrganizador&a=gestionar&id=' . (int) $torneo['id']; ?>
-                        <a href="<?php echo htmlspecialchars($rutaGestion, ENT_QUOTES, 'UTF-8'); ?>" class="boton boton-gestion">Gestionar</a>
+                           : URL_BASE . 'index.php?c=panelOrganizador&a=administrar&id=' . (int) $torneo['id']; ?>                        <a href="<?php echo htmlspecialchars($rutaGestion, ENT_QUOTES, 'UTF-8'); ?>" class="boton boton-gestion">Gestionar</a>
                       </li>
                   <?php endforeach; ?>
                <?php endif; ?>

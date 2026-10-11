@@ -14,11 +14,14 @@ class EquipoControlador {
     private Guardado $modeloGuardado;
 
     public function __construct(){
-        //Solo jugadores logueados pueden crear/gestionar equipos
+    //El perfil de un equipo es publico (cualquier rol o visitante); el resto es solo de jugadores
+    $accion = $_GET['a'] ?? '';
+    if ($accion !== 'verPerfil') {
         Sesion::validarJugador();
-        $this->modeloEquipo = Equipo::obtenerInstancia();
-        $this->modeloGuardado = new Guardado();
     }
+    $this->modeloEquipo = Equipo::obtenerInstancia();
+    $this->modeloGuardado = new Guardado();
+}
 
     //Accion para mostrar el formulario de crear equipo
     public function crear(){
@@ -77,24 +80,36 @@ class EquipoControlador {
     public function verPerfil(){
         $equipoId = (int) ($_GET['id'] ?? 0);
 
-        if ($equipoId <= 0) {
-            header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
-            exit;
-        }
+                if ($equipoId <= 0) {
+    header("Location: " . URL_BASE . "index.php");
+    exit;
+}
 
-        $equipo = $this->modeloEquipo->obtenerPorId($equipoId);
+$equipo = $this->modeloEquipo->obtenerPorId($equipoId);
 
-        if (!$equipo) {
-            header("Location: " . URL_BASE . "index.php?c=equipo&a=index&error=equipo_no_encontrado");
-            exit;
-        }
+if (!$equipo) {
+    header("Location: " . URL_BASE . "index.php");
+    exit;
+}
 
-        $usuarioId = $_SESSION['usuario_id'];
-        $capitanes = $this->modeloEquipo->obtenerCapitanes($equipoId);
-        $miembros = $this->modeloEquipo->obtenerMiembros($equipoId);
-        $yaEsMiembro = $this->modeloEquipo->esMiembro($equipoId, $usuarioId);
-        $tieneSolicitudPendiente = $this->modeloEquipo->tieneSolicitudPendiente($equipoId, $usuarioId);
-        $equipoGuardado = $this->modeloGuardado->estaGuardado($usuarioId, 'equipo', $equipoId);
+//Visitantes sin sesion tambien pueden ver el perfil
+Sesion::estaLogueado(); //solo inicia la sesion, no redirige
+$usuarioId = $_SESSION['usuario_id'] ?? null;
+$rolId = $_SESSION['rol_id'] ?? null;
+$esJugador = ($rolId === 3);
+
+$capitanes = $this->modeloEquipo->obtenerCapitanes($equipoId);
+$miembros = $this->modeloEquipo->obtenerMiembros($equipoId);
+
+//Solo los jugadores pueden ser miembros, pedir unirse o guardar el equipo
+$yaEsMiembro = false;
+$tieneSolicitudPendiente = false;
+$equipoGuardado = false;
+if ($esJugador) {
+    $yaEsMiembro = $this->modeloEquipo->esMiembro($equipoId, $usuarioId);
+    $tieneSolicitudPendiente = $this->modeloEquipo->tieneSolicitudPendiente($equipoId, $usuarioId);
+    $equipoGuardado = $this->modeloGuardado->estaGuardado($usuarioId, 'equipo', $equipoId);
+} 
 
         //Filtro simple para buscar entre los miembros que YA estan en el equipo (no para invitar gente nueva)
         $filtroMiembro = trim($_GET['filtro'] ?? '');

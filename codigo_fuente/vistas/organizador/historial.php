@@ -23,7 +23,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador historial-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">REGISTRO DE ACTIVIDAD</p><h1>Historial</h1><p>Cambios de estado y resultados registrados en tus torneos.</p></div></header>

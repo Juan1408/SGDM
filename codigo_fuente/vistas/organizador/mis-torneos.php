@@ -40,7 +40,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador mis-torneos-pagina">
         <header class="dashboard-header">
@@ -70,8 +70,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
                         <?php $estado = $estados[$torneo['estado']] ?? ['texto' => $torneo['estado'], 'clase' => 'estado']; ?>
                         <?php $ruta = $torneo['estado'] === 'borrador'
                             ? URL_BASE . 'index.php?c=panelOrganizador&amp;a=crear&amp;etapa=2&amp;id=' . (int) $torneo['id']
-                            : URL_BASE . 'index.php?c=panelOrganizador&amp;a=gestionar&amp;id=' . (int) $torneo['id']; ?>
-                        <article class="mi-torneo-card">
+                            : URL_BASE . 'index.php?c=panelOrganizador&amp;a=administrar&amp;id=' . (int) $torneo['id']; ?>                        <article class="mi-torneo-card">
                             <header><h2><?php echo $escapar($torneo['nombre']); ?></h2><span class="<?php echo $estado['clase']; ?>"><?php echo $escapar($estado['texto']); ?></span></header>
                             <p><i class="fa-solid fa-gamepad"></i> <?php echo $escapar($torneo['nombre_juego']); ?> · <?php echo $escapar(ucwords(str_replace('_', ' ', $torneo['formato']))); ?></p>
                             <div class="mi-torneo-meta"><span>Equipos<strong><?php echo (int) $torneo['equipos_confirmados']; ?>/<?php echo (int) $torneo['cupo_max_equipos']; ?></strong></span><span>Inicio<strong><?php echo $torneo['fecha_inicio'] ? $escapar(date('d/m/Y', strtotime($torneo['fecha_inicio']))) : 'Sin fecha'; ?></strong></span></div>

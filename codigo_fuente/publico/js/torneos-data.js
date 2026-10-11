@@ -3,8 +3,8 @@ const TORNEOS_DB = {
    "copa-ascend": {
       subtitulo: "Torneo de Rugby",
       tipoParticipacion: "equipos",
-      equipo1: { nombre: "BLACK FERNS", logo: "../../publico/img/bf.png" },
-      equipo2: { nombre: "WOMAN'S EAGLES", logo: "../../publico/img/eagles.png" },
+      equipo1: { nombre: "BLACK FERNS", logo: window.URL_BASE_JS + "img/bf.png" },
+      equipo2: { nombre: "WOMAN'S EAGLES", logo: window.URL_BASE_JS + "img/eagles.png" },
       fechas: "26 Mayo 2026 - 08 Diciembre 2026",
       meta: { formato: "Eliminación directa", equipos: "32 Equipos", estado: "En curso" },
       descripcion: "Torneo competitivo de rugby entre equipos destacados. Los participantes competirán en una estructura organizada con fechas, encuentros, resultados y seguimiento dentro de ASCEND.",
@@ -12,31 +12,31 @@ const TORNEOS_DB = {
       premios: { primero: "+ $200", segundo: "+ $100", tercero: "+ $50" },
 
       participantes: [
-   { nombre: "Black Ferns Team", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 3200", imagen: "../../publico/img/black ferns/black-ferns_mobilell.png" },
-   { nombre: "Woman's Eagles", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 2980", imagen: "../../publico/img/black ferns/black-ferns_mobilell.png" },
-   { nombre: "Rugby Stars", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 2450", imagen: "../../publico/img/black ferns/black-ferns_mobilell.png" }
+   { nombre: "Black Ferns Team", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 3200", imagen: window.URL_BASE_JS + "img/black ferns/black-ferns_mobilell.png" },
+   { nombre: "Woman's Eagles", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 2980", imagen: window.URL_BASE_JS + "img/black ferns/black-ferns_mobilell.png" },
+   { nombre: "Rugby Stars", deporte: "Rugby", cantidad: "15 Participantes", puntos: "Puntos: 2450", imagen: window.URL_BASE_JS + "img/black ferns/black-ferns_mobilell.png" }
 ],
 
 miembros: [
-   { nombre: "Ayesha Leti", foto: "../../publico/img/black ferns/ayesha-leti.png" },
-   { nombre: "Alana Borland", foto: "../../publico/img/black ferns/alana-borland.png" },
-   { nombre: "Portia Woodman", foto: "../../publico/img/black ferns/portia-woodman.png" },
-   { nombre: "Sylvia Brunt", foto: "../../publico/img/black ferns/sylvia-brunt.png" },
-   { nombre: "Kate Henwood", foto: "../../publico/img/black ferns/kate-henwood.png" },
-   { nombre: "Maiakawanak", foto: "../../publico/img/black ferns/maiakawanak.png" },
-   { nombre: "Jorja Miller", foto: "../../publico/img/black ferns/jorja-miller.png" },
-   { nombre: "Kennedy Tukuafu", foto: "../../publico/img/black ferns/kennedy-tukuafu.png" },
-   { nombre: "Tanya Kalounivale", foto: "../../publico/img/black ferns/tanya-kalounivale.png" },
-   { nombre: "Braxton Sorensen", foto: "../../publico/img/black ferns/braxton-sorensen.png" }
+   { nombre: "Ayesha Leti", foto: window.URL_BASE_JS + "img/black ferns/ayesha-leti.png" },
+   { nombre: "Alana Borland", foto: window.URL_BASE_JS + "img/black ferns/alana-borland.png" },
+   { nombre: "Portia Woodman", foto: window.URL_BASE_JS + "img/black ferns/portia-woodman.png" },
+   { nombre: "Sylvia Brunt", foto: window.URL_BASE_JS + "img/black ferns/sylvia-brunt.png" },
+   { nombre: "Kate Henwood", foto: window.URL_BASE_JS + "img/black ferns/kate-henwood.png" },
+   { nombre: "Maiakawanak", foto: window.URL_BASE_JS + "img/black ferns/maiakawanak.png" },
+   { nombre: "Jorja Miller", foto: window.URL_BASE_JS + "img/black ferns/jorja-miller.png" },
+   { nombre: "Kennedy Tukuafu", foto: window.URL_BASE_JS + "img/black ferns/kennedy-tukuafu.png" },
+   { nombre: "Tanya Kalounivale", foto: window.URL_BASE_JS + "img/black ferns/tanya-kalounivale.png" },
+   { nombre: "Braxton Sorensen", foto: window.URL_BASE_JS + "img/black ferns/braxton-sorensen.png" }
 ],
 
 rankingEquipo: {
-   logoEquipo: "../../publico/img/logos/BF.png",
+   logoEquipo: window.URL_BASE_JS + "img/logos/BF.png",
    filas: [
-      { jugadorFoto: "../../publico/img/black ferns/ayesha-leti.png", jugadorNombre: "Ayesha Leti", juego: "Rugby", partidas: 7, puntos: "3.000" },
-      { jugadorFoto: "../../publico/img/black ferns/alana-borland.png", jugadorNombre: "Alana Borland", juego: "Rugby", partidas: 6, puntos: "2.800" },
-      { jugadorFoto: "../../publico/img/black ferns/portia-woodman.png", jugadorNombre: "Portia Woodman", juego: "Rugby", partidas: 7, puntos: "2.750" },
-      { jugadorFoto: "../../publico/img/black ferns/sylvia-brunt.png", jugadorNombre: "Sylvia Brunt", juego: "Rugby", partidas: 5, puntos: "2.400" }
+      { jugadorFoto: window.URL_BASE_JS + "img/black ferns/ayesha-leti.png", jugadorNombre: "Ayesha Leti", juego: "Rugby", partidas: 7, puntos: "3.000" },
+      { jugadorFoto: window.URL_BASE_JS + "img/black ferns/alana-borland.png", jugadorNombre: "Alana Borland", juego: "Rugby", partidas: 6, puntos: "2.800" },
+      { jugadorFoto: window.URL_BASE_JS + "img/black ferns/portia-woodman.png", jugadorNombre: "Portia Woodman", juego: "Rugby", partidas: 7, puntos: "2.750" },
+      { jugadorFoto: window.URL_BASE_JS + "img/black ferns/sylvia-brunt.png", jugadorNombre: "Sylvia Brunt", juego: "Rugby", partidas: 5, puntos: "2.400" }
    ]
 },
 
@@ -115,8 +115,8 @@ resultados: [
    "ajedrez-master": {
       subtitulo: "Torneo de Ajedrez",
       tipoParticipacion: "individual",
-      equipo1: { nombre: "MARÍA GONZÁLEZ", logo: "../../publico/img/avatars/a2.png" },
-      equipo2: { nombre: "TOMÁS RIVERO", logo: "../../publico/img/avatars/a3.png" },
+      equipo1: { nombre: "MARÍA GONZÁLEZ", logo: window.URL_BASE_JS + "img/avatars/a2.png" },
+      equipo2: { nombre: "TOMÁS RIVERO", logo: window.URL_BASE_JS + "img/avatars/a3.png" },
       fechas: "10 Junio 2026 - 15 Junio 2026",
       meta: { formato: "Sistema suizo", equipos: "16 Personas", estado: "Abierto" },
       descripcion: "Torneo individual de ajedrez bajo sistema suizo: todos los jugadores compiten la misma cantidad de rondas, enfrentándose contra rivales de puntaje similar en cada ronda.",
@@ -124,17 +124,17 @@ resultados: [
       premios: { primero: "+ $150", segundo: "+ $80", tercero: "+ $40" },
 
       participantes: [
-   { nombre: "María González", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 4.5", imagen: "../../publico/img/avatars/a2.png" },
-   { nombre: "Tomás Rivero", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 4.0", imagen: "../../publico/img/avatars/a3.png" },
-   { nombre: "Lucía Fontana", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 3.5", imagen: "../../publico/img/avatars/a1.png" }
+   { nombre: "María González", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 4.5", imagen: window.URL_BASE_JS + "img/avatars/a2.png" },
+   { nombre: "Tomás Rivero", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 4.0", imagen: window.URL_BASE_JS + "img/avatars/a3.png" },
+   { nombre: "Lucía Fontana", deporte: "Ajedrez", cantidad: "1 Participante", puntos: "Puntos: 3.5", imagen: window.URL_BASE_JS + "img/avatars/a1.png" }
 ],
 
 
 rankingEquipo: {
    filas: [
-      { jugadorFoto: "../../publico/img/avatars/a2.png", jugadorNombre: "María González", juego: "Ajedrez", partidas: 5, puntos: "4.5" },
-      { jugadorFoto: "../../publico/img/avatars/a3.png", jugadorNombre: "Tomás Rivero", juego: "Ajedrez", partidas: 5, puntos: "4.0" },
-      { jugadorFoto: "../../publico/img/avatars/a1.png", jugadorNombre: "Lucía Fontana", juego: "Ajedrez", partidas: 5, puntos: "3.5" }
+      { jugadorFoto: window.URL_BASE_JS + "img/avatars/a2.png", jugadorNombre: "María González", juego: "Ajedrez", partidas: 5, puntos: "4.5" },
+      { jugadorFoto: window.URL_BASE_JS + "img/avatars/a3.png", jugadorNombre: "Tomás Rivero", juego: "Ajedrez", partidas: 5, puntos: "4.0" },
+      { jugadorFoto: window.URL_BASE_JS + "img/avatars/a1.png", jugadorNombre: "Lucía Fontana", juego: "Ajedrez", partidas: 5, puntos: "3.5" }
    ]
 },
 
@@ -213,8 +213,8 @@ resultados: [
    "futbol-5": {
    subtitulo: "Torneo de Fútbol 5",
    tipoParticipacion: "equipos",
-   equipo1: { nombre: "DURAZNO", logo: "../../publico/img/logos/durazno.png" },
-   equipo2: { nombre: "FLORES", logo: "../../publico/img/logos/flores.png" },
+   equipo1: { nombre: "DURAZNO", logo: window.URL_BASE_JS + "img/logos/durazno.png" },
+   equipo2: { nombre: "FLORES", logo: window.URL_BASE_JS + "img/logos/flores.png" },
    fechas: "16 Mayo 2026 - 20 Junio 2026",
    meta: { formato: "Liga", equipos: "12 Equipos", estado: "En curso" },
    descripcion: "Torneo de Fútbol 5 bajo formato de liga: todos los equipos se enfrentan entre sí a lo largo de la temporada, sumando puntos por cada partido ganado. El de más puntos al final es el campeón.",
@@ -222,27 +222,27 @@ resultados: [
    premios: { primero: "+ $200", segundo: "+ $100", tercero: "+ $50" },
 
    participantes: [
-      { nombre: "Leones FC", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 18", imagen: "../../publico/img/avatars/a1.png" },
-      { nombre: "Atlético Norte", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 15", imagen: "../../publico/img/avatars/a1.png" },
-      { nombre: "Deportivo Sur", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 12", imagen: "../../publico/img/avatars/a1.png" }
+      { nombre: "Leones FC", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 18", imagen: window.URL_BASE_JS + "img/avatars/a1.png" },
+      { nombre: "Atlético Norte", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 15", imagen: window.URL_BASE_JS + "img/avatars/a1.png" },
+      { nombre: "Deportivo Sur", deporte: "Fútbol 5", cantidad: "7 Participantes", puntos: "Puntos: 12", imagen: window.URL_BASE_JS + "img/avatars/a1.png" }
    ],
 
    miembros: [
-      { nombre: "Nicolás Pereyra", foto: "../../publico/img/avatars/a1.png" },
-      { nombre: "Bruno Castro", foto: "../../publico/img/avatars/a3.png" },
-      { nombre: "Federico Silva", foto: "../../publico/img/avatars/a2.png" },
-      { nombre: "Diego Martínez", foto: "../../publico/img/avatars/a1.png" },
-      { nombre: "Agustín López", foto: "../../publico/img/avatars/a3.png" },
-      { nombre: "Santiago Núñez", foto: "../../publico/img/avatars/a2.png" },
-      { nombre: "Gonzalo Ramírez", foto: "../../publico/img/avatars/a1.png" }
+      { nombre: "Nicolás Pereyra", foto: window.URL_BASE_JS + "img/avatars/a1.png" },
+      { nombre: "Bruno Castro", foto: window.URL_BASE_JS + "img/avatars/a3.png" },
+      { nombre: "Federico Silva", foto: window.URL_BASE_JS + "img/avatars/a2.png" },
+      { nombre: "Diego Martínez", foto: window.URL_BASE_JS + "img/avatars/a1.png" },
+      { nombre: "Agustín López", foto: window.URL_BASE_JS + "img/avatars/a3.png" },
+      { nombre: "Santiago Núñez", foto: window.URL_BASE_JS + "img/avatars/a2.png" },
+      { nombre: "Gonzalo Ramírez", foto: window.URL_BASE_JS + "img/avatars/a1.png" }
    ],
 
    rankingEquipo: {
-      logoEquipo: "../../publico/img/avatars/a1.png",
+      logoEquipo: window.URL_BASE_JS + "img/avatars/a1.png",
       filas: [
-         { jugadorFoto: "../../publico/img/avatars/a1.png", jugadorNombre: "Nicolás Pereyra", juego: "Fútbol 5", partidas: 6, puntos: "18" },
-         { jugadorFoto: "../../publico/img/avatars/a3.png", jugadorNombre: "Bruno Castro", juego: "Fútbol 5", partidas: 6, puntos: "15" },
-         { jugadorFoto: "../../publico/img/avatars/a2.png", jugadorNombre: "Federico Silva", juego: "Fútbol 5", partidas: 6, puntos: "12" }
+         { jugadorFoto: window.URL_BASE_JS + "img/avatars/a1.png", jugadorNombre: "Nicolás Pereyra", juego: "Fútbol 5", partidas: 6, puntos: "18" },
+         { jugadorFoto: window.URL_BASE_JS + "img/avatars/a3.png", jugadorNombre: "Bruno Castro", juego: "Fútbol 5", partidas: 6, puntos: "15" },
+         { jugadorFoto: window.URL_BASE_JS + "img/avatars/a2.png", jugadorNombre: "Federico Silva", juego: "Fútbol 5", partidas: 6, puntos: "12" }
       ]
    },
 

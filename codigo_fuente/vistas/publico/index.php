@@ -12,12 +12,12 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
    <!-- CSS -->
-   <link rel="stylesheet" href="../../publico/css/base.css">
-   <link rel="stylesheet" href="../../publico/css/variables.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
-   <link rel="stylesheet" href="../../publico/css/componentes/carruseles.css">
-   <link rel="stylesheet" href="../../publico/css/publico/home.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/carruseles.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
 
    <!-- Font Awesome -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -34,7 +34,7 @@
 
    <!-- NAVBAR ---------------------------->
 
-   <header id="navbar-publico-placeholder"></header>
+   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
 
    <main>
 
@@ -47,15 +47,15 @@
          <div class="hero-slider">
 
             <div class="hero-slide active">
-               <img src="../../publico/img/banners/header01.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header01.jpg" alt="">
             </div>
 
             <div class="hero-slide">
-               <img src="../../publico/img/banners/header2.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header2.jpg" alt="">
             </div>
 
             <div class="hero-slide">
-               <img src="../../publico/img/banners/header3.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header3.jpg" alt="">
             </div>
          </div>
 
@@ -78,11 +78,11 @@
 
             <div class="hero-botones">
 
-               <a href="torneos.html" class="primary-btn">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico" class="primary-btn">
                   <span>Explorar Torneos</span>
                </a>
 
-               <a href="../auth/registro.html" class="secondary-btn">
+               <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarRegistro" class="secondary-btn">
                   Comenzar
                </a>
 
@@ -133,7 +133,7 @@
       <section class="funcionalidades reveal">
 
          <div class="funcionalidades-imagen">
-            <img src="../../publico/img/bg.jpg" alt="Funcionalidades Ascend">
+            <img src="<?php echo URL_BASE; ?>img/bg.jpg" alt="Funcionalidades Ascend">
          </div>
 
          <div class="funcionalidades-contenido">
@@ -204,7 +204,7 @@
 
             <h2>Torneos Destacados</h2>
 
-            <a href="torneos.html">
+            <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">
                Ver todos
             </a>
 
@@ -217,7 +217,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card1.jpg" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card1.jpg" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Valorant Champion Series</h3>
                         <div class="tarjeta-meta">
@@ -251,7 +251,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card2.png" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card2.png" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Gran Campeonato de Truco</h3>
                         <div class="tarjeta-meta">
@@ -281,7 +281,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card3.png" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card3.png" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Copa Futbol 5</h3>
                         <div class="tarjeta-meta">
@@ -311,7 +311,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card5.jpg" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card5.jpg" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Valorant Champion Series</h3>
                         <div class="tarjeta-meta">
@@ -341,7 +341,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card4.png" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card4.png" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Torneo Ajedrez </h3>
                         <div class="tarjeta-meta">
@@ -371,7 +371,7 @@
 
                <li>
                   <article class="torneo-tarjeta">
-                     <img src="../../publico/img/torneos/card6.png" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/torneos/card6.png" alt="Valorant">
                      <div class="tarjeta-contenido">
                         <h3>Torneo Naciona de Basquet</h3>
                         <div class="tarjeta-meta">
@@ -416,10 +416,10 @@
          <ul class="vs-lista">
 
             <li>
-               <a href="detalle-torneo.html" class="enfrentamiento-tarjeta">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle" class="enfrentamiento-tarjeta">
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Black Ferns</span>
                   </div>
 
@@ -432,7 +432,7 @@
                   </div>
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Woman's Eagles</span>
                   </div>
 
@@ -440,10 +440,10 @@
             </li>
 
             <li>
-               <a href="detalle-torneo.html" class="enfrentamiento-tarjeta">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=fire-wolves-cyber-titans" class="enfrentamiento-tarjeta">
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Fire Wolves</span>
                   </div>
 
@@ -456,7 +456,7 @@
                   </div>
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Cyber Titans</span>
                   </div>
 
@@ -464,10 +464,10 @@
             </li>
 
             <li>
-               <a href="detalle-torneo.html" class="enfrentamiento-tarjeta">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=artigas-canelones" class="enfrentamiento-tarjeta">
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/artigas.png" alt="Artigas" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/artigas.png" alt="Artigas" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Artigas</span>
                   </div>
 
@@ -480,7 +480,7 @@
                   </div>
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/canelones.png" alt="Canelones" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/canelones.png" alt="Canelones" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Canelones</span>
                   </div>
 
@@ -488,10 +488,10 @@
             </li>
 
             <li>
-               <a href="detalle-torneo.html" class="enfrentamiento-tarjeta">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=colonia-cerro-largo" class="enfrentamiento-tarjeta">
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/colonia.png" alt="Colonia" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/colonia.png" alt="Colonia" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Colonia</span>
                   </div>
 
@@ -504,7 +504,7 @@
                   </div>
 
                   <div class="enfrentamiento-equipo">
-                     <img src="../../publico/img/logos/cerro-largo.png" alt="Cerro Largo" class="enfrentamiento-logo">
+                     <img src="<?php echo URL_BASE; ?>img/logos/cerro-largo.png" alt="Cerro Largo" class="enfrentamiento-logo">
                      <span class="enfrentamiento-nombre">Cerro Largo</span>
                   </div>
                </a>
@@ -528,14 +528,14 @@
                Seguí noticias de torneos, anuncios importantes, resultados destacados
                y actividades de la comunidad ASCEND.
             </p>
-            <a href="en-construccion.html">Ver comunidad</a>
+            <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Ver comunidad</a>
          </div>
 
          <ul class="noticias-grid">
 
             <li>
                <article class="noticias-tarjeta noticias-nuevas">
-                  <img src="../../publico/img/04.jpg" alt="Noticia">
+                  <img src="<?php echo URL_BASE; ?>img/04.jpg" alt="Noticia">
                   <div>
                      <span>Noticias</span>
                      <h3>Nuevo torneo de Valorant disponible</h3>
@@ -615,7 +615,7 @@
             <li>
                <article class="top-jugador-tarjeta drop-down">
                   <img
-                     src="../../publico/img/avatars/a1.png"
+                     src="<?php echo URL_BASE; ?>img/avatars/a1.png"
                      alt="Jugador"
                      class="jugador-img">
 
@@ -630,7 +630,7 @@
             <li>
                <article class="top-jugador-tarjeta drop-up">
                   <img
-                     src="../../publico/img/avatars/a2.png"
+                     src="<?php echo URL_BASE; ?>img/avatars/a2.png"
                      alt="Jugador"
                      class="jugador-img">
 
@@ -644,7 +644,7 @@
             <li>
                <article class="top-jugador-tarjeta drop-down">
                   <img
-                     src="../../publico/img/avatars/a3.png"
+                     src="<?php echo URL_BASE; ?>img/avatars/a3.png"
                      alt="Jugador"
                      class="jugador-img">
 
@@ -658,7 +658,7 @@
             <li>
                <article class="top-jugador-tarjeta drop-up">
                   <img
-                     src="../../publico/img/avatars/a5.png"
+                     src="<?php echo URL_BASE; ?>img/avatars/a5.png"
                      alt="Jugador"
                      class="jugador-img">
 
@@ -671,10 +671,10 @@
          </ul>
       </section>
 
-         <!-------------------------------------->
+      <!-------------------------------------->
       <!-- NEWSLETTER ------------------------->
       <!-------------------------------------->
- 
+
       <section class="newsletter-seccion reveal">
          <div class="newsletter-caja">
             <h2>Boletín de Noticias ASCEND</h2>
@@ -684,24 +684,21 @@
             </form>
          </div>
       </section>
- 
-   </main>
- 
 
    </main>
 
    <!-- FOOTER ---------------------------->
 
-   <footer id="footer-publico-placeholder"></footer>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
 
-   <script src="../../publico/js/includesPublicos.js"></script>
-   <script src="../../publico/js/scroll-reveal.js"></script>
-   <script src="../../publico/js/preloader.js"></script>
-   <script src="../../publico/js/navbar.js"></script>
-   <script src="../../publico/js/hero-slider.js"></script>
-   <script src="../../publico/js/featured-games.js"></script>
-   <script src="../../publico/js/carruselTorneos.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/preloader.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/featured-games.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/carruselTorneos.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 </body>

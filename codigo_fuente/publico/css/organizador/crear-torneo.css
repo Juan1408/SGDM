@@ -217,6 +217,11 @@
    gap: .75rem;
 }
 
+.crear-torneo-campo .banner-preview {
+   max-width: 480px;
+}
+
+
 .banner-divider {
    display: flex;
    align-items: center;

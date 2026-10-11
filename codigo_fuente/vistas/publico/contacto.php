@@ -8,12 +8,12 @@
 
    <title>ASCEND - Contacto</title>
 
-   <link rel="stylesheet" href="../../publico/css/variables.css">
-   <link rel="stylesheet" href="../../publico/css/base.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../publico/css/publico/home.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
-   <link rel="stylesheet" href="../../publico/css/publico/contacto.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/contacto.css">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
@@ -27,7 +27,7 @@
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <header id="navbar-publico-placeholder"></header>
+   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
 
    <main>
 
@@ -39,13 +39,13 @@
 
          <div class="hero-slider">
             <div class="hero-slide active">
-               <img src="../../publico/img/banners/header01.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header01.jpg" alt="">
             </div>
             <div class="hero-slide">
-               <img src="../../publico/img/banners/header2.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header2.jpg" alt="">
             </div>
             <div class="hero-slide">
-               <img src="../../publico/img/banners/header3.jpg" alt="">
+               <img src="<?php echo URL_BASE; ?>img/banners/header3.jpg" alt="">
             </div>
          </div>
 
@@ -60,11 +60,11 @@
             </p>
             <div class="hero-botones">
 
-               <a href="torneos.html" class="primary-btn">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico" class="primary-btn">
                   <span>Explorar Torneos</span>
                </a>
 
-               <a href="../auth/registro.html" class="secondary-btn">
+               <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarRegistro" class="secondary-btn">
                   Comenzar
                </a>
 
@@ -114,9 +114,9 @@
                <div>
                   <h2>Redes</h2>
                   <div class="contacto-redes">
-                     <a href="en-construccion.html" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
-                     <a href="en-construccion.html" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                     <a href="en-construccion.html" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
                   </div>
                </div>
             </div>
@@ -153,12 +153,12 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <footer id="footer-publico-placeholder"></footer>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
-   <script src="../../publico/js/includesPublicos.js"></script>
-   <script src="../../publico/js/navbar.js"></script>
-   <script src="../../publico/js/hero-slider.js"></script>
-   <script src="../../publico/js/scroll-reveal.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
 
 </body>
 

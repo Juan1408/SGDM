@@ -90,29 +90,6 @@ document.addEventListener(
          );
       }
 
-      /*
-================================================
-   SESIÓN DE JUGADOR (mockup con localStorage)
-================================================
-*/
-
-const esJugadorLogueado =
-   localStorage.getItem("sesionActiva") === "jugador";
-
-const authLinksJugador =
-   document.getElementById("auth-links-jugador");
-
-const sidebarFlotante =
-   document.getElementById("sidebar-jugador-flotante");
-
-const authLinksInvitado =
-   document.querySelector(".auth-links:not(.auth-links--jugador)");
-
-if (esJugadorLogueado) {
-   if (authLinksInvitado) authLinksInvitado.classList.add("oculto");
-   if (authLinksJugador) authLinksJugador.classList.remove("oculto");
-   if (sidebarFlotante) sidebarFlotante.classList.remove("oculto");
-}
 
 const NOTIFICACIONES_MOCK = [
    { id: 1, tipo: "solicitud", titulo: "Nueva solicitud", mensaje: "Ignacio Ferreira quiere unirse a tu equipo Fire Wolves", leido: false },
@@ -222,13 +199,6 @@ document.addEventListener("click", () => {
    if (dropdownMiPerfil) dropdownMiPerfil.classList.remove("open");
 });
 
-const cerrarSesionBtn = document.getElementById("cerrar-sesion-btn");
 
-if (cerrarSesionBtn) {
-   cerrarSesionBtn.addEventListener("click", () => {
-      localStorage.removeItem("sesionActiva");
-      window.location.href = "../publico/index.html";
-   });
-}
    }
 );

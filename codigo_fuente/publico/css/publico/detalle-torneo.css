@@ -12,7 +12,7 @@
    ========================================================================== */
 .td-hero {
    min-height: 320px;
-   padding: 48px 6%;
+   padding: 130px 6% 56px;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -21,11 +21,10 @@
    text-align: center;
    background-color: var(--fondo-principal);
    background-image:
-      linear-gradient(rgba(2, 1, 3, .6), rgba(2, 1, 3, .6)),
-      url("../../img/banners/humo1.jpg");
-   background-size: cover, contain;
+      linear-gradient(rgba(0, 180, 200, .35), rgba(45, 0, 60, .85)),
+      var(--td-banner, url("../../img/banners/humo1.jpg"));
+   background-size: cover;
    background-repeat: no-repeat;
-   background-position: center;
    background-position: center;
 }
 
@@ -38,6 +37,28 @@
 .td-hero-contenido p {
    font-size: 16px;
    margin: -5px;
+}
+
+/* Header: duración e inscripciones en líneas separadas */
+#hero-duracion,
+#hero-fechas {
+   display: block;
+}
+
+#hero-duracion {
+   font-size: 20px;
+   margin: 7px 0 6px;
+   color: var(--color-primario);
+
+}
+
+/* Nombre del torneo */
+.td-hero-contenido h1 {
+   font-size: 30px;
+   font-weight: 600;
+   line-height: 1.15;
+   margin: 10px 0;
+   overflow-wrap: break-word;
 }
 
 .td-hero-contenido h2 {
@@ -53,11 +74,11 @@
 }
 
 .td-actions {
-   margin-top: 24px;
+   margin-top: 20px;
    display: flex;
    flex-direction: column;
    align-items: center;
-   gap: 14px;
+   gap: 10px;
 }
 
 .td-actions a {
@@ -80,12 +101,12 @@
 
    .td-hero {
       min-height: 380px;
-      padding: 80px 8%;
+      padding: 120px 8% 60px;
       flex-direction: row;
       gap: 45px;
       background-image:
          linear-gradient(rgba(0, 180, 200, .35), rgba(45, 0, 60, .85)),
-         url("../../img/banners/humo1.jpg");
+         var(--td-banner, url("../../img/banners/humo1.jpg"));
       background-size: cover;
    }
 
@@ -99,6 +120,13 @@
       margin: -5px;
    }
 
+    .td-hero-contenido h1 {
+      font-size: 64px;
+      line-height: 1.1;
+      margin: 6px 0 10px;
+   }
+
+
    .td-hero-contenido h2 {
       font-size: 42px;
       line-height: normal;
@@ -106,7 +134,7 @@
    }
 
    .td-actions {
-      margin-top: 42px;
+      margin-top: 22px;
    }
 
    .td-actions a {
@@ -235,12 +263,19 @@ TABS RESPONSIVE (min-width: 700px)
 .td-meta {
    display: flex;
    flex-wrap: wrap;
-   gap: 12px 18px;
+   gap: 10px;
    padding-bottom: 18px;
    border-bottom: 1px solid var(--color-secundario);
    color: #ff00ff;
    font-weight: 700;
-   font-size: 14px;
+   font-size: 13px;
+}
+
+.td-meta span {
+   padding: 8px 14px;
+   background: rgba(255, 0, 255, 0.1);
+   border: 1px solid rgba(255, 0, 255, 0.3);
+   border-radius: 10px;
 }
 
 .td-info-general h2,
@@ -328,6 +363,28 @@ TABS RESPONSIVE (min-width: 700px)
 .actividad-item.tipo-pausa { border-left-color: #888; opacity: 0.75; }
 .actividad-item.tipo-pausa .actividad-icono { background: rgba(255, 255, 255, 0.08); color: #aaa; }
 
+.actividad-item.tipo-competencia { border-left-color: var(--color-azul); }
+.actividad-item.tipo-competencia .actividad-icono { background: rgba(var(--color-azul-rgb), 0.15); color: var(--color-azul); }
+
+.actividad-item.tipo-reunion { border-left-color: #00c2a8; }
+.actividad-item.tipo-reunion .actividad-icono { background: rgba(0, 194, 168, 0.15); color: #00c2a8; }
+
+.actividad-item.tipo-administrativo { border-left-color: #888; }
+.actividad-item.tipo-administrativo .actividad-icono { background: rgba(255, 255, 255, 0.08); color: #aaa; }
+
+.actividad-item.tipo-partido { border-left-color: var(--color-primario); }
+
+.actividad-marcador {
+   margin-left: auto;
+   flex-shrink: 0;
+   font-weight: 800;
+   color: var(--color-secundario);
+}
+
+.streaming-video-enlace {
+   display: block;
+}
+
 @media (min-width: 600px) {
 
    .actividad-item {
@@ -381,6 +438,13 @@ TABS RESPONSIVE (min-width: 700px)
    font-weight: 700;
 }
 
+.tarjeta-trofeo--plata i {
+   color: #c0c8d0;
+}
+
+.tarjeta-trofeo--bronce i {
+   color: #cd7f32;
+}
 
 /* ==========================================================================
         BLOQUE: COMENTARIOS Y FORMULARIO (EXCLUSIVOS DE INFORMACIÓN)
@@ -481,8 +545,7 @@ TABS RESPONSIVE (min-width: 700px)
 @media (min-width: 600px) {
 
    .td-meta {
-      justify-content: space-between;
-      font-size: 16px;
+      font-size: 15px;
    }
 
    .td-trofeos-lista {
@@ -2016,4 +2079,111 @@ TABS RESPONSIVE (min-width: 700px)
       width: 100%;
       border-radius: 8px;
    }
+}
+
+/* Botón de inscripción del hero (sirve para <a>, <button> y estado cerrado) */
+.td-boton-inscripcion {
+   display: inline-block;
+   padding: 12px 40px;
+   border: none;
+   border-radius: 8px;
+   background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
+   color: var(--texto-principal);
+   font-family: inherit;
+   font-size: 1rem;
+   font-weight: 700;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+.td-boton-inscripcion--cerrado {
+   background: rgba(255, 255, 255, 0.15);
+   color: rgba(255, 255, 255, 0.7);
+   cursor: not-allowed;
+}
+
+/* Pop-up para elegir el equipo a inscribir */
+.td-modal {
+   position: fixed;
+   inset: 0;
+   margin: auto;
+   width: min(420px, 90vw);
+   height: fit-content;
+   padding: 28px;
+   border: 1px solid rgba(255, 255, 255, 0.12);
+   border-radius: 12px;
+   background: #101010;
+   color: var(--texto-principal);
+   color-scheme: dark;
+   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.td-modal::backdrop {
+   background: rgba(0, 0, 0, 0.7);
+   backdrop-filter: blur(3px);
+}
+
+.td-modal h2 {
+   margin-bottom: 18px;
+   font-size: 1.05rem;
+}
+
+.td-modal label {
+   display: block;
+   margin-bottom: 8px;
+}
+
+.td-modal select {
+   width: 100%;
+   margin-bottom: 18px;
+   padding: 10px 12px;
+   border: 1px solid rgba(255, 255, 255, 0.16);
+   border-radius: 8px;
+   background: #1d1d33;
+   color: #fff;
+   font-family: inherit;
+}
+
+.td-modal select:focus {
+   outline: none;
+   border-color: var(--color-primario);
+}
+
+.td-modal-acciones {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+}
+
+.td-modal-boton {
+   padding: 8px 26px;
+   border: none;
+   border-radius: 6px;
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+   color: var(--texto-principal);
+   font-family: inherit;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.td-modal-cancelar {
+   border: none;
+   background: transparent;
+   color: var(--texto-secundario);
+   font-family: inherit;
+   text-decoration: underline;
+   cursor: pointer;
+}
+
+.participantes-enlace {
+   display: block;
+   color: inherit;
+   text-decoration: none;
+}
+
+.actividad-descripcion {
+   display: block;
+   margin-top: 4px;
+   font-size: 0.85rem;
+   opacity: 0.75;
 }

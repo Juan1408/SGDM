@@ -6,11 +6,11 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>ASCEND - Perfil Organizador</title>
 
-   <link rel="stylesheet" href="../../publico/css/variables.css">
-   <link rel="stylesheet" href="../../publico/css/base.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
-   <link rel="stylesheet" href="../../publico/css/publico/perfil-publico-organizador.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/perfil-publico-organizador.css">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
    <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <header id="navbar-publico-placeholder"></header>
+   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
 
    <main class="equipo-pagina">
 
@@ -32,12 +32,12 @@
       <header class="equipo-hero">
 
          <div class="equipo-hero-banner">
-            <img src="../../publico/img/bg.jpg" alt="Banner del organizador">
+            <img src="<?php echo URL_BASE; ?>img/bg.jpg" alt="Banner del organizador">
          </div>
 
          <div class="equipo-identidad">
             <div class="equipo-logo">
-               <img src="../../publico/img/avatars/a1.png" alt="Foto del organizador">
+               <img src="<?php echo URL_BASE; ?>img/avatars/a1.png" alt="Foto del organizador">
             </div>
 
             <div class="equipo-info-texto">
@@ -100,6 +100,7 @@
       <!-- ============================== -->
       <!-- TORNEOS QUE ORGANIZA           -->
       <!-- ============================== -->
+      <!-- Todavia con datos de ejemplo -- se conecta en un paso siguiente -->
       <section class="team-members" id="torneos-organiza">
 
          <h2 class="section-title-gradient">Torneos que organiza</h2>
@@ -107,8 +108,8 @@
          <ul class="torneos-organiza-grid">
 
             <li>
-               <a href="detalle-torneo.html" class="torneo-organiza-card">
-                  <img src="../../publico/img/torneos/card1.jpg" alt="Virtual Odyssey Chronicles">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle" class="torneo-organiza-card">
+                  <img src="<?php echo URL_BASE; ?>img/torneos/card1.jpg" alt="Virtual Odyssey Chronicles">
                   <div class="torneo-organiza-info">
                      <h3>Virtual Odyssey Chronicles</h3>
                      <span>eSports · 26 mayo 2026</span>
@@ -117,8 +118,8 @@
             </li>
 
             <li>
-               <a href="detalle-torneo.html" class="torneo-organiza-card">
-                  <img src="../../publico/img/torneos/card2.png" alt="Valorant Champion Series">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=valorant-champion-series" class="torneo-organiza-card">
+                  <img src="<?php echo URL_BASE; ?>img/torneos/card2.png" alt="Valorant Champion Series">
                   <div class="torneo-organiza-info">
                      <h3>Valorant Champion Series</h3>
                      <span>Competencia regional · 18 junio 2026</span>
@@ -127,8 +128,8 @@
             </li>
 
             <li>
-               <a href="detalle-torneo.html" class="torneo-organiza-card">
-                  <img src="../../publico/img/torneos/card3.png" alt="Copa Futbol 5">
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=copa-futbol-5" class="torneo-organiza-card">
+                  <img src="<?php echo URL_BASE; ?>img/torneos/card3.png" alt="Copa Futbol 5">
                   <div class="torneo-organiza-info">
                      <h3>Copa Futbol 5</h3>
                      <span>Deportes mixtos · 08 julio 2026</span>
@@ -144,6 +145,7 @@
       <!-- EQUIPOS QUE GESTIONA           -->
       <!-- Mismas clases que mis-equipos.html -->
       <!-- ============================== -->
+      <!-- Todavia con datos de ejemplo -- se conecta en un paso siguiente -->
       <section class="team-members" id="equipos-gestiona">
 
          <h2 class="section-title-gradient">Equipos que gestiona</h2>
@@ -152,45 +154,45 @@
 
             <li>
                <article class="mi-equipo-card">
-                  <img src="../../publico/img/logos/logo.png" alt="Fire Wolves">
+                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Fire Wolves">
                   <div class="mi-equipo-info">
                      <h3>Fire Wolves</h3>
                      <span class="mi-equipo-badge badge-miembro">eSports</span>
                   </div>
-                  <a href="perfil-equipo.html" class="boton-secundario">Ver perfil</a>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
                </article>
             </li>
 
             <li>
                <article class="mi-equipo-card">
-                  <img src="../../publico/img/logos/logo.png" alt="Cyber Titans">
+                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Cyber Titans">
                   <div class="mi-equipo-info">
                      <h3>Cyber Titans</h3>
                      <span class="mi-equipo-badge badge-miembro">eSports</span>
                   </div>
-                  <a href="perfil-equipo.html" class="boton-secundario">Ver perfil</a>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
                </article>
             </li>
 
             <li>
                <article class="mi-equipo-card">
-                  <img src="../../publico/img/logos/logo.png" alt="Dragon Crew">
+                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Dragon Crew">
                   <div class="mi-equipo-info">
                      <h3>Dragon Crew</h3>
                      <span class="mi-equipo-badge badge-miembro">Tradicional</span>
                   </div>
-                  <a href="perfil-equipo.html" class="boton-secundario">Ver perfil</a>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
                </article>
             </li>
 
             <li>
                <article class="mi-equipo-card">
-                  <img src="../../publico/img/logos/logo.png" alt="Mental Squad">
+                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Mental Squad">
                   <div class="mi-equipo-info">
                      <h3>Mental Squad</h3>
                      <span class="mi-equipo-badge badge-miembro">Mental</span>
                   </div>
-                  <a href="perfil-equipo.html" class="boton-secundario">Ver perfil</a>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
                </article>
             </li>
 
@@ -272,10 +274,10 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <footer id="footer-publico-placeholder"></footer>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
-   <script src="../../publico/js/includesPublicos.js"></script>
-   <script src="../../publico/js/navbar.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
 
 </body>
 </html>

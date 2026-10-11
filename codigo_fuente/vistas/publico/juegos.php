@@ -6,12 +6,12 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>ASCEND - Juegos</title>
 
-   <link rel="stylesheet" href="../../publico/css/variables.css">
-   <link rel="stylesheet" href="../../publico/css/base.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/navbar.css">
-   <link rel="stylesheet" href="../../publico/css/publico/home.css">
-   <link rel="stylesheet" href="../../publico/css/layouts/footer.css">
-   <link rel="stylesheet" href="../../publico/css/publico/juegos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/juegos.css">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
    <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,7 @@
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <header id="navbar-publico-placeholder"></header>
+   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
 
    <!-------------------------------------->
    <!-- HERO ------------------------------>
@@ -36,13 +36,13 @@
 
       <div class="hero-slider">
          <div class="hero-slide active">
-            <img src="../../publico/img/banners/header01.jpg" alt="">
+            <img src="<?php echo URL_BASE; ?>img/banners/header01.jpg" alt="">
          </div>
          <div class="hero-slide">
-            <img src="../../publico/img/banners/header2.jpg" alt="">
+            <img src="<?php echo URL_BASE; ?>img/banners/header2.jpg" alt="">
          </div>
          <div class="hero-slide">
-            <img src="../../publico/img/banners/header3.jpg" alt="">
+            <img src="<?php echo URL_BASE; ?>img/banners/header3.jpg" alt="">
          </div>
       </div>
 
@@ -104,6 +104,7 @@
       <!-------------------------------------->
       <!-- GRID DE JUEGOS --------------------->
       <!-------------------------------------->
+      <!-- Todavia con datos de ejemplo -- se conecta con la tabla juegos en un paso siguiente -->
 
       <section class="juegos-grilla-seccion">
 
@@ -112,7 +113,7 @@
             <li>
                <article class="tarjeta-juego val" data-categoria="esports" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/valorant.jpg" alt="Valorant">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/valorant.jpg" alt="Valorant">
                      <div class="tarjeta-overlay">
                         <h2>Valorant</h2>
                         <p>eSports · Por equipos</p>
@@ -124,7 +125,7 @@
             <li>
                <article class="tarjeta-juego lol" data-categoria="esports" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/odyssey.png" alt="League of Legends">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/odyssey.png" alt="League of Legends">
                      <div class="tarjeta-overlay">
                         <h2>League of Legends</h2>
                         <p>eSports · Por equipos</p>
@@ -136,7 +137,7 @@
             <li>
                <article class="tarjeta-juego apex" data-categoria="esports" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/fly.jpg" alt="Apex Legends">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/fly.jpg" alt="Apex Legends">
                      <div class="tarjeta-overlay">
                         <h2>Apex Legends</h2>
                         <p>eSports · Por equipos</p>
@@ -148,7 +149,7 @@
             <li>
                <article class="tarjeta-juego cs" data-categoria="esports" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/dos.jpg" alt="Counter Strike">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/dos.jpg" alt="Counter Strike">
                      <div class="tarjeta-overlay">
                         <h2>Counter Strike</h2>
                         <p>eSports · Por equipos</p>
@@ -160,7 +161,7 @@
             <li>
                <article class="tarjeta-juego wow" data-categoria="esports" data-modalidad="individual">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/mystic.png" alt="World of Warcraft">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/mystic.png" alt="World of Warcraft">
                      <div class="tarjeta-overlay">
                         <h2>World of Warcraft</h2>
                         <p>eSports · Individual</p>
@@ -172,7 +173,7 @@
             <li>
                <article class="tarjeta-juego chess" data-categoria="mentales" data-modalidad="individual">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/chess.jpg" alt="Ajedrez">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/chess.jpg" alt="Ajedrez">
                      <div class="tarjeta-overlay">
                         <h2>Ajedrez</h2>
                         <p>Mental · Individual</p>
@@ -184,7 +185,7 @@
             <li>
                <article class="tarjeta-juego truco" data-categoria="tradicionales" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/truco.jpg" alt="Truco">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/truco.jpg" alt="Truco">
                      <div class="tarjeta-overlay">
                         <h2>Truco</h2>
                         <p>Mesa · Por equipos</p>
@@ -196,7 +197,7 @@
             <li>
                <article class="tarjeta-juego uno" data-categoria="tradicionales" data-modalidad="individual">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/uno.jpg" alt="Uno">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/uno.jpg" alt="Uno">
                      <div class="tarjeta-overlay">
                         <h2>Uno</h2>
                         <p>Mesa · Individual</p>
@@ -208,7 +209,7 @@
             <li>
                <article class="tarjeta-juego basquet" data-categoria="tradicionales" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/basquet.png" alt="Básquetbol">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/basquet.png" alt="Básquetbol">
                      <div class="tarjeta-overlay">
                         <h2>Básquetbol</h2>
                         <p>Deporte · Por equipos</p>
@@ -220,7 +221,7 @@
             <li>
                <article class="tarjeta-juego futbol5" data-categoria="tradicionales" data-modalidad="equipos">
                   <div class="tarjeta-info">
-                     <img src="../../publico/img/juegos/futbol5.jpg" alt="Fútbol 5">
+                     <img src="<?php echo URL_BASE; ?>img/juegos/futbol5.jpg" alt="Fútbol 5">
                      <div class="tarjeta-overlay">
                         <h2>Fútbol 5</h2>
                         <p>Deporte · Por equipos</p>
@@ -232,7 +233,7 @@
          </ul>
 
          <div class="ver-mas-boton">
-            <a href="en-construccion.html" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
+            <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
       transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Ver más fechas</a>
          </div>
@@ -246,13 +247,13 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <footer id="footer-publico-placeholder"></footer>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
-   <script src="../../publico/js/includesPublicos.js"></script>
-   <script src="../../publico/js/navbar.js"></script>
-   <script src="../../publico/js/hero-slider.js"></script>
-   <script src="../../publico/js/scroll-reveal.js"></script>
-   <script src="../../publico/js/juegos.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/juegos.js"></script>
 
 </body>
 </html>

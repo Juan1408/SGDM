@@ -220,6 +220,7 @@
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
 
    <div class="etiqueta-seccion">Mi actividad</div>
+   <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=dashboard"><i class="fa-solid fa-house"></i> Inicio</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes"><i class="fa-solid fa-user-plus"></i> Solicitudes</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=index"><i class="fa-solid fa-people-group"></i> Mis Equipos</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear"><i class="fa-solid fa-plus"></i> Crear equipo</a>
@@ -236,6 +237,12 @@
 <aside class="sidebar-jugador-flotante" id="sidebar-jugador-flotante" aria-label="Navegación del jugador">
    <nav aria-label="Menú del jugador">
       <ul class="sidebar-flotante-lista">
+         <li>
+            <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=dashboard" class="sidebar-flotante-item" title="Inicio">
+               <i class="fa-solid fa-house" aria-hidden="true"></i>
+               <span>Inicio</span>
+            </a>
+         </li>
          <li>
             <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes" class="sidebar-flotante-item" title="Solicitudes">
                <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
