@@ -116,7 +116,8 @@
 .chips-contenedor {
    display: flex;
    flex-wrap: wrap;
-   gap: 8px;
+   gap: 6px;
+   align-items: center;
    list-style: none;
    margin: 0;
    padding: 0;
@@ -125,17 +126,19 @@
 .chip {
    border: none;
    background: transparent;
-   color: #351080;
-   font-size: 15px;
-   cursor: pointer;
-   padding: 10px;
+   color: #2102d1;
+   font-size: 14px;
    white-space: nowrap;
+   padding: 10px 12px;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: 0.3s ease;
 }
 
 .chip.active,
 .chip:hover {
-   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
-   color: #351080;
+   background: linear-gradient(90deg, var(--color-violeta));
+   color: #fefdff;
    box-shadow: none;
 }
 
@@ -316,7 +319,7 @@
    }
 
    .chip {
-      font-size: 17px;
+      font-size: 16px;
       padding: 12px;
    }
 

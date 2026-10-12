@@ -98,6 +98,7 @@
                                 <a href="index.php?c=errorTracking&a=verDetalle&id=<?= $error['id'] ?>" class="btn btn-primario"><i class="fa-solid fa-expand"></i> Pantalla Completa</a>
                                 
                                 <form method="POST" action="index.php?c=errorTracking&a=accionError" class="form-accion">
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="id" value="<?= $error['id'] ?>">
                                     
                                     <?php if ($error['estado'] !== 'revision'): ?>
@@ -146,6 +147,7 @@
             <button type="button" class="btn-cerrar" onclick="cerrarModal()">&times;</button>
         </div>
         <form method="POST" action="index.php?c=errorTracking&a=accionError" id="form-resolucion">
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="id" id="modal-error-id" value="">
             <input type="hidden" name="accion" value="cambiar_estado">
             <input type="hidden" name="estado" value="resuelto">

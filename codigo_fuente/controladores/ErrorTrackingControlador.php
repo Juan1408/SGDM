@@ -57,6 +57,7 @@ class ErrorTrackingControlador {
      */
     public function accionError() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            \App\Ayudantes\Sesion::requerirTokensCSRF();
             $id = $_POST['id'] ?? null;
             $accion = $_POST['accion'] ?? null;
 

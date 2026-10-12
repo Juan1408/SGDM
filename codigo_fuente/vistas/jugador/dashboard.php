@@ -15,6 +15,12 @@ $victorias = $record['victorias'];
 $derrotas = $record['derrotas'];
 $totalPartidos = $victorias + $derrotas;
 $winrate = $totalPartidos > 0 ? round(($victorias / $totalPartidos) * 100) : 0;
+$etiquetasInscripcion = [
+    'pendiente' => 'Pendiente de aprobación',
+    'confirmado' => 'Confirmada',
+    'rechazado' => 'Rechazada',
+    'cancelado' => 'Cancelada',
+];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -97,6 +103,41 @@ $winrate = $totalPartidos > 0 ? round(($victorias / $totalPartidos) * 100) : 0;
                            <?php endif; ?>
                         </span>
                      </div>
+                  </div>
+               <?php endforeach; ?>
+            </div>
+         <?php endif; ?>
+      </section>
+
+            <!-- ============================== -->
+      <!-- MIS INSCRIPCIONES              -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo">
+         <h2>Mis Inscripciones</h2>
+
+         <?php if (empty($misInscripciones)): ?>
+            <p class="lista-vacia">
+               Todavía no te inscribiste a ningún torneo.
+               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Explorá los torneos</a>.
+            </p>
+         <?php else: ?>
+            <div class="lista-jugadores">
+               <?php foreach ($misInscripciones as $inscripcion): ?>
+                  <div class="fila-jugador">
+                     <div class="fila-jugador-info">
+                        <span class="fila-jugador-nombre">
+                           <?php echo htmlspecialchars($inscripcion['torneo_nombre']); ?>
+                        </span>
+                        <span class="fila-jugador-usuario">
+                           <?php echo $inscripcion['tipo'] === 'equipo' ? 'Equipo' : 'Individual'; ?>:
+                           <?php echo htmlspecialchars($inscripcion['nombre']); ?>
+                           · <?php echo date('d/m/Y', strtotime($inscripcion['fecha_inscripcion'])); ?>
+                        </span>
+                     </div>
+                     <span class="mi-equipo-badge <?php echo $inscripcion['estado'] === 'confirmado' ? 'badge-lider' : 'badge-miembro'; ?>">
+                        <?php echo htmlspecialchars($etiquetasInscripcion[$inscripcion['estado']] ?? $inscripcion['estado']); ?>
+                     </span>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $inscripcion['torneo_id']; ?>" class="boton-secundario">Ver torneo</a>
                   </div>
                <?php endforeach; ?>
             </div>

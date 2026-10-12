@@ -94,6 +94,7 @@ document.addEventListener('partialsListos', () => {
       misTorneos: 'mis-torneos',
       crear: 'crear-torneo',
       gestionar: 'mis-torneos',
+      administrar: 'mis-torneos',
       resultados: 'resultados',
       historial: 'historial',
       calendario: 'calendario'

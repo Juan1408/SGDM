@@ -58,7 +58,8 @@
                <?php foreach ($torneosGuardados as $torneo): ?>
                   <li>
                      <article class="torneos-organiza-tarjeta">
-                        <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=quitar">
+                        <form method="POST" action="<?php echo URL_BASE; ?>
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=guardados&a=quitar">
                            <input type="hidden" name="tipo" value="torneo">
                            <input type="hidden" name="referencia_id" value="<?php echo (int) $torneo['id']; ?>">
                            <button type="submit" class="boton-quitar-favorito" title="Quitar de guardados">
@@ -94,7 +95,8 @@
                <?php foreach ($equiposGuardados as $equipo): ?>
                   <li>
                      <article class="mi-tarjeta-equipo">
-                        <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=quitar">
+                        <form method="POST" action="<?php echo URL_BASE; ?>
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=guardados&a=quitar">
                            <input type="hidden" name="tipo" value="equipo">
                            <input type="hidden" name="referencia_id" value="<?php echo (int) $equipo['id']; ?>">
                            <button type="submit" class="boton-quitar-favorito" title="Quitar de guardados">

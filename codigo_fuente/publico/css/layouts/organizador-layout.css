@@ -21,6 +21,10 @@ html {
    overflow-x: hidden;
 }
 
+:root {
+   --alto-navbar: 80px;
+}
+
 body {
    margin: 0;
    font-family: 'Poppins', sans-serif;
@@ -85,6 +89,7 @@ body {
 .navbar-organizador-buscar {
    display: none; /* oculto en mobile, ver min-width:600px */
 }
+
 
 .navbar-organizador-acciones {
    display: flex;

@@ -63,7 +63,7 @@ $escapar = static fn($valor): string => htmlspecialchars((string) $valor, ENT_QU
 </head>
 
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador perfil-pagina">
         <header class="dashboard-header">

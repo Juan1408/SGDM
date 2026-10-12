@@ -193,7 +193,8 @@
                   <div class="dropdown-mi-perfil" id="dropdown-mi-perfil">
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-user"></i> Mi Perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
-                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+                     <form method="POST" action="<?php echo URL_BASE; ?>
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=auth&a=logout">
                         <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
                      </form>
                   </div>
@@ -220,13 +221,15 @@
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
 
    <div class="etiqueta-seccion">Mi actividad</div>
+   <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=dashboard"><i class="fa-solid fa-house"></i> Inicio</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes"><i class="fa-solid fa-user-plus"></i> Solicitudes</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=index"><i class="fa-solid fa-people-group"></i> Mis Equipos</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear"><i class="fa-solid fa-plus"></i> Crear equipo</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil#historial"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=guardados&a=index"><i class="fa-solid fa-bookmark"></i> Guardados</a>
 
-   <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+   <form method="POST" action="<?php echo URL_BASE; ?>
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=auth&a=logout">
       <button type="submit" class="cerrar-sesion"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
    </form>
 
@@ -236,6 +239,12 @@
 <aside class="sidebar-jugador-flotante" id="sidebar-jugador-flotante" aria-label="Navegación del jugador">
    <nav aria-label="Menú del jugador">
       <ul class="sidebar-flotante-lista">
+         <li>
+            <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=dashboard" class="sidebar-flotante-item" title="Inicio">
+               <i class="fa-solid fa-house" aria-hidden="true"></i>
+               <span>Inicio</span>
+            </a>
+         </li>
          <li>
             <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes" class="sidebar-flotante-item" title="Solicitudes">
                <i class="fa-solid fa-user-plus" aria-hidden="true"></i>

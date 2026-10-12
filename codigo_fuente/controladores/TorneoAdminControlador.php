@@ -85,6 +85,7 @@ class TorneoAdminControlador {
 
     public function actualizar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            \App\Ayudantes\Sesion::requerirTokensCSRF();
             $id = $_POST['id'] ?? null;
             $nombre = $_POST['nombre'] ?? '';
             $estado = $_POST['estado'] ?? '';

@@ -47,7 +47,161 @@ class Torneo {
     public function obtenerUltimosTorneos(int $limite = 5){
         return $this->obtenerUltimosTorneosCreados($limite);
     }
+
+    //Metodo para inscribir a un jugador o equipo en un torneo
+    public function inscribirse(int $torneoId, string $tipo, int $referenciaId, string $nombre): bool {
+        $sql = "INSERT INTO participantes_torneo (torneo_id, tipo, referencia_id, nombre)
+                VALUES (:torneo_id, :tipo, :referencia_id, :nombre)";
+        $stmt = $this->bd->prepare($sql);
+        return $stmt->execute([
+            ':torneo_id' => $torneoId,
+            ':tipo' => $tipo,
+            ':referencia_id' => $referenciaId,
+            ':nombre' => $nombre,
+        ]);
+    }
+
+    //Metodo para saber si el jugador (directo o via alguno de sus equipos) ya esta inscripto
+    public function obtenerInscripcionDelJugador(int $torneoId, int $usuarioId, array $equipoIds): ?array {
+        $condiciones = ["(tipo = 'usuario' AND referencia_id = :usuarioId)"];
+        $parametros = [':torneoId' => $torneoId, ':usuarioId' => $usuarioId];
+
+        if (!empty($equipoIds)) {
+            $marcadores = [];
+            foreach ($equipoIds as $indice => $equipoId) {
+                $clave = ":equipoId{$indice}";
+                $marcadores[] = $clave;
+                $parametros[$clave] = (int) $equipoId;
+            }
+            $condiciones[] = "(tipo = 'equipo' AND referencia_id IN (" . implode(',', $marcadores) . "))";
+        }
+
+        $sql = "SELECT * FROM participantes_torneo WHERE torneo_id = :torneoId AND (" . implode(' OR ', $condiciones) . ") LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
+        $inscripcion = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $inscripcion ?: null;
+    }
+
+        //Metodo para el detalle publico de un torneo puntual (ya publicado)
+    public function obtenerTorneoPublico(int $torneoId): ?array {
+        $sql = "SELECT t.*, j.nombre AS nombre_juego, j.categoria AS categoria_juego,
+                       m.nombre AS nombre_modalidad, u.nombre_completo AS nombre_organizador
+                FROM torneos t
+                INNER JOIN juegos j ON j.id = t.juego_id
+                INNER JOIN modalidades m ON m.id = t.modalidad_id
+                INNER JOIN usuarios u ON u.id = t.organizador_id
+                WHERE t.id = :id AND t.estado <> 'borrador' AND t.estado <> 'cancelado'
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $torneoId]);
+        $torneo = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $torneo ?: null;
+    }
     
+    //Agenda publica del torneo: actividades del cronograma + partidos con fecha programada
+    public function obtenerAgendaPublica(int $torneoId): array {
+        $sql = "SELECT fecha, hora, tipo, titulo, descripcion, estado, res_local, res_visitante FROM (
+                    SELECT a.fecha, a.hora, a.tipo, a.titulo, a.descripcion,
+                           NULL AS estado, NULL AS res_local, NULL AS res_visitante
+                    FROM torneo_actividades a
+                    WHERE a.torneo_id = :torneo_id_actividad
+                    UNION ALL
+                    SELECT DATE(e.fecha_hora_programada), TIME(e.fecha_hora_programada), 'partido',
+                           CONCAT(COALESCE(pl.nombre, 'Por definir'), ' vs ', COALESCE(pv.nombre, 'Por definir')),
+                           NULL,
+                           e.estado, e.resultado_local, e.resultado_visitante
+                    FROM torneo_encuentros e
+                    LEFT JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+                    LEFT JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+                    WHERE e.torneo_id = :torneo_id_partido AND e.fecha_hora_programada IS NOT NULL
+                ) agenda
+                ORDER BY fecha ASC, hora IS NULL, hora ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([
+            ':torneo_id_actividad' => $torneoId,
+            ':torneo_id_partido' => $torneoId,
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        //Equipos o jugadores confirmados del torneo (los mismos que entran al fixture), para la pestaña Participantes
+    public function obtenerParticipantesPublicos(int $torneoId): array {
+        $sql = "SELECT p.id, p.tipo, p.referencia_id, p.nombre,
+                       CASE WHEN p.tipo = 'equipo' THEN e.escudo_url ELSE u.foto_perfil_url END AS imagen,
+                       CASE WHEN p.tipo = 'equipo'
+                            THEN (SELECT COUNT(*) FROM equipo_miembros m
+                                  WHERE m.equipo_id = p.referencia_id AND m.es_activo = 1)
+                            ELSE NULL END AS miembros,
+                       COALESCE(pos.puntos, 0) AS puntos
+                FROM participantes_torneo p
+                LEFT JOIN equipos e ON p.tipo = 'equipo' AND e.id = p.referencia_id
+                LEFT JOIN usuarios u ON p.tipo = 'usuario' AND u.id = p.referencia_id
+                LEFT JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                WHERE p.torneo_id = :torneo_id AND p.estado = 'confirmado'
+                ORDER BY p.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Todos los partidos del torneo (para Brackets, Resultados y Próximos Enfrentamientos)
+    public function obtenerFixturePublico(int $torneoId): array {
+        $sql = "SELECT e.id, e.ronda, e.estado, e.fecha_hora_programada, e.cancha,
+                       e.resultado_local, e.resultado_visitante,
+                       e.participante_local_id, e.participante_visitante_id, e.participante_ganador_id,
+                       pl.nombre AS local_nombre, pv.nombre AS visitante_nombre,
+                       CASE WHEN pl.tipo = 'equipo' THEN el.escudo_url ELSE ul.foto_perfil_url END AS local_imagen,
+                       CASE WHEN pv.tipo = 'equipo' THEN ev.escudo_url ELSE uv.foto_perfil_url END AS visitante_imagen
+                FROM torneo_encuentros e
+                LEFT JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+                LEFT JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+                LEFT JOIN equipos el ON pl.tipo = 'equipo' AND el.id = pl.referencia_id
+                LEFT JOIN usuarios ul ON pl.tipo = 'usuario' AND ul.id = pl.referencia_id
+                LEFT JOIN equipos ev ON pv.tipo = 'equipo' AND ev.id = pv.referencia_id
+                LEFT JOIN usuarios uv ON pv.tipo = 'usuario' AND uv.id = pv.referencia_id
+                WHERE e.torneo_id = :torneo_id
+                ORDER BY e.ronda ASC, e.id ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Tabla de posiciones publica (liga y suizo): incluye a todos los confirmados, aunque todavia no hayan jugado
+    public function obtenerPosicionesPublicas(int $torneoId): array {
+        $sql = "SELECT p.nombre,
+                       COALESCE(pos.partidos_jugados, 0) AS partidos_jugados,
+                       COALESCE(pos.partidos_ganados, 0) AS partidos_ganados,
+                       COALESCE(pos.partidos_empatados, 0) AS partidos_empatados,
+                       COALESCE(pos.partidos_perdidos, 0) AS partidos_perdidos,
+                       COALESCE(pos.puntos, 0) AS puntos
+                FROM participantes_torneo p
+                LEFT JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                WHERE p.torneo_id = :torneo_id AND p.estado = 'confirmado'
+                ORDER BY COALESCE(pos.puntos, 0) DESC, COALESCE(pos.diferencia_goles, 0) DESC,
+                         COALESCE(pos.puntos_favor, 0) DESC, p.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        //Metodo para el catalogo publico: torneos ya publicados (no borradores ni cancelados)
+    public function obtenerTorneosPublicados(): array {
+        $sql = "SELECT t.id, t.nombre, t.formato, t.estado, t.cupo_max_equipos,
+                       t.fecha_inicio, t.fecha_fin, t.banner_url, t.localidad,
+                       j.nombre AS nombre_juego, j.categoria AS categoria_juego,
+                       m.nombre AS nombre_modalidad
+                FROM torneos t
+                INNER JOIN juegos j ON j.id = t.juego_id
+                INNER JOIN modalidades m ON m.id = t.modalidad_id
+                WHERE t.estado <> 'borrador' AND t.estado <> 'cancelado'
+                ORDER BY t.fecha_inicio IS NULL, t.fecha_inicio ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     //Metodo para obtener todos los torneos
     public function obtenerTorneos(){
         $sql = "SELECT t.*, j.nombre AS nombre_juego
@@ -150,9 +304,11 @@ class Torneo {
     public function crearBorrador(array $datos, int $organizadorId): int {
         $sql = "INSERT INTO torneos
                     (nombre, juego_id, formato, estado, cupo_max_equipos, organizador_id,
-                    modalidad_id, sistema_puntuacion_id, tipo_resultado, mejor_de)
+                    modalidad_id, sistema_puntuacion_id, tipo_resultado, mejor_de,
+                    banner_url, descripcion, reglas)
                 VALUES (:nombre, :juego_id, :formato, 'borrador', :cupo, :organizador_id,
-                        :modalidad_id, :sistema_puntuacion_id, :tipo_resultado, :mejor_de)";
+                        :modalidad_id, :sistema_puntuacion_id, :tipo_resultado, :mejor_de,
+                        :banner_url, :descripcion, :reglas)";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([
             ':nombre' => $datos['nombre'],
@@ -164,9 +320,40 @@ class Torneo {
             ':sistema_puntuacion_id' => $datos['sistema_puntuacion_id'],
             ':tipo_resultado' => $datos['tipo_resultado'],
             ':mejor_de' => $datos['mejor_de'],
+            ':banner_url' => $datos['banner_url'],
+            ':descripcion' => $datos['descripcion'],
+            ':reglas' => $datos['reglas'],
         ]);
 
         return (int) $this->bd->lastInsertId();
+    }
+
+       public function actualizarEtapaGeneral(int $torneoId, int $organizadorId, array $datos): bool {
+        $sql = "UPDATE torneos SET
+                    nombre = :nombre,
+                    juego_id = :juego_id,
+                    formato = :formato,
+                    cupo_max_equipos = :cupo,
+                    modalidad_id = :modalidad_id,
+                    sistema_puntuacion_id = :sistema_puntuacion_id,
+                    descripcion = :descripcion,
+                    reglas = :reglas,
+                    banner_url = COALESCE(:banner_url, banner_url)
+                WHERE id = :id AND organizador_id = :organizador_id AND estado = 'borrador'";
+        $stmt = $this->bd->prepare($sql);
+        return $stmt->execute([
+            ':nombre' => $datos['nombre'],
+            ':juego_id' => $datos['juego_id'],
+            ':formato' => $datos['formato'],
+            ':cupo' => $datos['cupo'],
+            ':modalidad_id' => $datos['modalidad_id'],
+            ':sistema_puntuacion_id' => $datos['sistema_puntuacion_id'],
+            ':descripcion' => $datos['descripcion'],
+            ':reglas' => $datos['reglas'],
+            ':banner_url' => $datos['banner_url'],
+            ':id' => $torneoId,
+            ':organizador_id' => $organizadorId,
+        ]);
     }
 
     public function actualizarEtapaDatos(int $torneoId, int $organizadorId, array $datos): bool {
@@ -175,56 +362,67 @@ class Torneo {
                     fecha_limite_inscripcion = :fecha_limite_inscripcion,
                     fecha_inicio = :fecha_inicio,
                     fecha_fin = :fecha_fin,
-                    descripcion = :descripcion,
-                    reglas = :reglas,
                     ubicacion = :ubicacion,
                     localidad = :localidad,
                     comunidad = :comunidad,
                     premios = :premios,
-                    banner_url = :banner_url,
                     stream_url = :stream_url,
                     tipo_resultado = :tipo_resultado,
-                    mejor_de = :mejor_de,
-                    modalidad_id = :modalidad_id,
-                    sistema_puntuacion_id = :sistema_puntuacion_id
+                    mejor_de = :mejor_de
                 WHERE id = :id AND organizador_id = :organizador_id AND estado = 'borrador'";
-        try {
-            $this->bd->beginTransaction();
-            $stmt = $this->bd->prepare($sql);
-            $stmt->execute([
+        $stmt = $this->bd->prepare($sql);
+        return $stmt->execute([
             ':fecha_inicio_inscripcion' => $datos['fecha_inicio_inscripcion'],
             ':fecha_limite_inscripcion' => $datos['fecha_limite_inscripcion'],
             ':fecha_inicio' => $datos['fecha_inicio'],
             ':fecha_fin' => $datos['fecha_fin'],
-            ':descripcion' => $datos['descripcion'],
-            ':reglas' => $datos['reglas'],
             ':ubicacion' => $datos['ubicacion'],
-                ':localidad' => $datos['localidad'],
-                ':comunidad' => $datos['comunidad'],
-                ':premios' => $datos['premios'],
-                ':banner_url' => $datos['banner_url'],
-                ':stream_url' => $datos['stream_url'],
-                ':tipo_resultado' => $datos['tipo_resultado'],
-                ':mejor_de' => $datos['mejor_de'],
-                ':modalidad_id' => $datos['modalidad_id'],
-                ':sistema_puntuacion_id' => $datos['sistema_puntuacion_id'],
-                ':id' => $torneoId,
-                ':organizador_id' => $organizadorId,
-            ]);
+            ':localidad' => $datos['localidad'],
+            ':comunidad' => $datos['comunidad'],
+            ':premios' => $datos['premios'],
+            ':stream_url' => $datos['stream_url'],
+            ':tipo_resultado' => $datos['tipo_resultado'],
+            ':mejor_de' => $datos['mejor_de'],
+            ':id' => $torneoId,
+            ':organizador_id' => $organizadorId,
+        ]);
+    }
+
+        public function guardarActividades(int $torneoId, int $organizadorId, array $actividades): bool {
+        try {
+            $this->bd->beginTransaction();
+            $existe = $this->bd->prepare(
+                "SELECT id FROM torneos WHERE id = :id AND organizador_id = :organizador_id AND estado = 'borrador'"
+            );
+            $existe->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]);
+            if (!$existe->fetchColumn()) {
+                $this->bd->rollBack();
+                return false;
+            }
+
+            // Se conservan las descripciones de las actividades que siguen iguales
+            $previas = $this->bd->prepare(
+                'SELECT titulo, tipo, fecha, descripcion FROM torneo_actividades WHERE torneo_id = :torneo_id'
+            );
+            $previas->execute([':torneo_id' => $torneoId]);
+            $descripciones = [];
+            foreach ($previas->fetchAll(PDO::FETCH_ASSOC) as $fila) {
+                $descripciones[$fila['titulo'] . '|' . $fila['tipo'] . '|' . $fila['fecha']] = $fila['descripcion'];
+            }
 
             $this->bd->prepare('DELETE FROM torneo_actividades WHERE torneo_id = :torneo_id')
                 ->execute([':torneo_id' => $torneoId]);
-            $actividad = $this->bd->prepare(
-                'INSERT INTO torneo_actividades (torneo_id, titulo, tipo, fecha, hora)
-                VALUES (:torneo_id, :titulo, :tipo, :fecha, :hora)'
+            $insertar = $this->bd->prepare(
+                'INSERT INTO torneo_actividades (torneo_id, titulo, descripcion, tipo, fecha, hora)
+                 VALUES (:torneo_id, :titulo, :descripcion, :tipo, :fecha, :hora)'
             );
-            foreach ($datos['actividades'] as $item) {
-                if ($item['titulo'] === '' || $item['fecha'] === '') {
-                    continue;
-                }
-                $actividad->execute([
+            foreach ($actividades as $item) {
+                $descripcion = $item['descripcion']
+                    ?? ($descripciones[$item['titulo'] . '|' . $item['tipo'] . '|' . $item['fecha']] ?? null);
+                $insertar->execute([
                     ':torneo_id' => $torneoId,
                     ':titulo' => $item['titulo'],
+                    ':descripcion' => ($descripcion !== null && $descripcion !== '') ? $descripcion : null,
                     ':tipo' => $item['tipo'],
                     ':fecha' => $item['fecha'],
                     ':hora' => $item['hora'] !== '' ? $item['hora'] : null,
@@ -266,12 +464,27 @@ class Torneo {
 
     public function actualizarGestion(int $torneoId, int $organizadorId, array $datos): bool {
         $torneo = $this->obtenerBorrador($torneoId, $organizadorId);
-        if (!$torneo || in_array($torneo['estado'], ['en_curso', 'finalizado', 'cancelado'], true)) {
+        if (!$torneo || in_array($torneo['estado'], ['finalizado', 'cancelado'], true)) {
+            return false;
+        }
+
+        // Fechas: libres en borrador / inscripciones abiertas; en curso solo se puede mover la de fin
+        $fechasLibres = in_array($torneo['estado'], ['borrador', 'inscripciones_abiertas'], true);
+        $fechas = [];
+        foreach (['fecha_inicio_inscripcion', 'fecha_limite_inscripcion', 'fecha_inicio', 'fecha_fin'] as $campo) {
+            $editable = $fechasLibres || $campo === 'fecha_fin';
+            $fechas[$campo] = $editable ? ($datos[$campo] ?? $torneo[$campo]) : $torneo[$campo];
+        }
+        if (in_array(null, $fechas, true) || in_array('', $fechas, true)
+            || $fechas['fecha_inicio_inscripcion'] > $fechas['fecha_limite_inscripcion']
+            || $fechas['fecha_limite_inscripcion'] > $fechas['fecha_inicio']
+            || $fechas['fecha_inicio'] > $fechas['fecha_fin']) {
             return false;
         }
 
         $sql = "UPDATE torneos SET descripcion = :descripcion, reglas = :reglas,
-                    comunidad = :comunidad, premios = :premios, banner_url = :banner_url,
+                    comunidad = :comunidad, premios = :premios,
+                    banner_url = COALESCE(:banner_url, banner_url),
                     stream_url = :stream_url, fecha_inicio_inscripcion = :fecha_inicio_inscripcion,
                     fecha_limite_inscripcion = :fecha_limite_inscripcion, fecha_inicio = :fecha_inicio,
                     fecha_fin = :fecha_fin
@@ -282,12 +495,12 @@ class Torneo {
             ':reglas' => $datos['reglas'],
             ':comunidad' => $datos['comunidad'],
             ':premios' => $datos['premios'],
-            ':banner_url' => $datos['banner_url'],
+            ':banner_url' => $datos['banner_url'] ?? null,
             ':stream_url' => $datos['stream_url'],
-            ':fecha_inicio_inscripcion' => $datos['fecha_inicio_inscripcion'],
-            ':fecha_limite_inscripcion' => $datos['fecha_limite_inscripcion'],
-            ':fecha_inicio' => $datos['fecha_inicio'],
-            ':fecha_fin' => $datos['fecha_fin'],
+            ':fecha_inicio_inscripcion' => $fechas['fecha_inicio_inscripcion'],
+            ':fecha_limite_inscripcion' => $fechas['fecha_limite_inscripcion'],
+            ':fecha_inicio' => $fechas['fecha_inicio'],
+            ':fecha_fin' => $fechas['fecha_fin'],
             ':id' => $torneoId,
             ':organizador_id' => $organizadorId,
         ]);
@@ -490,8 +703,15 @@ class Torneo {
     }
 
     public function obtenerInscripciones(int $torneoId, int $organizadorId): array {
-        $sql = "SELECT p.id, p.tipo, p.referencia_id, p.nombre, p.estado,
+                $sql = "SELECT p.id, p.tipo, p.referencia_id, p.nombre, p.estado,
                        p.fecha_inscripcion, t.cupo_max_equipos,
+                       CASE WHEN p.tipo = 'usuario'
+                            THEN (SELECT u.nombre_completo FROM usuarios u WHERE u.id = p.referencia_id)
+                            ELSE (SELECT u.nombre_completo FROM equipo_capitanes ec
+                                  INNER JOIN usuarios u ON u.id = ec.usuario_id
+                                  WHERE ec.equipo_id = p.referencia_id
+                                  ORDER BY ec.es_capitan_principal DESC LIMIT 1)
+                       END AS responsable,
                        (SELECT COUNT(*) FROM participantes_torneo confirmados
                         WHERE confirmados.torneo_id = p.torneo_id
                           AND confirmados.estado = 'confirmado') AS confirmados
@@ -502,6 +722,84 @@ class Torneo {
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([':torneo_id' => $torneoId, ':organizador_id' => $organizadorId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        public function obtenerActividades(int $torneoId, int $organizadorId): array {
+        $sql = "SELECT a.id, a.titulo, a.descripcion, a.tipo, a.fecha, a.hora
+                FROM torneo_actividades a
+                INNER JOIN torneos t ON t.id = a.torneo_id
+                WHERE a.torneo_id = :torneo_id AND t.organizador_id = :organizador_id
+                ORDER BY a.fecha ASC, a.hora IS NULL, a.hora ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId, ':organizador_id' => $organizadorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        // Las actividades se pueden tocar mientras el torneo no esté finalizado ni cancelado
+    private function torneoPermiteActividades(int $torneoId, int $organizadorId): bool {
+        $stmt = $this->bd->prepare(
+            "SELECT id FROM torneos
+             WHERE id = :id AND organizador_id = :organizador_id
+               AND estado NOT IN ('finalizado', 'cancelado')"
+        );
+        $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    private function actividadEditable(int $actividadId, int $organizadorId): bool {
+        $stmt = $this->bd->prepare(
+            "SELECT a.id FROM torneo_actividades a
+             INNER JOIN torneos t ON t.id = a.torneo_id
+             WHERE a.id = :id AND t.organizador_id = :organizador_id
+               AND t.estado NOT IN ('finalizado', 'cancelado')"
+        );
+        $stmt->execute([':id' => $actividadId, ':organizador_id' => $organizadorId]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    public function agregarActividad(int $torneoId, int $organizadorId, array $actividad): bool {
+        if (!$this->torneoPermiteActividades($torneoId, $organizadorId)) {
+            return false;
+        }
+        $insertar = $this->bd->prepare(
+            'INSERT INTO torneo_actividades (torneo_id, titulo, descripcion, tipo, fecha, hora)
+             VALUES (:torneo_id, :titulo, :descripcion, :tipo, :fecha, :hora)'
+        );
+        return $insertar->execute([
+            ':torneo_id' => $torneoId,
+            ':titulo' => $actividad['titulo'],
+            ':descripcion' => $actividad['descripcion'] !== '' ? $actividad['descripcion'] : null,
+            ':tipo' => $actividad['tipo'],
+            ':fecha' => $actividad['fecha'],
+            ':hora' => $actividad['hora'] !== '' ? $actividad['hora'] : null,
+        ]);
+    }
+
+    public function editarActividad(int $actividadId, int $organizadorId, array $actividad): bool {
+        if (!$this->actividadEditable($actividadId, $organizadorId)) {
+            return false;
+        }
+        $actualizar = $this->bd->prepare(
+            'UPDATE torneo_actividades
+             SET titulo = :titulo, descripcion = :descripcion, tipo = :tipo, fecha = :fecha, hora = :hora
+             WHERE id = :id'
+        );
+        return $actualizar->execute([
+            ':titulo' => $actividad['titulo'],
+            ':descripcion' => $actividad['descripcion'] !== '' ? $actividad['descripcion'] : null,
+            ':tipo' => $actividad['tipo'],
+            ':fecha' => $actividad['fecha'],
+            ':hora' => $actividad['hora'] !== '' ? $actividad['hora'] : null,
+            ':id' => $actividadId,
+        ]);
+    }
+
+    public function eliminarActividad(int $actividadId, int $organizadorId): bool {
+        if (!$this->actividadEditable($actividadId, $organizadorId)) {
+            return false;
+        }
+        $borrar = $this->bd->prepare('DELETE FROM torneo_actividades WHERE id = :id');
+        return $borrar->execute([':id' => $actividadId]);
     }
 
     public function obtenerFixture(int $torneoId, int $organizadorId): array {
@@ -517,7 +815,7 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function generarFixture(int $torneoId, int $organizadorId): array {
+        public function generarFixture(int $torneoId, int $organizadorId): array {
         try {
             $this->bd->beginTransaction();
             $torneoStmt = $this->bd->prepare(
@@ -528,6 +826,14 @@ class Torneo {
             $torneo = $torneoStmt->fetch(PDO::FETCH_ASSOC);
             if (!$torneo || !in_array($torneo['estado'], ['inscripciones_abiertas', 'en_curso'], true)) {
                 throw new \RuntimeException('El torneo debe estar abierto o en curso.');
+            }
+
+            $resultadosStmt = $this->bd->prepare(
+                "SELECT COUNT(*) FROM torneo_encuentros WHERE torneo_id = :torneo_id AND estado = 'finalizado'"
+            );
+            $resultadosStmt->execute([':torneo_id' => $torneoId]);
+            if ((int) $resultadosStmt->fetchColumn() > 0) {
+                throw new \RuntimeException('No se puede regenerar el fixture porque ya hay resultados registrados.');
             }
 
             $participantesStmt = $this->bd->prepare(
@@ -545,7 +851,10 @@ class Torneo {
                 throw new \RuntimeException('La eliminación directa necesita 2, 4, 8, 16, 32 o 64 participantes.');
             }
 
-            $this->bd->prepare('DELETE FROM torneo_encuentros WHERE torneo_id = :torneo_id AND estado = \'programado\'')
+            // Se reemplaza el fixture anterior (todavía sin resultados) y el historial de emparejamientos suizos
+            $this->bd->prepare('DELETE FROM torneo_encuentros WHERE torneo_id = :torneo_id')
+                ->execute([':torneo_id' => $torneoId]);
+            $this->bd->prepare('DELETE FROM torneo_suizo_parejas WHERE torneo_id = :torneo_id')
                 ->execute([':torneo_id' => $torneoId]);
             $insertar = $this->bd->prepare(
                 "INSERT INTO torneo_encuentros
@@ -554,17 +863,30 @@ class Torneo {
             );
 
             if ($torneo['formato'] === 'liga') {
-                for ($indice = 0; $indice < $cantidad; $indice++) {
-                    for ($oponente = $indice + 1; $oponente < $cantidad; $oponente++) {
-                        $insertar->execute([
-                            ':torneo_id' => $torneoId,
-                            ':ronda' => $indice + 1,
-                            ':local_id' => $participantes[$indice],
-                            ':visitante_id' => $participantes[$oponente],
-                        ]);
+                // Todos contra todos: cada ronda es una "fecha" en la que cada participante juega una sola vez
+                $lista = $participantes;
+                if ($cantidad % 2 === 1) {
+                    $lista[] = null; // descanso
+                }
+                $total = count($lista);
+                for ($ronda = 1; $ronda < $total; $ronda++) {
+                    for ($indice = 0; $indice < $total / 2; $indice++) {
+                        $local = $lista[$indice];
+                        $visitante = $lista[$total - 1 - $indice];
+                        if ($local !== null && $visitante !== null) {
+                            $insertar->execute([
+                                ':torneo_id' => $torneoId,
+                                ':ronda' => $ronda,
+                                ':local_id' => $local,
+                                ':visitante_id' => $visitante,
+                            ]);
+                        }
                     }
+                    $ultimo = array_pop($lista);
+                    array_splice($lista, 1, 0, [$ultimo]);
                 }
             } elseif ($torneo['formato'] === 'eliminacion_directa') {
+                shuffle($participantes);
                 for ($indice = 0; $indice < $cantidad; $indice += 2) {
                     $insertar->execute([
                         ':torneo_id' => $torneoId,
@@ -584,6 +906,30 @@ class Torneo {
             }
             return ['ok' => false, 'mensaje' => $error->getMessage()];
         }
+    }
+
+        // Guarda fecha, hora y sede de un partido que todavía no se jugó
+    public function programarEncuentro(int $encuentroId, int $organizadorId, string $fechaHora, string $sede): bool {
+        $existe = $this->bd->prepare(
+            "SELECT e.id FROM torneo_encuentros e
+             INNER JOIN torneos t ON t.id = e.torneo_id
+             WHERE e.id = :id AND t.organizador_id = :organizador_id
+               AND e.estado IN ('programado', 'aplazado')
+               AND t.estado IN ('inscripciones_abiertas', 'en_curso')"
+        );
+        $existe->execute([':id' => $encuentroId, ':organizador_id' => $organizadorId]);
+        if (!$existe->fetchColumn()) {
+            return false;
+        }
+
+        $actualizar = $this->bd->prepare(
+            'UPDATE torneo_encuentros SET fecha_hora_programada = :fecha_hora, cancha = :sede WHERE id = :id'
+        );
+        return $actualizar->execute([
+            ':fecha_hora' => $fechaHora,
+            ':sede' => $sede !== '' ? $sede : null,
+            ':id' => $encuentroId,
+        ]);
     }
 
     public function guardarResultado(int $encuentroId, int $organizadorId, float $local, float $visitante): array {
@@ -723,6 +1069,16 @@ class Torneo {
         $participantesStmt->execute([':torneo_id' => $torneoId]);
         $participantes = $participantesStmt->fetchAll(PDO::FETCH_ASSOC);
         $ids = array_map(static fn ($item) => (int) $item['id'], $participantes);
+
+        // Cantidad de rondas del suizo: la menor potencia de 2 que alcanza a los participantes (8 → 3, 6 → 3, 4 → 2)
+        $totalRondas = 1;
+        while (2 ** $totalRondas < count($ids)) {
+            $totalRondas++;
+        }
+        if ($rondaActual >= $totalRondas) {
+            return;
+        }
+
         $this->crearRondaSuiza($torneoId, $ids, $rondaActual + 1);
     }
 
@@ -920,7 +1276,47 @@ class Torneo {
             }
             return false;
         }
-    }   
+    }
+       
+        //Elimina (cancela) a un participante confirmado mientras las inscripciones sigan abiertas
+    public function quitarParticipante(int $inscripcionId, int $organizadorId): bool {
+        $sql = "UPDATE participantes_torneo p
+                INNER JOIN torneos t ON t.id = p.torneo_id
+                SET p.estado = 'cancelado'
+                WHERE p.id = :id
+                  AND p.estado = 'confirmado'
+                  AND t.estado = 'inscripciones_abiertas'
+                  AND t.organizador_id = :organizador_id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $inscripcionId, ':organizador_id' => $organizadorId]);
+        return $stmt->rowCount() > 0;
+    }
+
+        //Trae todas las inscripciones del jugador (directas o via sus equipos), con el torneo y su estado
+    public function obtenerInscripcionesDelJugador(int $usuarioId, array $equipoIds): array {
+        $condiciones = ["(p.tipo = 'usuario' AND p.referencia_id = :usuarioId)"];
+        $parametros = [':usuarioId' => $usuarioId];
+
+        if (!empty($equipoIds)) {
+            $marcadores = [];
+            foreach ($equipoIds as $indice => $equipoId) {
+                $clave = ":equipoId{$indice}";
+                $marcadores[] = $clave;
+                $parametros[$clave] = (int) $equipoId;
+            }
+            $condiciones[] = "(p.tipo = 'equipo' AND p.referencia_id IN (" . implode(',', $marcadores) . "))";
+        }
+
+        $sql = "SELECT p.id, p.tipo, p.nombre, p.estado, p.fecha_inscripcion,
+                       t.id AS torneo_id, t.nombre AS torneo_nombre
+                FROM participantes_torneo p
+                INNER JOIN torneos t ON t.id = p.torneo_id
+                WHERE (" . implode(' OR ', $condiciones) . ")
+                ORDER BY p.fecha_inscripcion DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     //====================================================================================================

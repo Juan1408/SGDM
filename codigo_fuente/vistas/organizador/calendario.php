@@ -24,7 +24,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador calendario-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">AGENDA DEL ORGANIZADOR</p><h1>Calendario</h1><p>Actividades y partidos de tus torneos.</p></div></header>

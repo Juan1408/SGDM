@@ -41,6 +41,7 @@ class JuegoControlador {
     //Procesamos el formulario de cuando se crea el nuevo juego
     public function guardar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            \App\Ayudantes\Sesion::requerirTokensCSRF();
             //Recoleccion de datos
             $nombre = trim($_POST['nombre'] ?? '');
             $categoria = trim($_POST['categoria'] ?? '');
@@ -121,6 +122,7 @@ class JuegoControlador {
     //Metodo para procesar el formulario de editar
     public function actualizar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            \App\Ayudantes\Sesion::requerirTokensCSRF();
             //Recoleccion de datos
             $juegoId = (int)$_POST['id'];
             $nombre = trim($_POST['nombre'] ?? '');

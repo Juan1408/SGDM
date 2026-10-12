@@ -29,6 +29,7 @@ class FormatoControlador {
     public function guardarEstados() {
         Sesion::validarAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            \App\Ayudantes\Sesion::requerirTokensCSRF();
             $formatosActivos = $_POST['formatos'] ?? [];
             $todosLosFormatos = $this->modeloFormato->obtenerTodas();
             

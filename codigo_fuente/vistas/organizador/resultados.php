@@ -23,7 +23,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/navbar.html'; ?>
+    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
     <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador resultados-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">COMPETENCIA</p><h1>Resultados</h1><p>Partidos de tus torneos y resultados cargados.</p></div></header>

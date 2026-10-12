@@ -31,6 +31,7 @@ class GuardadosControlador {
             header("Location: " . URL_BASE . "index.php?c=guardados&a=index");
             exit;
         }
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $tipo = $_POST['tipo'] ?? '';
@@ -51,6 +52,7 @@ class GuardadosControlador {
             header("Location: " . URL_BASE . "index.php?c=guardados&a=index");
             exit;
         }
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
         $tipo = $_POST['tipo'] ?? '';

@@ -15,7 +15,7 @@ if (!defined('APP_NOMBRE')) {
 
 // URL Base del proyecto (Ajustar según la ruta local en XAMPP/WAMP o Docker)
 if (!defined('URL_BASE')) {
-    $urlBase = trim((string)getenv('APP_URL')) ?: 'http://localhost/SGDM/codigo_fuente/publico/';
+    $urlBase = trim((string)getenv('APP_URL')) ?: 'http://localhost:8080/SGDM-ASCEND/codigo_fuente/publico/';
     define('URL_BASE', rtrim($urlBase, '/') . '/');
 }
 

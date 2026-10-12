@@ -35,6 +35,7 @@ class PanelJugadorControlador {
         $torneosActivos = $this->modeloTorneo->contarTorneosActivosDelJugador($usuarioId, $equipoIds);
         $proximosPartidos = $this->modeloTorneo->obtenerProximosPartidos($usuarioId, $equipoIds, 3);
         $record = $this->modeloTorneo->obtenerRecordDelJugador($usuarioId, $equipoIds);
+        $misInscripciones = $this->modeloTorneo->obtenerInscripcionesDelJugador($usuarioId, $equipoIds);
         $solicitudesPendientes = $this->modeloEquipo->obtenerInvitacionesRecibidas($usuarioId);
 
         require_once __DIR__ . '/../vistas/jugador/dashboard.php';
@@ -56,6 +57,7 @@ class PanelJugadorControlador {
             header("Location: " . URL_BASE . "index.php?c=panelJugador&a=perfil");
             exit;
         }
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
 
         $usuarioId = $_SESSION['usuario_id'];
 

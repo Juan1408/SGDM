@@ -7,7 +7,11 @@
    <title>ASCEND - En Construcción</title>
 
    <!-- CSS Principal -->
-   <link rel="stylesheet" href="../../publico/css/home.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
 
    <!-- Font Awesome -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -20,8 +24,8 @@
 </head>
 
 <body>
-   <!-- Navbar Inyectado Dinámicamente -->
-   <div id="navbar-publico-placeholder"></div>
+
+   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
 
    <main>
       <section class="pantalla-construccion">
@@ -30,17 +34,17 @@
             <h1>Pantalla en Construcción</h1>
             <p>Esta sección estará disponible para la próxima entrega del proyecto.</p>
             <div class="hero-buttons">
-               <a href="index.html" class="primary-btn">Volver al Inicio</a>
+               <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=index" class="primary-btn">Volver al Inicio</a>
             </div>
          </div>
       </section>
    </main>
 
-   <!-- Footer Inyectado Dinámicamente -->
-   <div id="footer-publico-placeholder"></div>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
-   <!-- Archivo centralizado que carga navbar y footer -->
-   <script src="../../publico/js/includesPublicos.js"></script>
+   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+
 </body>
 
 </html>

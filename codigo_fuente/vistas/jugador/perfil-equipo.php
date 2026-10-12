@@ -39,8 +39,15 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <?php include __DIR__ . '/../componentes/navbar-jugador.php'; ?>
-
+<?php
+if ($rolId === 3) {
+    include __DIR__ . '/../componentes/navbar-jugador.php';
+} elseif ($rolId === 2) {
+    include __DIR__ . '/../componentes/navbar-organizador.php';
+} else {
+    include __DIR__ . '/../componentes/navbar-publico.php';
+}
+?>
    <main class="equipo-pagina">
 
       <?php if (isset($_GET['solicitudEnviada'])): ?>
@@ -54,10 +61,9 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
 
          <div class="equipo-hero-banner">
             <img src="<?php echo htmlspecialchars($bannerUrl); ?>" alt="Banner del equipo">
-            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $equipoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-equipo">
-               <input type="hidden"
-                  name="csrf_token"
-                  value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+         <?php if ($esJugador): ?>
+               <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $equipoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-equipo">
+               <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                <input type="hidden" name="tipo" value="equipo">
                <input type="hidden" name="referencia_id" value="<?php echo (int) $equipo['id']; ?>">
                <input type="hidden" name="volver_a" value="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $equipo['id']; ?>">
@@ -65,6 +71,7 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
                   <i class="<?php echo $equipoGuardado ? 'fa-solid' : 'fa-regular'; ?> fa-bookmark"></i>
                </button>
             </form>
+           <?php endif; ?>
 
          </div>
 
@@ -141,6 +148,7 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
                <?php endforeach; ?>
             </ul>
 
+            <?php if ($esJugador): ?>
             <?php if ($yaEsMiembro): ?>
                <span class="ya-eres-miembro">Ya sos parte de este equipo</span>
             <?php elseif ($tieneSolicitudPendiente): ?>
@@ -154,6 +162,8 @@ $bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
                   <button type="submit" class="boton-solicitar-unirse">Solicitar Unirse</button>
                </form>
             <?php endif; ?>
+            <?php endif; ?>
+
          </div>
 
       </section>
