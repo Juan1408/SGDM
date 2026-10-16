@@ -848,7 +848,7 @@ CREATE TABLE IF NOT EXISTS juego_modalidades_permitidas (
 ) ENGINE = InnoDB;
 
 -- 2. Quitar el campo innecesario de la tabla juegos (ahora es N:M)
-ALTER TABLE juegos DROP COLUMN formato_equipo_defecto;
+-- (formato_equipo_defecto ya no se define en CREATE TABLE juegos; nada que quitar)
 
 -- 3. Crear la nueva tabla de Formatos de Torneo
 CREATE TABLE IF NOT EXISTS formatos_torneo (
@@ -873,9 +873,7 @@ CREATE TABLE IF NOT EXISTS juego_formatos_permitidos (
     CONSTRAINT fk_jfp_formato FOREIGN KEY (formato_codigo) REFERENCES formatos_torneo (codigo) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
--- 6. Agregar el campo iniciado_por a la tabla solicitudes_equipo
-ALTER TABLE solicitudes_equipo ADD COLUMN iniciado_por INT NOT NULL AFTER usuario_id;
-ALTER TABLE solicitudes_equipo ADD CONSTRAINT fk_solicitud_iniciado FOREIGN KEY (iniciado_por) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE;
+-- 6. (iniciado_por y su FK ya se definen en CREATE TABLE solicitudes_equipo)
 
 -- 7. Crear la tabla de guardados genéricos (Asociación Polimórfica)
 CREATE TABLE IF NOT EXISTS guardados ( 
@@ -887,3 +885,23 @@ CREATE TABLE IF NOT EXISTS guardados (
     UNIQUE KEY unique_guardado (usuario_id, tipo, referencia_id), 
     CONSTRAINT fk_guardado_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE 
 ) ENGINE = InnoDB;
+-- 8. Tablas de Seguridad y Autenticacion (Rate Limiting y Politicas)
+CREATE TABLE IF NOT EXISTS intentos_login (
+    ip_origen VARCHAR(45) PRIMARY KEY,
+    intentos INT NOT NULL DEFAULT 1,
+    ultimo_intento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    bloqueado_hasta DATETIME NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS politicas_contrasenas (
+    id INT PRIMARY KEY,
+    longitud_minima INT DEFAULT 8,
+    requiere_mayuscula BOOLEAN DEFAULT 1,
+    requiere_minuscula BOOLEAN DEFAULT 1,
+    requiere_numero BOOLEAN DEFAULT 1,
+    requiere_caracter_especial BOOLEAN DEFAULT 1,
+    expiracion_dias INT DEFAULT 90,
+    historial_cantidad INT DEFAULT 5,
+    actualizado_por INT NULL,
+    FOREIGN KEY (actualizado_por) REFERENCES usuarios(id) ON DELETE SET NULL
+) ENGINE=InnoDB;

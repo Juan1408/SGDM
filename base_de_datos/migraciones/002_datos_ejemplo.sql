@@ -252,7 +252,7 @@ INSERT IGNORE INTO
 VALUES (
         1,
         'admin@ascend.com',
-        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        '$2y$10$1/Bs9kQBa4wTOBmKf.ipzyterxkNODRZJRKUUJ9KG3vZqURVO',
         'Administrador General',
         '+59899123456',
         1,
@@ -294,7 +294,7 @@ INSERT IGNORE INTO
 VALUES (
         2,
         'organizador@ascend.com',
-        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        '$2y$10$1/Bs9kQBa4wTOBmKf.ipzyterxkNODRZJRKUUJ9KG3vZqURVO',
         'Valentina Organizadora',
         '+59899654321',
         2,
@@ -335,7 +335,7 @@ INSERT IGNORE INTO
 VALUES (
         3,
         'jugador@ascend.com',
-        '$2y$10$1.sqxv9SKZkmiTBZIcGhtuees.DhhY6x003C9k.WP0mRcv2qI1IMK',
+        '$2y$10$1/Bs9kQBa4wTOBmKf.ipzyterxkNODRZJRKUUJ9KG3vZqURVO',
         'Marcos Competidor',
         '+59899777888',
         3,

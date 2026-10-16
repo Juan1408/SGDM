@@ -15,7 +15,22 @@ if (!defined('APP_NOMBRE')) {
 
 // URL Base del proyecto (Ajustar según la ruta local en XAMPP/WAMP o Docker)
 if (!defined('URL_BASE')) {
-    $urlBase = trim((string)getenv('APP_URL')) ?: 'http://localhost:8080/SGDM-ASCEND/codigo_fuente/publico/';
+    $envUrl = trim((string)getenv('APP_URL'));
+    if (!empty($envUrl)) {
+        $urlBase = $envUrl;
+    } else {
+        // Detección automática en entornos locales (XAMPP / Apache / Docker)
+        $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        
+        // Si el puerto es 8080 (Docker), la raíz apunta directo a /publico/
+        if (strpos($host, ':8080') !== false) {
+            $urlBase = $scheme . $host . '/publico/';
+        } else {
+            // Entorno estándar XAMPP (Apache en puerto 80)
+            $urlBase = $scheme . $host . '/SGDM/codigo_fuente/publico/';
+        }
+    }
     define('URL_BASE', rtrim($urlBase, '/') . '/');
 }
 

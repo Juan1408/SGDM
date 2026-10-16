@@ -1,3 +1,8 @@
+<?php
+if (!defined('URL_BASE')) {
+    require_once __DIR__ . '/../../configuracion/constantes.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
