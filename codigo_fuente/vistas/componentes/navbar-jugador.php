@@ -194,8 +194,8 @@
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-user"></i> Mi Perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=editarPerfil"><i class="fa-solid fa-pen"></i> Editar perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
-                     <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=auth&a=logout">
+                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                         <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
                      </form>
                   </div>
@@ -229,8 +229,8 @@
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil#historial"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=guardados&a=index"><i class="fa-solid fa-bookmark"></i> Guardados</a>
 
-   <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=auth&a=logout">
+   <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
       <button type="submit" class="cerrar-sesion"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
    </form>
 

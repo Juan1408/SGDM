@@ -158,8 +158,8 @@
                   <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarLogin" class="td-boton-inscripcion">Inscribirse</a>
 
                <?php elseif ($esModalidadIndividual): ?>
-                  <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=torneo&a=inscribirse">
+                  <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                      <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                      <input type="hidden" name="tipo" value="usuario">
                      <button type="submit" class="td-boton-inscripcion">Inscribirse</button>
@@ -170,8 +170,8 @@
                      onclick="document.getElementById('modal-inscripcion').showModal()">Inscribirse</button>
 
                   <dialog class="td-modal" id="modal-inscripcion">
-                     <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=torneo&a=inscribirse">
+                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                         <input type="hidden" name="tipo" value="equipo">
 
