@@ -128,9 +128,9 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
             <?php if ($botonesEstado !== []): ?>
                <div class="torneo-header-acciones">
                   <?php foreach ($botonesEstado as [$estadoNuevo, $textoBoton, $iconoBoton, $peligro, $confirmacion]): ?>
-                     <form method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=cambiarEstado"
+                                         <form method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=cambiarEstado"
                         onsubmit="return confirm('<?php echo $escapar($confirmacion); ?>');">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                         <input type="hidden" name="estado" value="<?php echo $estadoNuevo; ?>">
                         <input type="hidden" name="seccion" value="<?php echo $escapar($seccion); ?>">
@@ -277,9 +277,9 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                            <?php if ($puedeResponder): ?>
                               <div class="solicitud-card__acciones">
                                  <?php foreach (['confirmado' => ['aceptar', 'fa-check', 'Aceptar'], 'rechazado' => ['rechazar', 'fa-xmark', 'Rechazar']] as $respuesta => [$clase, $icono, $texto]): ?>
-                                    <form method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=responderInscripcion">
-                                       <input type="hidden" name="inscripcion_id" value="<?php echo (int) $solicitud['id']; ?>">
+                                    <form method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=responderInscripcion">
+                                       <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="inscripcion_id" value="<?php echo (int) $solicitud['id']; ?>">
                                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                        <input type="hidden" name="respuesta" value="<?php echo $respuesta; ?>">
                                        <button class="solicitud-boton solicitud-boton--<?php echo $clase; ?>" type="submit">
@@ -352,8 +352,8 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                         <?php endif; ?>
 
                               <?php if ($puedeResponder): ?>
-                                 <form method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=quitarParticipante" onsubmit="return confirm('¿Eliminar a este participante del torneo?');">
+                                 <form method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=quitarParticipante" onsubmit="return confirm('¿Eliminar a este participante del torneo?');">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="inscripcion_id" value="<?php echo (int) $participante['id']; ?>">
                                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                     <button class="participante-btn participante-btn-remove" type="submit">
@@ -407,9 +407,9 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                </div>
 
                <?php if ($puedeEditarCronograma): ?>
-                  <form class="edit-form cronograma-form" method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=agregarActividad">
-                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                  <form class="edit-form cronograma-form" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=agregarActividad">
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                  <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
 
                      <div class="edit-form__grid">
                         <div class="form-group form-group--full">
@@ -503,10 +503,9 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                                                 <i class="fa-solid fa-pen"></i>
                                                 Editar
                                              </button>
-
-                                             <form method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=eliminarActividad"
+                                             <form method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=eliminarActividad"
                                                 onsubmit="return confirm('¿Eliminar esta actividad?');">
+                                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                                 <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                                 <input type="hidden" name="actividad_id" value="<?php echo (int) $actividad['id']; ?>">
                                                 <button class="participante-btn participante-btn-remove" type="submit">
@@ -517,8 +516,8 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
 
                                           <dialog class="programar-modal" id="actividad-<?php echo (int) $actividad['id']; ?>">
                                              <form class="edit-form" method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=editarActividad">
-                                                <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                             <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                                 <input type="hidden" name="actividad_id" value="<?php echo (int) $actividad['id']; ?>">
 
                                                 <div class="edit-form__grid">
@@ -624,9 +623,9 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                   </div>
 
                   <?php if ($puedeGenerar): ?>
-                     <form method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=generarFixture"
+                     <form method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=generarFixture"
                         onsubmit="return confirm('<?php echo $fixture ? 'Esto reemplazará el fixture actual. ¿Querés continuar?' : '¿Querés generar automáticamente el fixture?'; ?>');">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                         <button class="fixture-generar-boton" type="submit">
                            <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -708,8 +707,8 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                                  </div>
 
                                  <dialog class="programar-modal" id="programar-<?php echo (int) $partido['id']; ?>">
-                                    <form class="edit-form" method="post" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=programarEncuentro">
+                                    <form class="edit-form" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=programarEncuentro">
+                                       <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                        <input type="hidden" name="encuentro_id" value="<?php echo (int) $partido['id']; ?>">
                                        <input type="hidden" name="ronda" value="<?php echo (int) $partido['ronda']; ?>">
@@ -865,9 +864,10 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                                  </p>
                               <?php elseif ($puedeCargar): ?>
                                  <form class="marcador-form" method="post"
-                                    action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=guardarResultado"
+                                 
+                                                                     action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarResultado"
                                     onsubmit="return confirm('¿Guardar el resultado? No se podrá modificar después.');">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                                     <input type="hidden" name="encuentro_id" value="<?php echo (int) $partido['id']; ?>">
                                     <input type="hidden" name="ronda" value="<?php echo (int) $partido['ronda']; ?>">
@@ -1036,8 +1036,8 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
 
                <?php if ($torneoEditable): ?>
                   <form class="edit-form cronograma-form" method="post" enctype="multipart/form-data"
-                     action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=panelOrganizador&a=editarTorneo">
+                                       action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=editarTorneo">
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                      <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
 
                      <div class="edit-form__grid">

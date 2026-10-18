@@ -237,6 +237,7 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
                      Organizador
                      <i class="fa-solid fa-chevron-down"></i>
                   </button>
+                                    <div class="dropdown-mi-perfil" id="dropdown-mi-perfil">
                      <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) ($_SESSION['usuario_id'] ?? 0); ?>"><i class="fa-solid fa-user"></i> Ver mi perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=editarPerfil"><i class="fa-solid fa-pen"></i> Editar perfil</a>
                      <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
@@ -273,8 +274,8 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
    <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=resultados"><i class="fa-solid fa-clipboard-check"></i> Resultados</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=historial"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
 
-   <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=auth&a=logout">
+   <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+                           <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
       <button type="submit" class="cerrar-sesion"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
    </form>
 

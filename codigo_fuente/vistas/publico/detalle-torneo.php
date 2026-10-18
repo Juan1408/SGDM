@@ -158,9 +158,9 @@
                   <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarLogin" class="td-boton-inscripcion">Inscribirse</a>
 
                <?php elseif ($esModalidadIndividual): ?>
-                  <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=torneo&a=inscribirse">
-                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                  <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                  <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                      <input type="hidden" name="tipo" value="usuario">
                      <button type="submit" class="td-boton-inscripcion">Inscribirse</button>
                   </form>
@@ -170,9 +170,9 @@
                      onclick="document.getElementById('modal-inscripcion').showModal()">Inscribirse</button>
 
                   <dialog class="td-modal" id="modal-inscripcion">
-                     <form method="POST" action="<?php echo URL_BASE; ?>
-<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">index.php?c=torneo&a=inscribirse">
-                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                         <input type="hidden" name="tipo" value="equipo">
 
                         <h2><?php echo htmlspecialchars($torneo['nombre']); ?>: Modalidad - Equipos</h2>
@@ -194,7 +194,7 @@
                   </dialog>
                <?php endif; ?>
             </div>
-
+</div>
       </section>
 
       <!-------------------------------------->
@@ -361,7 +361,7 @@
                      <div class="perfil-organizador-label"><?php echo htmlspecialchars($torneo['nombre_organizador']); ?></div>
                         <div class="perfil-organizador-actions perfil-organizador-actions--centered">
                         <button class="perfil-boton-primario">Seguir</button>
-                           <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?> class="perfil-boton-secundario">Ver perfil</a>
+                           <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?>" class="perfil-boton-secundario">Ver perfil</a>
                      </div>
                   </div>
 
