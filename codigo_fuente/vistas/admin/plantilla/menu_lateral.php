@@ -25,7 +25,6 @@
             <li><a href="#" class="menu-enlace">Equipos y Solicitudes</a>
                 <ul class="menu-sublista">
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=index" class="menu-enlace">Directorio de Equipos</a></li>
-                    <li><a href="#equipos/solicitudes" class="menu-enlace">Aprobar Solicitudes</a></li>
                 </ul>
             </li>
 
@@ -33,7 +32,6 @@
             <li><a href="#" class="menu-enlace">Juegos y Disciplinas</a>
                 <ul class="menu-sublista">
                     <li><a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index" class="menu-enlace">Ver Catálogo</a></li>
-                    <li><a href="#juegos/formulario" class="menu-enlace">Registrar Nuevo Juego</a></li>
                 </ul>
             </li>
 

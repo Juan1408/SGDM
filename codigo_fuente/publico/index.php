@@ -9,6 +9,8 @@
  * ============================================================================
  */
 
+ob_start();
+
 require_once __DIR__ . '/../configuracion/constantes.php';
 require_once __DIR__ . '/../configuracion/base_de_datos.php';
 

@@ -46,7 +46,7 @@ class Sesion {
         $_SESSION['email'] = $usuarioBD['email'];
         $_SESSION['rol_id'] = $usuarioBD['rol_id'];
         $_SESSION['usuario_nombre'] = $usuarioBD['nombre_completo'];
-        $_SESSION['es_activo'] = $usuarioBD['es_activo'];
+        $_SESSION['esta_activo'] = $usuarioBD['esta_activo'] ?? $usuarioBD['es_activo'] ?? 1;
 
         //Control de tiempo de expiración (Timeboxing)
         $_SESSION['expiracion_sesion'] = time() + 1800; //30 minutos

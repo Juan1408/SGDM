@@ -30,26 +30,6 @@ class OrganizadorControlador {
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }
 
-    public function cambiarVerificacion() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            exit('Metodo no permitido');
-        }
-
-        Sesion::requerirTokensCSRF();
-
-        $id = (int) ($_POST['id'] ?? 0);
-        if ($id > 0) {
-            $exito = $this->modeloUsuario->cambiarVerificacionOrganizador($id);
-            $_SESSION['mensaje'] = $exito 
-                ? "Estado de aprobación/verificación del organizador actualizado correctamente."
-                : "No se pudo actualizar el estado de aprobación del organizador.";
-        }
-        header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
-        exit;
-
-        
-    }
 
     public function responderSolicitud() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
