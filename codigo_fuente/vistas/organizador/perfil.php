@@ -64,7 +64,6 @@ $escapar = static fn($valor): string => htmlspecialchars((string) $valor, ENT_QU
 
 <body>
     <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-    <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador perfil-pagina">
         <header class="dashboard-header">
             <div>
@@ -92,9 +91,6 @@ $escapar = static fn($valor): string => htmlspecialchars((string) $valor, ENT_QU
             <label>Biografía<textarea name="bio_organizacion" maxlength="2000"><?php echo $escapar($perfil['bio_organizacion'] ?? ''); ?></textarea></label>
             <button class="boton boton-gestion" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar perfil</button>
         </form>
-    </main>
-    <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
-    <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
 </body>
 
 </html>

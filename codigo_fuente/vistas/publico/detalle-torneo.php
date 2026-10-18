@@ -348,14 +348,20 @@
                      <div class="perfil-organizador-header">
                         <div class="organizer-avatar" id="organizerAvatar">
 
-                           <img id="foto-organizador" src="<?php echo URL_BASE; ?>img/avatars/a1.png" alt="Foto del organizador">
+                     <?php
+                        $fotoOrg = $torneo['foto_organizador'] ?? '';
+                        $fotoOrgUrl = $fotoOrg === ''
+                           ? URL_BASE . 'img/avatars/a1.png'
+                           : (preg_match('#^(https?:)?//#i', $fotoOrg) ? $fotoOrg : URL_BASE . ltrim($fotoOrg, '/'));
+                        ?>
+                        <img id="foto-organizador" src="<?php echo htmlspecialchars($fotoOrgUrl); ?>" alt="Foto del organizador">
                         </div>
 
                      </div>
                      <div class="perfil-organizador-label"><?php echo htmlspecialchars($torneo['nombre_organizador']); ?></div>
                         <div class="perfil-organizador-actions perfil-organizador-actions--centered">
                         <button class="perfil-boton-primario">Seguir</button>
-                        <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=perfilPublicoOrganizador" class="perfil-boton-secundario">Ver perfil</a>
+                           <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?> class="perfil-boton-secundario">Ver perfil</a>
                      </div>
                   </div>
 
@@ -369,122 +375,203 @@
          <!--- PARTICIPANTES -------------------->
          <!-------------------------------------->
 
-         <div class="panel-pestañas" id="participantes">
+      <div class="panel-pestañas" id="participantes">
 
-                  <section class="seccion-participantes">
-               <h2 id="titulo-participantes"><?php echo $participaEquipos ? 'Equipos que participan' : 'Participantes'; ?></h2>
+            <?php if ($participaEquipos): ?>
 
-               <?php if (empty($participantes)): ?>
-                  <p>Todavía no hay participantes confirmados.</p>
-               <?php else: ?>
+               <!-- ======= MODALIDAD EQUIPOS: lista de equipos + miembros del equipo elegido ======= -->
+               <section class="seccion-participantes">
+                  <h2 id="titulo-participantes">Equipos que participan</h2>
+
+                  <?php if (empty($participantes)): ?>
+                     <p>Todavía no hay participantes confirmados.</p>
+                  <?php else: ?>
+                     <p class="participantes-ayuda">Tocá un equipo para ver sus miembros.</p>
                      <ul class="participantes-grilla" id="participantes-grid">
-                     <?php foreach ($participantes as $indiceParticipante => $participante): ?>
-                        <li<?php echo $indiceParticipante >= 3 ? ' data-oculto="1" style="display:none"' : ''; ?>>
-                           <?php if ($participante['tipo'] === 'equipo'): ?>
-                              <a class="participantes-enlace" href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $participante['referencia_id']; ?>">
-                           <?php endif; ?>
-                           <article class="participantes-tarjeta">
-                              <img src="<?php echo htmlspecialchars($participante['imagen'] ?: $imagenPorDefecto); ?>" alt="<?php echo htmlspecialchars($participante['nombre']); ?>">
+                        <?php foreach ($participantes as $indiceParticipante => $participante): ?>
+                           <li<?php echo $indiceParticipante >= 3 ? ' data-oculto="1" style="display:none"' : ''; ?>>
+                              <article class="participantes-tarjeta participantes-tarjeta--seleccionable<?php echo $indiceParticipante === 0 ? ' seleccionado' : ''; ?>"
+                                 data-equipo-tarjeta="<?php echo (int) $participante['referencia_id']; ?>"
+                                 data-equipo-nombre="<?php echo htmlspecialchars($participante['nombre']); ?>"
+                                 tabindex="0" role="button">
+                                 <img src="<?php echo htmlspecialchars($participante['imagen'] ?: $imagenPorDefecto); ?>" alt="<?php echo htmlspecialchars($participante['nombre']); ?>">
 
-                              <div class="participantes-info">
-                                 <h3><?php echo htmlspecialchars($participante['nombre']); ?></h3>
-                                 <p><?php echo htmlspecialchars($torneo['nombre_juego']); ?></p>
-                                 <?php if ($participante['tipo'] === 'equipo'): ?>
+                                 <div class="participantes-info">
+                                    <h3>
+                                       <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $participante['referencia_id']; ?>"><?php echo htmlspecialchars($participante['nombre']); ?></a>
+                                    </h3>
+                                    <p><?php echo htmlspecialchars($torneo['nombre_juego']); ?></p>
                                     <p><?php echo (int) $participante['miembros']; ?> Participantes</p>
-                                 <?php endif; ?>
-                                 <?php if (in_array($torneo['formato'], ['liga', 'suizo'], true)): ?>
-                                    <p>Puntos: <?php echo $numeroMarcador($participante['puntos'] ?? 0); ?></p>
-                                 <?php endif; ?>
-                              </div>
-                           </article>
-                           <?php if ($participante['tipo'] === 'equipo'): ?>
-                              </a>
-                           <?php endif; ?>
-                        </li>
-                     <?php endforeach; ?>
-                  </ul>
+                                    <?php if (in_array($torneo['formato'], ['liga', 'suizo'], true)): ?>
+                                       <p>Puntos: <?php echo $numeroMarcador($participante['puntos'] ?? 0); ?></p>
+                                    <?php endif; ?>
+                                 </div>
+                              </article>
+                           </li>
+                        <?php endforeach; ?>
+                     </ul>
 
-                  <?php if (count($participantes) > 3): ?>
-                     <div class="ver-mas-miembros">
-                        <button type="button" id="participantes-cargar-mas" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
+                     <?php if (count($participantes) > 3): ?>
+                        <div class="ver-mas-miembros">
+                           <button type="button" data-cargar-mas="participantes-grid" data-paso="3" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
        transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
        hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
-                     </div>
-                     <script>
-                        (function () {
-                           var boton = document.getElementById('participantes-cargar-mas');
-                           boton.addEventListener('click', function () {
-                              var ocultos = document.querySelectorAll('#participantes-grid li[data-oculto]');
-                              for (var i = 0; i < 3 && i < ocultos.length; i++) {
-                                 ocultos[i].style.display = '';
-                                 ocultos[i].removeAttribute('data-oculto');
-                              }
-                              if (!document.querySelector('#participantes-grid li[data-oculto]')) {
-                                 boton.parentNode.style.display = 'none';
-                              }
-                           });
-                        })();
-                     </script>
+                        </div>
+                     <?php endif; ?>
                   <?php endif; ?>
+               </section>
+
+               <!-- MIEMBROS DEL EQUIPO SELECCIONADO -->
+               <?php if (!empty($participantes)): ?>
+               <section class="equipo-miembros">
+
+                  <h2 class="seccion-gradiente-titulo">
+                     Miembros de <span id="nombre-equipo-seleccionado"><?php echo htmlspecialchars($participantes[0]['nombre']); ?></span>
+                  </h2>
+
+                  <?php foreach ($participantes as $indiceParticipante => $participante): ?>
+                     <div class="miembros-equipo-panel" data-miembros-equipo="<?php echo (int) $participante['referencia_id']; ?>"<?php echo $indiceParticipante > 0 ? ' style="display:none"' : ''; ?>>
+                        <?php if (empty($participante['lista_miembros'])): ?>
+                           <p>Este equipo todavía no tiene miembros.</p>
+                        <?php else: ?>
+                           <ul class="miembros-grilla">
+                              <?php foreach ($participante['lista_miembros'] as $miembro): ?>
+                                 <li>
+                                    <a class="enlace-jugador" href="<?php echo URL_BASE; ?>index.php?c=perfil&a=jugador&id=<?php echo (int) $miembro['id']; ?>">
+                                       <article class="miembro-tarjeta">
+                                          <div class="miembro-foto">
+                                             <div class="miembro-fondo"></div>
+                                             <img src="<?php echo htmlspecialchars($miembro['foto_perfil_url'] ?: URL_BASE . 'img/avatars/a1.png'); ?>" alt="Jugador">
+                                          </div>
+                                          <h3><?php echo htmlspecialchars($miembro['nombre_completo']); ?></h3>
+                                          <?php if (!empty($miembro['posicion'])): ?>
+                                             <span class="miembro-posicion"><?php echo htmlspecialchars($miembro['posicion']); ?></span>
+                                          <?php endif; ?>
+                                       </article>
+                                    </a>
+                                 </li>
+                              <?php endforeach; ?>
+                           </ul>
+                        <?php endif; ?>
+                     </div>
+                  <?php endforeach; ?>
+
+               </section>
                <?php endif; ?>
-            </section>
 
-            <!-- MIEMBROS DEL EQUIPO -->
+               <!--------- RANKINGS DE LOS MIEMBROS DEL EQUIPO SELCCIONADO ---------->
 
-            <section class="equipo-miembros">
+               <section class="ranking-equipo">
 
-               <h2 class="seccion-gradiente-titulo">
-                  Miembros del equipo
-               </h2>
+                  <div class="ranking-header">
+                     <h2 id="titulo-ranking">Rankings del Equipo</h2>
+                  </div>
 
-               <ul class="miembros-grilla" id="miembros-grilla">
-                  <!-- Se llena por JS -->
-               </ul>
-               <div class="ver-mas-miembros">
-                  <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
+                  <div class="ranking-tabla" id="ranking-tabla-contenedor">
+
+                     <table>
+                        <thead>
+                           <tr id="ranking-head" class="ranking-head">
+                              <!-- Se llena por JS: cambia según sea equipo o individual -->
+                           </tr>
+                        </thead>
+                        <tbody id="ranking-filas">
+                           <!-- Se llena por JS -->
+                        </tbody>
+                     </table>
+
+                  </div>
+
+               </section>
+
+            <?php else: ?>
+
+               <!-- ======= MODALIDAD INDIVIDUAL: solo "Jugadores que participan" ======= -->
+               <section class="equipo-miembros">
+
+                  <h2 class="seccion-gradiente-titulo">Jugadores que participan</h2>
+
+                  <?php if (empty($participantes)): ?>
+                     <p>Todavía no hay participantes confirmados.</p>
+                  <?php else: ?>
+                     <ul class="miembros-grilla" id="jugadores-grid">
+                        <?php foreach ($participantes as $indiceParticipante => $participante): ?>
+                           <li<?php echo $indiceParticipante >= 8 ? ' data-oculto="1" style="display:none"' : ''; ?>>
+                              <a class="enlace-jugador" href="<?php echo URL_BASE; ?>index.php?c=perfil&a=jugador&id=<?php echo (int) $participante['referencia_id']; ?>">
+                                 <article class="miembro-tarjeta">
+                                    <div class="miembro-foto">
+                                       <div class="miembro-fondo"></div>
+                                       <img src="<?php echo htmlspecialchars($participante['imagen'] ?: $imagenPorDefecto); ?>" alt="<?php echo htmlspecialchars($participante['nombre']); ?>">
+                                    </div>
+                                    <h3><?php echo htmlspecialchars($participante['nombre']); ?></h3>
+                                    <?php if (in_array($torneo['formato'], ['liga', 'suizo'], true)): ?>
+                                       <span class="miembro-posicion">Puntos: <?php echo $numeroMarcador($participante['puntos'] ?? 0); ?></span>
+                                    <?php endif; ?>
+                                 </article>
+                              </a>
+                           </li>
+                        <?php endforeach; ?>
+                     </ul>
+
+                     <?php if (count($participantes) > 8): ?>
+                        <div class="ver-mas-miembros">
+                           <button type="button" data-cargar-mas="jugadores-grid" data-paso="8" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
        transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Ver más
-                     miembros</a>
-               </div>
-            </section>
+       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
+                        </div>
+                     <?php endif; ?>
+                  <?php endif; ?>
 
-            <!--------- RANKINGS DE LOS MIEMBROS DEL EQUIPO SELCCIONADO ---------->
+               </section>
 
-            <section class="ranking-equipo">
+            <?php endif; ?>
 
-               <div class="ranking-header">
-                  <h2 id="titulo-ranking">Rankings del Equipo</h2>
-               </div>
+            <script>
+               (function () {
+                  // "Cargar más": muestra de a "data-paso" elementos ocultos de la grilla indicada
+                  document.querySelectorAll('[data-cargar-mas]').forEach(function (boton) {
+                     boton.addEventListener('click', function () {
+                        var selector = '#' + boton.getAttribute('data-cargar-mas') + ' li[data-oculto]';
+                        var paso = parseInt(boton.getAttribute('data-paso'), 10) || 3;
+                        var ocultos = document.querySelectorAll(selector);
+                        for (var i = 0; i < paso && i < ocultos.length; i++) {
+                           ocultos[i].style.display = '';
+                           ocultos[i].removeAttribute('data-oculto');
+                        }
+                        if (!document.querySelector(selector)) {
+                           boton.parentNode.style.display = 'none';
+                        }
+                     });
+                  });
 
-               <div class="ranking-tabla" id="ranking-tabla-contenedor">
+                  // Equipos: al elegir una tarjeta se muestran los miembros de ese equipo
+                  var tarjetas = document.querySelectorAll('[data-equipo-tarjeta]');
+                  var paneles = document.querySelectorAll('[data-miembros-equipo]');
+                  var titulo = document.getElementById('nombre-equipo-seleccionado');
 
-                  <table>
-                     <thead>
-                        <tr id="ranking-head" class="ranking-head">
-                           <!-- Se llena por JS: cambia según sea equipo o individual -->
-                        </tr>
-                     </thead>
-                     <tbody id="ranking-filas">
-                        <!-- Se llena por JS -->
-                     </tbody>
-                  </table>
+                  function seleccionar(tarjeta) {
+                     var id = tarjeta.getAttribute('data-equipo-tarjeta');
+                     tarjetas.forEach(function (t) { t.classList.toggle('seleccionado', t === tarjeta); });
+                     paneles.forEach(function (p) {
+                        p.style.display = p.getAttribute('data-miembros-equipo') === id ? '' : 'none';
+                     });
+                     if (titulo) { titulo.textContent = tarjeta.getAttribute('data-equipo-nombre'); }
+                  }
 
-               </div>
-
-               <!-- foreach($jugadores as $jugador){
-                     Crear una fila con:
-
-                   - Logo del equipo
-                   - Posición en el ranking
-                   - Foto del jugador
-                   - Nombre del jugador
-                   - Juego
-                   - Partidas jugadas
-                   - Puntos
-                   }
-                 cambio de equipo y cambia la ID, muestra la info de esos jugadores -->
-
-            </section>
+                  tarjetas.forEach(function (tarjeta) {
+                     tarjeta.addEventListener('click', function (evento) {
+                        if (evento.target.closest('a')) { return; } // el nombre del equipo es un enlace a su perfil
+                        seleccionar(tarjeta);
+                     });
+                     tarjeta.addEventListener('keydown', function (evento) {
+                        if (evento.key === 'Enter' || evento.key === ' ') {
+                           evento.preventDefault();
+                           seleccionar(tarjeta);
+                        }
+                     });
+                  });
+               })();
+            </script>
 
          </div>
 

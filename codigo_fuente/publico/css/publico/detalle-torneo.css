@@ -2187,3 +2187,15 @@ TABS RESPONSIVE (min-width: 700px)
    font-size: 0.85rem;
    opacity: 0.75;
 }
+
+/* ===== Pestaña Participantes: equipo seleccionable + enlaces ===== */
+.participantes-ayuda { text-align: center; font-size: 0.85rem; opacity: 0.75; margin-bottom: 14px; }
+
+.participantes-tarjeta--seleccionable { cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s; }
+.participantes-tarjeta--seleccionable:hover { border-color: rgba(0, 255, 238, 0.4); }
+.participantes-tarjeta--seleccionable.seleccionado { border-color: #00FFEE; }
+
+.participantes-info h3 a { color: inherit; text-decoration: none; }
+.participantes-info h3 a:hover { text-decoration: underline; color: #00FFEE; }
+
+.enlace-jugador { display: block; color: inherit; text-decoration: none; }

@@ -86,11 +86,12 @@ class Torneo {
         //Metodo para el detalle publico de un torneo puntual (ya publicado)
     public function obtenerTorneoPublico(int $torneoId): ?array {
         $sql = "SELECT t.*, j.nombre AS nombre_juego, j.categoria AS categoria_juego,
-                       m.nombre AS nombre_modalidad, u.nombre_completo AS nombre_organizador
+                        m.nombre AS nombre_modalidad, u.nombre_completo AS nombre_organizador, u.foto_perfil_url AS foto_organizador
                 FROM torneos t
                 INNER JOIN juegos j ON j.id = t.juego_id
                 INNER JOIN modalidades m ON m.id = t.modalidad_id
                 INNER JOIN usuarios u ON u.id = t.organizador_id
+                LEFT JOIN perfiles_organizadores po ON po.usuario_id = t.organizador_id
                 WHERE t.id = :id AND t.estado <> 'borrador' AND t.estado <> 'cancelado'
                 LIMIT 1";
         $stmt = $this->bd->prepare($sql);
@@ -139,10 +140,48 @@ class Torneo {
                 LEFT JOIN usuarios u ON p.tipo = 'usuario' AND u.id = p.referencia_id
                 LEFT JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
                 WHERE p.torneo_id = :torneo_id AND p.estado = 'confirmado'
-                ORDER BY p.nombre ASC";
+                    ORDER BY p.nombre ASC";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([':torneo_id' => $torneoId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $participantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //Para los equipos: se agrega la lista de jugadores activos de cada uno ('lista_miembros'),
+        //que usa la pestaña Participantes para mostrar los miembros del equipo seleccionado
+        $equipoIds = [];
+        foreach ($participantes as $participante) {
+            if ($participante['tipo'] === 'equipo') {
+                $equipoIds[] = (int) $participante['referencia_id'];
+            }
+        }
+
+        $miembrosPorEquipo = [];
+        if (!empty($equipoIds)) {
+            $marcadores = [];
+            $parametros = [];
+            foreach ($equipoIds as $indice => $equipoId) {
+                $marcadores[] = ":equipo{$indice}";
+                $parametros[":equipo{$indice}"] = $equipoId;
+            }
+            $sqlMiembros = "SELECT m.equipo_id, u.id, u.nombre_completo, u.foto_perfil_url, m.posicion
+                            FROM equipo_miembros m
+                            INNER JOIN usuarios u ON u.id = m.usuario_id
+                            WHERE m.equipo_id IN (" . implode(',', $marcadores) . ") AND m.es_activo = 1
+                            ORDER BY u.nombre_completo ASC";
+            $stmtMiembros = $this->bd->prepare($sqlMiembros);
+            $stmtMiembros->execute($parametros);
+            foreach ($stmtMiembros->fetchAll(PDO::FETCH_ASSOC) as $fila) {
+                $miembrosPorEquipo[(int) $fila['equipo_id']][] = $fila;
+            }
+        }
+
+        foreach ($participantes as &$participante) {
+            $participante['lista_miembros'] = $participante['tipo'] === 'equipo'
+                ? ($miembrosPorEquipo[(int) $participante['referencia_id']] ?? [])
+                : [];
+        }
+        unset($participante);
+
+        return $participantes;
     }
 
     //Todos los partidos del torneo (para Brackets, Resultados y Próximos Enfrentamientos)
@@ -185,11 +224,11 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-        //Metodo para el catalogo publico: torneos ya publicados (no borradores ni cancelados)
+    //Metodo para el catalogo publico: torneos ya publicados (no borradores ni cancelados)
     public function obtenerTorneosPublicados(): array {
         $sql = "SELECT t.id, t.nombre, t.formato, t.estado, t.cupo_max_equipos,
-                       t.fecha_inicio, t.fecha_fin, t.banner_url, t.localidad,
-                       j.nombre AS nombre_juego, j.categoria AS categoria_juego,
+                       t.fecha_inicio, t.fecha_fin, t.banner_url, t.localidad, t.ubicacion, t.comunidad,
+                       t.juego_id, j.nombre AS nombre_juego, j.categoria AS categoria_juego,
                        m.nombre AS nombre_modalidad
                 FROM torneos t
                 INNER JOIN juegos j ON j.id = t.juego_id
@@ -699,6 +738,27 @@ class Torneo {
             ':organizador_id_actividad' => $organizadorId,
             ':organizador_id_partido' => $organizadorId,
         ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerPartidosCalendarioOrganizador(int $organizadorId): array {
+        $stmt = $this->bd->prepare(
+            "SELECT e.id, e.ronda, e.resultado_local, e.resultado_visitante,
+                    DATE(e.fecha_hora_programada) AS fecha,
+                    TIME(e.fecha_hora_programada) AS hora,
+                    e.cancha AS sede,
+                    t.id AS torneo_id, t.nombre AS torneo_nombre,
+                    j.nombre AS juego_nombre,
+                    pl.nombre AS local_nombre, pv.nombre AS visitante_nombre
+             FROM torneo_encuentros e
+             INNER JOIN torneos t ON t.id = e.torneo_id
+             LEFT JOIN juegos j ON j.id = t.juego_id
+             LEFT JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+             LEFT JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+             WHERE t.organizador_id = :organizador_id
+             ORDER BY e.fecha_hora_programada IS NULL, e.fecha_hora_programada ASC, e.id ASC"
+        );
+        $stmt->execute([':organizador_id' => $organizadorId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -1308,7 +1368,7 @@ class Torneo {
         }
 
         $sql = "SELECT p.id, p.tipo, p.nombre, p.estado, p.fecha_inscripcion,
-                       t.id AS torneo_id, t.nombre AS torneo_nombre
+                    t.id AS torneo_id, t.nombre AS torneo_nombre, t.banner_url AS torneo_banner
                 FROM participantes_torneo p
                 INNER JOIN torneos t ON t.id = p.torneo_id
                 WHERE (" . implode(' OR ', $condiciones) . ")

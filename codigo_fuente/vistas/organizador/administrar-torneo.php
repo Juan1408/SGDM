@@ -103,7 +103,6 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
 <body>
 
       <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-      <?php require_once __DIR__ . '/sidebar.html'; ?>
 
    <main class="dashboard-organizador administrar-torneo-pagina">
 
@@ -342,12 +341,15 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                               <p><i class="fa-solid fa-calendar-day"></i><strong>Inscripto:</strong> <?php echo $formatearFecha($participante['fecha_inscripcion']); ?></p>
                            </div>
 
-                           <div class="participante-card-actions">
-                              <?php if ($participante['tipo'] === 'equipo'): ?>
-                                 <a class="participante-btn participante-btn-view" href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $participante['referencia_id']; ?>">
-                                    <i class="fa-solid fa-people-group"></i>Ver equipo
-                                 </a>
-                              <?php endif; ?>
+                           <?php if ($participante['tipo'] === 'equipo'): ?>
+                              <a class="participante-btn participante-btn-view" href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $participante['referencia_id']; ?>">
+                              <i class="fa-solid fa-people-group"></i>Ver equipo
+                           </a>
+                        <?php else: ?>
+                              <a class="participante-btn participante-btn-view" href="<?php echo URL_BASE; ?>index.php?c=perfil&a=jugador&id=<?php echo (int) $participante['referencia_id']; ?>">
+                              <i class="fa-solid fa-user"></i>Ver jugador
+                           </a>
+                        <?php endif; ?>
 
                               <?php if ($puedeResponder): ?>
                                  <form method="post" action="<?php echo URL_BASE; ?>
@@ -1122,9 +1124,8 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
    <script>
       window.ADMINISTRAR_URL = "<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=administrar&id=<?php echo (int) $torneo['id']; ?>";
    </script>
-   <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
-   <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
    <script src="<?php echo URL_BASE; ?>js/organizador/administrarMenu.js"></script>
+   <?php include __DIR__ . '/../componentes/footer.html'; ?>
 
 </body>
 </html>

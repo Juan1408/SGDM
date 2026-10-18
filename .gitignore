@@ -1,9 +1,11 @@
 Documentos_Juan/
 
-Documentos_Juan/
-
 /vendor/
 composer.phar
 
 .phpunit.result.cache
 scratch/
+
+codigo_fuente/publico/img/torneos/subidos/
+codigo_fuente/publico/img/perfiles/subidos/
+codigo_fuente/logs/*.log

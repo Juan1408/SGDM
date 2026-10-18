@@ -129,6 +129,18 @@
    color: var(--texto-secundario);
 }
 
+/* Botón y etiqueta dentro de una fila (ej. Mis Inscripciones del dashboard) */
+.fila-jugador .boton-secundario {
+   width: auto;
+   flex-shrink: 0;
+   white-space: nowrap;
+}
+
+.fila-jugador .mi-equipo-badge {
+   flex-shrink: 0;
+   white-space: nowrap;
+}
+
 .fila-jugador-badge {
    padding: 4px 10px;
    border-radius: 999px;

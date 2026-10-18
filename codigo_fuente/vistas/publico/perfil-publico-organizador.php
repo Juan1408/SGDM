@@ -1,10 +1,61 @@
+<?php
+/**
+ * Vista: perfil-publico-organizador.php  (vistas/publico/)
+ * Perfil publico de un organizador. Lo carga PerfilControlador::organizador().
+ * Variables: $datos (ya filtrado por el modelo segun lo que el organizador deja publico),
+ *            $torneos, $esDuenio.
+ * Nunca llegan email ni telefono personal.
+ */
+
+$urlImagen = function (?string $valor, string $porDefecto): string {
+   if (empty($valor)) { return URL_BASE . $porDefecto; }
+   return preg_match('#^(https?:)?//#i', $valor) ? $valor : URL_BASE . ltrim($valor, '/');
+};
+
+$nombreOrganizacion = $datos['nombre_organizacion'] ?? '';
+$nombrePersona = $datos['nombre_completo'] ?? $nombreOrganizacion;
+//La organizacion se muestra aparte solo si es distinta del nombre de la persona
+$mostrarOrganizacion = $nombreOrganizacion !== '' && $nombreOrganizacion !== $nombrePersona;
+$bio = trim((string) ($datos['bio_organizacion'] ?? ''));
+$localidad = trim((string) ($datos['localidad'] ?? ''));
+$telefonoContacto = trim((string) ($datos['telefono_contacto'] ?? ''));
+$sitioWeb = trim((string) ($datos['sitio_web'] ?? ''));
+if (!preg_match('#^https?://#i', $sitioWeb)) {
+   $sitioWeb = '';
+}
+$verificado = !empty($datos['verificado_oficial']);
+$avatarUrl = $urlImagen($datos['foto_perfil_url'] ?? '', 'img/avatars/a1.png');
+$bannerUrl = $urlImagen($datos['banner_url'] ?? '', 'img/bg.jpg');
+
+//Cantidades reales
+$totalTorneos = count($torneos);
+$enCurso = count(array_filter($torneos, fn($t) => $t['estado'] === 'en_curso'));
+$finalizados = count(array_filter($torneos, fn($t) => $t['estado'] === 'finalizado'));
+
+$mesesCorto = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+$formatearFecha = function (?string $fecha) use ($mesesCorto): string {
+   if (empty($fecha)) { return 'Fecha a confirmar'; }
+   $marca = strtotime($fecha);
+   return date('d', $marca) . ' ' . $mesesCorto[(int) date('n', $marca) - 1] . ' ' . date('Y', $marca);
+};
+
+//Navbar segun quien mira
+$rolSesion = (int) ($_SESSION['rol_id'] ?? 0);
+if ($rolSesion === 3) {
+   $archivoNavbar = 'navbar-jugador.php';
+} elseif ($rolSesion === 2) {
+   $archivoNavbar = 'navbar-organizador.php';
+} else {
+   $archivoNavbar = 'navbar-publico.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>ASCEND - Perfil Organizador</title>
+   <title>ASCEND - <?php echo htmlspecialchars($nombrePersona); ?></title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
@@ -21,78 +72,90 @@
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <?php include __DIR__ . '/../componentes/navbar-publico.php'; ?>
+   <?php include __DIR__ . '/../componentes/' . $archivoNavbar; ?>
 
    <main class="equipo-pagina">
 
+      <?php if ($esDuenio && isset($_GET['exito'])): ?>
+         <div class="mensaje-exito">Perfil actualizado correctamente.</div>
+      <?php endif; ?>
+
       <!-- ============================== -->
-      <!-- HEADER: banner, avatar, stats  -->
-      <!-- (sin tabs, todo en una página) -->
+      <!-- HEADER: banner, foto, datos    -->
       <!-- ============================== -->
       <header class="equipo-hero">
 
          <div class="equipo-hero-banner">
-            <img src="<?php echo URL_BASE; ?>img/bg.jpg" alt="Banner del organizador">
+            <img src="<?php echo htmlspecialchars($bannerUrl); ?>" alt="Banner del organizador">
          </div>
 
          <div class="equipo-identidad">
             <div class="equipo-logo">
-               <img src="<?php echo URL_BASE; ?>img/avatars/a1.png" alt="Foto del organizador">
+               <img src="<?php echo htmlspecialchars($avatarUrl); ?>" alt="Foto del organizador">
             </div>
 
             <div class="equipo-info-texto">
-               <span class="organizador-etiqueta">Organizadora</span>
-               <h1 class="equipo-nombre">Valentina Torres</h1>
+               <span class="organizador-etiqueta">Organizador<?php echo $verificado ? ' · <i class="fa-solid fa-circle-check"></i> Verificado' : ''; ?></span>
+               <h1 class="equipo-nombre"><?php echo htmlspecialchars($nombrePersona); ?></h1>
 
-               <p class="equipo-descripcion">
-                  Organizadora de torneos eSports y deportes mixtos, comprometida con la
-                  experiencia del participante y la gestión profesional de cada evento.
-               </p>
+               <?php if ($bio !== ''): ?>
+                  <p class="equipo-descripcion"><?php echo nl2br(htmlspecialchars($bio)); ?></p>
+               <?php endif; ?>
 
+               <?php if ($mostrarOrganizacion || $localidad !== '' || $telefonoContacto !== '' || $sitioWeb !== ''): ?>
                <div class="equipo-datos">
-                  <div class="equipo-dato">
-                     <i class="fa-solid fa-location-dot"></i>
-                     <span>Montevideo - Uruguay</span>
-                  </div>
-                  <div class="equipo-dato">
-                     <i class="fa-solid fa-building"></i>
-                     <span>ASCEND</span>
-                  </div>
-                  <div class="equipo-dato">
-                     <i class="fa-solid fa-envelope"></i>
-                     <span>valentina@email.com</span>
-                  </div>
+                  <?php if ($mostrarOrganizacion): ?>
+                     <div class="equipo-dato">
+                        <i class="fa-solid fa-building"></i>
+                        <span><?php echo htmlspecialchars($nombreOrganizacion); ?></span>
+                     </div>
+                  <?php endif; ?>
+                  <?php if ($localidad !== ''): ?>
+                     <div class="equipo-dato">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span><?php echo htmlspecialchars($localidad); ?></span>
+                     </div>
+                  <?php endif; ?>
+                  <?php if ($telefonoContacto !== ''): ?>
+                     <div class="equipo-dato">
+                        <i class="fa-solid fa-phone"></i>
+                        <span><?php echo htmlspecialchars($telefonoContacto); ?></span>
+                     </div>
+                  <?php endif; ?>
+                  <?php if ($sitioWeb !== ''): ?>
+                     <div class="equipo-dato">
+                        <i class="fa-solid fa-globe"></i>
+                        <a href="<?php echo htmlspecialchars($sitioWeb); ?>" target="_blank" rel="noopener noreferrer"><?php echo htmlspecialchars($sitioWeb); ?></a>
+                     </div>
+                  <?php endif; ?>
                </div>
+               <?php endif; ?>
             </div>
          </div>
 
          <div class="equipo-stats">
             <div class="stat-card">
-               <strong>12</strong>
+               <strong><?php echo $totalTorneos; ?></strong>
                <span>Torneos</span>
             </div>
             <div class="stat-card">
-               <strong>4.9</strong>
-               <span>Puntaje</span>
+               <strong><?php echo $enCurso; ?></strong>
+               <span>En curso</span>
             </div>
             <div class="stat-card">
-               <strong>86</strong>
-               <span>Opiniones</span>
-            </div>
-            <div class="stat-card">
-               <strong>5</strong>
-               <span>Equipos</span>
+               <strong><?php echo $finalizados; ?></strong>
+               <span>Finalizados</span>
             </div>
          </div>
 
       </header>
 
       <!-- ============================== -->
-      <!-- SEGUIR                         -->
+      <!-- SEGUIR (todavia sin funcion)   -->
       <!-- ============================== -->
       <section class="equipo-card equipo-capitanes">
          <div class="capitanes-fila capitanes-fila--solo-boton">
-            <p class="perfil-organizador-cta-texto">¿Te interesa competir en los torneos de esta organizadora?</p>
+            <p class="perfil-organizador-cta-texto">¿Te interesa competir en los torneos de este organizador?</p>
             <button type="button" class="boton-solicitar-unirse">Seguir</button>
          </div>
       </section>
@@ -100,184 +163,39 @@
       <!-- ============================== -->
       <!-- TORNEOS QUE ORGANIZA           -->
       <!-- ============================== -->
-      <!-- Todavia con datos de ejemplo -- se conecta en un paso siguiente -->
       <section class="team-members" id="torneos-organiza">
 
          <h2 class="section-title-gradient">Torneos que organiza</h2>
 
-         <ul class="torneos-organiza-grid">
-
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle" class="torneo-organiza-card">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card1.jpg" alt="Virtual Odyssey Chronicles">
-                  <div class="torneo-organiza-info">
-                     <h3>Virtual Odyssey Chronicles</h3>
-                     <span>eSports · 26 mayo 2026</span>
-                  </div>
-               </a>
-            </li>
-
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=valorant-champion-series" class="torneo-organiza-card">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card2.png" alt="Valorant Champion Series">
-                  <div class="torneo-organiza-info">
-                     <h3>Valorant Champion Series</h3>
-                     <span>Competencia regional · 18 junio 2026</span>
-                  </div>
-               </a>
-            </li>
-
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=copa-futbol-5" class="torneo-organiza-card">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card3.png" alt="Copa Futbol 5">
-                  <div class="torneo-organiza-info">
-                     <h3>Copa Futbol 5</h3>
-                     <span>Deportes mixtos · 08 julio 2026</span>
-                  </div>
-               </a>
-            </li>
-
-         </ul>
-
-      </section>
-
-      <!-- ============================== -->
-      <!-- EQUIPOS QUE GESTIONA           -->
-      <!-- Mismas clases que mis-equipos.html -->
-      <!-- ============================== -->
-      <!-- Todavia con datos de ejemplo -- se conecta en un paso siguiente -->
-      <section class="team-members" id="equipos-gestiona">
-
-         <h2 class="section-title-gradient">Equipos que gestiona</h2>
-
-         <ul class="mis-equipos-grid">
-
-            <li>
-               <article class="mi-equipo-card">
-                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Fire Wolves">
-                  <div class="mi-equipo-info">
-                     <h3>Fire Wolves</h3>
-                     <span class="mi-equipo-badge badge-miembro">eSports</span>
-                  </div>
-                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
-               </article>
-            </li>
-
-            <li>
-               <article class="mi-equipo-card">
-                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Cyber Titans">
-                  <div class="mi-equipo-info">
-                     <h3>Cyber Titans</h3>
-                     <span class="mi-equipo-badge badge-miembro">eSports</span>
-                  </div>
-                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
-               </article>
-            </li>
-
-            <li>
-               <article class="mi-equipo-card">
-                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Dragon Crew">
-                  <div class="mi-equipo-info">
-                     <h3>Dragon Crew</h3>
-                     <span class="mi-equipo-badge badge-miembro">Tradicional</span>
-                  </div>
-                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
-               </article>
-            </li>
-
-            <li>
-               <article class="mi-equipo-card">
-                  <img src="<?php echo URL_BASE; ?>img/logos/logo.png" alt="Mental Squad">
-                  <div class="mi-equipo-info">
-                     <h3>Mental Squad</h3>
-                     <span class="mi-equipo-badge badge-miembro">Mental</span>
-                  </div>
-                  <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil" class="boton-secundario">Ver perfil</a>
-               </article>
-            </li>
-
-         </ul>
-
-      </section>
-
-      <!-- ============================== -->
-      <!-- OPINIONES                      -->
-      <!-- Mismo patrón que "Testimonios"  -->
-      <!-- en perfil-equipo, en grilla     -->
-      <!-- porque acá hay varias, más un   -->
-      <!-- formulario para dejar la propia -->
-      <!-- ============================== -->
-      <section class="equipo-card equipo-testimonios">
-
-         <h2>Opiniones</h2>
-         <p class="opiniones-subtitulo">Lo que dicen los participantes sobre la organización y el ambiente de los torneos.</p>
-
-         <ul class="opiniones-grid">
-
-            <li>
-               <article class="testimonio-item">
-                  <div class="testimonio-avatar"></div>
-                  <span class="testimonio-nombre">Mateo R.</span>
-                  <div class="testimonio-estrellas">
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                  </div>
-                  <p>Excelente comunicación y eventos bien organizados. Cada detalle estuvo cuidado y el ambiente fue muy profesional.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="testimonio-item">
-                  <div class="testimonio-avatar"></div>
-                  <span class="testimonio-nombre">Ana G.</span>
-                  <div class="testimonio-estrellas">
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-regular fa-star"></i>
-                  </div>
-                  <p>Los horarios fueron claros y la logística del torneo fue impecable. Recomendable para equipos nuevos y competitivos.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="testimonio-item">
-                  <div class="testimonio-avatar"></div>
-                  <span class="testimonio-nombre">Lucas M.</span>
-                  <div class="testimonio-estrellas">
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                     <i class="fa-solid fa-star"></i>
-                  </div>
-                  <p>Ambiente inclusivo y muy buena gestión de resultados. Los participantes siempre se sintieron escuchados.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="testimonio-item testimonio-item--form">
-                  <h3>Deja tu opinión</h3>
-                  <textarea placeholder="¿Qué te pareció la organización del torneo?" rows="4"></textarea>
-                  <button type="button" onclick="alert('Opinión enviada. ¡Gracias por tu feedback! (Simulación)')">Enviar opinión</button>
-               </article>
-            </li>
-
-         </ul>
+         <?php if (empty($torneos)): ?>
+            <p>Todavía no publicó ningún torneo.</p>
+         <?php else: ?>
+            <ul class="torneos-organiza-grid">
+               <?php foreach ($torneos as $torneo): ?>
+                  <li>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $torneo['id']; ?>" class="torneo-organiza-card">
+                        <img src="<?php echo htmlspecialchars($urlImagen($torneo['banner_url'] ?? '', 'img/torneos/card1.jpg')); ?>" alt="<?php echo htmlspecialchars($torneo['nombre']); ?>">
+                        <div class="torneo-organiza-info">
+                           <h3><?php echo htmlspecialchars($torneo['nombre']); ?></h3>
+                           <span><?php echo htmlspecialchars($torneo['nombre_juego']); ?> · <?php echo htmlspecialchars($formatearFecha($torneo['fecha_inicio'])); ?></span>
+                        </div>
+                     </a>
+                  </li>
+               <?php endforeach; ?>
+            </ul>
+         <?php endif; ?>
 
       </section>
 
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.php'; ?>
+   <?php include __DIR__ . '/../componentes/footer.html'; ?>
 
+   <?php if ($archivoNavbar === 'navbar-publico.php'): ?>
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <?php endif; ?>
 
 </body>
 </html>

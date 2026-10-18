@@ -23,7 +23,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/organizador/mis-torneos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        .mis-torneos-pagina { max-width: 1100px; }
         .mis-torneos-toolbar { display: flex; gap: .75rem; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
         .mis-torneos-filtros { display: flex; gap: .5rem; flex-wrap: wrap; }
         .mis-torneos-filtros a { padding: .55rem .8rem; border: 1px solid var(--borde-suave); border-radius: var(--radio-md); color: var(--texto-secundario); text-decoration: none; }
@@ -41,7 +40,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
 </head>
 <body>
     <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-    <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador mis-torneos-pagina">
         <header class="dashboard-header">
             <div>
@@ -81,7 +79,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
             <?php endif; ?>
         </section>
     </main>
-    <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
-    <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
+    <?php include __DIR__ . '/../componentes/footer.html'; ?>
 </body>
 </html>
