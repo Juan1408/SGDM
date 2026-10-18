@@ -1,33 +1,77 @@
 <?php
 /**
  * Vista: perfil-jugador.php
- * Requiere que $datos venga cargado por panelJugadorControlador (perfil() o actualizarPerfil()).
- * $datos viene de Jugador::obtenerPerfil() -> puede tener campos nulos si el jugador
- * todavia no tiene fila en perfiles_jugadores.
+ * Tiene dos modos (los dos son de SOLO LECTURA):
+ *  - Perfil propio ($esPublico = false): lo carga panelJugadorControlador::perfil(). Muestra todo.
+ *    Para editar se usa la pagina aparte editar-perfil-jugador.php (menu Jugador > Editar perfil).
+ *  - Perfil publico ($esPublico = true): lo carga PerfilControlador::jugador(). Solo lectura; el modelo
+ *    ya dejo en null todo lo que el jugador no marco como publico (nunca llegan email ni telefono).
+ * Variables que llegan: $datos, $equipos, $torneos, $camposPublicos (campos opcionales publicos),
+ *                       y $esPublico.
  */
 
+$esPublico = !empty($esPublico);
+$camposPublicos = $camposPublicos ?? [];
+$torneos = $torneos ?? [];
+
+//Una opcion es visible si es el perfil propio, o si el jugador la marco como publica
+$ver = fn(string $campo): bool => !$esPublico || in_array($campo, $camposPublicos, true);
+
+//Imagenes: pueden ser rutas relativas a publico/ (subidas) o URLs completas
+$urlImagen = function (?string $valor, string $porDefecto): string {
+   if (empty($valor)) { return URL_BASE . $porDefecto; }
+   return preg_match('#^(https?:)?//#i', $valor) ? $valor : URL_BASE . ltrim($valor, '/');
+};
+
 $nombre = $datos['nombre_completo'] ?? '';
+if ($esPublico && !empty($datos['apodo_gamertag'])) {
+   //En el perfil publico se muestra el apodo; si no tiene, el nombre
+   $nombre = $datos['apodo_gamertag'];
+}
 $email = $datos['email'] ?? '';
 $bio = $datos['bio'] ?? '';
 $ciudad = $datos['ciudad'] ?? '';
 $pais = $datos['pais'] ?? '';
 $fechaNacimiento = $datos['fecha_nacimiento'] ?? '';
+$discord = $datos['discord_tag'] ?? '';
+$instagram = $datos['instagram_url'] ?? '';
+$twitter = $datos['twitter_url'] ?? '';
 $nivel = $datos['nivel'] ?? 1;
-$avatarUrl = $datos['foto_perfil_url'] ?: URL_BASE . 'img/avatars/a1.png';
-$bannerUrl = $datos['banner_url'] ?: URL_BASE . 'img/bg.jpg';
+$avatarUrl = $urlImagen($datos['foto_perfil_url'] ?? '', 'img/avatars/a1.png');
+$bannerUrl = $urlImagen($datos['banner_url'] ?? '', 'img/bg.jpg');
 
-//Texto de ubicacion para mostrar en modo lectura (ciudad + pais)
+//Ubicacion (ciudad + pais)
 $ubicacionTexto = trim($ciudad . (($ciudad && $pais) ? ' - ' : '') . $pais);
-if ($ubicacionTexto === '') {
-   $ubicacionTexto = 'Sin especificar';
-}
+$ubicacionVista = $ubicacionTexto !== '' ? $ubicacionTexto : 'Sin especificar';
 
-//Calculamos la edad a partir de fecha_nacimiento para mostrarla en modo lectura
+//Edad a partir de fecha_nacimiento
 $edadTexto = 'Edad: sin especificar';
 if (!empty($fechaNacimiento)) {
-   $nacimiento = new DateTime($fechaNacimiento);
-   $hoy = new DateTime();
-   $edadTexto = 'Edad: ' . $hoy->diff($nacimiento)->y;
+   $edadTexto = 'Edad: ' . (new DateTime())->diff(new DateTime($fechaNacimiento))->y;
+}
+
+//Que mostrar en el encabezado: en el perfil propio siempre; en el publico, solo si es publico Y tiene dato
+$mostrarBio = $ver('bio') && ($bio !== '' || !$esPublico);
+$mostrarUbicacion = $ver('ubicacion') && ($ubicacionTexto !== '' || !$esPublico);
+$mostrarEdad = $ver('edad') && (!empty($fechaNacimiento) || !$esPublico);
+
+//Redes: los enlaces solo si son http(s)
+$esEnlace = fn(string $u): bool => (bool) preg_match('#^https?://#i', $u);
+$mostrarDiscord = $ver('discord') && $discord !== '';
+$mostrarInstagram = $ver('instagram') && $instagram !== '' && $esEnlace($instagram);
+$mostrarTwitter = $ver('twitter') && $twitter !== '' && $esEnlace($twitter);
+$hayRedes = $mostrarDiscord || $mostrarInstagram || $mostrarTwitter;
+
+$etiquetaEstado = ['confirmado' => 'Confirmado', 'pendiente' => 'Pendiente de aprobación'];
+
+//Navbar: el perfil propio usa la del jugador; el publico, la que corresponde a quien lo mira
+$rolSesion = (int) ($_SESSION['rol_id'] ?? 0);
+if (!$esPublico || $rolSesion === 3) {
+   $archivoNavbar = 'navbar-jugador.php';
+} elseif ($rolSesion === 2) {
+   $archivoNavbar = 'navbar-organizador.php';
+} else {
+   $archivoNavbar = 'navbar-publico.php';
 }
 ?>
 <!DOCTYPE html>
@@ -53,29 +97,18 @@ if (!empty($fechaNacimiento)) {
 <body>
 
    <!-- NAVBAR ---------------------------->
-   <?php include __DIR__ . '/../componentes/navbar-jugador.php'; ?>
+   <?php include __DIR__ . '/../componentes/' . $archivoNavbar; ?>
 
    <main class="equipo-pagina">
 
-      <?php if (!empty($error)): ?>
-         <div class="mensaje-error"><?php echo htmlspecialchars($error); ?></div>
-      <?php endif; ?>
-
-      <?php if (isset($_GET['exito'])): ?>
+      <?php if (!$esPublico && isset($_GET['exito'])): ?>
          <div class="mensaje-exito">Perfil actualizado correctamente.</div>
       <?php endif; ?>
 
-      <form action="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=actualizarPerfil" method="POST" id="form-perfil-jugador">
-
          <!-- ============================== -->
-         <!-- HEADER: banner, avatar, stats  -->
+         <!-- HEADER: banner, avatar, datos  -->
          <!-- ============================== -->
          <header class="equipo-hero" id="perfil-banner">
-
-            <button type="button" class="boton-cambiar-banner oculto" id="btn-cambiar-banner">
-               <i class="fa-solid fa-camera"></i> Cambiar banner
-            </button>
-            <input type="file" id="input-banner" accept="image/*" hidden>
 
             <div class="equipo-hero-banner">
                <img src="<?php echo htmlspecialchars($bannerUrl); ?>" alt="Banner del jugador" id="perfil-banner-img">
@@ -84,57 +117,43 @@ if (!empty($fechaNacimiento)) {
             <div class="equipo-identidad">
                <div class="equipo-logo">
                   <img src="<?php echo htmlspecialchars($avatarUrl); ?>" alt="Avatar jugador" id="perfil-avatar-img">
-
-                  <label for="input-avatar" class="boton-cambiar-avatar oculto" id="btn-cambiar-avatar" title="Cambiar foto">
-                     <i class="fa-solid fa-camera"></i>
-                  </label>
-                  <input type="file" id="input-avatar" accept="image/*" hidden>
                </div>
 
                <div class="equipo-info-texto">
                   <span class="perfil-nivel">Nivel <?php echo (int) $nivel; ?></span>
 
                   <h1 class="equipo-nombre" id="perfil-nombre"><?php echo htmlspecialchars($nombre); ?></h1>
-                  <input type="hidden" name="nombre_completo" id="input-nombre-completo">
 
-                  <p class="equipo-descripcion" id="perfil-sobre-mi"><?php echo htmlspecialchars($bio); ?></p>
-                  <input type="hidden" name="bio" id="input-bio">
+                  <?php if ($mostrarBio): ?>
+                  <p class="equipo-descripcion" id="perfil-sobre-mi"><?php echo htmlspecialchars($bio !== '' ? $bio : 'Todavía no escribiste tu biografía.'); ?></p>
+                  <?php endif; ?>
 
                   <ul class="equipo-datos">
+                     <?php if ($mostrarUbicacion): ?>
                      <li class="equipo-dato">
                         <i class="fa-solid fa-location-dot"></i>
-                        <span id="perfil-ubicacion-vista"><?php echo htmlspecialchars($ubicacionTexto); ?></span>
-                        <input type="text" name="ciudad" id="perfil-ciudad" placeholder="Ciudad"
-                           value="<?php echo htmlspecialchars($ciudad); ?>" class="oculto campo-formulario">
-                        <input type="text" name="pais" id="perfil-pais" placeholder="Pais"
-                           value="<?php echo htmlspecialchars($pais); ?>" class="oculto campo-formulario">
+                        <span id="perfil-ubicacion-vista"><?php echo htmlspecialchars($ubicacionVista); ?></span>
                      </li>
+                     <?php endif; ?>
+
+                     <?php if (!$esPublico): ?>
                      <li class="equipo-dato">
                         <i class="fa-solid fa-envelope"></i>
                         <span id="perfil-email"><?php echo htmlspecialchars($email); ?></span>
-                        <input type="hidden" name="email" id="input-email">
                      </li>
+                     <?php endif; ?>
+
+                     <?php if ($mostrarEdad): ?>
                      <li class="equipo-dato">
                         <i class="fa-solid fa-cake-candles"></i>
                         <span id="perfil-edad-vista"><?php echo htmlspecialchars($edadTexto); ?></span>
-                        <input type="date" name="fecha_nacimiento" id="perfil-fecha-nacimiento"
-                           value="<?php echo htmlspecialchars($fechaNacimiento); ?>" class="oculto campo-formulario">
                      </li>
+                     <?php endif; ?>
                   </ul>
-
-                  <div class="perfil-acciones-edicion oculto" id="perfil-acciones-edicion">
-                     <button type="button" id="btn-editar-perfil" class="boton-editar-perfil">
-                        <i class="fa-solid fa-pen"></i> Editar Perfil
-                     </button>
-
-                     <div class="grupo-guardar-cancelar oculto" id="grupo-guardar-cancelar">
-                        <button type="button" id="btn-guardar-perfil" class="boton-registro">Guardar</button>
-                        <button type="button" id="btn-cancelar-edicion" class="boton-cancelar-edicion">Cancelar</button>
-                     </div>
-                  </div>
                </div>
             </div>
 
+            <?php if (!$esPublico): ?>
             <!-- Las estadisticas (partidas, victorias, etc) todavia son de ejemplo -->
             <!-- Se conectan cuando se programe el modulo de Torneos / Resultados -->
             <dl class="equipo-estadisticas" id="estadisticas">
@@ -155,34 +174,49 @@ if (!empty($fechaNacimiento)) {
                   <dt>Puntos</dt>
                </div>
             </dl>
+            <?php endif; ?>
 
          </header>
 
-      </form>
-
       <!-- ============================== -->
-      <!-- REDES SOCIALES                 -->
+      <!-- REDES SOCIALES (datos reales)  -->
       <!-- ============================== -->
+      <?php if ($hayRedes || !$esPublico): ?>
       <section class="tarjeta-equipo equipo-capitanes">
          <div class="capitanes-fila capitanes-fila--solo-boton">
-            <p class="perfil-organizador-cta-texto">Encontrame también en:</p>
-            <div class="perfil-redes">
-               <a href="../publico/en-construccion.html"><i class="fa-brands fa-discord"></i></a>
-               <a href="../publico/en-construccion.html"><i class="fa-brands fa-instagram"></i></a>
-               <a href="../publico/en-construccion.html"><i class="fa-brands fa-x-twitter"></i></a>
-            </div>
+            <?php if ($hayRedes): ?>
+               <p class="perfil-organizador-cta-texto"><?php echo $esPublico ? 'Encontralo también en:' : 'Encontrame también en:'; ?></p>
+               <div class="perfil-redes">
+                  <?php if ($mostrarDiscord): ?>
+                     <span class="perfil-red-discord" title="Discord"><i class="fa-brands fa-discord"></i> <?php echo htmlspecialchars($discord); ?></span>
+                  <?php endif; ?>
+                  <?php if ($mostrarInstagram): ?>
+                     <a href="<?php echo htmlspecialchars($instagram); ?>" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                  <?php endif; ?>
+                  <?php if ($mostrarTwitter): ?>
+                     <a href="<?php echo htmlspecialchars($twitter); ?>" target="_blank" rel="noopener noreferrer" title="X"><i class="fa-brands fa-x-twitter"></i></a>
+                  <?php endif; ?>
+               </div>
+            <?php else: ?>
+               <p class="perfil-organizador-cta-texto">Todavía no agregaste tus redes. Tocá "Editar Perfil" para sumarlas.</p>
+            <?php endif; ?>
          </div>
       </section>
+      <?php endif; ?>
 
-      
-       <!-- EQUIPOS: ahora con datos reales -->
+
+      <!-- EQUIPOS: ahora con datos reales -->
       <!-- ============================== -->
       <section class="equipo-miembros">
 
          <h2 class="seccion-gradiente-titulo">Equipos</h2>
 
          <?php if (empty($equipos)): ?>
-            <p>Todavía no formás parte de ningún equipo. <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear">Creá el tuyo</a>.</p>
+            <?php if ($esPublico): ?>
+               <p>Todavía no forma parte de ningún equipo.</p>
+            <?php else: ?>
+               <p>Todavía no formás parte de ningún equipo. <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear">Creá el tuyo</a>.</p>
+            <?php endif; ?>
          <?php else: ?>
             <ul class="mis-equipos-grid">
                <?php foreach ($equipos as $equipo): ?>
@@ -199,7 +233,7 @@ if (!empty($fechaNacimiento)) {
                            <?php endif; ?>
                         </div>
 
-                        <?php if ($equipo['es_capitan']): ?>
+                        <?php if (!$esPublico && $equipo['es_capitan']): ?>
                            <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=gestionar&id=<?php echo (int) $equipo['id']; ?>" class="boton-secundario">
                               Gestionar
                            </a>
@@ -216,49 +250,40 @@ if (!empty($fechaNacimiento)) {
 
       </section>
 
+
       <!-- ============================== -->
-      <!-- TORNEOS (todavia de ejemplo -- se conecta en la Fase de Torneos) -->
+      <!-- TORNEOS (datos reales)         -->
       <!-- ============================== -->
+      <?php if ($ver('torneos')): ?>
       <section class="equipo-miembros" id="mis-torneos">
 
          <h2 class="seccion-gradiente-titulo">Torneos</h2>
 
-         <ul class="torneos-organiza-grilla">
-
-            <li>
-               <a href="detalle-torneo.html?id=copa-ascend" class="torneos-organiza-tarjeta">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card1.jpg" alt="Virtual Odyssey Chronicles">
-                  <div class="torneo-organiza-info">
-                     <h3>Virtual Odyssey Chronicles</h3>
-                     <span>Puesto: 3 · Puntos: 1.124</span>
-                  </div>
-               </a>
-            </li>
-
-            <li>
-               <a href="detalle-torneo.html?id=copa-ascend" class="torneos-organiza-tarjeta">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card2.png" alt="Valorant Champion Series">
-                  <div class="torneo-organiza-info">
-                     <h3>Valorant Champion Series</h3>
-                     <span>Puesto: 1 · Puntos: 2.300</span>
-                  </div>
-               </a>
-            </li>
-
-            <li>
-               <a href="detalle-torneo.html?id=futbol-5" class="torneos-organiza-tarjeta">
-                  <img src="<?php echo URL_BASE; ?>img/torneos/card3.png" alt="Copa Futbol 5">
-                  <div class="torneo-organiza-info">
-                     <h3>Copa Futbol 5</h3>
-                     <span>Puesto: 4 · Puntos: 980</span>
-                  </div>
-               </a>
-            </li>
-
-         </ul>
+         <?php if (empty($torneos)): ?>
+            <p><?php echo $esPublico ? 'Todavía no participa en ningún torneo.' : 'Todavía no te inscribiste en ningún torneo.'; ?></p>
+         <?php else: ?>
+            <ul class="torneos-organiza-grilla">
+               <?php foreach ($torneos as $t): ?>
+                  <li>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $t['torneo_id']; ?>" class="torneos-organiza-tarjeta">
+                        <img src="<?php echo htmlspecialchars($urlImagen($t['torneo_banner'] ?? '', 'img/torneos/card1.jpg')); ?>" alt="<?php echo htmlspecialchars($t['torneo_nombre']); ?>">
+                        <div class="torneo-organiza-info">
+                           <h3><?php echo htmlspecialchars($t['torneo_nombre']); ?></h3>
+                           <span>
+                              <?php echo $t['tipo'] === 'equipo' ? 'Con ' . htmlspecialchars($t['nombre']) : 'Individual'; ?>
+                              <?php if (!$esPublico): ?> · <?php echo htmlspecialchars($etiquetaEstado[$t['estado']] ?? $t['estado']); ?><?php endif; ?>
+                           </span>
+                        </div>
+                     </a>
+                  </li>
+               <?php endforeach; ?>
+            </ul>
+         <?php endif; ?>
 
       </section>
+      <?php endif; ?>
 
+      <?php if (!$esPublico): ?>
       <!-- ============================== -->
       <!-- TROFEOS (todavia de ejemplo)    -->
       <!-- ============================== -->
@@ -394,13 +419,17 @@ if (!empty($fechaNacimiento)) {
          </ul>
 
       </section>
+      <?php endif; ?>
 
    </main>
 
    <!-- FOOTER ---------------------------->
    <?php include __DIR__ . '/../componentes/footer.html'; ?>
 
-   <script src="<?php echo URL_BASE; ?>js/perfil-jugador.js"></script>
+   <?php if ($archivoNavbar === 'navbar-publico.php'): ?>
+<script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
+<script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+<?php endif; ?>
 
 </body>
 </html>

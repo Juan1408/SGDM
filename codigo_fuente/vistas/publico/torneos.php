@@ -1,3 +1,33 @@
+<?php
+$etiquetasFormato = [
+   'liga' => 'Liga',
+   'suizo' => 'Sistema suizo',
+   'eliminacion_directa' => 'Eliminación directa',
+];
+$etiquetasEstadoTorneo = [
+   'inscripciones_abiertas' => 'Inscripciones abiertas',
+   'en_curso' => 'En curso',
+   'finalizado' => 'Finalizado',
+];
+$etiquetasEstadoFiltro = $etiquetasEstadoTorneo + ['proximos' => 'Próximos'];
+$etiquetasLugar = ['online' => 'Online', 'presencial' => 'Presencial'];
+
+//El select de juegos solo ofrece juegos que tienen torneos publicados
+$juegosCatalogo = [];
+foreach ($torneos as $torneoCatalogo) {
+   $juegosCatalogo[(int) $torneoCatalogo['juego_id']] = $torneoCatalogo['nombre_juego'];
+}
+asort($juegosCatalogo);
+
+//Categoria de la base -> chip del catalogo
+$tipoDeJuego = static function (string $categoria): string {
+   if (strpos($categoria, 'esport-') === 0) { return 'esports'; }
+   if ($categoria === 'deporte-fisico') { return 'tradicionales'; }
+   if ($categoria === 'juego-mesa') { return 'mentales'; }
+   return '';
+};
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -119,86 +149,81 @@
       <!-- PANEL DE FILTRO ------------------->
       <!-------------------------------------->
 
-      <section class="panel-filtros" aria-label="Filtros de búsqueda de torneos" id="torneos">
+         <section class="panel-filtros" aria-label="Filtros de búsqueda de torneos" id="torneos">
 
          <div class="top-fila">
 
             <ul class="chips-contenedor">
-               <li><button class="chip active">Todos</button></li>
-               <li><button class="chip">eSports</button></li>
-               <li><button class="chip">Tradicionales</button></li>
-               <li><button class="chip">Mentales</button></li>
+               <li><button type="button" class="chip active" data-tipo="todos">Todos</button></li>
+               <li><button type="button" class="chip" data-tipo="esports">eSports</button></li>
+               <li><button type="button" class="chip" data-tipo="tradicionales">Tradicionales</button></li>
+               <li><button type="button" class="chip" data-tipo="mentales">Mentales</button></li>
             </ul>
 
             <div class="buscador">
                <i class="fa-solid fa-magnifying-glass"></i>
-               <input type="text" placeholder="Buscar torneo...">
+               <input type="text" id="buscar-torneo" placeholder="Buscar torneo, juego o lugar...">
             </div>
 
          </div>
 
          <div class="seleccionar-filtros">
 
-            <select>
-               <option>Juego</option>
-               <option>Valorant</option>
-               <option>League of Legends</option>
-               <option>Ajedrez</option>
-               <option>Truco</option>
+            <select id="filtro-juego" aria-label="Juego">
+               <option value="">Juego</option>
+               <?php foreach ($juegosCatalogo as $juegoId => $juegoNombre): ?>
+                  <option value="<?php echo (int) $juegoId; ?>"><?php echo htmlspecialchars($juegoNombre); ?></option>
+               <?php endforeach; ?>
             </select>
 
-            <select>
-               <option>Tipo de eliminación</option>
-               <option>Liga</option>
-               <option>Eliminación directa</option>
-               <option>Sistema suizo</option>
+            <select id="filtro-formato" aria-label="Formato">
+               <option value="">Formato</option>
+               <?php foreach ($etiquetasFormato as $codigo => $etiqueta): ?>
+                  <option value="<?php echo $codigo; ?>"><?php echo $etiqueta; ?></option>
+               <?php endforeach; ?>
             </select>
 
-            <select>
-               <option>Región</option>
-               <option>Uruguay</option>
-               <option>Latam</option>
-               <option>Online</option>
+            <select id="filtro-lugar" aria-label="Lugar">
+               <option value="">Lugar</option>
+               <?php foreach ($etiquetasLugar as $codigo => $etiqueta): ?>
+                  <option value="<?php echo $codigo; ?>"><?php echo $etiqueta; ?></option>
+               <?php endforeach; ?>
             </select>
 
-            <select>
-               <option>Estado</option>
-               <option>Inscripciones abiertas</option>
-               <option>En curso</option>
-               <option>Finalizado</option>
-               <option>Proximos</option>
+            <select id="filtro-estado" aria-label="Estado">
+               <option value="">Estado</option>
+               <?php foreach ($etiquetasEstadoFiltro as $codigo => $etiqueta): ?>
+                  <option value="<?php echo $codigo; ?>"><?php echo $etiqueta; ?></option>
+               <?php endforeach; ?>
             </select>
 
          </div>
 
       </section>
 
-            <!-------------------------------------->
+      <!-------------------------------------->
       <!------ TORNEOS ----------------------->
       <!-------------------------------------->
 
       <section class="torneos-pagina">
 
-         <?php
-            $etiquetasFormato = [
-               'liga' => 'Liga',
-               'suizo' => 'Sistema suizo',
-               'eliminacion_directa' => 'Eliminación directa',
-            ];
-            $etiquetasEstadoTorneo = [
-               'inscripciones_abiertas' => 'Inscripciones abiertas',
-               'en_curso' => 'En curso',
-               'finalizado' => 'Finalizado',
-            ];
-         ?>
-
          <?php if (empty($torneos)): ?>
             <p class="lista-vacia">Todavía no hay torneos publicados.</p>
          <?php else: ?>
              <ul class="torneos-grid" id="torneos-grid">
-               <?php foreach ($torneos as $indiceTorneo => $torneo): ?>
-                  <li<?php echo $indiceTorneo >= 9 ? ' data-oculto="1" style="display:none"' : ''; ?>>
-                     <article class="torneo-tarjeta">
+               <?php foreach ($torneos as $torneo): ?>
+                  <?php
+                     $esOnline = strpos((string) $torneo['ubicacion'], 'Online') === 0;
+                     $esProximo = !empty($torneo['fecha_inicio']) && $torneo['fecha_inicio'] > date('Y-m-d') && $torneo['estado'] !== 'finalizado';
+                  ?>
+                  <li data-busqueda="<?php echo htmlspecialchars($torneo['nombre'] . ' ' . $torneo['nombre_juego'] . ' ' . $torneo['localidad'] . ' ' . $torneo['comunidad']); ?>"
+                      data-tipo="<?php echo $tipoDeJuego((string) $torneo['categoria_juego']); ?>"
+                      data-juego="<?php echo (int) $torneo['juego_id']; ?>"
+                      data-formato="<?php echo htmlspecialchars($torneo['formato']); ?>"
+                      data-lugar="<?php echo $esOnline ? 'online' : 'presencial'; ?>"
+                      data-estado="<?php echo htmlspecialchars($torneo['estado']); ?>"
+                      data-proximo="<?php echo $esProximo ? '1' : '0'; ?>">
+                  <article class="torneo-tarjeta">
                         <img src="<?php echo htmlspecialchars($torneo['banner_url'] ? URL_BASE . $torneo['banner_url'] : URL_BASE . 'img/torneos/card1.jpg'); ?>" alt="<?php echo htmlspecialchars($torneo['nombre']); ?>">
                         <div class="tarjeta-contenido">
                            <h2><?php echo htmlspecialchars($torneo['nombre']); ?></h2>
@@ -206,7 +231,7 @@
                            <div class="tarjeta-meta">
                               <span><i class="fa-solid fa-gamepad"></i> <?php echo htmlspecialchars($torneo['nombre_juego']); ?></span>
                               <span><i class="fa-solid fa-users"></i> <?php echo (int) $torneo['cupo_max_equipos']; ?> cupos</span>
-                              <span><i class="fa-solid fa-trofeo"></i> <?php echo htmlspecialchars($etiquetasEstadoTorneo[$torneo['estado']] ?? $torneo['estado']); ?></span>
+                              <span><i class="fa-solid fa-trophy"></i> <?php echo htmlspecialchars($etiquetasEstadoTorneo[$torneo['estado']] ?? $torneo['estado']); ?></span>
                            </div>
 
                            <div class="tarjeta-tipo">
@@ -227,28 +252,13 @@
                <?php endforeach; ?>
             </ul>
 
-            <?php if (count($torneos) > 9): ?>
-               <div class="ver-mas-boton">
-                  <button type="button" id="torneos-cargar-mas" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
+            <p class="lista-vacia oculto" id="torneos-sin-resultados">No encontramos torneos con esos filtros.</p>
+
+            <div class="ver-mas-boton" id="torneos-mas">
+               <button type="button" id="torneos-cargar-mas" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
        transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
        hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
-               </div>
-               <script>
-                  (function () {
-                     var boton = document.getElementById('torneos-cargar-mas');
-                     boton.addEventListener('click', function () {
-                        var ocultos = document.querySelectorAll('#torneos-grid li[data-oculto]');
-                        for (var i = 0; i < 3 && i < ocultos.length; i++) {
-                           ocultos[i].style.display = '';
-                           ocultos[i].removeAttribute('data-oculto');
-                        }
-                        if (!document.querySelector('#torneos-grid li[data-oculto]')) {
-                           boton.parentNode.style.display = 'none';
-                        }
-                     });
-                  })();
-               </script>
-            <?php endif; ?>
+            </div>
          <?php endif; ?>
 
       </section>
@@ -263,19 +273,8 @@
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
-
-   <script>
-      // Simulador de filtros
-      document.addEventListener('DOMContentLoaded', () => {
-         const chips = document.querySelectorAll('.chips-contenedor .chip');
-         chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-               chips.forEach(c => c.classList.remove('active'));
-               chip.classList.add('active');
-            });
-         });
-      });
-   </script>
+   <script src="<?php echo URL_BASE; ?>js/torneos.js"></script>
+ 
 </body>
 
 </html>

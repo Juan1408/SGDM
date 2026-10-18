@@ -185,16 +185,18 @@ if ($rolId === 3) {
             <ul class="miembros-grilla">
                <?php foreach ($miembros as $miembro): ?>
                   <li>
-                     <article class="miembro-tarjeta">
-                        <div class="miembro-foto">
-                           <div class="miembro-fondo"></div>
-                           <img src="<?php echo htmlspecialchars($miembro['foto_perfil_url'] ?: URL_BASE . 'img/avatars/a1.png'); ?>" alt="Jugador">
-                        </div>
-                        <h3><?php echo htmlspecialchars($miembro['nombre_completo']); ?></h3>
-                        <?php if (!empty($miembro['posicion'])): ?>
-                           <span class="miembro-posicion"><?php echo htmlspecialchars($miembro['posicion']); ?></span>
-                        <?php endif; ?>
-                     </article>
+                     <a class="enlace-jugador" href="<?php echo URL_BASE; ?>index.php?c=perfil&a=jugador&id=<?php echo (int) $miembro['id']; ?>">
+                        <article class="miembro-tarjeta">
+                           <div class="miembro-foto">
+                              <div class="miembro-fondo"></div>
+                              <img src="<?php echo htmlspecialchars($miembro['foto_perfil_url'] ?: URL_BASE . 'img/avatars/a1.png'); ?>" alt="Jugador">
+                           </div>
+                           <h3><?php echo htmlspecialchars($miembro['nombre_completo']); ?></h3>
+                           <?php if (!empty($miembro['posicion'])): ?>
+                              <span class="miembro-posicion"><?php echo htmlspecialchars($miembro['posicion']); ?></span>
+                           <?php endif; ?>
+                        </article>
+                     </a>
                   </li>
                <?php endforeach; ?>
             </ul>

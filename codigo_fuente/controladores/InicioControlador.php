@@ -37,11 +37,6 @@ class InicioControlador {
         require_once __DIR__ . '/../vistas/publico/nosotros.php';
     }
 
-    //Perfil publico de un organizador
-    public function perfilPublicoOrganizador(){
-        require_once __DIR__ . '/../vistas/publico/perfil-publico-organizador.php';
-    }
-
     //Ranking general
     public function rankings(){
         require_once __DIR__ . '/../vistas/publico/rankings.php';

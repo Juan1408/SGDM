@@ -25,7 +25,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
 </head>
 <body>
     <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-    <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador perfil-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">CUENTA DEL ORGANIZADOR</p><h1>Mi perfil</h1><p>Actualiza tus datos personales y los de tu organización.</p></div></header>
         <?php if (!empty($datos['mensaje'])): ?><p class="perfil-notificacion"><?php echo $escapar($datos['mensaje']); ?></p><?php endif; ?>
@@ -41,6 +40,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
             <button class="boton boton-gestion" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar perfil</button>
         </form>
     </main>
-    <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script><script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
+
+    </script>
 </body>
 </html>

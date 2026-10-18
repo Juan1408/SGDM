@@ -130,7 +130,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
         .etapa-torneo { padding: .65rem 1rem; border: 1px solid var(--borde-suave); border-radius: var(--radio-md); color: var(--texto-secundario); }
         .etapa-torneo.activa { border-color: var(--color-secundario); color: var(--color-secundario); }
         .etapa-torneo.completada { color: var(--color-primario); }
-        .wizard-torneo { max-width: 880px; }
         .wizard-acciones { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
         .wizard-resumen { display: grid; gap: .75rem; }
         .wizard-resumen div { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--borde-suave); }
@@ -172,7 +171,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
 </head>
 <body>
     <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-    <?php require_once __DIR__ . '/sidebar.html'; ?>
 
     <main class="dashboard-organizador crear-torneo-pagina wizard-torneo">
         <header class="crear-torneo-header">
@@ -562,7 +560,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
             }
         });
     </script>
-    <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
-    <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
+    <?php include __DIR__ . '/../componentes/footer.html'; ?>
 </body>
 </html>

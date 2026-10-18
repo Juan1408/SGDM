@@ -8,7 +8,14 @@ $rolNavbar = isset($_SESSION['usuario_id']) ? (int) ($_SESSION['rol_id'] ?? 0) :
 $esJugadorNavbar = $rolNavbar === 3;
 $esOrganizadorNavbar = $rolNavbar === 2;
 $haySesionNavbar = $esJugadorNavbar || $esOrganizadorNavbar;
-$urlPerfilNavbar = URL_BASE . 'index.php?c=' . ($esOrganizadorNavbar ? 'panelOrganizador' : 'panelJugador') . '&a=perfil';
+$idNavbar = (int) ($_SESSION['usuario_id'] ?? 0);
+if ($esOrganizadorNavbar) {
+   $urlVerPerfilNavbar = URL_BASE . 'index.php?c=perfil&a=organizador&id=' . $idNavbar;
+   $urlEditarPerfilNavbar = URL_BASE . 'index.php?c=panelOrganizador&a=editarPerfil';
+} else {
+   $urlVerPerfilNavbar = URL_BASE . 'index.php?c=panelJugador&a=perfil';
+   $urlEditarPerfilNavbar = URL_BASE . 'index.php?c=panelJugador&a=editarPerfil';
+}
 ?>
 <!-------------------------------------->
 <!-- NAVBAR PÚBLICO -------------------->
@@ -123,10 +130,21 @@ $urlPerfilNavbar = URL_BASE . 'index.php?c=' . ($esOrganizadorNavbar ? 'panelOrg
    </div>
 
    <div class="perfil-jugador-menu">
-      <a href="<?php echo $urlPerfilNavbar; ?>" class="boton-mi-perfil" style="text-decoration: none;">
+      <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">
          <i class="fa-solid fa-circle-user"></i>
          <?php echo $esOrganizadorNavbar ? 'Organizador' : 'Jugador'; ?>
-      </a>
+         <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div class="dropdown-mi-perfil" id="dropdown-mi-perfil">
+         <?php if ($esOrganizadorNavbar): ?>
+            <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=dashboard"><i class="fa-solid fa-gauge"></i> Mi panel</a>
+         <?php endif; ?>
+         <a href="<?php echo $urlVerPerfilNavbar; ?>"><i class="fa-solid fa-user"></i> Ver mi perfil</a>
+         <a href="<?php echo $urlEditarPerfilNavbar; ?>"><i class="fa-solid fa-pen"></i> Editar perfil</a>
+         <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+         </form>
+      </div>
    </div>
 
 </li>
@@ -141,6 +159,8 @@ $urlPerfilNavbar = URL_BASE . 'index.php?c=' . ($esOrganizadorNavbar ? 'panelOrg
 
 
 <?php if ($esJugadorNavbar): ?>
+   <!--------------------------------------
+
 <aside
    class="sidebar-jugador-flotante"
    id="sidebar-jugador-flotante"
@@ -229,4 +249,6 @@ $urlPerfilNavbar = URL_BASE . 'index.php?c=' . ($esOrganizadorNavbar ? 'panelOrg
    </nav>
 
 </aside>
+------------------------------------>
+
 <?php endif; ?>

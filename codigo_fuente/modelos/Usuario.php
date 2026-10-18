@@ -208,50 +208,6 @@ class Usuario {
         return $usuario ?: false;
     }
 
-    public function obtenerPerfilOrganizador(int $usuarioId): ?array {
-        $stmt = $this->bd->prepare(
-            "SELECT u.id, u.nombre_completo, u.email, u.telefono, u.foto_perfil_url,
-                    p.nombre_organizacion, p.bio_organizacion, p.localidad,
-                    p.telefono_contacto, p.sitio_web
-             FROM usuarios u
-             LEFT JOIN perfiles_organizadores p ON p.usuario_id = u.id
-             WHERE u.id = :usuario_id AND u.rol_id = 2
-             LIMIT 1"
-        );
-        $stmt->execute([':usuario_id' => $usuarioId]);
-        $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $perfil ?: null;
-    }
-
-    public function actualizarPerfilOrganizador(int $usuarioId, array $datos): bool {
-        try {
-            $this->bd->beginTransaction();
-            $usuario = $this->bd->prepare(
-                'UPDATE usuarios SET nombre_completo = :nombre, telefono = :telefono WHERE id = :id AND rol_id = 2'
-            );
-            $usuario->execute([':nombre' => $datos['nombre_completo'], ':telefono' => $datos['telefono'], ':id' => $usuarioId]);
-            $perfil = $this->bd->prepare(
-                "INSERT INTO perfiles_organizadores
-                    (usuario_id, nombre_organizacion, bio_organizacion, localidad, telefono_contacto, sitio_web)
-                 VALUES (:id, :organizacion, :bio, :localidad, :telefono, :sitio)
-                 ON DUPLICATE KEY UPDATE nombre_organizacion = VALUES(nombre_organizacion),
-                    bio_organizacion = VALUES(bio_organizacion), localidad = VALUES(localidad),
-                    telefono_contacto = VALUES(telefono_contacto), sitio_web = VALUES(sitio_web)"
-            );
-            $perfil->execute([
-                ':id' => $usuarioId, ':organizacion' => $datos['nombre_organizacion'],
-                ':bio' => $datos['bio_organizacion'], ':localidad' => $datos['localidad'],
-                ':telefono' => $datos['telefono_contacto'], ':sitio' => $datos['sitio_web'],
-            ]);
-            $this->bd->commit();
-            return true;
-        } catch (\Throwable $error) {
-            if ($this->bd->inTransaction()) {
-                $this->bd->rollBack();
-            }
-            return false;
-        }
-    }
 
     //Metodo para obtener todos los roles del sistema, con esto llenamos el <select> del formulario
     public function obtenerTodosLosRoles(){

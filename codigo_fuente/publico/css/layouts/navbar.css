@@ -603,28 +603,36 @@
 }
 
 /* ===== Sidebar flotante (jugador logueado) ===== */
-/* ===== Sidebar flotante del jugador ===== */
 
 .sidebar-jugador-flotante {
    position: fixed;
-   left: 18px;
-   top: 100px;      /* deja libre el alto de la navbar fija */
-   bottom: 100px;    /* deja libre el alto del footer */
-   margin: auto 0;   /* centra verticalmente DENTRO de ese rango, no en toda la pantalla */
-   height: fit-content;
-   max-height: calc(100vh - 200px);
-   overflow-y: auto;
+   left: 0;
+   top: 80px;       /* debajo del navbar fijo */
+   bottom: 0;
+   width: 88px;
+   padding: 24px 0;
    z-index: 900;
 
    display: flex;
    flex-direction: column;
+   align-items: center;
 
-   background: rgba(15, 15, 35, 0.9);
-   border: 1px solid rgba(255, 255, 255, 0.1);
-   border-radius: 20px;
-   padding: 12px 8px;
+   /* si el riel queda corto (footer a la vista), los iconos se deslizan adentro */
+   overflow-y: auto;
+   overflow-x: hidden;
+   scrollbar-width: none;
 
+   background: rgba(10, 10, 24, 0.92);
+   border-right: 1px solid rgba(255, 255, 255, 0.08);
    backdrop-filter: blur(10px);
+}
+
+.sidebar-jugador-flotante::-webkit-scrollbar {
+   width: 0;
+}
+
+.sidebar-jugador-flotante nav {
+   flex-shrink: 0;
 }
 
 
@@ -683,6 +691,19 @@
    color: #fff;
 }
 
+.sidebar-flotante-item.activo,
+.sidebar-flotante-submenu a.activo {
+   background: rgba(0, 255, 238, 0.12);
+   color: #00FFEE;
+}
+
+.sidebar-flotante-desplegable.cerrado .sidebar-flotante-submenu {
+   display: none;
+}
+
+.sidebar-flotante-desplegable.cerrado .sidebar-flotante-toggle i {
+   transform: rotate(180deg);
+}
 
 /* ===== EQUIPOS (link + botón toggle separados,       ===== */
 /* ===== un <a> no puede ir anidado dentro de <button>) ===== */
@@ -766,7 +787,7 @@
 /* En mobile se mantiene oculto,
    igual que antes */
 
-@media (max-width: 860px) {
+@media (max-width: 880px) {
 
    .sidebar-jugador-flotante {
       display: none;

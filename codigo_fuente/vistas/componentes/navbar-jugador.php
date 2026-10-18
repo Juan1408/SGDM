@@ -192,6 +192,7 @@
                   </button>
                   <div class="dropdown-mi-perfil" id="dropdown-mi-perfil">
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-user"></i> Mi Perfil</a>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=editarPerfil"><i class="fa-solid fa-pen"></i> Editar perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
                      <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
                         <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
@@ -347,3 +348,4 @@
       }
    });
 </script>
+<script src="<?php echo URL_BASE; ?>js/sidebar-riel.js"></script>

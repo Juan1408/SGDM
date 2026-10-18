@@ -31,7 +31,6 @@
 <body>
 
    <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-   <?php require_once __DIR__ . '/sidebar.html'; ?>
 
    <?php
    $estadisticas = $datos['estadisticas'] ?? ['activos' => 0, 'solicitudes' => 0, 'finalizados' => 0];
@@ -190,9 +189,7 @@
 
    </main>
 
-   <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script>
-   <script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
-
+<?php include __DIR__ . '/../componentes/footer.html'; ?>
 </body>
 
 </html>

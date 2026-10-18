@@ -2,25 +2,27 @@
 namespace App\Controladores;
 
 require_once __DIR__ . '/../ayudantes/Sesion.php';
+require_once __DIR__ . '/../ayudantes/SubidaImagen.php';
 require_once __DIR__ . '/../modelos/Torneo.php';
 require_once __DIR__ . '/../modelos/Juego.php';
-require_once __DIR__ . '/../modelos/Usuario.php';
+require_once __DIR__ . '/../modelos/Organizador.php';
 
 use App\Ayudantes\Sesion;
+use App\Ayudantes\SubidaImagen;
 use App\Modelos\Torneo;
 use App\Modelos\Juego;
-use App\Modelos\Usuario;
+use App\Modelos\Organizador;
 
 class PanelOrganizadorControlador {
     private Torneo $modeloTorneo;
     private \Juego $modeloJuego;
-    private Usuario $modeloUsuario;
+    private Organizador $modeloOrganizador;
 
     public function __construct() {
         Sesion::validarOrganizador();
         $this->modeloTorneo = new Torneo();
         $this->modeloJuego = \Juego::obtenerInstancia();
-        $this->modeloUsuario = new Usuario();
+        $this->modeloOrganizador = new Organizador();
     }
 
     public function dashboard() {
@@ -97,7 +99,7 @@ class PanelOrganizadorControlador {
 
     public function calendario() {
         $datos = [
-            'calendario' => $this->modeloTorneo->obtenerCalendarioOrganizador((int) $_SESSION['usuario_id']),
+            'calendario' => $this->modeloTorneo->obtenerPartidosCalendarioOrganizador((int) $_SESSION['usuario_id']),
         ];
         require_once __DIR__ . '/../vistas/organizador/calendario.php';
     }
@@ -109,16 +111,39 @@ class PanelOrganizadorControlador {
         require_once __DIR__ . '/../vistas/organizador/historial.php';
     }
 
-    public function perfil() {
-        $datos = [
-            'perfil' => $this->modeloUsuario->obtenerPerfilOrganizador((int) $_SESSION['usuario_id']),
-            'mensaje' => $_SESSION['mensaje'] ?? null,
-        ];
-        unset($_SESSION['mensaje']);
-        require_once __DIR__ . '/../vistas/organizador/perfil.php';
+    //Muestra la pagina para editar el perfil propio
+    public function editarPerfil() {
+        $this->mostrarEdicionPerfil();
     }
 
+    private function mostrarEdicionPerfil(string $error = '', array $enviados = []) {
+        $datos = $this->modeloOrganizador->obtenerPerfil((int) $_SESSION['usuario_id']);
+        if (!$datos) {
+            http_response_code(404);
+            echo 'Perfil no encontrado.';
+            return;
+        }
+        $camposPublicos = Organizador::listaCamposPublicos($datos['campos_publicos'] ?? '');
+
+        //Si hubo un error, se muestran los valores que habia escrito
+        if (!empty($enviados)) {
+            $datos = array_merge($datos, $enviados['datos']);
+            $camposPublicos = $enviados['publico'];
+        }
+
+        require_once __DIR__ . '/../vistas/organizador/editar-perfil-organizador.php';
+        
+    }
+
+    //Recibe el formulario de editar perfil (solo POST)
     public function guardarPerfil() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=editarPerfil');
+            exit;
+        }
+
+        $organizadorId = (int) $_SESSION['usuario_id'];
+
         $datos = [
             'nombre_completo' => trim($_POST['nombre_completo'] ?? ''),
             'telefono' => trim($_POST['telefono'] ?? ''),
@@ -128,15 +153,73 @@ class PanelOrganizadorControlador {
             'telefono_contacto' => trim($_POST['telefono_contacto'] ?? ''),
             'sitio_web' => trim($_POST['sitio_web'] ?? ''),
         ];
+
+        //Solo se aceptan los campos opcionales conocidos
+        $publico = array_values(array_intersect(Organizador::CAMPOS_OPCIONALES, (array) ($_POST['publico'] ?? [])));
+        $enviados = ['datos' => $datos, 'publico' => $publico];
+
+        $error = '';
         if ($datos['nombre_completo'] === '' || $datos['nombre_organizacion'] === '') {
-            $_SESSION['mensaje'] = 'El nombre y la organización son obligatorios.';
-        } elseif ($this->modeloUsuario->actualizarPerfilOrganizador((int) $_SESSION['usuario_id'], $datos)) {
-            $_SESSION['usuario_nombre'] = $datos['nombre_completo'];
-            $_SESSION['mensaje'] = 'Perfil actualizado correctamente.';
-        } else {
-            $_SESSION['mensaje'] = 'No se pudo actualizar el perfil.';
+            $error = 'El nombre y la organización son obligatorios.';
+        } elseif (mb_strlen($datos['nombre_completo']) > 120 || mb_strlen($datos['nombre_organizacion']) > 150) {
+            $error = 'El nombre o la organización son demasiado largos.';
+        } elseif ($datos['telefono'] !== '' && !preg_match('/^[0-9+()\-\s]{6,20}$/', $datos['telefono'])) {
+            $error = 'El teléfono personal no es válido.';
+        } elseif ($datos['telefono_contacto'] !== '' && !preg_match('/^[0-9+()\-\s]{6,50}$/', $datos['telefono_contacto'])) {
+            $error = 'El teléfono de contacto no es válido.';
+        } elseif (mb_strlen($datos['localidad']) > 100) {
+            $error = 'La localidad es demasiado larga.';
+        } elseif ($datos['sitio_web'] !== '' && (mb_strlen($datos['sitio_web']) > 255
+                  || !filter_var($datos['sitio_web'], FILTER_VALIDATE_URL)
+                  || !preg_match('#^https?://#i', $datos['sitio_web']))) {
+            $error = 'El sitio web debe ser una dirección válida que empiece con http:// o https://';
+        } elseif (mb_strlen($datos['bio_organizacion']) > 2000) {
+            $error = 'La biografía no puede superar los 2000 caracteres.';
         }
-        header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=perfil');
+
+        $fotoUrl = null;
+        $bannerUrl = null;
+        if ($error === '') {
+            if (SubidaImagen::fueEnviado($_FILES['avatar'] ?? null)) {
+                $fotoUrl = SubidaImagen::guardar($_FILES['avatar'], 'perfiles/subidos');
+                if ($fotoUrl === null) { $error = 'La foto de perfil no es válida (JPG, PNG o WEBP, máximo 2 MB).'; }
+            }
+            if ($error === '' && SubidaImagen::fueEnviado($_FILES['banner'] ?? null)) {
+                $bannerUrl = SubidaImagen::guardar($_FILES['banner'], 'perfiles/subidos');
+                if ($bannerUrl === null) { $error = 'El banner no es válido (JPG, PNG o WEBP, máximo 2 MB).'; }
+            }
+        }
+
+        if ($error !== '') {
+            $this->mostrarEdicionPerfil($error, $enviados);
+            return;
+        }
+
+        $ok = $this->modeloOrganizador->actualizarPerfil(
+            $organizadorId,
+            [
+                'nombre_completo' => $datos['nombre_completo'],
+                'telefono' => $datos['telefono'],
+                'foto_perfil_url' => $fotoUrl,
+            ],
+            [
+                'nombre_organizacion' => $datos['nombre_organizacion'],
+                'bio_organizacion' => $datos['bio_organizacion'],
+                'localidad' => $datos['localidad'],
+                'telefono_contacto' => $datos['telefono_contacto'],
+                'sitio_web' => $datos['sitio_web'],
+                'banner_url' => $bannerUrl,
+                'campos_publicos' => implode(',', $publico),
+            ]
+        );
+
+        if (!$ok) {
+            $this->mostrarEdicionPerfil('No se pudo guardar el perfil. Intentá de nuevo.', $enviados);
+            return;
+        }
+
+        $_SESSION['usuario_nombre'] = $datos['nombre_completo'];
+        header('Location: ' . URL_BASE . 'index.php?c=perfil&a=organizador&id=' . $organizadorId . '&exito=1');
         exit;
     }
 

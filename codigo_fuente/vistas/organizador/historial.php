@@ -15,7 +15,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/organizador-layout.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        .historial-pagina { max-width: 1100px; }
         .historial-lista { display: grid; gap: .7rem; }
         .historial-item { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; background: var(--fondo-tarjeta); border: 1px solid var(--borde-suave); border-radius: var(--radio-md); }
         .historial-item small { display: block; color: var(--texto-secundario); margin-bottom: .35rem; }
@@ -24,7 +23,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
 </head>
 <body>
     <?php require_once __DIR__ . '/../componentes/navbar-organizador.php'; ?>
-    <?php require_once __DIR__ . '/sidebar.html'; ?>
     <main class="dashboard-organizador historial-pagina">
         <header class="dashboard-header"><div><p class="dashboard-tag">REGISTRO DE ACTIVIDAD</p><h1>Historial</h1><p>Cambios de estado y resultados registrados en tus torneos.</p></div></header>
         <section class="dashboard-panel">
@@ -38,6 +36,6 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
             <?php endif; ?>
         </section>
     </main>
-    <script src="<?php echo URL_BASE; ?>js/organizador/includes.js"></script><script src="<?php echo URL_BASE; ?>js/organizador/sidebar.js"></script>
+    <?php include __DIR__ . '/../componentes/footer.html'; ?>
 </body>
 </html>
