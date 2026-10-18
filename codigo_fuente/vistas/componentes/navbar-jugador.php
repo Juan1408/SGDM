@@ -158,11 +158,11 @@
             <div class="contenido-desplegable">
                <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Todos los Torneos</a>
                <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Detalle Torneos</a>
-               <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index">Juegos</a>
+               <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=juegos">Juegos</a>
             </div>
          </li>
 
-         <li><a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=rankings">Rankings</a></li>
+         <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=rankings">Rankings</a></li>
          <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=nosotros">Nosotros</a></li>
          <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=contacto">Contacto</a></li>
 
