@@ -240,6 +240,88 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        // ============================================================================
+    // METODOS DE LA HOME PUBLICA
+    // ============================================================================
+
+    //Torneos destacados: primero los de inscripciones abiertas (inicio mas proximo), despues los en curso
+    public function obtenerTorneosDestacados(int $limite = 6): array {
+        $sql = "SELECT t.id, t.nombre, t.formato, t.estado, t.cupo_max_equipos,
+                       t.fecha_inicio, t.fecha_fin, t.banner_url,
+                       j.nombre AS nombre_juego, j.categoria AS categoria_juego
+                FROM torneos t
+                INNER JOIN juegos j ON j.id = t.juego_id
+                WHERE t.estado IN ('inscripciones_abiertas', 'en_curso')
+                  AND (t.estado <> 'inscripciones_abiertas'
+                       OR t.fecha_limite_inscripcion IS NULL
+                       OR t.fecha_limite_inscripcion >= CURDATE())
+                ORDER BY (t.estado = 'inscripciones_abiertas') DESC, t.fecha_inicio IS NULL, t.fecha_inicio ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Proximos partidos programados de torneos activos (ambos participantes ya definidos)
+    public function obtenerProximosEnfrentamientos(int $limite = 4): array {
+        $sql = "SELECT e.id, e.torneo_id, e.fecha_hora_programada, e.cancha,
+                       t.stream_url, t.ubicacion,
+                       pl.nombre AS local_nombre, pv.nombre AS visitante_nombre,
+                       CASE WHEN pl.tipo = 'equipo' THEN el.escudo_url ELSE ul.foto_perfil_url END AS local_imagen,
+                       CASE WHEN pv.tipo = 'equipo' THEN ev.escudo_url ELSE uv.foto_perfil_url END AS visitante_imagen
+                FROM torneo_encuentros e
+                INNER JOIN torneos t ON t.id = e.torneo_id
+                INNER JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+                INNER JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+                LEFT JOIN equipos el ON pl.tipo = 'equipo' AND el.id = pl.referencia_id
+                LEFT JOIN usuarios ul ON pl.tipo = 'usuario' AND ul.id = pl.referencia_id
+                LEFT JOIN equipos ev ON pv.tipo = 'equipo' AND ev.id = pv.referencia_id
+                LEFT JOIN usuarios uv ON pv.tipo = 'usuario' AND uv.id = pv.referencia_id
+                WHERE e.estado = 'programado'
+                  AND e.fecha_hora_programada >= CURDATE()
+                  AND t.estado IN ('inscripciones_abiertas', 'en_curso')
+                ORDER BY e.fecha_hora_programada ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Numeros del banner de estadisticas
+    public function obtenerEstadisticasPublicas(): array {
+        $sql = "SELECT
+                    (SELECT COUNT(*) FROM usuarios) AS usuarios,
+                    (SELECT COUNT(*) FROM torneo_encuentros WHERE estado = 'finalizado') AS encuentros,
+                    (SELECT COUNT(*) FROM torneos WHERE estado NOT IN ('borrador', 'cancelado')) AS torneos,
+                    (SELECT COUNT(*) FROM equipos) AS equipos";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: ['usuarios' => 0, 'encuentros' => 0, 'torneos' => 0, 'equipos' => 0];
+    }
+
+    //Jugadores con mas victorias (las victorias se pueden comparar entre disciplinas, los puntos no)
+    public function obtenerTopJugadores(int $limite = 4): array {
+        $sql = "SELECT u.id,
+                       COALESCE(NULLIF(MAX(pj.apodo_gamertag), ''), u.nombre_completo) AS nombre,
+                       u.foto_perfil_url AS imagen,
+                       SUM(pos.partidos_ganados) AS victorias
+                FROM participantes_torneo p
+                INNER JOIN torneos t ON t.id = p.torneo_id
+                INNER JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                INNER JOIN usuarios u ON u.id = p.referencia_id
+                LEFT JOIN perfiles_jugadores pj ON pj.usuario_id = u.id
+                WHERE p.tipo = 'usuario' AND t.estado IN ('finalizado', 'en_curso')
+                GROUP BY u.id, u.nombre_completo, u.foto_perfil_url
+                HAVING victorias > 0
+                ORDER BY victorias DESC, nombre ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     //Metodo para obtener todos los torneos
     public function obtenerTorneos(){

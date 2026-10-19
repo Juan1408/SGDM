@@ -8,8 +8,6 @@
 
    <title>ASCEND - Panel Organizador</title>
 
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-
    <!-- Layout compartido de organizador -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">

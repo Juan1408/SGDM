@@ -14,6 +14,12 @@ class InicioControlador {
 
      //Pagina de inicio
     public function index(){
+        require_once __DIR__ . '/../modelos/Torneo.php';
+        $modeloTorneo = new \App\Modelos\Torneo();
+        $torneosDestacados = $modeloTorneo->obtenerTorneosDestacados(6);
+        $proximosEnfrentamientos = $modeloTorneo->obtenerProximosEnfrentamientos(4);
+        $estadisticas = $modeloTorneo->obtenerEstadisticasPublicas();
+        $topJugadores = $modeloTorneo->obtenerTopJugadores(4);
         require_once __DIR__ . '/../vistas/publico/index.php';
     }
 
@@ -39,8 +45,33 @@ class InicioControlador {
         require_once __DIR__ . '/../vistas/publico/nosotros.php';
     }
 
-    //Ranking general
+    //Ranking por disciplina (los puntos de cada juego no son comparables entre si)
     public function rankings(){
+        require_once __DIR__ . '/../modelos/ResultadoGlobal.php';
+        $modeloRanking = new \App\Modelos\ResultadoGlobal();
+
+        $juegosRanking = $modeloRanking->obtenerJuegosConRanking();
+
+        require_once __DIR__ . '/../modelos/Juego.php';
+        $juegosDestacados = (new \Juego())->obtenerJuegosDestacados(6);
+
+        //Disciplina elegida (?juego=ID); si no hay o no es valida, la primera con resultados
+        $juegoId = (int) ($_GET['juego'] ?? 0);
+        $juegoSeleccionado = null;
+        foreach ($juegosRanking as $j) {
+            if ((int) $j['id'] === $juegoId) { $juegoSeleccionado = $j; break; }
+        }
+        if ($juegoSeleccionado === null && !empty($juegosRanking)) {
+            $juegoSeleccionado = $juegosRanking[0];
+        }
+
+        $rankingJugadores = [];
+        $rankingEquipos = [];
+        if ($juegoSeleccionado !== null) {
+            $rankingJugadores = $modeloRanking->obtenerRankingPorJuego((int) $juegoSeleccionado['id'], 'usuario');
+            $rankingEquipos = $modeloRanking->obtenerRankingPorJuego((int) $juegoSeleccionado['id'], 'equipo');
+        }
+
         require_once __DIR__ . '/../vistas/publico/rankings.php';
     }
 }

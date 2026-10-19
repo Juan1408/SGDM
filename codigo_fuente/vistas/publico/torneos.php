@@ -38,9 +38,6 @@ $tipoDeJuego = static function (string $categoria): string {
 
    <title>ASCEND</title>
 
-   <!-- Swiper.js -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">

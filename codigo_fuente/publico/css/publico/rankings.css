@@ -322,11 +322,12 @@
   font-weight: 800;
 }
 
+/* Tabla de ranking (mismo estilo que el ranking del detalle del torneo) */
 .seccion-tabla {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
+  background: #061331;
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .seccion-tabla table {
@@ -351,24 +352,31 @@
 
 .ranking-row {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 90px;
+  grid-template-columns: 50px minmax(180px, 1fr) 90px 90px 80px;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  min-width: 640px;
+  margin: 12px;
+  padding: 12px 20px;
+  background: #2d3956;
+  border-radius: 60px;
+  color: #fff;
+  font-size: 14px;
+  transition: 0.25s;
 }
-.ranking-row:last-child { border-bottom: none; }
 
 .ranking-row.head {
-  background: rgba(255,255,255,0.03);
-  color: #888;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  margin: 0;
+  padding: 14px 20px;
+  background: #10275c;
+  border-radius: 0;
+  font-size: 15px;
   font-weight: 700;
-  padding: 14px 24px;
 }
 
-.ranking-row:not(.head):hover { background: rgba(255,255,255,0.03); }
+.ranking-row:not(.head):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(var(--color-secundario-rgb), 0.25);
+}
 
 .rk-pos {
   color: #fff;
@@ -397,9 +405,7 @@
 }
 .rk-player span { color: #fff; font-size: 14px; font-weight: 600; }
 
-.rk-game { display: none; color: #a0a0c0; font-size: 13px; }
-.rk-encuentros { display: none; color: #a0a0c0; font-size: 13px; text-align: center; }
-.rk-points { color: var(--color-secundario); font-weight: 700; font-size: 14px; text-align: right; }
+.rk-points { font-weight: 800; }
 
 /* From Uiverse.io by Navarog21 */ 
 .rk-tab {
@@ -453,13 +459,95 @@
 
 
 
-@media (min-width: 700px) {
-  .ranking-row {
-    grid-template-columns: 60px minmax(0, 1fr) 160px 110px 130px;
+@media (min-width: 900px) {
+  .seccion-tabla {
+    max-width: 960px;
+    margin: 0 auto;
+    border-radius: 18px;
   }
 
-  .rk-game, .rk-encuentros { display: block; }
+  .ranking-row {
+    grid-template-columns: 50px minmax(0, 1fr) 110px 110px 80px;
+    min-width: 0;
+    margin: 10px;
+    padding: 8px 22px;
+    border-radius: 60px;
+    font-size: 16px;
+  }
+
+  .ranking-row.head {
+    margin: 0;
+    padding: 10px 32px;
+    border-radius: 0;
+    font-size: 14px;
+  }
+
+  .rk-pos { font-size: 16px; }
+
+  .rk-pos.top3 {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+
+  .rk-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .rk-player span { font-size: 17px; }
 }
 
-.col-puntos { text-align: right; }
+/* Selector de disciplina */
+.ranking-filtro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
 
+.ranking-filtro label {
+  color: var(--color-secundario);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 13px;
+}
+
+.ranking-filtro select {
+  min-width: 14em;
+  height: 3.5em;
+  padding: 0 1em;
+  border: 3px ridge #149CEA;
+  border-radius: 0.3em;
+  background-color: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  transition: 0.5s;
+}
+
+.ranking-filtro select:hover,
+.ranking-filtro select:focus {
+  box-shadow: inset 0px 0px 25px #1479EA;
+}
+
+/* Sin esto la lista desplegable queda con letras blancas sobre fondo blanco */
+.ranking-filtro select option {
+  background: var(--fondo-principal);
+  color: #fff;
+}
+
+
+
+/* Mensaje cuando no hay resultados */
+.ranking-vacio {
+  color: #a0a0c0;
+  font-size: 15px;
+  padding: 8px 0;
+}

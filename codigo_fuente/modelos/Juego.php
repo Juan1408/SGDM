@@ -51,6 +51,21 @@ class Juego {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        //Juegos con mas torneos creados (para "Juegos Destacados")
+    public function obtenerJuegosDestacados(int $limite = 6): array {
+        $sql = "SELECT j.id, j.nombre, j.categoria, j.imagen_url, COUNT(t.id) AS total_torneos
+                FROM juegos j
+                INNER JOIN torneos t ON t.juego_id = j.id
+                WHERE j.activo = 1
+                GROUP BY j.id, j.nombre, j.categoria, j.imagen_url
+                ORDER BY total_torneos DESC, j.nombre ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function estaActivo(int $juegoId): bool {
         $stmt = $this->bd->prepare('SELECT COUNT(*) FROM juegos WHERE id = :id AND activo = 1');
         $stmt->execute([':id' => $juegoId]);
