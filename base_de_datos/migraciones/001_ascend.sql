@@ -242,6 +242,7 @@ CREATE TABLE perfiles_jugadores (
     discord_tag VARCHAR(100),
     instagram_url VARCHAR(255),
     twitter_url VARCHAR(255),
+    campos_publicos VARCHAR(255) NOT NULL DEFAULT '',
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_perfil_jugador_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;

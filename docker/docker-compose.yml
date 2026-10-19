@@ -17,6 +17,12 @@ services:
     build: .
     # Nombre único del contenedor para identificarlo fácilmente
     container_name: sgdm_web
+    # Antes de arrancar Apache: crea las carpetas de imagenes subidas y le da permiso de escritura a Apache (www-data).
+    # Hace falta porque el codigo se monta desde el host y esas carpetas no vienen en la imagen.
+    command: >
+      sh -c "mkdir -p /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos
+      && chown -R www-data:www-data /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos || true;
+      exec apache2-foreground"
     # Mapeo de puertos: [puerto de tu PC] : [puerto dentro del contenedor]
     # Así podrás ver la app en http://localhost:8080
     ports:
