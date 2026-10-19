@@ -190,7 +190,7 @@ if ($rolSesion === 3) {
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <?php if ($archivoNavbar === 'navbar-publico.php'): ?>
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>

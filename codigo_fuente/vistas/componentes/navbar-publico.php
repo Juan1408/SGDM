@@ -142,6 +142,7 @@ if ($esOrganizadorNavbar) {
          <a href="<?php echo $urlVerPerfilNavbar; ?>"><i class="fa-solid fa-user"></i> Ver mi perfil</a>
          <a href="<?php echo $urlEditarPerfilNavbar; ?>"><i class="fa-solid fa-pen"></i> Editar perfil</a>
          <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
             <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
          </form>
       </div>
