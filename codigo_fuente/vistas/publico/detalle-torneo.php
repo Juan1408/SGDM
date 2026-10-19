@@ -123,6 +123,18 @@
       ?>
       <section class="td-hero"<?php echo $bannerEstilo; ?>>
 
+               <?php if ($esJugadorLogueado): ?>
+            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $torneoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-torneo">
+               <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+               <input type="hidden" name="tipo" value="torneo">
+               <input type="hidden" name="referencia_id" value="<?php echo (int) $torneo['id']; ?>">
+               <input type="hidden" name="volver_a" value="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $torneo['id']; ?>">
+               <button type="submit" class="boton-guardar-torneo<?php echo $torneoGuardado ? ' guardado' : ''; ?>" title="<?php echo $torneoGuardado ? 'Quitar de guardados' : 'Guardar torneo'; ?>" aria-label="<?php echo $torneoGuardado ? 'Quitar de guardados' : 'Guardar torneo'; ?>">
+                  <i class="<?php echo $torneoGuardado ? 'fa-solid' : 'fa-regular'; ?> fa-bookmark"></i>
+               </button>
+            </form>
+         <?php endif; ?>
+
          <div class="td-hero-contenido td-hero-contenido--solo">            
             <h1><?php echo htmlspecialchars($torneo['nombre']); ?></h1>
             <p id="hero-subtitulo"><?php echo htmlspecialchars($torneo['nombre_juego']); ?> · <?php echo htmlspecialchars($etiquetasFormato[$torneo['formato']] ?? $torneo['formato']); ?></p>

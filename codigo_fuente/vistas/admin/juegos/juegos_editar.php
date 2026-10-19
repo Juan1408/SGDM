@@ -16,15 +16,15 @@
         </a>
     </div>
 
-    <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=actualizar" method="POST" class="formulario-estandar validacion-activa">
-        <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
+    <form action="<?php echo URL_BASE; ?>index.php?c=juego&a=actualizar" method="POST" enctype="multipart/form-data" class="formulario-estandar validacion-activa">
+    <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
         <fieldset>
         <!-- ID Oculto para que el controlador sepa cuál actualizar -->
         <input type="hidden" name="id" value="<?php echo $juego['id']; ?>">
 
         <div class="grupo-formulario">
             <label for="nombre">Nombre del Juego <span class="requerido">*</span></label>
-            <input type="text" name="nombre" id="nombre" class="campo-requerido" value="<?php echo $juego['nombre']; ?>" required>
+            <input type="text" name="nombre" id="nombre" class="campo-requerido" value="<?php echo htmlspecialchars($juego['nombre']); ?" required>
         </div>
 
         <div class="grupo-formulario">
@@ -34,6 +34,14 @@
                 <option value="deporte-fisico" <?php echo ($juego['categoria'] === 'deporte-fisico' ? 'selected' : ''); ?>>Deporte Físico</option>
                 <option value="juego-mesa" <?php echo ($juego['categoria'] === 'juego-mesa' ? 'selected' : ''); ?>>Juego de Mesa</option>
             </select>
+        </div>
+
+        <div class="grupo-formulario">
+            <label for="imagen">Carátula del juego</label>
+            <?php if (!empty($juego['imagen_url'])): ?>
+                <p><small>Imagen actual: <?php echo htmlspecialchars($juego['imagen_url']); ?>. Subí otra solo si querés reemplazarla.</small></p>
+            <?php endif; ?>
+            <input type="file" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp">
         </div>
 
         <div class="grupo-formulario">

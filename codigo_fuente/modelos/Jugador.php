@@ -124,6 +124,19 @@ class Jugador {
         return $perfil;
     }
 
+        //Logros del jugador (catalogo + su estado y progreso). Primero los desbloqueados, despues en curso, al final bloqueados
+    public function obtenerLogros(int $usuarioId): array {
+        $sql = "SELECT l.nombre, l.descripcion, l.icono,
+                       ul.estado, ul.progreso_actual, ul.progreso_objetivo
+                FROM usuario_logros ul
+                INNER JOIN logros l ON l.id = ul.logro_id
+                WHERE ul.usuario_id = :usuarioId
+                ORDER BY FIELD(ul.estado, 'desbloqueado', 'en_curso', 'bloqueado'), l.id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':usuarioId' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     //Metodo para actualizar el perfil del jugador (datos de cuenta + datos deportivos)
     //$datosUsuario: nombre_completo, email, foto_perfil_url (null = no cambia)
     //$datosPerfil: bio, ciudad, pais, fecha_nacimiento, discord_tag, instagram_url, twitter_url,

@@ -104,131 +104,52 @@
       <!-------------------------------------->
       <!-- GRID DE JUEGOS --------------------->
       <!-------------------------------------->
-      <!-- Todavia con datos de ejemplo -- se conecta con la tabla juegos en un paso siguiente -->
-
       <section class="juegos-grilla-seccion">
+
+                <?php
+         $juegos = $juegos ?? [];
+
+         //Categoria de la BD -> [filtro de esta pagina, texto de la tarjeta]
+         $categoriaFiltro = function (string $cat): array {
+            if (strpos($cat, 'esport') === 0)  { return ['esports', 'eSports']; }
+            if (strpos($cat, 'deporte') === 0) { return ['tradicionales', 'Deporte']; }
+            return ['mentales', 'Juego de mesa'];
+         };
+         ?>
 
          <ul class="juegos-grillas" id="juegos-grillas">
 
-            <li>
-               <article class="tarjeta-juego val" data-categoria="esports" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/valorant.jpg" alt="Valorant">
-                     <div class="tarjeta-overlay">
-                        <h2>Valorant</h2>
-                        <p>eSports · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
+            <?php if (empty($juegos)): ?>
+               <li><p>Todavía no hay juegos cargados.</p></li>
+            <?php endif; ?>
 
-            <li>
-               <article class="tarjeta-juego lol" data-categoria="esports" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/odyssey.png" alt="League of Legends">
-                     <div class="tarjeta-overlay">
-                        <h2>League of Legends</h2>
-                        <p>eSports · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
+            <?php foreach ($juegos as $j): ?>
+               <?php
+               [$filtroCat, $textoCat] = $categoriaFiltro((string) $j['categoria']);
 
-            <li>
-               <article class="tarjeta-juego apex" data-categoria="esports" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/fly.jpg" alt="Apex Legends">
-                     <div class="tarjeta-overlay">
-                        <h2>Apex Legends</h2>
-                        <p>eSports · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
+               $modalidad = (string) ($j['modalidad'] ?? '');
+               $filtroMod = $modalidad === '' ? '' : (stripos($modalidad, 'individual') !== false ? 'individual' : 'equipos');
+               $textoMod = $filtroMod === 'individual' ? 'Individual' : ($filtroMod === 'equipos' ? 'Por equipos' : '');
 
-            <li>
-               <article class="tarjeta-juego cs" data-categoria="esports" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/dos.jpg" alt="Counter Strike">
-                     <div class="tarjeta-overlay">
-                        <h2>Counter Strike</h2>
-                        <p>eSports · Por equipos</p>
+               $img = (string) ($j['imagen_url'] ?? '');
+               if ($img === '') {
+                  $imgSrc = URL_BASE . 'img/bg.jpg';
+               } else {
+                  $imgSrc = preg_match('#^(https?:)?//#i', $img) ? $img : URL_BASE . ltrim($img, '/');
+               }
+               ?>
+               <li>
+                  <article class="tarjeta-juego" data-categoria="<?php echo $filtroCat; ?>" data-modalidad="<?php echo $filtroMod; ?>">
+                     <div class="tarjeta-info">
+                        <img src="<?php echo htmlspecialchars($imgSrc); ?>" alt="<?php echo htmlspecialchars($j['nombre']); ?>">
+                        <div class="tarjeta-overlay">
+                           <h2><?php echo htmlspecialchars($j['nombre']); ?></h2>
+                           <p><?php echo $textoCat . ($textoMod !== '' ? ' · ' . $textoMod : ''); ?></p>
+                        </div>
                      </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego wow" data-categoria="esports" data-modalidad="individual">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/mystic.png" alt="World of Warcraft">
-                     <div class="tarjeta-overlay">
-                        <h2>World of Warcraft</h2>
-                        <p>eSports · Individual</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego chess" data-categoria="mentales" data-modalidad="individual">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/chess.jpg" alt="Ajedrez">
-                     <div class="tarjeta-overlay">
-                        <h2>Ajedrez</h2>
-                        <p>Mental · Individual</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego truco" data-categoria="tradicionales" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/truco.jpg" alt="Truco">
-                     <div class="tarjeta-overlay">
-                        <h2>Truco</h2>
-                        <p>Mesa · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego uno" data-categoria="tradicionales" data-modalidad="individual">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/uno.jpg" alt="Uno">
-                     <div class="tarjeta-overlay">
-                        <h2>Uno</h2>
-                        <p>Mesa · Individual</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego basquet" data-categoria="tradicionales" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/basquet.png" alt="Básquetbol">
-                     <div class="tarjeta-overlay">
-                        <h2>Básquetbol</h2>
-                        <p>Deporte · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="tarjeta-juego futbol5" data-categoria="tradicionales" data-modalidad="equipos">
-                  <div class="tarjeta-info">
-                     <img src="<?php echo URL_BASE; ?>img/juegos/futbol5.jpg" alt="Fútbol 5">
-                     <div class="tarjeta-overlay">
-                        <h2>Fútbol 5</h2>
-                        <p>Deporte · Por equipos</p>
-                     </div>
-                  </div>
-               </article>
-            </li>
+                  </article>
+               </li>
+            <?php endforeach; ?>
 
          </ul>
 

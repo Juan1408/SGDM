@@ -569,6 +569,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
             }
         });
     </script>
-    <?php include __DIR__ . '/../componentes/footer.html'; ?>
+    <?php include __DIR__ . '/../componentes/footer.php'; ?>
 </body>
 </html>

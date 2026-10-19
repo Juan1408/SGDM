@@ -173,6 +173,7 @@ CREATE TABLE juegos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL,
     categoria VARCHAR(50) NOT NULL COMMENT 'esport-shooter, esport-moba, deporte-fisico, juego-mesa',
+    imagen_url TEXT,
     puntos_victoria DECIMAL(5, 2) DEFAULT 3.00,
     puntos_empate DECIMAL(5, 2) DEFAULT 1.00,
     puntos_derrota DECIMAL(5, 2) DEFAULT 0.00,

@@ -2,11 +2,13 @@
 namespace App\Controladores;
 use App\Ayudantes\Sesion;
 use App\Modelos\Juego;
+use App\Ayudantes\SubidaImagen;
 
 require_once __DIR__ . '/../modelos/Juego.php';
 require_once __DIR__ . '/../modelos/Formato.php';
 require_once __DIR__ . '/../modelos/Modalidad.php';
 require_once __DIR__ . '/../ayudantes/Sesion.php';
+require_once __DIR__ . '/../ayudantes/SubidaImagen.php';
 
 class JuegoControlador {
     private $modeloJuego;
@@ -53,10 +55,20 @@ class JuegoControlador {
             $modalidades = $_POST['modalidades'] ?? [];
             $formatos = $_POST['formatos'] ?? [];
 
+            //Caratula (opcional): si se envia y no es valida, no se guarda nada
+            $imagenUrl = null;
+            $errorImagen = false;
+            if (SubidaImagen::fueEnviado($_FILES['imagen'] ?? null)) {
+                $imagenUrl = SubidaImagen::guardar($_FILES['imagen'], 'juegos/subidos');
+                $errorImagen = ($imagenUrl === null);
+            }
+
             //Validacion simple de datos, para la entrega final la seguimos mejorando
-            if (!empty($nombre) && !empty($categoria)){
+            if ($errorImagen) {
+                $_SESSION['mensaje'] = "La caratula no es valida (JPG, PNG o WEBP, maximo 2 MB)";
+            } elseif (!empty($nombre) && !empty($categoria)){
                 //Llamamos al modelo
-                if ($this->modeloJuego->crearJuego($nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos)){
+                if ($this->modeloJuego->crearJuego($nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos, $imagenUrl)){
                     $_SESSION['mensaje'] = "Juego creado exitosamente y añadido al catalogo";
                 } else {
                     $_SESSION['mensaje'] = "Error al guardar el juego";
@@ -119,7 +131,7 @@ class JuegoControlador {
         }
     }
 
-    //Metodo para procesar el formulario de editar
+    //Metodo para procesar el formulario de editar        //Metodo para procesar el formulario de editar
     public function actualizar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             \App\Ayudantes\Sesion::requerirTokensCSRF();
@@ -135,10 +147,20 @@ class JuegoControlador {
             $modalidades = $_POST['modalidades'] ?? [];
             $formatos = $_POST['formatos'] ?? [];
 
+            //Caratula (opcional): si no se sube una nueva, se conserva la anterior
+            $imagenUrl = null;
+            $errorImagen = false;
+            if (SubidaImagen::fueEnviado($_FILES['imagen'] ?? null)) {
+                $imagenUrl = SubidaImagen::guardar($_FILES['imagen'], 'juegos/subidos');
+                $errorImagen = ($imagenUrl === null);
+            }
+
             //Validacion simple de datos, para la entrega final la seguimos mejorando
-            if (!empty($nombre) && !empty($categoria)){
+            if ($errorImagen) {
+                $_SESSION['mensaje'] = "La caratula no es valida (JPG, PNG o WEBP, maximo 2 MB)";
+            } elseif (!empty($nombre) && !empty($categoria)){
                 //Llamamos al modelo
-                if ($this->modeloJuego->actualizarJuego($juegoId, $nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos)){
+                if ($this->modeloJuego->actualizarJuego($juegoId, $nombre, $categoria, $pts_vic, $pts_emp, $pts_der, $modalidades, $formatos, $imagenUrl)){
                     $_SESSION['mensaje'] = "Juego actualizado exitosamente";
                 } else {
                     $_SESSION['mensaje'] = "Error al actualizar el juego";

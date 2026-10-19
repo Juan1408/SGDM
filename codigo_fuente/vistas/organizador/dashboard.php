@@ -189,7 +189,7 @@
 
    </main>
 
-<?php include __DIR__ . '/../componentes/footer.html'; ?>
+<?php include __DIR__ . '/../componentes/footer.php'; ?>
 </body>
 
 </html>

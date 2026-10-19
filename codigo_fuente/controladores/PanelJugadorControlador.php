@@ -48,6 +48,7 @@ class PanelJugadorControlador {
         $usuarioId = $_SESSION['usuario_id'];
         $datos = $this->modeloJugador->obtenerPerfil($usuarioId);
         $equipos = $this->modeloEquipo->obtenerEquiposDelJugador($usuarioId);
+        $logros = $this->modeloJugador->obtenerLogros($usuarioId);
 
         //Torneos reales: inscripciones del jugador (directas o por sus equipos), sin las rechazadas/canceladas
         $equipoIds = array_column($equipos, 'id');

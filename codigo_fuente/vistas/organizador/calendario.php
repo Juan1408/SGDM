@@ -243,6 +243,6 @@ $urlTorneo = URL_BASE . 'index.php?c=panelOrganizador&a=administrar';
     </main>
 
     <script src="<?php echo URL_BASE; ?>js/organizador/calendario.js"></script>
-    <?php include __DIR__ . '/../componentes/footer.html'; ?>
+    <?php include __DIR__ . '/../componentes/footer.php'; ?>
 </body>
 </html>

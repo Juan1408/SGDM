@@ -309,52 +309,33 @@ if (!$esPublico || $rolSesion === 3) {
 
          <h2>Logros</h2>
 
+                 <?php
+         $logros = $logros ?? [];
+         $claseLogro = ['desbloqueado' => 'desbloqueado', 'en_curso' => 'en-curso', 'bloqueado' => 'bloqueado'];
+         $etiquetaLogro = ['desbloqueado' => 'Logrado', 'en_curso' => 'En curso', 'bloqueado' => 'Bloqueado'];
+         ?>
          <ul class="logros-grilla">
-
-            <li>
-               <article class="logro-tarjeta desbloqueado">
-                  <div class="logro-icon"></div>
-                  <div>
-                     <h3>Primera batalla</h3>
-                     <p>Jugaste tu primer torneo</p>
-                  </div>
-                  <span>Logrado</span>
-               </article>
-            </li>
-
-            <li>
-               <article class="logro-tarjeta desbloqueado">
-                  <div class="logro-icon"></div>
-                  <div>
-                     <h3>Campeón</h3>
-                     <p>Ganaste un torneo oficial</p>
-                  </div>
-                  <span>Logrado</span>
-               </article>
-            </li>
-
-            <li>
-               <article class="logro-tarjeta en-curso">
-                  <div class="logro-icon"></div>
-                  <div>
-                     <h3>Veterano</h3>
-                     <p>6/10 torneos</p>
-                  </div>
-                  <span>En curso</span>
-               </article>
-            </li>
-
-            <li>
-               <article class="logro-tarjeta bloqueado">
-                  <div class="logro-icon"></div>
-                  <div>
-                     <h3>En racha</h3>
-                     <p>Ganá 3 partidas distintas</p>
-                  </div>
-                  <span>Bloqueado</span>
-               </article>
-            </li>
-
+            <?php if (empty($logros)): ?>
+               <li><p>Todavía no hay logros para mostrar.</p></li>
+            <?php else: ?>
+               <?php foreach ($logros as $l): ?>
+                  <li>
+                     <article class="logro-tarjeta <?php echo $claseLogro[$l['estado']] ?? 'bloqueado'; ?>">
+                        <div class="logro-icon"></div>
+                        <div>
+                           <h3><?php echo htmlspecialchars($l['nombre']); ?></h3>
+                           <p>
+                              <?php echo htmlspecialchars($l['descripcion']); ?>
+                              <?php if ($l['estado'] === 'en_curso'): ?>
+                                 (<?php echo (int) $l['progreso_actual']; ?>/<?php echo (int) $l['progreso_objetivo']; ?>)
+                              <?php endif; ?>
+                           </p>
+                        </div>
+                        <span><?php echo $etiquetaLogro[$l['estado']] ?? 'Bloqueado'; ?></span>
+                     </article>
+                  </li>
+               <?php endforeach; ?>
+            <?php endif; ?>
          </ul>
 
       </section>
@@ -424,7 +405,7 @@ if (!$esPublico || $rolSesion === 3) {
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <?php if ($archivoNavbar === 'navbar-publico.php'): ?>
 <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>

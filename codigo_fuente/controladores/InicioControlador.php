@@ -29,6 +29,8 @@ class InicioControlador {
 
     //Catalogo de juegos
     public function juegos(){
+        require_once __DIR__ . '/../modelos/Juego.php';
+        $juegos = (new \Juego())->obtenerJuegosPublicos();
         require_once __DIR__ . '/../vistas/publico/juegos.php';
     }
 

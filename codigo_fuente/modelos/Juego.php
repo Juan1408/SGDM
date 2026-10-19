@@ -34,6 +34,23 @@ class Juego {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        //Juegos activos para el catalogo publico (con la modalidad permitida, si tiene)
+    public function obtenerJuegosPublicos(): array {
+        $sql = "SELECT j.id, j.nombre, j.categoria, j.imagen_url,
+                       (SELECT m.nombre
+                        FROM juego_modalidades_permitidas jmp
+                        INNER JOIN modalidades m ON m.id = jmp.modalidad_id
+                        WHERE jmp.juego_id = j.id
+                        ORDER BY m.id
+                        LIMIT 1) AS modalidad
+                FROM juegos j
+                WHERE j.activo = 1
+                ORDER BY j.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function estaActivo(int $juegoId): bool {
         $stmt = $this->bd->prepare('SELECT COUNT(*) FROM juegos WHERE id = :id AND activo = 1');
         $stmt->execute([':id' => $juegoId]);
@@ -41,16 +58,17 @@ class Juego {
     }
     
     //2. Crear un nuevo juego
-    public function crearJuego(string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = []){
+        public function crearJuego(string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = [], ?string $imagenUrl = null){
         try {
             $this->bd->beginTransaction();
 
-            $sql = "INSERT INTO juegos(nombre, categoria, puntos_victoria, puntos_empate, puntos_derrota, activo) 
-                    VALUES (:nombre, :categoria, :p_vic, :p_emp, :p_der, 1)";
+            $sql = "INSERT INTO juegos(nombre, categoria, imagen_url, puntos_victoria, puntos_empate, puntos_derrota, activo) 
+                    VALUES (:nombre, :categoria, :imagen, :p_vic, :p_emp, :p_der, 1)";
             $stmt = $this->bd->prepare($sql);
             $stmt->execute([
                ':nombre' => $nombre,
                ':categoria' => $categoria,
+               ':imagen' => $imagenUrl,
                ':p_vic' => $pts_victoria,
                ':p_emp' => $pts_empate,
                ':p_der' => $pts_derrota
@@ -116,17 +134,19 @@ class Juego {
     }
 
     //Actualizar los datos de un juego
-    public function actualizarJuego(int $juegoId, string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = []){
+        public function actualizarJuego(int $juegoId, string $nombre, string $categoria, float $pts_victoria, float $pts_empate, float $pts_derrota, array $modalidades = [], array $formatos = [], ?string $imagenUrl = null){
         try {
             $this->bd->beginTransaction();
 
             $sql = "UPDATE juegos SET nombre = :nombre, categoria = :categoria, 
+                    imagen_url = COALESCE(:imagen, imagen_url),
                     puntos_victoria = :p_vic, puntos_empate = :p_emp, puntos_derrota = :p_der 
                     WHERE id = :id";
             $stmt = $this->bd->prepare($sql);
             $stmt->execute([
                ':nombre' => $nombre,
                ':categoria' => $categoria,
+               ':imagen' => $imagenUrl,
                ':p_vic' => $pts_victoria,
                ':p_emp' => $pts_empate,
                ':p_der' => $pts_derrota,

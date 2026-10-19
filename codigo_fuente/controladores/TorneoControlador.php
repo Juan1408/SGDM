@@ -4,9 +4,11 @@ namespace App\Controladores;
 use App\Ayudantes\Sesion;
 use App\Modelos\Torneo;
 use App\Modelos\Equipo;
+use App\Modelos\Guardado;
 require_once __DIR__ . '/../ayudantes/Sesion.php';
 require_once __DIR__ . '/../modelos/Torneo.php';
 require_once __DIR__ . '/../modelos/Equipo.php';
+require_once __DIR__ . '/../modelos/Guardado.php';
 
 /**
  * Controlador publico de Torneos (catalogo + detalle + inscripcion).
@@ -48,6 +50,7 @@ class TorneoControlador {
 
         $miInscripcion = null;
         $misEquiposCapitan = [];
+        $torneoGuardado = false;
 
         if ($esJugadorLogueado) {
             $usuarioId = (int) $_SESSION['usuario_id'];
@@ -55,6 +58,7 @@ class TorneoControlador {
             $misEquiposCapitan = array_values(array_filter($misEquipos, static fn ($equipo) => !empty($equipo['es_capitan'])));
             $equipoIds = array_map(static fn ($equipo) => (int) $equipo['id'], $misEquipos);
             $miInscripcion = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, $equipoIds);
+            $torneoGuardado = (new Guardado())->estaGuardado($usuarioId, 'torneo', $torneoId);
         }
         $agenda = $this->modeloTorneo->obtenerAgendaPublica($torneoId);
         $participantes = $this->modeloTorneo->obtenerParticipantesPublicos($torneoId);

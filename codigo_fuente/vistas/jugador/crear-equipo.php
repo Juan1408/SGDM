@@ -121,7 +121,7 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <!-- crear-equipo.js NO se carga: este formulario no necesita JS -->
    <!-- (required + POST nativo alcanzan; se vuelve a agregar cuando -->

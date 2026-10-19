@@ -1125,7 +1125,7 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
       window.ADMINISTRAR_URL = "<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=administrar&id=<?php echo (int) $torneo['id']; ?>";
    </script>
    <script src="<?php echo URL_BASE; ?>js/organizador/administrarMenu.js"></script>
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
 </body>
 </html>

@@ -97,7 +97,7 @@ if (!$equipo) {
 //Visitantes sin sesion tambien pueden ver el perfil
 Sesion::estaLogueado(); //solo inicia la sesion, no redirige
 $usuarioId = $_SESSION['usuario_id'] ?? null;
-$rolId = $_SESSION['rol_id'] ?? null;
+$rolId = (int) ($_SESSION['rol_id'] ?? 0);
 $esJugador = ($rolId === 3);
 
 $capitanes = $this->modeloEquipo->obtenerCapitanes($equipoId);
