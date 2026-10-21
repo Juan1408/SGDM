@@ -21,7 +21,7 @@ asort($juegosCatalogo);
 
 //Categoria de la base -> chip del catalogo
 $tipoDeJuego = static function (string $categoria): string {
-   if (strpos($categoria, 'esport-') === 0) { return 'esports'; }
+   if ($categoria === 'esport' || strpos($categoria, 'esport-') === 0) { return 'esports'; }
    if ($categoria === 'deporte-fisico') { return 'tradicionales'; }
    if ($categoria === 'juego-mesa') { return 'mentales'; }
    return '';

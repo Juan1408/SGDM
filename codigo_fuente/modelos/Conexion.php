@@ -18,7 +18,8 @@ class Conexion {
         $config = require __DIR__ . '/../configuracion/base_de_datos.php';
 
         //Preparamos los parametros de la conexion
-        $dns = 'mysql:host=' . $config['host'] . ";dbname=" . $config['bdnombre'] . ";charset=" . $config['charset'];
+        $puerto = $config['puerto'] ?? '3306';
+        $dns = 'mysql:host=' . $config['host'] . ';port=' . $puerto . ";dbname=" . $config['bdnombre'] . ";charset=" . $config['charset'];
         
         //Intentamos la conexion aplicando try catch
         try {

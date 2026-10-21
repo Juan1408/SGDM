@@ -16,6 +16,8 @@
         <label for="categoria">Categoria <span class="requerido">*</span></label>
         <select id="categoria" name="categoria" class="campo-requerido" required>
             <option value="esport">eSport</option>
+            <option value="esport-shooter">eSport Shooter</option>
+            <option value="esport-moba">eSport MOBA</option>
             <option value="deporte-fisico">Deporte Fisico</option>
             <option value="juego-mesa">Juego de Mesa</option>
             </select>

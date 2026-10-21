@@ -29,7 +29,7 @@ const sistemaSelect =
 const cuposInput =
    document.getElementById("participantes");
 
-const ayuda-cupos =
+const ayudaCupos =
    document.getElementById("ayuda-cupos");
 
 const fechaInicioInscripcionInput =
@@ -175,13 +175,13 @@ function actualizarDisciplina() {
    );
 }
 
-function actualizarayuda-cupos() {
+function actualizarAyudaCupos() {
    const sistema = sistemaSelect.value;
 
    if (
       sistema === "Eliminación directa"
    ) {
-      ayuda-cupos.textContent =
+      ayudaCupos.textContent =
          "Debe ser 2, 4, 8, 16, 32 o 64.";
 
       cuposInput.min = "2";
@@ -191,7 +191,7 @@ function actualizarayuda-cupos() {
    }
 
    if (sistema === "Liga") {
-      ayuda-cupos.textContent =
+      ayudaCupos.textContent =
          "La liga admite entre 2 y 40 participantes.";
 
       cuposInput.min = "2";
@@ -201,7 +201,7 @@ function actualizarayuda-cupos() {
    }
 
    if (sistema === "Sistema Suizo") {
-      ayuda-cupos.textContent =
+      ayudaCupos.textContent =
          "El sistema suizo admite entre 4 y 64 participantes.";
 
       cuposInput.min = "4";
@@ -210,7 +210,7 @@ function actualizarayuda-cupos() {
       return;
    }
 
-   ayuda-cupos.textContent =
+   ayudaCupos.textContent =
       "Indicá la cantidad máxima de equipos o jugadores.";
 }
 
@@ -671,7 +671,7 @@ disciplinaSelect.addEventListener(
 
 sistemaSelect.addEventListener(
    "change",
-   actualizarayuda-cupos
+   actualizarAyudaCupos
 );
 
 botonAgregarEvento.addEventListener(

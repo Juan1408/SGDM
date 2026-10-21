@@ -411,7 +411,7 @@ class Torneo {
                        t.fecha_inicio, t.fecha_fin,
                        j.nombre AS juego_nombre,
                        u.nombre_completo AS organizador_nombre,
-                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'aprobado') AS total_participantes
+                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'confirmado') AS total_participantes
                 FROM torneos t
                 INNER JOIN juegos j ON t.juego_id = j.id
                 INNER JOIN usuarios u ON t.organizador_id = u.id
@@ -580,7 +580,8 @@ class Torneo {
                 AND fecha_inicio IS NOT NULL
                 AND fecha_fin IS NOT NULL";
         $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]);
+        //execute() devuelve true aunque no haya filas afectadas; rowCount distingue "publicado" de "no se pudo publicar"
+        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]) && $stmt->rowCount() > 0;
     }
 
     public function actualizarGestion(int $torneoId, int $organizadorId, array $datos): bool {
@@ -640,12 +641,16 @@ class Torneo {
             return false;
         }
 
-        if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
-            return false;
-        }
-
         try {
             $this->bd->beginTransaction();
+
+            //El podio se calcula y guarda dentro de la misma transaccion que el cambio de estado:
+            //si el UPDATE del torneo falla, no debe quedar un podio guardado de un torneo no finalizado.
+            if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
+                $this->bd->rollBack();
+                return false;
+            }
+
             $stmt = $this->bd->prepare(
                 "UPDATE torneos SET estado = :estado WHERE id = :id AND organizador_id = :organizador_id"
             );
@@ -654,6 +659,10 @@ class Torneo {
                 ':id' => $torneoId,
                 ':organizador_id' => $organizadorId,
             ]);
+            if ($stmt->rowCount() === 0) {
+                $this->bd->rollBack();
+                return false;
+            }
             $historial = $this->bd->prepare(
                 'INSERT INTO torneo_cambio_estado (torneo_id, estado_anterior, estado_nuevo, usuario_id)
                  VALUES (:torneo_id, :estado_anterior, :estado_nuevo, :usuario_id)'
@@ -991,6 +1000,10 @@ class Torneo {
             $cantidad = count($participantes);
             if ($torneo['formato'] === 'eliminacion_directa' && ($cantidad & ($cantidad - 1)) !== 0) {
                 throw new \RuntimeException('La eliminación directa necesita 2, 4, 8, 16, 32 o 64 participantes.');
+            }
+            //El suizo actual empareja de a dos y no tiene bye: con cantidad impar quedaria un jugador sin partido
+            if ($torneo['formato'] === 'suizo' && $cantidad % 2 !== 0) {
+                throw new \RuntimeException('El sistema suizo necesita una cantidad par de participantes.');
             }
 
             // Se reemplaza el fixture anterior (todavía sin resultados) y el historial de emparejamientos suizos

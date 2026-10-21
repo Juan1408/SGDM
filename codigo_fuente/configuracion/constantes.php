@@ -19,17 +19,14 @@ if (!defined('URL_BASE')) {
     if (!empty($envUrl)) {
         $urlBase = $envUrl;
     } else {
-        // Detección automática en entornos locales (XAMPP / Apache / Docker)
+        // Detección automática basada en la ruta real del front controller.
+        // Funciona igual si el docroot es /SGDM/codigo_fuente/publico (XAMPP)
+        // o si es la raíz del contenedor (Docker con DocumentRoot /publico).
         $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        
-        // Si el puerto es 8080 (Docker), la raíz apunta directo a /publico/
-        if (strpos($host, ':8080') !== false) {
-            $urlBase = $scheme . $host . '/publico/';
-        } else {
-            // Entorno estándar XAMPP (Apache en puerto 80)
-            $urlBase = $scheme . $host . '/SGDM/codigo_fuente/publico/';
-        }
+        $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/index.php');
+        $directorio = rtrim(str_replace('\\', '/', dirname($script)), '/');
+        $urlBase = $scheme . $host . ($directorio === '' ? '/' : $directorio . '/');
     }
     define('URL_BASE', rtrim($urlBase, '/') . '/');
 }

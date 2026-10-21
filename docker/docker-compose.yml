@@ -9,10 +9,13 @@ services:
   web:
     environment:
       DB_HOST: db
+      DB_PORT: 3306
       DB_NAME: ascend
       DB_USER: ascend_usuario
       DB_PASSWORD: ascend_password
-      APP_URL: http://localhost:8080/publico/
+      # Vacío = detección automática por HTTP_HOST/SCRIPT_NAME.
+      # Para una demo por IP o dominio, definí APP_URL en un .env o en el entorno.
+      APP_URL: "${APP_URL:-}"
     # Construye la imagen a partir del Dockerfile que está en esta misma carpeta (./docker)
     build: .
     # Nombre único del contenedor para identificarlo fácilmente
@@ -20,8 +23,8 @@ services:
     # Antes de arrancar Apache: crea las carpetas de imagenes subidas y le da permiso de escritura a Apache (www-data).
     # Hace falta porque el codigo se monta desde el host y esas carpetas no vienen en la imagen.
     command: >
-      sh -c "mkdir -p /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos
-      && chown -R www-data:www-data /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos || true;
+      sh -c "mkdir -p /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos /var/www/html/publico/img/torneos/subidos
+      && chown -R www-data:www-data /var/www/html/publico/img/perfiles/subidos /var/www/html/publico/img/juegos/subidos /var/www/html/publico/img/torneos/subidos || true;
       exec apache2-foreground"
     # Mapeo de puertos: [puerto de tu PC] : [puerto dentro del contenedor]
     # Así podrás ver la app en http://localhost:8080
@@ -44,8 +47,8 @@ services:
   # SERVICIO 2: Base de datos MySQL 8.0
   # ------------------------------------------------------------
   db:
-    # Imagen oficial de MySQL versión 8.0 (la misma que usa XAMPP actualmente)
-    image: mysql:8.0
+    # Imagen oficial de MySQL 8.0 (versión fijada para una entrega reproducible)
+    image: mysql:8.0.46
     container_name: sgdm_db
     # Variables de entorno para configurar la base de datos al primer inicio
     environment:
@@ -68,12 +71,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+      start_period: 30s
 
   # ------------------------------------------------------------
   # SERVICIO 3: phpMyAdmin (interfaz web para administrar la base de datos)
   # ------------------------------------------------------------
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.2
     container_name: sgdm_phpmyadmin
     # Variables para que sepa dónde está la base de datos
     environment:
@@ -91,10 +95,10 @@ services:
   # SERVICIO 4: Grafana (monitoreo – requisito de Administración de Sistemas Operativos)
   # ------------------------------------------------------------
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:11.3.0
     container_name: sgdm_grafana
     ports:
-      - "127.0.0.1:3000:3000"   # Acceso a Grafana en http://localhost:3000
+      - "127.0.0.1:3001:3000"   # Acceso a Grafana en http://localhost:3001 (3000 suele estar ocupado)
     networks:
       - sgdm_red
 

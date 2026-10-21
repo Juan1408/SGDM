@@ -24,13 +24,15 @@
 
         <div class="grupo-formulario">
             <label for="nombre">Nombre del Juego <span class="requerido">*</span></label>
-            <input type="text" name="nombre" id="nombre" class="campo-requerido" value="<?php echo htmlspecialchars($juego['nombre']); ?" required>
+            <input type="text" name="nombre" id="nombre" class="campo-requerido" value="<?php echo htmlspecialchars($juego['nombre']); ?>" required>
         </div>
 
         <div class="grupo-formulario">
             <label for="categoria">Categoría <span class="requerido">*</span></label>
             <select name="categoria" id="categoria" class="campo-requerido" required>
                 <option value="esport" <?php echo ($juego['categoria'] === 'esport' ? 'selected' : ''); ?>>eSport</option>
+                <option value="esport-shooter" <?php echo ($juego['categoria'] === 'esport-shooter' ? 'selected' : ''); ?>>eSport Shooter</option>
+                <option value="esport-moba" <?php echo ($juego['categoria'] === 'esport-moba' ? 'selected' : ''); ?>>eSport MOBA</option>
                 <option value="deporte-fisico" <?php echo ($juego['categoria'] === 'deporte-fisico' ? 'selected' : ''); ?>>Deporte Físico</option>
                 <option value="juego-mesa" <?php echo ($juego['categoria'] === 'juego-mesa' ? 'selected' : ''); ?>>Juego de Mesa</option>
             </select>

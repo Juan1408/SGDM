@@ -888,7 +888,7 @@
                </div>
                <div class="streaming-video-placeholder">
                   <a class="streaming-video-enlace" href="<?php echo htmlspecialchars($streamUrl); ?>" target="_blank" rel="noopener noreferrer">
-                     <img src="<?php echo URL_BASE; ?>img/chess.jpg" alt="Transmisión del torneo">
+                     <img src="<?php echo URL_BASE; ?>img/chess2.jpg" alt="Transmisión del torneo">
                      <?php if ($torneo['estado'] === 'en_curso'): ?>
                         <div class="live-badge"><i class="fa-solid fa-circle"></i> EN VIVO</div>
                      <?php endif; ?>

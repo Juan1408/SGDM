@@ -253,6 +253,8 @@ CREATE TABLE perfiles_organizadores (
     usuario_id INT PRIMARY KEY,
     nombre_organizacion VARCHAR(150) NOT NULL DEFAULT 'Organizador Independiente',
     bio_organizacion TEXT,
+    banner_url TEXT,
+    campos_publicos VARCHAR(255) NOT NULL DEFAULT '',
     localidad VARCHAR(100),
     telefono_contacto VARCHAR(50),
     sitio_web VARCHAR(255),
@@ -583,7 +585,8 @@ CREATE TABLE torneo_suizo_parejas (
     PRIMARY KEY (
         torneo_id,
         participante_a_id,
-        participante_b_id
+        participante_b_id,
+        ronda
     ),
     CONSTRAINT fk_suizo_torneo FOREIGN KEY (torneo_id) REFERENCES torneos (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_suizo_participanteA FOREIGN KEY (participante_a_id) REFERENCES participantes_torneo (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -617,6 +620,7 @@ CREATE TABLE torneo_actividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     torneo_id INT NOT NULL,
     titulo VARCHAR(150) NOT NULL,
+    descripcion TEXT NULL,
     tipo ENUM(
         'administrativo',
         'reunion',
@@ -887,7 +891,7 @@ CREATE TABLE IF NOT EXISTS guardados (
     UNIQUE KEY unique_guardado (usuario_id, tipo, referencia_id), 
     CONSTRAINT fk_guardado_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE 
 ) ENGINE = InnoDB;
--- 8. Tablas de Seguridad y Autenticacion (Rate Limiting y Politicas)
+-- 8. Tablas de Seguridad y Autenticacion (Rate Limiting)
 CREATE TABLE IF NOT EXISTS intentos_login (
     ip_origen VARCHAR(45) PRIMARY KEY,
     intentos INT NOT NULL DEFAULT 1,
@@ -895,15 +899,4 @@ CREATE TABLE IF NOT EXISTS intentos_login (
     bloqueado_hasta DATETIME NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS politicas_contrasenas (
-    id INT PRIMARY KEY,
-    longitud_minima INT DEFAULT 8,
-    requiere_mayuscula BOOLEAN DEFAULT 1,
-    requiere_minuscula BOOLEAN DEFAULT 1,
-    requiere_numero BOOLEAN DEFAULT 1,
-    requiere_caracter_especial BOOLEAN DEFAULT 1,
-    expiracion_dias INT DEFAULT 90,
-    historial_cantidad INT DEFAULT 5,
-    actualizado_por INT NULL,
-    FOREIGN KEY (actualizado_por) REFERENCES usuarios(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+-- NOTA: politicas_contrasenas ya se define en 7.2. No se duplica aqui.

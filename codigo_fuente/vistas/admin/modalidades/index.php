@@ -7,7 +7,7 @@
  */
 ?>
 <div class="modalidades-container">
-    <link rel="stylesheet" href="<?php echo URL_BASE; ?>publico/css/admin_modalidades.css">
+    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/admin_modalidades.css">
     <div class="modalidades-header">
         <h2>🛠️ Gestión de Módulos de Torneo (Feature Flags)</h2>
         <p>Activa o desactiva formatos enteros de la plataforma. Si desactivas un formato, los organizadores no podrán seleccionarlo, permitiendo realizar mantenimientos programados de forma segura.</p>
