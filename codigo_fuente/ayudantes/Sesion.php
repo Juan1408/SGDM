@@ -94,7 +94,7 @@ class Sesion {
         //Consultamos que el rol sea de administrador
         if ((int)($_SESSION['rol_id'] ?? 0) !== 1) {
             //si no es el administrador lo mandamos al inicio
-            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
+            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=mostrarLogin&error=acceso_denegado");
             exit;
         }
     }
@@ -104,8 +104,8 @@ class Sesion {
         self::requerirLogin();
 
         if ((int) ($_SESSION['rol_id'] ?? 0) !== 2) {
-            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
-            exit;
+            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=mostrarLogin&error=acceso_denegado");
+        exit;
         }
     }
 
@@ -133,10 +133,10 @@ class Sesion {
         self::requerirLogin();
  
         //Consultamos que el rol sea de jugador
-        if ($_SESSION['rol_id'] !== 3) {
-            //si no es jugador lo mandamos al inicio
-            header("Location: " . URL_BASE . "index.php?c=auth&a=requerirLogin&error=acceso_denegado");
-            exit;
+        if ((int) ($_SESSION['rol_id'] ?? 0) !== 3) {
+        //si no es jugador lo mandamos al inicio
+            header("Location: " . URL_BASE . "index.php?c=auth&a=mostrarLogin&error=acceso_denegado");
+        exit;
         }
     }
 

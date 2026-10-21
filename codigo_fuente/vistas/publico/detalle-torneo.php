@@ -6,8 +6,6 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>ASCEND</title>
 
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
@@ -123,6 +121,18 @@
       ?>
       <section class="td-hero"<?php echo $bannerEstilo; ?>>
 
+               <?php if ($esJugadorLogueado): ?>
+            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=guardados&a=<?php echo $torneoGuardado ? 'quitar' : 'guardar'; ?>" class="form-guardar-torneo">
+               <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+               <input type="hidden" name="tipo" value="torneo">
+               <input type="hidden" name="referencia_id" value="<?php echo (int) $torneo['id']; ?>">
+               <input type="hidden" name="volver_a" value="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $torneo['id']; ?>">
+               <button type="submit" class="boton-guardar-torneo<?php echo $torneoGuardado ? ' guardado' : ''; ?>" title="<?php echo $torneoGuardado ? 'Quitar de guardados' : 'Guardar torneo'; ?>" aria-label="<?php echo $torneoGuardado ? 'Quitar de guardados' : 'Guardar torneo'; ?>">
+                  <i class="<?php echo $torneoGuardado ? 'fa-solid' : 'fa-regular'; ?> fa-bookmark"></i>
+               </button>
+            </form>
+         <?php endif; ?>
+
          <div class="td-hero-contenido td-hero-contenido--solo">            
             <h1><?php echo htmlspecialchars($torneo['nombre']); ?></h1>
             <p id="hero-subtitulo"><?php echo htmlspecialchars($torneo['nombre_juego']); ?> · <?php echo htmlspecialchars($etiquetasFormato[$torneo['formato']] ?? $torneo['formato']); ?></p>
@@ -160,7 +170,7 @@
                <?php elseif ($esModalidadIndividual): ?>
                   <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
                      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
-                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                  <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                      <input type="hidden" name="tipo" value="usuario">
                      <button type="submit" class="td-boton-inscripcion">Inscribirse</button>
                   </form>
@@ -171,8 +181,8 @@
 
                   <dialog class="td-modal" id="modal-inscripcion">
                      <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=inscribirse">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                     <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
                         <input type="hidden" name="tipo" value="equipo">
 
                         <h2><?php echo htmlspecialchars($torneo['nombre']); ?>: Modalidad - Equipos</h2>
@@ -194,7 +204,7 @@
                   </dialog>
                <?php endif; ?>
             </div>
-
+</div>
       </section>
 
       <!-------------------------------------->
@@ -361,7 +371,7 @@
                      <div class="perfil-organizador-label"><?php echo htmlspecialchars($torneo['nombre_organizador']); ?></div>
                         <div class="perfil-organizador-actions perfil-organizador-actions--centered">
                         <button class="perfil-boton-primario">Seguir</button>
-                           <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?> class="perfil-boton-secundario">Ver perfil</a>
+                           <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?>" class="perfil-boton-secundario">Ver perfil</a>
                      </div>
                   </div>
 
@@ -878,7 +888,7 @@
                </div>
                <div class="streaming-video-placeholder">
                   <a class="streaming-video-enlace" href="<?php echo htmlspecialchars($streamUrl); ?>" target="_blank" rel="noopener noreferrer">
-                     <img src="<?php echo URL_BASE; ?>img/chess.jpg" alt="Transmisión del torneo">
+                     <img src="<?php echo URL_BASE; ?>img/chess2.jpg" alt="Transmisión del torneo">
                      <?php if ($torneo['estado'] === 'en_curso'): ?>
                         <div class="live-badge"><i class="fa-solid fa-circle"></i> EN VIVO</div>
                      <?php endif; ?>

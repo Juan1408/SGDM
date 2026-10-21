@@ -287,7 +287,7 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <script>
       window.URL_BASE_JS = "<?php echo URL_BASE; ?>";

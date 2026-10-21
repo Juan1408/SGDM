@@ -71,7 +71,7 @@
           </button>
         </div>
         <div class="forgot-password">
-          <a href="<?php echo URL_BASE; ?>recuperar-password.html">¿Olvidaste tu contraseña?</a>
+          <span>Recuperación de contraseña no disponible en esta versión.</span>
         </div>
         <button type="submit" class="auth-btn">Ingresar</button>
       </form>

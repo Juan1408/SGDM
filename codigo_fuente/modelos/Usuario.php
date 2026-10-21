@@ -224,7 +224,6 @@ class Usuario {
         $sql = "UPDATE usuarios
             SET nombre_completo = :nombre_completo,
                 email = :email,
-                telefono = :telefono,
                 rol_id = :rol
             WHERE id = :id";
 
@@ -233,7 +232,6 @@ class Usuario {
         return $stmt->execute([
             'nombre_completo' => $datos['nombre_completo'],
             'email' => $datos['email'],
-            'telefono' => $datos['telefono'],
             'rol' => $datos['rol_id'],
             'id' => $usuarioId
         ]);
@@ -254,11 +252,29 @@ class Usuario {
         ]);
     }
 
-    //Metodo para eliminar un usuario (Baja fisica)
-    public function eliminarUsuario(int $usuarioId){
-        $sql = "DELETE FROM usuarios WHERE id = :id";
-        $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([':id' => $usuarioId]);
+    //Metodo para eliminar un usuario. Si tiene historial asociado, se desactiva
+    //en lugar de romper la integridad referencial.
+    public function eliminarUsuario(int $usuarioId): array {
+        try {
+            $stmt = $this->bd->prepare("DELETE FROM usuarios WHERE id = :id");
+            $stmt->execute([':id' => $usuarioId]);
+
+            if ($stmt->rowCount() === 0) {
+                return ['exito' => false, 'mensaje' => 'El usuario no existe.'];
+            }
+
+            return ['exito' => true, 'mensaje' => 'Usuario eliminado correctamente.'];
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                $stmt = $this->bd->prepare("UPDATE usuarios SET esta_activo = 0 WHERE id = :id");
+                $stmt->execute([':id' => $usuarioId]);
+                return [
+                    'exito' => true,
+                    'mensaje' => 'El usuario tiene historial asociado; se desactivó en lugar de eliminarse.'
+                ];
+            }
+            throw $e;
+        }
     }
 
     //Metodo para registrar un nuevo usuario en el sistema con generacion de token de verificacion por email
@@ -328,11 +344,19 @@ class Usuario {
                 'token' => $token,
                 'mensaje' => 'Registro completado con éxito.'
             ];
+        } catch (\PDOException $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            if ($e->getCode() === '23000') {
+                return ['exito' => false, 'mensaje' => 'El correo electrónico ya se encuentra registrado.'];
+            }
+            return ['exito' => false, 'mensaje' => 'No se pudo completar el registro. Intentá nuevamente.'];
         } catch (\Throwable $e) {
             if ($this->bd->inTransaction()) {
                 $this->bd->rollBack();
             }
-            return ['exito' => false, 'mensaje' => 'Error al registrar el usuario: ' . $e->getMessage()];
+            return ['exito' => false, 'mensaje' => 'No se pudo completar el registro. Intentá nuevamente.'];
         }
     }
 

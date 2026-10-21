@@ -240,6 +240,88 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        // ============================================================================
+    // METODOS DE LA HOME PUBLICA
+    // ============================================================================
+
+    //Torneos destacados: primero los de inscripciones abiertas (inicio mas proximo), despues los en curso
+    public function obtenerTorneosDestacados(int $limite = 6): array {
+        $sql = "SELECT t.id, t.nombre, t.formato, t.estado, t.cupo_max_equipos,
+                       t.fecha_inicio, t.fecha_fin, t.banner_url,
+                       j.nombre AS nombre_juego, j.categoria AS categoria_juego
+                FROM torneos t
+                INNER JOIN juegos j ON j.id = t.juego_id
+                WHERE t.estado IN ('inscripciones_abiertas', 'en_curso')
+                  AND (t.estado <> 'inscripciones_abiertas'
+                       OR t.fecha_limite_inscripcion IS NULL
+                       OR t.fecha_limite_inscripcion >= CURDATE())
+                ORDER BY (t.estado = 'inscripciones_abiertas') DESC, t.fecha_inicio IS NULL, t.fecha_inicio ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Proximos partidos programados de torneos activos (ambos participantes ya definidos)
+    public function obtenerProximosEnfrentamientos(int $limite = 4): array {
+        $sql = "SELECT e.id, e.torneo_id, e.fecha_hora_programada, e.cancha,
+                       t.stream_url, t.ubicacion,
+                       pl.nombre AS local_nombre, pv.nombre AS visitante_nombre,
+                       CASE WHEN pl.tipo = 'equipo' THEN el.escudo_url ELSE ul.foto_perfil_url END AS local_imagen,
+                       CASE WHEN pv.tipo = 'equipo' THEN ev.escudo_url ELSE uv.foto_perfil_url END AS visitante_imagen
+                FROM torneo_encuentros e
+                INNER JOIN torneos t ON t.id = e.torneo_id
+                INNER JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+                INNER JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+                LEFT JOIN equipos el ON pl.tipo = 'equipo' AND el.id = pl.referencia_id
+                LEFT JOIN usuarios ul ON pl.tipo = 'usuario' AND ul.id = pl.referencia_id
+                LEFT JOIN equipos ev ON pv.tipo = 'equipo' AND ev.id = pv.referencia_id
+                LEFT JOIN usuarios uv ON pv.tipo = 'usuario' AND uv.id = pv.referencia_id
+                WHERE e.estado = 'programado'
+                  AND e.fecha_hora_programada >= CURDATE()
+                  AND t.estado IN ('inscripciones_abiertas', 'en_curso')
+                ORDER BY e.fecha_hora_programada ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Numeros del banner de estadisticas
+    public function obtenerEstadisticasPublicas(): array {
+        $sql = "SELECT
+                    (SELECT COUNT(*) FROM usuarios) AS usuarios,
+                    (SELECT COUNT(*) FROM torneo_encuentros WHERE estado = 'finalizado') AS encuentros,
+                    (SELECT COUNT(*) FROM torneos WHERE estado NOT IN ('borrador', 'cancelado')) AS torneos,
+                    (SELECT COUNT(*) FROM equipos) AS equipos";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: ['usuarios' => 0, 'encuentros' => 0, 'torneos' => 0, 'equipos' => 0];
+    }
+
+    //Jugadores con mas victorias (las victorias se pueden comparar entre disciplinas, los puntos no)
+    public function obtenerTopJugadores(int $limite = 4): array {
+        $sql = "SELECT u.id,
+                       COALESCE(NULLIF(MAX(pj.apodo_gamertag), ''), u.nombre_completo) AS nombre,
+                       u.foto_perfil_url AS imagen,
+                       SUM(pos.partidos_ganados) AS victorias
+                FROM participantes_torneo p
+                INNER JOIN torneos t ON t.id = p.torneo_id
+                INNER JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                INNER JOIN usuarios u ON u.id = p.referencia_id
+                LEFT JOIN perfiles_jugadores pj ON pj.usuario_id = u.id
+                WHERE p.tipo = 'usuario' AND t.estado IN ('finalizado', 'en_curso')
+                GROUP BY u.id, u.nombre_completo, u.foto_perfil_url
+                HAVING victorias > 0
+                ORDER BY victorias DESC, nombre ASC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     //Metodo para obtener todos los torneos
     public function obtenerTorneos(){
@@ -329,7 +411,7 @@ class Torneo {
                        t.fecha_inicio, t.fecha_fin,
                        j.nombre AS juego_nombre,
                        u.nombre_completo AS organizador_nombre,
-                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'aprobado') AS total_participantes
+                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'confirmado') AS total_participantes
                 FROM torneos t
                 INNER JOIN juegos j ON t.juego_id = j.id
                 INNER JOIN usuarios u ON t.organizador_id = u.id
@@ -498,7 +580,8 @@ class Torneo {
                 AND fecha_inicio IS NOT NULL
                 AND fecha_fin IS NOT NULL";
         $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]);
+        //execute() devuelve true aunque no haya filas afectadas; rowCount distingue "publicado" de "no se pudo publicar"
+        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]) && $stmt->rowCount() > 0;
     }
 
     public function actualizarGestion(int $torneoId, int $organizadorId, array $datos): bool {
@@ -558,12 +641,16 @@ class Torneo {
             return false;
         }
 
-        if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
-            return false;
-        }
-
         try {
             $this->bd->beginTransaction();
+
+            //El podio se calcula y guarda dentro de la misma transaccion que el cambio de estado:
+            //si el UPDATE del torneo falla, no debe quedar un podio guardado de un torneo no finalizado.
+            if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
+                $this->bd->rollBack();
+                return false;
+            }
+
             $stmt = $this->bd->prepare(
                 "UPDATE torneos SET estado = :estado WHERE id = :id AND organizador_id = :organizador_id"
             );
@@ -572,6 +659,10 @@ class Torneo {
                 ':id' => $torneoId,
                 ':organizador_id' => $organizadorId,
             ]);
+            if ($stmt->rowCount() === 0) {
+                $this->bd->rollBack();
+                return false;
+            }
             $historial = $this->bd->prepare(
                 'INSERT INTO torneo_cambio_estado (torneo_id, estado_anterior, estado_nuevo, usuario_id)
                  VALUES (:torneo_id, :estado_anterior, :estado_nuevo, :usuario_id)'
@@ -909,6 +1000,10 @@ class Torneo {
             $cantidad = count($participantes);
             if ($torneo['formato'] === 'eliminacion_directa' && ($cantidad & ($cantidad - 1)) !== 0) {
                 throw new \RuntimeException('La eliminación directa necesita 2, 4, 8, 16, 32 o 64 participantes.');
+            }
+            //El suizo actual empareja de a dos y no tiene bye: con cantidad impar quedaria un jugador sin partido
+            if ($torneo['formato'] === 'suizo' && $cantidad % 2 !== 0) {
+                throw new \RuntimeException('El sistema suizo necesita una cantidad par de participantes.');
             }
 
             // Se reemplaza el fixture anterior (todavía sin resultados) y el historial de emparejamientos suizos

@@ -6,6 +6,7 @@ use App\Modelos\Equipo;
 use App\Modelos\Guardado;
 require_once __DIR__ . '/../ayudantes/Sesion.php';
 require_once __DIR__ . '/../modelos/Equipo.php';
+require_once __DIR__ . '/../modelos/Juego.php';
 require_once __DIR__ . '/../modelos/Guardado.php';
 
 class EquipoControlador {
@@ -25,6 +26,8 @@ class EquipoControlador {
 
     //Accion para mostrar el formulario de crear equipo
     public function crear(){
+        //Juegos activos para el select de disciplina del equipo
+        $juegos = \Juego::obtenerInstancia()->obtenerJuegosActivos();
         require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
     }
 
@@ -51,10 +54,21 @@ class EquipoControlador {
         $descripcion = trim($_POST['descripcion'] ?? '');
         $ubicacion = trim($_POST['ubicacion'] ?? '');
         $anioFundacion = trim($_POST['anio_fundacion'] ?? '');
+        $juegoId = (int) ($_POST['juego_id'] ?? 0);
+
+        //Los juegos se recargan porque, si hay error, se vuelve a mostrar el formulario
+        $juegos = \Juego::obtenerInstancia()->obtenerJuegosActivos();
 
         //Validacion minima
         if (empty($nombreEquipo)) {
             $error = "El nombre del equipo es obligatorio.";
+            require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
+            return;
+        }
+
+        //El equipo debe estar asociado a un juego activo (juego_id es FK a juegos)
+        if ($juegoId <= 0 || !\Juego::obtenerInstancia()->estaActivo($juegoId)) {
+            $error = "Seleccioná un juego válido para el equipo.";
             require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
             return;
         }
@@ -67,7 +81,7 @@ class EquipoControlador {
             return;
         }
 
-        $resultado = $this->modeloEquipo->crearEquipoCompleto($nombreEquipo, $usuarioId, $descripcion ?: null, $ubicacion ?: null, $anioFundacion !== '' ? (int) $anioFundacion : null);
+        $resultado = $this->modeloEquipo->crearEquipoCompleto($nombreEquipo, $usuarioId, $descripcion ?: null, $ubicacion ?: null, $anioFundacion !== '' ? (int) $anioFundacion : null, $juegoId);
         if (!$resultado['exito']) {
             $error = "No se pudo crear el equipo. Intenta de nuevo.";
             require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
@@ -97,7 +111,7 @@ if (!$equipo) {
 //Visitantes sin sesion tambien pueden ver el perfil
 Sesion::estaLogueado(); //solo inicia la sesion, no redirige
 $usuarioId = $_SESSION['usuario_id'] ?? null;
-$rolId = $_SESSION['rol_id'] ?? null;
+$rolId = (int) ($_SESSION['rol_id'] ?? 0);
 $esJugador = ($rolId === 3);
 
 $capitanes = $this->modeloEquipo->obtenerCapitanes($equipoId);

@@ -88,8 +88,21 @@
                <h2>Datos del equipo</h2>
 
                <div class="campo-grupo">
+                  <label for="crear-juego">Juego</label>
+                  <select name="juego_id" id="crear-juego" required>
+                     <option value="">Seleccioná un juego</option>
+                     <?php foreach (($juegos ?? []) as $juego): ?>
+                        <option value="<?php echo (int) $juego['id']; ?>"
+                           <?php echo (isset($_POST['juego_id']) && (int) $_POST['juego_id'] === (int) $juego['id']) ? 'selected' : ''; ?>>
+                           <?php echo htmlspecialchars($juego['nombre']); ?>
+                        </option>
+                     <?php endforeach; ?>
+                  </select>
+               </div>
+
+               <div class="campo-grupo">
                   <label for="crear-nombre">Nombre del equipo</label>
-                  <input type="text" name="nombre_equipo" id="crear-nombre" placeholder="Ej: Fire Wolves" required maxlength="100">
+                  <input type="text" name="nombre_equipo" id="crear-nombre" placeholder="Ej: Fire Wolves" required maxlength="100" value="<?php echo htmlspecialchars($_POST['nombre_equipo'] ?? ''); ?>">
                </div>
 
                <div class="campo-fila">
@@ -121,7 +134,7 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <!-- crear-equipo.js NO se carga: este formulario no necesita JS -->
    <!-- (required + POST nativo alcanzan; se vuelve a agregar cuando -->

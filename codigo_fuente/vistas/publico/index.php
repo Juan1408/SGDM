@@ -3,6 +3,65 @@ if (!defined('URL_BASE')) {
     require_once __DIR__ . '/../../configuracion/constantes.php';
 }
 ?>
+<?php
+$torneosDestacados = $torneosDestacados ?? [];
+$proximosEnfrentamientos = $proximosEnfrentamientos ?? [];
+$estadisticas = $estadisticas ?? [];
+$topJugadores = $topJugadores ?? [];
+
+//Ruta de imagen: URL completa si viene con http(s), si no se antepone URL_BASE
+$urlImagen = static function (?string $ruta, string $porDefecto): string {
+   $ruta = trim((string) $ruta);
+   if ($ruta === '') {
+      return URL_BASE . $porDefecto;
+   }
+   return preg_match('#^https?://#i', $ruta) ? $ruta : URL_BASE . ltrim($ruta, '/');
+};
+
+$mesesCorto = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+$fechaCorta = static function (?string $fecha) use ($mesesCorto): string {
+   if (empty($fecha)) {
+      return 'A confirmar';
+   }
+   $marca = strtotime($fecha);
+   return date('d', $marca) . ' ' . $mesesCorto[(int) date('n', $marca) - 1] . ' ' . date('Y', $marca);
+};
+
+$etiquetasFormato = ['liga' => 'Liga', 'suizo' => 'Sistema suizo', 'eliminacion_directa' => 'Eliminación directa'];
+$etiquetasEstado = ['inscripciones_abiertas' => 'Inscripciones abiertas', 'en_curso' => 'En curso'];
+
+//Categoria del juego (admin) a la etiqueta de las tarjetas, igual que en el catalogo de juegos
+$categoriaTexto = static function (?string $categoria): string {
+   $c = strtolower((string) $categoria);
+   if ($c === 'esport') {
+      return 'eSports';
+   }
+   return strpos($c, 'deporte') === 0 ? 'Tradicional' : 'De mesa';
+};
+
+//Icono y texto del canal del partido: plataforma de la transmision, o la cancha / ubicacion
+$canalPartido = static function (array $p): array {
+   $stream = trim((string) ($p['stream_url'] ?? ''));
+   if (preg_match('#^https?://#i', $stream)) {
+      $host = strtolower((string) parse_url($stream, PHP_URL_HOST));
+      $plataformas = [
+         'twitch' => ['fa-brands fa-twitch', 'Twitch'],
+         'youtu' => ['fa-brands fa-youtube', 'YouTube'],
+         'discord' => ['fa-brands fa-discord', 'Discord'],
+         'facebook' => ['fa-brands fa-facebook', 'Facebook'],
+         'tiktok' => ['fa-brands fa-tiktok', 'TikTok'],
+      ];
+      foreach ($plataformas as $clave => $datos) {
+         if (strpos($host, $clave) !== false) {
+            return $datos;
+         }
+      }
+      return ['fa-solid fa-tv', 'Transmisión'];
+   }
+   $lugar = trim((string) ($p['cancha'] ?? '')) ?: trim((string) ($p['ubicacion'] ?? ''));
+   return ['fa-solid fa-location-dot', $lugar !== '' ? $lugar : 'A definir'];
+};
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,9 +71,6 @@ if (!defined('URL_BASE')) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <title>ASCEND</title>
-
-   <!-- Swiper.js -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
@@ -121,7 +177,7 @@ if (!defined('URL_BASE')) {
 
             <li>
                <article class="tarjetas">
-                  <i class="fa-solid fa-trofeo"></i>
+                  <i class="fa-solid fa-trophy"></i>
                   <h2>Juegos Tradicionales</h2>
                   <p>Organizá torneos de deportes, juegos clásicos y competencias presenciales.</p>
                </article>
@@ -154,7 +210,7 @@ if (!defined('URL_BASE')) {
 
                <li class="funcionalidades-item">
                   <div class="caracteristica-icon cyan">
-                     <i class="fa-solid fa-trofeo"></i>
+                     <i class="fa-solid fa-trophy"></i>
                   </div>
                   <div>
                      <h3>Crear torneos</h3>
@@ -218,191 +274,43 @@ if (!defined('URL_BASE')) {
          <div class="torneos-slider">
             <ul class="torneos-carrusel" mask>
 
-               <!-- CARD -->
+               <?php if (empty($torneosDestacados)): ?>
+                  <li><p>Todavía no hay torneos con inscripciones abiertas.</p></li>
+               <?php endif; ?>
 
+               <?php foreach ($torneosDestacados as $t): ?>
                <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card1.jpg" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Valorant Champion Series</h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              eSports
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              32 Equipos
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              Finales
-                           </span>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $t['id']; ?>" class="torneo-tarjeta-enlace">
+                     <article class="torneo-tarjeta">
+                        <img src="<?php echo htmlspecialchars($urlImagen($t['banner_url'], 'img/torneos/card1.jpg')); ?>" alt="<?php echo htmlspecialchars($t['nombre']); ?>">
+                        <div class="tarjeta-contenido">
+                           <h3><?php echo htmlspecialchars($t['nombre']); ?></h3>
+                           <div class="tarjeta-meta">
+                              <span>
+                                 <i class="fa-solid fa-gamepad"></i>
+                                 <?php echo htmlspecialchars($categoriaTexto($t['categoria_juego'])); ?>
+                              </span>
+                              <span>
+                                 <i class="fa-solid fa-users"></i>
+                                 <?php echo (int) $t['cupo_max_equipos']; ?> cupos
+                              </span>
+                              <span>
+                                 <i class="fa-solid fa-trophy"></i>
+                                 <?php echo htmlspecialchars($etiquetasEstado[$t['estado']] ?? $t['estado']); ?>
+                              </span>
+                           </div>
+                           <div class="tarjeta-tipo">
+                              <i class="fa-solid fa-diagram-project"></i>
+                              <p><?php echo htmlspecialchars($etiquetasFormato[$t['formato']] ?? $t['formato']); ?></p>
+                           </div>
+                           <div class="tarjeta-fecha">
+                              <?php echo htmlspecialchars($fechaCorta($t['fecha_inicio']) . ' - ' . $fechaCorta($t['fecha_fin'])); ?>
+                           </div>
                         </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Eliminación Directa</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
+                     </article>
+                  </a>
                </li>
-
-               <!-------------------------------------->
-               <!-- DUPLICAR CARDS -------------------->
-               <!-------------------------------------->
-
-               <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card2.png" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Gran Campeonato de Truco</h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              De mesa
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              64 Participantes
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              En curso
-                           </span>
-                        </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Eliminación Directa</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
-               </li>
-
-               <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card3.png" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Copa Futbol 5</h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              Tradicional
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              12 Equipos
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              Finales
-                           </span>
-                        </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Eliminación Directa</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
-               </li>
-
-               <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card5.jpg" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Valorant Champion Series</h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              eSports
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              32 Equipos
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              Finales
-                           </span>
-                        </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Eliminación Directa</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
-               </li>
-
-               <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card4.png" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Torneo Ajedrez </h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              De mesa
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              32 Personas
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              Finales
-                           </span>
-                        </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Sistema Suizo</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
-               </li>
-
-               <li>
-                  <article class="torneo-tarjeta">
-                     <img src="<?php echo URL_BASE; ?>img/torneos/card6.png" alt="Valorant">
-                     <div class="tarjeta-contenido">
-                        <h3>Torneo Naciona de Basquet</h3>
-                        <div class="tarjeta-meta">
-                           <span>
-                              <i class="fa-solid fa-gamepad"></i>
-                              Tradicional
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-users"></i>
-                              24 Equipos
-                           </span>
-                           <span>
-                              <i class="fa-solid fa-trofeo"></i>
-                              Finales
-                           </span>
-                        </div>
-                        <div class="tarjeta-tipo">
-                           <i class="fa-solid fa-diagram-project"></i>
-                           <p>Eliminación Directa</p>
-                        </div>
-                        <div class="tarjeta-fecha">
-                           Mayo 2026 - Junio 2026
-                        </div>
-                     </div>
-                  </article>
-               </li>
+               <?php endforeach; ?>
             </ul>
          </div>
       </section>
@@ -420,100 +328,36 @@ if (!defined('URL_BASE')) {
 
          <ul class="vs-lista">
 
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle" class="enfrentamiento-tarjeta">
+            <?php if (empty($proximosEnfrentamientos)): ?>
+               <li><p>Todavía no hay enfrentamientos programados.</p></li>
+            <?php endif; ?>
 
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/bf.png" alt="Black Ferns" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Black Ferns</span>
-                  </div>
+            <?php foreach ($proximosEnfrentamientos as $p): ?>
+               <?php [$iconoCanal, $textoCanal] = $canalPartido($p); ?>
+               <li>
+                  <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $p['torneo_id']; ?>" class="enfrentamiento-tarjeta">
 
-                  <div class="enfrentamiento-centro">
-                     <span class="enfrentamiento-vs">Vs</span>
-                     <span class="enfrentamiento-fecha">26 Ago 2026</span>
-                     <span class="enfrentamiento-canal">
-                        <i class="fa-brands fa-discord"></i> Discord
-                     </span>
-                  </div>
+                     <div class="enfrentamiento-equipo">
+                        <img src="<?php echo htmlspecialchars($urlImagen($p['local_imagen'], 'img/avatars/a1.png')); ?>" alt="<?php echo htmlspecialchars($p['local_nombre']); ?>" class="enfrentamiento-logo">
+                        <span class="enfrentamiento-nombre"><?php echo htmlspecialchars($p['local_nombre']); ?></span>
+                     </div>
 
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/eagles.png" alt="Woman's Eagles" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Woman's Eagles</span>
-                  </div>
+                     <div class="enfrentamiento-centro">
+                        <span class="enfrentamiento-vs">Vs</span>
+                        <span class="enfrentamiento-fecha"><?php echo htmlspecialchars($fechaCorta($p['fecha_hora_programada']) . ' · ' . date('H:i', strtotime($p['fecha_hora_programada']))); ?></span>
+                        <span class="enfrentamiento-canal">
+                           <i class="<?php echo $iconoCanal; ?>"></i> <?php echo htmlspecialchars($textoCanal); ?>
+                        </span>
+                     </div>
 
-               </a>
-            </li>
+                     <div class="enfrentamiento-equipo">
+                        <img src="<?php echo htmlspecialchars($urlImagen($p['visitante_imagen'], 'img/avatars/a1.png')); ?>" alt="<?php echo htmlspecialchars($p['visitante_nombre']); ?>" class="enfrentamiento-logo">
+                        <span class="enfrentamiento-nombre"><?php echo htmlspecialchars($p['visitante_nombre']); ?></span>
+                     </div>
 
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=fire-wolves-cyber-titans" class="enfrentamiento-tarjeta">
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/durazno.png" alt="Fire Wolves" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Fire Wolves</span>
-                  </div>
-
-                  <div class="enfrentamiento-centro">
-                     <span class="enfrentamiento-vs">Vs</span>
-                     <span class="enfrentamiento-fecha">15 Ago 2026</span>
-                     <span class="enfrentamiento-canal">
-                        <i class="fa-brands fa-twitch"></i> Twitch
-                     </span>
-                  </div>
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/flores.png" alt="Cyber Titans" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Cyber Titans</span>
-                  </div>
-
-               </a>
-            </li>
-
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=artigas-canelones" class="enfrentamiento-tarjeta">
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/artigas.png" alt="Artigas" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Artigas</span>
-                  </div>
-
-                  <div class="enfrentamiento-centro">
-                     <span class="enfrentamiento-vs">Vs</span>
-                     <span class="enfrentamiento-fecha">18 Ago 2026</span>
-                     <span class="enfrentamiento-canal">
-                        <i class="fa-brands fa-youtube"></i> YouTube
-                     </span>
-                  </div>
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/canelones.png" alt="Canelones" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Canelones</span>
-                  </div>
-
-               </a>
-            </li>
-
-            <li>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=colonia-cerro-largo" class="enfrentamiento-tarjeta">
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/colonia.png" alt="Colonia" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Colonia</span>
-                  </div>
-
-                  <div class="enfrentamiento-centro">
-                     <span class="enfrentamiento-vs">Vs</span>
-                     <span class="enfrentamiento-fecha">22 Ago 2026</span>
-                     <span class="enfrentamiento-canal">
-                        <i class="fa-brands fa-twitch"></i> Twitch
-                     </span>
-                  </div>
-
-                  <div class="enfrentamiento-equipo">
-                     <img src="<?php echo URL_BASE; ?>img/logos/cerro-largo.png" alt="Cerro Largo" class="enfrentamiento-logo">
-                     <span class="enfrentamiento-nombre">Cerro Largo</span>
-                  </div>
-               </a>
-            </li>
+                  </a>
+               </li>
+            <?php endforeach; ?>
          </ul>
       </section>
 
@@ -579,25 +423,12 @@ if (!defined('URL_BASE')) {
 
          <dl class="estadisticas-grid">
 
+            <?php foreach ([['usuarios', 'Usuarios'], ['encuentros', 'Encuentros'], ['torneos', 'Torneos'], ['equipos', 'Equipos']] as [$clave, $etiqueta]): ?>
             <div class="estadisticas-item">
-               <dd>+1.000</dd>
-               <dt>Usuarios</dt>
+               <dd><?php echo number_format((int) ($estadisticas[$clave] ?? 0), 0, ',', '.'); ?></dd>
+               <dt><?php echo $etiqueta; ?></dt>
             </div>
-
-            <div class="estadisticas-item">
-               <dd>+500</dd>
-               <dt>Encuentros</dt>
-            </div>
-
-            <div class="estadisticas-item">
-               <dd>+1.000</dd>
-               <dt>Premios</dt>
-            </div>
-
-            <div class="estadisticas-item">
-               <dd>+200</dd>
-               <dt>Ligas</dt>
-            </div>
+            <?php endforeach; ?>
 
          </dl>
 
@@ -606,7 +437,7 @@ if (!defined('URL_BASE')) {
       <!-------------------------------------->
       <!-- TOP JUGADORES --------------------->
       <!-------------------------------------->
-
+   <?php if (!empty($topJugadores)): ?>
       <section class="top-jugadores reveal">
 
          <div class="top-jugadores-header">
@@ -617,64 +448,25 @@ if (!defined('URL_BASE')) {
 
          <ul class="top-jugadores-fila">
 
+                     <?php foreach ($topJugadores as $i => $jug): ?>
             <li>
-               <article class="top-jugador-tarjeta drop-down">
+               <article class="top-jugador-tarjeta <?php echo $i % 2 === 0 ? 'drop-down' : 'drop-up'; ?>">
                   <img
-                     src="<?php echo URL_BASE; ?>img/avatars/a1.png"
-                     alt="Jugador"
+                     src="<?php echo htmlspecialchars($urlImagen($jug['imagen'], 'img/avatars/a1.png')); ?>"
+                     alt="<?php echo htmlspecialchars($jug['nombre']); ?>"
                      class="jugador-img">
 
                   <div class="jugador-info">
-                     <h3>KryptoNick</h3>
-                     <p>
-                        <i class="fa-solid fa-gamepad"></i> Jugador destacado</p>
+                     <h3><?php echo htmlspecialchars($jug['nombre']); ?></h3>
+                     <p><i class="fa-solid fa-trophy"></i> <?php echo (int) $jug['victorias']; ?> <?php echo (int) $jug['victorias'] === 1 ? 'victoria' : 'victorias'; ?></p>
                   </div>
                </article>
             </li>
-
-            <li>
-               <article class="top-jugador-tarjeta drop-up">
-                  <img
-                     src="<?php echo URL_BASE; ?>img/avatars/a2.png"
-                     alt="Jugador"
-                     class="jugador-img">
-
-                  <div class="jugador-info">
-                     <h3>Tonysparkog</h3>
-                     <p><i class="fa-solid fa-gamepad"></i> Top eSports</p>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="top-jugador-tarjeta drop-down">
-                  <img
-                     src="<?php echo URL_BASE; ?>img/avatars/a3.png"
-                     alt="Jugador"
-                     class="jugador-img">
-
-                  <div class="jugador-info">
-                     <h3>Awwwsnap</h3>
-                     <p><i class="fa-solid fa-chess-knight"></i> Jugador estratégico</p>
-                  </div>
-               </article>
-            </li>
-
-            <li>
-               <article class="top-jugador-tarjeta drop-up">
-                  <img
-                     src="<?php echo URL_BASE; ?>img/avatars/a5.png"
-                     alt="Jugador"
-                     class="jugador-img">
-
-                  <div class="jugador-info">
-                     <h3>CyberNova</h3>
-                     <p><i class="fa-solid fa-brain"></i> Top mental</p>
-                  </div>
-               </article>
-            </li>
+            <?php endforeach; ?>
+            
          </ul>
       </section>
+   <?php endif; ?>
 
       <!-------------------------------------->
       <!-- NEWSLETTER ------------------------->
@@ -703,8 +495,6 @@ if (!defined('URL_BASE')) {
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/featured-games.js"></script>
-   <script src="<?php echo URL_BASE; ?>js/carruselTorneos.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 </body>
 

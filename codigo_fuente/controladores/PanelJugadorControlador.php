@@ -48,6 +48,7 @@ class PanelJugadorControlador {
         $usuarioId = $_SESSION['usuario_id'];
         $datos = $this->modeloJugador->obtenerPerfil($usuarioId);
         $equipos = $this->modeloEquipo->obtenerEquiposDelJugador($usuarioId);
+        $logros = $this->modeloJugador->obtenerLogros($usuarioId);
 
         //Torneos reales: inscripciones del jugador (directas o por sus equipos), sin las rechazadas/canceladas
         $equipoIds = array_column($equipos, 'id');
@@ -144,7 +145,11 @@ class PanelJugadorControlador {
             'banner_url' => $bannerUrl, 'campos_publicos' => $camposPublicos
         ];
 
-        $this->modeloJugador->actualizarPerfil($usuarioId, $datosUsuario, $datosPerfil);
+        $ok = $this->modeloJugador->actualizarPerfil($usuarioId, $datosUsuario, $datosPerfil);
+        if (!$ok) {
+            $this->mostrarEdicion("No se pudo guardar el perfil. Intentá de nuevo.", $enviados);
+            return;
+        }
 
         //Actualizamos el nombre/email en sesion para que se reflejen sin tener que volver a loguearse
         $_SESSION['usuario_nombre'] = $nombreCompleto;

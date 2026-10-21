@@ -158,11 +158,11 @@
             <div class="contenido-desplegable">
                <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Todos los Torneos</a>
                <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Detalle Torneos</a>
-               <a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index">Juegos</a>
+               <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=juegos">Juegos</a>
             </div>
          </li>
 
-         <li><a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=rankings">Rankings</a></li>
+         <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=rankings">Rankings</a></li>
          <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=nosotros">Nosotros</a></li>
          <li><a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=contacto">Contacto</a></li>
 
@@ -195,7 +195,7 @@
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=editarPerfil"><i class="fa-solid fa-pen"></i> Editar perfil</a>
                      <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
                      <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=auth&a=logout">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                           <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                         <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
                      </form>
                   </div>

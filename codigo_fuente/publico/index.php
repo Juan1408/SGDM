@@ -47,10 +47,11 @@ $rutasPermitidas = [
     'guardados' => ['index', 'guardar', 'quitar'],
     'juego' => ['index', 'crear', 'guardar', 'cambiarEstado', 'editar', 'actualizar'],
     'jugador' => ['index'],
-    'organizador' => ['index', 'cambiarVerificacion', 'responderSolicitud'],
-    'panelJugador' => ['dashboard', 'perfil', 'actualizarPerfil'],
-    'panelOrganizador' => ['dashboard', 'crear', 'misTorneos', 'resultados', 'calendario', 'historial', 'perfil', 'guardarPerfil', 'administrar', 'cambiarEstado', 'responderInscripcion', 'quitarParticipante', 'generarFixture', 'programarEncuentro', 'agregarActividad', 'editarActividad', 'eliminarActividad', 'editarTorneo', 'guardarResultado', 'guardarEtapa'],
-    'inicio' => ['index', 'enConstruccion', 'contacto', 'juegos', 'nosotros', 'perfilPublicoOrganizador', 'rankings'],
+    'perfil' => ['jugador', 'organizador'],
+    'organizador' => ['index', 'responderSolicitud'],
+    'panelJugador' => ['dashboard', 'perfil', 'actualizarPerfil', 'editarPerfil'],
+    'panelOrganizador' => ['dashboard', 'crear', 'misTorneos', 'resultados', 'calendario', 'historial', 'perfil', 'editarPerfil', 'guardarPerfil', 'administrar', 'cambiarEstado', 'responderInscripcion', 'quitarParticipante', 'generarFixture', 'programarEncuentro', 'agregarActividad', 'editarActividad', 'eliminarActividad', 'editarTorneo', 'guardarResultado', 'guardarEtapa'],
+    'inicio' => ['index', 'enConstruccion', 'contacto', 'juegos', 'nosotros', 'rankings'],
     'torneo' => ['catalogoPublico', 'detalle', 'inscribirse'],
     'politicaContrasena' => ['index', 'guardar'],
     'resultadoGlobal' => ['index'],
@@ -101,10 +102,14 @@ if (file_exists($rutaArchivo)) {
     if (method_exists($instancia, $accion)){
         $instancia->$accion();
     } else {
-        echo "<h1>Error 404</h1><p>La accion no existe en este controlador</p>";
+        http_response_code(404);
+        echo "<h1>Error 404</h1><p>La acción no existe en este controlador.</p>";
+        exit;
     }
 } else {
-    echo "<h1>Error 404</h1><p>El controlador no existe</p>";
+    http_response_code(404);
+    echo "<h1>Error 404</h1><p>El controlador no existe.</p>";
+    exit;
 }
 
 // ============================================================================

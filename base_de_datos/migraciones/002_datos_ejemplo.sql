@@ -1,6 +1,9 @@
 -- datos_ejemplo.sql
 -- Semillas para poblar la base de datos con datos de prueba
 
+USE ascend;
+SET NAMES utf8mb4;
+
 -- =============================================================================
 -- 9. DATOS SEMILLA (Seeders Iniciales para Pruebas y Producción)
 -- =============================================================================

@@ -358,7 +358,7 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
             <!-- ===================== PASO 3: ACTIVIDADES ===================== -->
             <form class="crear-torneo-bloque" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarEtapa">
                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="etapa" value="3">
+            <input type="hidden" name="etapa" value="3">
                 <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
 
                 <fieldset class="crear-torneo-campo">
@@ -395,7 +395,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
                         <input name="actividad_hora[]" type="time">
                         <button type="button" class="actividad-quitar" aria-label="Quitar actividad"><i class="fa-solid fa-trash"></i></button>
                         <input class="actividad-descripcion-campo" name="actividad_descripcion[]" type="text" maxlength="255" placeholder="Descripción breve (opcional)">
-                        <input class="actividad-descripcion-campo" name="actividad_descripcion[]" type="text" maxlength="255" placeholder="Descripción breve (opcional)" value="<?php echo $e($actividad['descripcion'] ?? ''); ?>">
                     </div>
                 </template>
 
@@ -570,6 +569,6 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
             }
         });
     </script>
-    <?php include __DIR__ . '/../componentes/footer.html'; ?>
+    <?php include __DIR__ . '/../componentes/footer.php'; ?>
 </body>
 </html>

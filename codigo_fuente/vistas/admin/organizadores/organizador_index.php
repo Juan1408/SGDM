@@ -82,9 +82,14 @@
                                 <button type="submit" class="boton-accion">Ver Como</button>
                             </form>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario&id=<?php echo $organizador['id']; ?>" class="boton-secundario">
-                                <?php echo $organizador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
-                            </a>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario" style="display:inline-block;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="id" value="<?php echo (int) $organizador['id']; ?>">
+                                <input type="hidden" name="rol_id" value="2">
+                                <button type="submit" class="boton-secundario">
+                                    <?php echo $organizador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -95,7 +95,7 @@
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <!-- solicitudes.js NO se carga: la lista se arma del lado del servidor -->
 

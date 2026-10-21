@@ -21,7 +21,7 @@ asort($juegosCatalogo);
 
 //Categoria de la base -> chip del catalogo
 $tipoDeJuego = static function (string $categoria): string {
-   if (strpos($categoria, 'esport-') === 0) { return 'esports'; }
+   if ($categoria === 'esport' || strpos($categoria, 'esport-') === 0) { return 'esports'; }
    if ($categoria === 'deporte-fisico') { return 'tradicionales'; }
    if ($categoria === 'juego-mesa') { return 'mentales'; }
    return '';
@@ -37,9 +37,6 @@ $tipoDeJuego = static function (string $categoria): string {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <title>ASCEND</title>
-
-   <!-- Swiper.js -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">

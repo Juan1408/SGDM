@@ -67,7 +67,7 @@ $opcionesPrivacidad = [
 
       <form action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=guardarPerfil" method="POST"
             enctype="multipart/form-data" id="form-editar-perfil">
-
+         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
          <!-- ============================== -->
          <!-- SECCION 1: MIS DATOS           -->
          <!-- ============================== -->
@@ -170,7 +170,7 @@ $opcionesPrivacidad = [
    </main>
 
    <!-- FOOTER ---------------------------->
-   <?php include __DIR__ . '/../componentes/footer.html'; ?>
+   <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
    <script src="<?php echo URL_BASE; ?>js/editar-perfil-jugador.js"></script>
 

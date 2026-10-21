@@ -33,16 +33,17 @@ class Equipo {
     }
 
      //Metodo para crear un equipo (columnas reales de la tabla 'equipos')
-    public function crearEquipo(string $nombreEquipo, int $creadoPor, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?string $escudoUrl = null, ?string $bannerUrl = null, ?string $codigoInvitacion = null){
+    public function crearEquipo(string $nombreEquipo, int $creadoPor, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?string $escudoUrl = null, ?string $bannerUrl = null, ?string $codigoInvitacion = null, ?int $juegoId = null){
         //Preparamos la consulta SQL con las columnas que realmente existen en 'equipos'
-        $sql = "INSERT INTO equipos (nombre_equipo, creado_por, descripcion, ubicacion, anio_fundacion, escudo_url, banner_url, codigo_invitacion)
-                VALUES (:nombreEquipo, :creadoPor, :descripcion, :ubicacion, :anioFundacion, :escudoUrl, :bannerUrl, :codigoInvitacion)";
+        $sql = "INSERT INTO equipos (nombre_equipo, creado_por, juego_id, descripcion, ubicacion, anio_fundacion, escudo_url, banner_url, codigo_invitacion)
+                VALUES (:nombreEquipo, :creadoPor, :juegoId, :descripcion, :ubicacion, :anioFundacion, :escudoUrl, :bannerUrl, :codigoInvitacion)";
         //Preparamos la consulta para evitar inyección SQL
         $stmt = $this->bd->prepare($sql);
         //Ejecutamos la consulta pasandole los datos
         $stmt->execute([
             ':nombreEquipo' => $nombreEquipo,
             ':creadoPor' => $creadoPor,
+            ':juegoId' => $juegoId,
             ':descripcion' => $descripcion,
             ':ubicacion' => $ubicacion,
             ':anioFundacion' => $anioFundacion,
@@ -72,18 +73,16 @@ class Equipo {
 
     //Metodo para crear un equipo completo: el equipo + el creador como miembro + el creador como capitan principal
     //Usamos una transaccion porque son 3 inserciones relacionadas: si una falla, no queremos que las otras queden a medias
-    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null): array {        
+    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?int $juegoId = null): array {
         try {
             $this->bd->beginTransaction();
 
             $codigoInvitacion = $this->generarCodigoInvitacion();
 
             //1. Creamos el equipo (escudo y banner quedan null por ahora, se suben en un paso aparte)
-            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, null, null, $codigoInvitacion);
+            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, null, null, $codigoInvitacion, $juegoId);
             //2. El creador queda como miembro del equipo
-            $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-            $stmtMiembro = $this->bd->prepare($sqlMiembro);
-            $stmtMiembro->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
+            $this->agregarMiembro((int) $equipoId, $usuarioId);
 
             //3. El creador queda como capitan principal (asignado_por: se asigna a si mismo, no hay nadie mas todavia)
             $sqlCapitan = "INSERT INTO equipo_capitanes (equipo_id, usuario_id, asignado_por, es_capitan_principal) VALUES (:equipoId, :usuarioIdCapitan, :usuarioIdAsigna, 1)";
@@ -102,6 +101,17 @@ class Equipo {
             $this->bd->rollBack();
             return ['exito' => false, 'error' => $e->getMessage()];
         }
+    }
+
+    //Metodo interno para sumar (o reactivar) a un usuario como miembro activo del equipo.
+    //Usamos ON DUPLICATE KEY UPDATE porque la PK es (equipo_id, usuario_id): si el jugador
+    //ya habia estado en el equipo (expulsado o se fue), hay que reactivar su fila en lugar de fallar.
+    private function agregarMiembro(int $equipoId, int $usuarioId): void {
+        $sql = "INSERT INTO equipo_miembros (equipo_id, usuario_id, es_activo, fecha_union)
+                VALUES (:equipoId, :usuarioId, 1, CURRENT_TIMESTAMP)
+                ON DUPLICATE KEY UPDATE es_activo = 1, fecha_union = CURRENT_TIMESTAMP";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
     }
 
         //Metodo para eliminar un equipo (Soft Delete)
@@ -219,8 +229,17 @@ class Equipo {
     //Metodo para crear una solicitud de union a un equipo
     //$iniciadoPor: quien la origino (el propio jugador pidiendo entrar, o el capitan invitando)
     public function crearSolicitud(int $equipoId, int $usuarioId, int $iniciadoPor, ?string $mensaje = null): bool {
+        //ON DUPLICATE KEY UPDATE permite volver a postularse despues de un rechazo:
+        //la PK logica es (equipo_id, usuario_id), asi que reutilizamos esa fila y la dejamos pendiente otra vez.
         $sql = "INSERT INTO solicitudes_equipo (equipo_id, usuario_id, iniciado_por, mensaje, estado)
-                VALUES (:equipoId, :usuarioId, :iniciadoPor, :mensaje, 'pendiente')";
+                VALUES (:equipoId, :usuarioId, :iniciadoPor, :mensaje, 'pendiente')
+                ON DUPLICATE KEY UPDATE
+                    iniciado_por = VALUES(iniciado_por),
+                    mensaje = VALUES(mensaje),
+                    estado = 'pendiente',
+                    fecha_solicitud = CURRENT_TIMESTAMP,
+                    fecha_respuesta = NULL,
+                    respondido_por = NULL";
         $stmt = $this->bd->prepare($sql);
         return $stmt->execute([
             ':equipoId' => $equipoId,
@@ -276,11 +295,9 @@ class Equipo {
                 ':id' => $solicitudId
             ]);
 
-            //Si acepto, lo sumamos de verdad como miembro del equipo
+            //Si acepto, lo sumamos de verdad como miembro del equipo (reactivandolo si ya habia estado)
             if ($aceptar) {
-                $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-                $stmtMiembro = $this->bd->prepare($sqlMiembro);
-                $stmtMiembro->execute([':equipoId' => $solicitud['equipo_id'], ':usuarioId' => $usuarioId]);
+                $this->agregarMiembro((int) $solicitud['equipo_id'], $usuarioId);
             }
 
             $this->bd->commit();
@@ -378,6 +395,16 @@ class Equipo {
         try {
             $this->bd->beginTransaction();
 
+            //Solo un capitan del equipo puede aceptar/rechazar solicitudes (defensa en profundidad,
+            //aunque el controlador ya lo valida)
+            $sqlCapitan = "SELECT 1 FROM equipo_capitanes WHERE equipo_id = :equipoId AND usuario_id = :respondidoPor LIMIT 1";
+            $stmtCapitan = $this->bd->prepare($sqlCapitan);
+            $stmtCapitan->execute([':equipoId' => $equipoId, ':respondidoPor' => $respondidoPor]);
+            if (!$stmtCapitan->fetch(PDO::FETCH_ASSOC)) {
+                $this->bd->rollBack();
+                return ['exito' => false, 'error' => 'Solo un capitán del equipo puede responder esta solicitud.'];
+            }
+
             //Verificamos que la solicitud sea de ESTE equipo y siga pendiente
             $sqlVerificar = "SELECT usuario_id FROM solicitudes_equipo WHERE id = :id AND equipo_id = :equipoId AND estado = 'pendiente' LIMIT 1 FOR UPDATE";
             $stmtVerificar = $this->bd->prepare($sqlVerificar);
@@ -401,11 +428,9 @@ class Equipo {
                 ':id' => $solicitudId
             ]);
 
-            //Si se acepto, sumamos al jugador que pidio entrar como miembro real
+            //Si se acepto, sumamos al jugador que pidio entrar como miembro real (reactivandolo si ya habia estado)
             if ($aceptar) {
-                $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-                $stmtMiembro = $this->bd->prepare($sqlMiembro);
-                $stmtMiembro->execute([':equipoId' => $equipoId, ':usuarioId' => $solicitud['usuario_id']]);
+                $this->agregarMiembro($equipoId, (int) $solicitud['usuario_id']);
             }
 
             $this->bd->commit();
@@ -418,6 +443,11 @@ class Equipo {
 
         //Metodo para designar a un miembro como capitan adicional (sub-capitan)
     public function hacerCapitan(int $equipoId, int $usuarioId, int $asignadoPor): bool {
+        //Solo se puede nombrar capitan a alguien que sea miembro activo del equipo
+        if (!$this->esMiembro($equipoId, $usuarioId)) {
+            return false;
+        }
+
         //Si ya es capitan no hacemos nada (evita el error de clave duplicada)
         if ($this->esCapitan($equipoId, $usuarioId)) {
             return false;

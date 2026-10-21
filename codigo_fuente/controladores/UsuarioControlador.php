@@ -55,8 +55,15 @@ class UsuarioControlador {
             }
         }
 
-        //Recargamos la tabla de usuarios redirigiendo a la lista
-        header("Location: " . URL_BASE . "index.php?c=usuario&a=index");
+        //Recargamos la lista de origen según el rol del usuario afectado
+        $rolId = isset($_POST['rol_id']) ? (int) $_POST['rol_id'] : 0;
+        if ($rolId === 3) {
+            header("Location: " . URL_BASE . "index.php?c=jugador&a=index");
+        } elseif ($rolId === 2) {
+            header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
+        } else {
+            header("Location: " . URL_BASE . "index.php?c=usuario&a=index");
+        }
         exit();
     }
 
@@ -102,11 +109,7 @@ class UsuarioControlador {
         }
         Sesion::requerirTokensCSRF();
 
-        $_SESSION['admin_antes_suplantar'] = [
-            'usuario_id' => $_SESSION['usuario_id'],
-            'usuario_nombre' => $_SESSION['usuario_nombre'],
-            'rol_id' => $_SESSION['rol_id']
-        ];
+        $_SESSION['admin_antes_suplantar'] = $_SESSION['admin_antes_suplantar'] ?? $_SESSION['usuario_id'];
         $usuarioId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
         //Traemos todos los datos del jugador desde el modelo con el metodo ya creado
@@ -114,9 +117,6 @@ class UsuarioControlador {
 
         //Si el jugador existe y esta activo
         if ($usuario && $usuario['esta_activo'] == 1) {
-            //Guardamos nuestra sesion antes de entrar como usuario
-            $_SESSION['admin_antes_suplantar'] = $_SESSION['usuario_id'];
-
             //Sobreescribimos la sesion con los datos del usuario
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['usuario_nombre'] = $usuario['nombre_completo'];
@@ -140,11 +140,12 @@ class UsuarioControlador {
             //Si el usuario no existe o esta bloqueado lo indicamos con un mensaje de error
             $_SESSION['mensaje'] = "No puedes suplantar a un usuario bloqueado o inexistente.";
 
-            //Si es jugador redirigimos a la lista de jugadores
-            if ($usuario['rol_id'] == 3){
+            //Redirigimos segun el rol del usuario objetivo (si existe); si no, a la lista general
+            $rolDestino = (int) ($usuario['rol_id'] ?? 0);
+            if ($rolDestino === 3){
                 header("Location: " . URL_BASE . "index.php?c=jugador&a=index");
                 exit();
-            } else if ($usuario['rol_id'] == 2){
+            } else if ($rolDestino === 2){
                 header("Location: " . URL_BASE . "index.php?c=organizador&a=index");
                 exit();
             } else {
@@ -162,8 +163,12 @@ class UsuarioControlador {
         
         // Verificamos si existe la variable de sesion original
         if (isset($_SESSION['admin_antes_suplantar'])) {
-            $adminId = (int)$_SESSION['admin_antes_suplantar'];
-            
+            // Compatibilidad con sesiones creadas antes de guardar solo el id (formato array)
+            $respaldoAdmin = $_SESSION['admin_antes_suplantar'];
+            $adminId = is_array($respaldoAdmin)
+                ? (int) ($respaldoAdmin['usuario_id'] ?? 0)
+                : (int) $respaldoAdmin;
+
             // Traemos los datos del administrador
             $admin = $this->modeloUsuario->obtenerUsuarioPorId($adminId);
 
@@ -214,14 +219,22 @@ class UsuarioControlador {
                 exit();
             }
 
-            $resultado = $this->modeloUsuario->actualizarUsuario($usuarioId, $datosActualizar);
+            try {
+                $resultado = $this->modeloUsuario->actualizarUsuario($usuarioId, $datosActualizar);
+            } catch (\PDOException $e) {
+                if ($e->getCode() === '23000') {
+                    $_SESSION['mensaje'] = "El correo electrónico ya está registrado por otro usuario.";
+                    header("Location: " . URL_BASE . "index.php?c=usuario&a=editarUsuario&id=" . $usuarioId);
+                    exit();
+                }
+                throw $e;
+            }
 
             if ($resultado) {
                 $_SESSION['mensaje'] = "Usuario actualizado correctamente";
             } else {
                 $_SESSION['mensaje'] = "Error al actualizar el usuario";
             }
-
             //Recargamos la tabla de usuarios redirigiendo a la lista
             if ($datosActualizar['rol_id'] == 3){
                 header("Location: " . URL_BASE . "index.php?c=jugador&a=index");
@@ -252,9 +265,9 @@ class UsuarioControlador {
         //Capturamos el rol para redirigir despues de eliminar
         $rolId = isset($_POST['rol_id']) ? (int) $_POST['rol_id'] : 0;
         //Ejecutamos la funcion eliminarUsuario del modelo
-        $this->modeloUsuario->eliminarUsuario($usuarioId);
+        $resultado = $this->modeloUsuario->eliminarUsuario($usuarioId);
         //Mandamos un mensaje de feedback
-        $_SESSION['mensaje'] = "Usuario eliminado correctamente";
+        $_SESSION['mensaje'] = $resultado['mensaje'];
         //Redirigimos al usuario
         if ($rolId == 3){
             header("Location: " . URL_BASE . "index.php?c=jugador&a=index");
