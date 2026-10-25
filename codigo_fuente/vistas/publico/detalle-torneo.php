@@ -134,15 +134,32 @@
          <?php endif; ?>
 
          <div class="td-hero-contenido td-hero-contenido--solo">            
+             <?php if (!empty($_SESSION['mensaje_exito'])): ?>
+                <div class="alerta alerta-exito" style="background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #86efac; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                   <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($_SESSION['mensaje_exito']); unset($_SESSION['mensaje_exito']); ?>
+                </div>
+             <?php endif; ?>
+             <?php if (!empty($_SESSION['mensaje_error'])): ?>
+                <div class="alerta alerta-error" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                   <i class="fa-solid fa-triangle-exclamation"></i> <?php echo htmlspecialchars($_SESSION['mensaje_error']); unset($_SESSION['mensaje_error']); ?>
+                </div>
+             <?php endif; ?>
             <h1><?php echo htmlspecialchars($torneo['nombre']); ?></h1>
             <p id="hero-subtitulo"><?php echo htmlspecialchars($torneo['nombre_juego']); ?> · <?php echo htmlspecialchars($etiquetasFormato[$torneo['formato']] ?? $torneo['formato']); ?></p>
             <span id="hero-duracion">Duración del torneo: <?php echo htmlspecialchars($fechaInicioTexto); ?> - <?php echo htmlspecialchars($fechaFinTexto); ?></span><br>
             <span id="hero-fechas">Inscripciones: <?php echo htmlspecialchars($inscripcionInicioTexto); ?> - <?php echo htmlspecialchars($inscripcionCierreTexto); ?></span>
                      <?php
+               $hoy = date('Y-m-d');
+               $cuposConfirmados = $this->modeloTorneo->contarConfirmados((int) $torneo['id']);
+               $cupoLleno = $cuposConfirmados >= (int) ($torneo['cupo_max_equipos'] ?? 0);
+               $inscripcionNoIniciada = !empty($torneo['fecha_inicio_inscripcion']) && $torneo['fecha_inicio_inscripcion'] > $hoy;
+               $inscripcionVencida = !empty($torneo['fecha_limite_inscripcion']) && $torneo['fecha_limite_inscripcion'] < $hoy;
                $inscripcionesAbiertas = $torneo['estado'] === 'inscripciones_abiertas'
-                  && (empty($torneo['fecha_limite_inscripcion']) || $torneo['fecha_limite_inscripcion'] >= date('Y-m-d'));
-               $estadoTexto = ($torneo['estado'] === 'inscripciones_abiertas' && !$inscripcionesAbiertas)
-                  ? 'Inscripciones cerradas'
+                  && !$cupoLleno
+                  && !$inscripcionNoIniciada
+                  && !$inscripcionVencida;
+               $estadoTexto = ($torneo['estado'] === 'inscripciones_abiertas')
+                  ? ($cupoLleno ? 'Cupos agotados' : ($inscripcionNoIniciada ? 'Inscripciones próximamente' : ($inscripcionVencida ? 'Inscripciones cerradas' : 'Inscripciones abiertas')))
                   : ($etiquetasEstadoTorneo[$torneo['estado']] ?? $torneo['estado']);
                $esModalidadIndividual = strtolower(trim($torneo['nombre_modalidad'])) === 'individual';
                $etiquetasInscripcion = [
@@ -157,6 +174,32 @@
 
                <?php if ($miInscripcion): ?>
                   <p><?php echo htmlspecialchars($etiquetasInscripcion[$miInscripcion['estado']] ?? $miInscripcion['estado']); ?></p>
+                  <?php if ($miInscripcion['estado'] === 'pendiente' && $torneo['estado'] === 'inscripciones_abiertas'): ?>
+                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=cancelarInscripcion" onsubmit="return confirm('¿Estás seguro de que deseás retirar tu solicitud de inscripción?');" style="margin-top: 8px;">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                        <input type="hidden" name="tipo" value="<?php echo htmlspecialchars($miInscripcion['tipo']); ?>">
+                        <?php if ($miInscripcion['tipo'] === 'equipo'): ?>
+                           <input type="hidden" name="equipo_id" value="<?php echo (int) $miInscripcion['referencia_id']; ?>">
+                        <?php endif; ?>
+                        <button type="submit" class="td-boton-inscripcion" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; cursor: pointer; padding: 6px 14px; font-size: 0.9rem;">
+                           <i class="fa-solid fa-ban"></i> Retirar solicitud
+                        </button>
+                     </form>
+                  <?php endif; ?>
+
+               <?php else: ?>
+                  <?php if (!empty($ultimaInscripcion) && in_array($ultimaInscripcion['estado'], ['rechazado', 'cancelado'], true)): ?>
+                     <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">
+                        <i class="fa-solid fa-circle-info"></i> <?php echo $ultimaInscripcion['estado'] === 'rechazado' ? 'Tu solicitud previa fue rechazada. Podés volver a inscribirte si las condiciones cambiaron.' : 'Habías cancelado tu solicitud previa. Podés volver a inscribirte.'; ?>
+                     </p>
+                  <?php endif; ?>
+
+                  <?php if ($cupoLleno): ?>
+                  <span class="td-boton-inscripcion td-boton-inscripcion--cerrado">Cupos agotados</span>
+
+               <?php elseif ($inscripcionNoIniciada): ?>
+                  <span class="td-boton-inscripcion td-boton-inscripcion--cerrado">Inscripciones próximamente</span>
 
                <?php elseif (!$inscripcionesAbiertas): ?>
                   <span class="td-boton-inscripcion td-boton-inscripcion--cerrado">Inscripciones cerradas</span>
@@ -189,19 +232,26 @@
 
                         <label for="equipo_id">Seleccionar equipo</label>
                         <select name="equipo_id" id="equipo_id" required>
-                           <option value=""><?php echo empty($misEquiposCapitan) ? 'No sos capitán de ningún equipo' : 'Elegí tu equipo'; ?></option>
+                           <option value=""><?php echo empty($misEquiposCapitan) ? 'No sos capitán de ningún equipo elegible' : 'Elegí tu equipo'; ?></option>
                            <?php foreach ($misEquiposCapitan as $equipoCapitan): ?>
                               <option value="<?php echo (int) $equipoCapitan['id']; ?>"><?php echo htmlspecialchars($equipoCapitan['nombre_equipo']); ?></option>
                            <?php endforeach; ?>
                         </select>
 
+                        <?php if (empty($misEquiposCapitan)): ?>
+                           <p style="color: #94a3b8; font-size: 0.9rem; margin: 10px 0;">
+                              Debes ser capitán de un equipo registrado en <strong><?php echo htmlspecialchars($torneo['juego_nombre'] ?? 'esta disciplina'); ?></strong> para inscribirte.
+                           </p>
+                        <?php endif; ?>
+
                         <div class="td-modal-acciones">
-                           <button type="submit" class="td-modal-boton">Inscribirse</button>
+                           <button type="submit" class="td-modal-boton" <?php echo empty($misEquiposCapitan) ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''; ?>>Inscribirse</button>
                            <button type="button" class="td-modal-cancelar"
                               onclick="this.closest('dialog').close()">Cancelar</button>
                         </div>
                      </form>
                   </dialog>
+               <?php endif; ?>
                <?php endif; ?>
             </div>
 </div>

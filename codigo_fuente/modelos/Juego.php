@@ -25,13 +25,31 @@ class Juego {
     }
 
     public function obtenerJuegosActivos(): array {
-        $sql = "SELECT id, nombre, categoria
+        $sql = "SELECT id, nombre, categoria, puntos_victoria, puntos_empate, puntos_derrota
                 FROM juegos
                 WHERE activo = 1
                 ORDER BY nombre ASC";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerJuegosParaEquipos(): array {
+        $sql = "SELECT j.id, j.nombre, j.categoria
+                FROM juegos j
+                INNER JOIN juego_modalidades_permitidas jmp ON jmp.juego_id = j.id
+                WHERE j.activo = 1 AND jmp.modalidad_id = 2
+                ORDER BY j.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function permiteEquipos(int $juegoId): bool {
+        $sql = "SELECT 1 FROM juego_modalidades_permitidas WHERE juego_id = :id AND modalidad_id = 2 LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $juegoId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
     }
 
         //Juegos activos para el catalogo publico (con la modalidad permitida, si tiene)
@@ -217,7 +235,7 @@ class Juego {
         $sql = "SELECT f.codigo, f.nombre, f.activo 
                 FROM formatos_torneo f
                 INNER JOIN juego_formatos_permitidos jfp ON f.codigo = jfp.formato_codigo
-                WHERE jfp.juego_id = :id";
+                WHERE jfp.juego_id = :id AND f.activo = 1";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([':id' => $juegoId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

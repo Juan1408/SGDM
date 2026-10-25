@@ -109,18 +109,18 @@ if ($rolId === 3) {
             </ul>
          </nav>
 
-         <!-- Estadisticas todavia de ejemplo -- se conectan en la fase de Torneos/Resultados -->
+         <!-- Estadísticas reales del equipo calculadas desde la base de datos -->
          <dl class="equipo-estadisticas">
             <div class="tarjeta-estadistica">
-               <dd>38</dd>
+               <dd><?php echo (int) ($estadisticas['partidas'] ?? 0); ?></dd>
                <dt>Partidas</dt>
             </div>
             <div class="tarjeta-estadistica">
-               <dd>24</dd>
+               <dd><?php echo (int) ($estadisticas['victorias'] ?? 0); ?></dd>
                <dt>Victorias</dt>
             </div>
             <div class="tarjeta-estadistica">
-               <dd>3</dd>
+               <dd><?php echo (int) ($estadisticas['torneos_ganados'] ?? 0); ?></dd>
                <dt>Torneos ganados</dt>
             </div>
          </dl>

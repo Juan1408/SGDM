@@ -111,7 +111,15 @@ class TorneoAdminControlador {
     }
 
     public function eliminar() {
-        $id = $_GET['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $_SESSION['mensaje'] = "Método no permitido. La eliminación requiere una solicitud POST válida.";
+            header("Location: " . URL_BASE . "index.php?c=torneoAdmin&a=index");
+            exit;
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $id = $_POST['id'] ?? null;
         
         if ($id) {
             // Buscamos el nombre del torneo antes de eliminarlo para loguearlo

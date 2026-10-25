@@ -231,27 +231,28 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
                 </div>
                 <div class="crear-torneo-campo">
                     <label for="modalidad_id">Modalidad</label>
-                    <select id="modalidad_id" name="modalidad_id" required>
+                    <select id="modalidad_id" name="modalidad_id" required data-valor="<?php echo $valor('modalidad_id'); ?>">
                         <option value="">Seleccionar modalidad</option>
                         <?php foreach ($modalidades as $modalidad): ?>
                             <option value="<?php echo (int) $modalidad['id']; ?>" <?php echo $seleccionado('modalidad_id', $modalidad['id']); ?>><?php echo $e(ucfirst($modalidad['nombre'])); ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <small id="ayuda-modalidad">Modalidad permitida según la disciplina seleccionada.</small>
                 </div>
                 <div class="crear-torneo-campo">
                     <label for="sistema_puntuacion_id">Sistema de puntuación</label>
-                    <select id="sistema_puntuacion_id" name="sistema_puntuacion_id">
-                        <option value="">Usar configuración predeterminada</option>
+                    <select id="sistema_puntuacion_id" name="sistema_puntuacion_id" data-valor="<?php echo $valor('sistema_puntuacion_id'); ?>">
+                        <option value="">Usar configuración predeterminada de la disciplina</option>
                         <?php foreach ($sistemasPuntuacion as $sistema): ?>
                             <?php $nombrePuntuacion = $nombresPuntuacion[$sistema['nombre']] ?? ucwords(str_replace('_', ' ', $sistema['nombre'])); ?>
                             <option value="<?php echo (int) $sistema['id']; ?>" <?php echo $seleccionado('sistema_puntuacion_id', $sistema['id']); ?>><?php echo $e($nombrePuntuacion); ?> (victoria <?php echo $sistema['puntos_victoria']; ?>, empate <?php echo $sistema['puntos_empate']; ?>, derrota <?php echo $sistema['puntos_derrota']; ?>)</option>
                         <?php endforeach; ?>
                     </select>
-                    <small>Define cuántos puntos recibe cada participante según el resultado.</small>
+                    <small id="ayuda-puntuacion">Define cuántos puntos recibe cada participante según el resultado.</small>
                 </div>
                 <div class="crear-torneo-campo">
                     <label for="formato">Formato de competencia</label>
-                    <select id="formato" name="formato" required>
+                    <select id="formato" name="formato" required data-valor="<?php echo $valor('formato'); ?>">
                         <option value="">Seleccionar formato</option>
                         <?php foreach ($etiquetasEstado as $codigo => $etiqueta): ?>
                             <option value="<?php echo $codigo; ?>" <?php echo $seleccionado('formato', $codigo); ?>><?php echo $etiqueta; ?></option>
@@ -467,45 +468,145 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
     </main>
 
     <script>
-        // ---- Paso 1: ayuda del formato, etiqueta del cupo y vista previa del banner ----
-        const formato = document.getElementById('formato');
-        const ayudaFormato = document.getElementById('ayuda-formato');
+        // ---- Paso 1: Reglas dinámicas por disciplina (modalidades y formatos permitidos) ----
+        const reglasPorJuego = <?php echo json_encode($datos['reglasPorJuego'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+        const formatoNombres = <?php echo json_encode($etiquetasEstado, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
         const ayudasFormato = <?php echo json_encode($formatoAyuda, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-        formato?.addEventListener('change', () => {
-            ayudaFormato.textContent = ayudasFormato[formato.value] || 'Selecciona un formato para ver cómo se organizará la competencia.';
-        });
 
-        // Cupos permitidos según el formato
-        const cupo = document.getElementById('cupo_max_equipos');
+        const juegoSelect = document.getElementById('juego_id');
+        const modalidadSelect = document.getElementById('modalidad_id');
+        const formatoSelect = document.getElementById('formato');
+        const puntuacionSelect = document.getElementById('sistema_puntuacion_id');
+        const cupoSelect = document.getElementById('cupo_max_equipos');
+        const ayudaFormato = document.getElementById('ayuda-formato');
+        const ayudaModalidad = document.getElementById('ayuda-modalidad');
+        const etiquetaCupo = document.querySelector('label[for="cupo_max_equipos"]');
+
         const cuposPorFormato = {
             liga: Array.from({ length: 18 }, (_, i) => i + 3),                    // 3 a 20
             suizo: Array.from({ length: 31 }, (_, i) => (i + 2) * 2),             // 4, 6, ... 64
             eliminacion_directa: [2, 4, 8, 16, 32, 64],
         };
+
         const cargarCupos = (conservar) => {
-            const opciones = cuposPorFormato[formato.value];
-            const elegido = conservar ?? cupo.value;
-            cupo.innerHTML = '';
+            if (!formatoSelect || !cupoSelect) return;
+            const fmt = formatoSelect.value;
+            const opciones = cuposPorFormato[fmt];
+            const elegido = conservar ?? cupoSelect.value;
+            cupoSelect.innerHTML = '';
             if (!opciones) {
-                cupo.add(new Option('Elegí primero el formato', ''));
+                cupoSelect.add(new Option('Elegí primero el formato', ''));
                 return;
             }
-            cupo.add(new Option('Seleccionar cupo', ''));
-            opciones.forEach((numero) => cupo.add(new Option(numero, numero)));
-            cupo.value = opciones.map(String).includes(String(elegido)) ? String(elegido) : '';
+            cupoSelect.add(new Option('Seleccionar cupo', ''));
+            opciones.forEach((numero) => cupoSelect.add(new Option(numero, numero)));
+            cupoSelect.value = opciones.map(String).includes(String(elegido)) ? String(elegido) : '';
         };
-        if (formato && cupo) {
-            formato.addEventListener('change', () => cargarCupos());
-            cargarCupos(cupo.dataset.valor);
-        }
 
-        const modalidad = document.getElementById('modalidad_id');
-        const etiquetaCupo = document.querySelector('label[for="cupo_max_equipos"]');
-        modalidad?.addEventListener('change', () => {
-            const texto = modalidad.options[modalidad.selectedIndex].text.toLowerCase();
+        const actualizarEtiquetaCupo = () => {
+            if (!modalidadSelect || !etiquetaCupo) return;
+            const texto = modalidadSelect.options[modalidadSelect.selectedIndex]?.text?.toLowerCase() || '';
             etiquetaCupo.textContent = texto === 'individual' ? 'Cupo máximo de jugadores'
                 : texto === 'equipos' ? 'Cupo máximo de equipos' : 'Cupo máximo';
-        });
+        };
+
+        const sincronizarDisciplina = (conservar = false) => {
+            if (!juegoSelect || !modalidadSelect || !formatoSelect) return;
+            const juegoId = juegoSelect.value;
+            const reglas = reglasPorJuego[juegoId];
+
+            if (!reglas) {
+                modalidadSelect.innerHTML = '<option value="">Elegí primero una disciplina</option>';
+                modalidadSelect.disabled = true;
+                formatoSelect.innerHTML = '<option value="">Elegí primero una disciplina</option>';
+                formatoSelect.disabled = true;
+                if (ayudaModalidad) ayudaModalidad.textContent = 'Seleccioná una disciplina para ver las modalidades permitidas.';
+                if (ayudaFormato) ayudaFormato.textContent = 'Selecciona un formato para ver cómo se organizará la competencia.';
+                cargarCupos();
+                return;
+            }
+
+            modalidadSelect.disabled = false;
+            formatoSelect.disabled = false;
+
+            // 1. Modalidades permitidas
+            const modalidadGuardada = conservar ? (modalidadSelect.dataset.valor || modalidadSelect.value) : '';
+            modalidadSelect.innerHTML = '';
+            if (reglas.modalidades.length === 0) {
+                modalidadSelect.add(new Option('Sin modalidades permitidas', ''));
+            } else {
+                if (reglas.modalidades.length > 1) {
+                    modalidadSelect.add(new Option('Seleccionar modalidad', ''));
+                }
+                reglas.modalidades.forEach((m) => {
+                    const texto = m.nombre.charAt(0).toUpperCase() + m.nombre.slice(1);
+                    modalidadSelect.add(new Option(texto, m.id));
+                });
+
+                if (modalidadGuardada && reglas.modalidades.some(m => String(m.id) === String(modalidadGuardada))) {
+                    modalidadSelect.value = String(modalidadGuardada);
+                } else if (reglas.modalidades.length > 0) {
+                    modalidadSelect.value = String(reglas.modalidades[0].id);
+                }
+            }
+
+            if (ayudaModalidad) {
+                ayudaModalidad.textContent = reglas.modalidades.length === 1
+                    ? 'Modalidad fija para ' + reglas.nombre + ': ' + (reglas.modalidades[0]?.nombre || '') + '.'
+                    : 'Modalidades habilitadas para ' + reglas.nombre + '.';
+            }
+            actualizarEtiquetaCupo();
+
+            // 2. Formatos permitidos
+            const formatoGuardado = conservar ? (formatoSelect.dataset.valor || formatoSelect.value) : '';
+            formatoSelect.innerHTML = '';
+            if (reglas.formatos.length === 0) {
+                formatoSelect.add(new Option('Sin formatos permitidos', ''));
+            } else {
+                if (reglas.formatos.length > 1) {
+                    formatoSelect.add(new Option('Seleccionar formato', ''));
+                }
+                reglas.formatos.forEach((f) => {
+                    const etiqueta = formatoNombres[f.codigo] || f.nombre;
+                    formatoSelect.add(new Option(etiqueta, f.codigo));
+                });
+
+                if (formatoGuardado && reglas.formatos.some(f => f.codigo === formatoGuardado)) {
+                    formatoSelect.value = formatoGuardado;
+                } else if (reglas.formatos.length > 0) {
+                    formatoSelect.value = reglas.formatos[0].codigo;
+                }
+            }
+
+            if (ayudaFormato) {
+                ayudaFormato.textContent = ayudasFormato[formatoSelect.value] || 'Selecciona un formato para ver cómo se organizará la competencia.';
+            }
+            cargarCupos(conservar ? cupoSelect.dataset.valor : null);
+
+            // 3. Sistema de puntuación predeterminado
+            if (puntuacionSelect) {
+                const opDefecto = puntuacionSelect.querySelector('option[value=""]');
+                if (opDefecto) {
+                    opDefecto.textContent = 'Predeterminado de ' + reglas.nombre + ' (' + reglas.puntos_victoria + ' victoria, ' + reglas.puntos_empate + ' empate/tablas, ' + reglas.puntos_derrota + ' derrota)';
+                }
+            }
+        };
+
+        if (juegoSelect) {
+            juegoSelect.addEventListener('change', () => sincronizarDisciplina(false));
+            formatoSelect?.addEventListener('change', () => {
+                if (ayudaFormato) ayudaFormato.textContent = ayudasFormato[formatoSelect.value] || 'Selecciona un formato para ver cómo se organizará la competencia.';
+                cargarCupos();
+            });
+            modalidadSelect?.addEventListener('change', actualizarEtiquetaCupo);
+
+            // Inicializar en carga
+            if (juegoSelect.value) {
+                sincronizarDisciplina(true);
+            } else {
+                sincronizarDisciplina(false);
+            }
+        }
 
         const vistaPrevia = document.getElementById('banner-vista-previa');
         const archivoBanner = document.getElementById('banner');

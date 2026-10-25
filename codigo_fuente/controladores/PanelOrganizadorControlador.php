@@ -38,12 +38,37 @@ class PanelOrganizadorControlador {
 
     public function crear() {
         Sesion::validarOrganizadorVerificado();
+        $juegos = $this->modeloJuego->obtenerJuegosActivos();
+
+        $reglasPorJuego = [];
+        foreach ($juegos as $j) {
+            $jId = (int) $j['id'];
+            $modalidadesJuego = $this->modeloJuego->obtenerModalidadesPermitidas($jId);
+            $formatosJuego = $this->modeloJuego->obtenerFormatosPermitidos($jId);
+            $reglasPorJuego[$jId] = [
+                'id' => $jId,
+                'nombre' => $j['nombre'],
+                'puntos_victoria' => (float) ($j['puntos_victoria'] ?? 3.0),
+                'puntos_empate' => (float) ($j['puntos_empate'] ?? 1.0),
+                'puntos_derrota' => (float) ($j['puntos_derrota'] ?? 0.0),
+                'modalidades' => array_values(array_map(static fn ($m) => [
+                    'id' => (int) $m['id'],
+                    'nombre' => (string) $m['nombre'],
+                ], $modalidadesJuego)),
+                'formatos' => array_values(array_map(static fn ($f) => [
+                    'codigo' => (string) $f['codigo'],
+                    'nombre' => (string) $f['nombre'],
+                ], $formatosJuego)),
+            ];
+        }
+
         $datos = [
             'etapa' => max(1, min(4, (int) ($_GET['etapa'] ?? 1))),
             'torneo' => null,
-            'juegos' => $this->modeloJuego->obtenerJuegosActivos(),
+            'juegos' => $juegos,
             'modalidades' => $this->modeloTorneo->obtenerModalidades(),
             'sistemasPuntuacion' => $this->modeloTorneo->obtenerSistemasPuntuacion(),
+            'reglasPorJuego' => $reglasPorJuego,
             'actividades' => [],
             'mensaje' => $_SESSION['mensaje'] ?? null,
         ];
@@ -264,8 +289,9 @@ class PanelOrganizadorControlador {
                 ? $this->modeloTorneo->obtenerPodio((int) $torneo['id'])
                 : null,
             'mensaje' => $_SESSION['mensaje'] ?? null,
+            'error' => $_SESSION['error'] ?? null,
         ];
-        unset($_SESSION['mensaje']);
+        unset($_SESSION['mensaje'], $_SESSION['error']);
         require_once __DIR__ . '/../vistas/organizador/administrar-torneo.php';
     }
 
@@ -326,13 +352,11 @@ class PanelOrganizadorControlador {
             exit;
         }
         Sesion::requerirTokensCSRF();
-        $correcto = $this->modeloTorneo->quitarParticipante(
+        $resultado = $this->modeloTorneo->quitarParticipante(
             (int) ($_POST['inscripcion_id'] ?? 0),
             (int) $_SESSION['usuario_id']
         );
-        $_SESSION['mensaje'] = $correcto
-            ? 'Participante eliminado del torneo.'
-            : 'No se pudo eliminar al participante. Solo se puede mientras las inscripciones estén abiertas.';
+        $_SESSION['mensaje'] = $resultado['mensaje'];
         header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=administrar&seccion=participantes&id=' . $torneoId);
         exit;
     }
@@ -372,18 +396,25 @@ class PanelOrganizadorControlador {
         $horaOk = (bool) preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $hora);
 
         if (!$torneo) {
-            $_SESSION['mensaje'] = 'Torneo no encontrado.';
+            $_SESSION['error'] = 'Torneo no encontrado.';
+            $_SESSION['mensaje'] = $_SESSION['error'];
         } elseif (!$fechaOk || !$horaOk) {
-            $_SESSION['mensaje'] = 'Ingresá una fecha y una hora válidas.';
+            $_SESSION['error'] = 'Ingresá una fecha y una hora válidas.';
+            $_SESSION['mensaje'] = $_SESSION['error'];
         } elseif ($torneo['fecha_inicio'] && $torneo['fecha_fin']
             && ($fecha < $torneo['fecha_inicio'] || $fecha > $torneo['fecha_fin'])) {
-            $_SESSION['mensaje'] = 'La fecha del partido debe estar dentro de la duración del torneo ('
+            $_SESSION['error'] = 'La fecha del partido debe estar dentro de la duración del torneo ('
                 . date('d/m/Y', strtotime($torneo['fecha_inicio'])) . ' - '
                 . date('d/m/Y', strtotime($torneo['fecha_fin'])) . ').';
-        } elseif (!$this->modeloTorneo->programarEncuentro($encuentroId, $organizadorId, $fecha . ' ' . $hora . ':00', $sede)) {
-            $_SESSION['mensaje'] = 'No se pudo programar el partido.';
+            $_SESSION['mensaje'] = $_SESSION['error'];
         } else {
-            $_SESSION['mensaje'] = 'Partido programado correctamente.';
+            $resultado = $this->modeloTorneo->programarEncuentro($encuentroId, $organizadorId, $fecha . ' ' . $hora . ':00', $sede);
+            if (!$resultado['ok']) {
+                $_SESSION['error'] = $resultado['mensaje'];
+                $_SESSION['mensaje'] = $resultado['mensaje'];
+            } else {
+                $_SESSION['mensaje'] = $resultado['mensaje'];
+            }
         }
         header('Location: ' . $volver);
         exit;
@@ -496,8 +527,8 @@ class PanelOrganizadorControlador {
             || $fechas['fecha_limite_inscripcion'] > $fechas['fecha_inicio']
             || $fechas['fecha_inicio'] > $fechas['fecha_fin']) {
             $_SESSION['mensaje'] = 'Las fechas deben respetar el orden: inicio de inscripción, cierre de inscripción, inicio del torneo y fin del torneo.';
-        } elseif ($streamUrl !== '' && !preg_match('#^https?://#i', $streamUrl)) {
-            $_SESSION['mensaje'] = 'El link de transmisión debe empezar con http:// o https://.';
+        } elseif ($streamUrl !== '' && (!filter_var($streamUrl, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $streamUrl))) {
+            $_SESSION['mensaje'] = 'El link de transmisión debe ser una URL válida que empiece con http:// o https://.';
         } else {
             // Banner nuevo (opcional): si no se sube uno, se conserva el actual
             $banner = null;
@@ -554,6 +585,29 @@ class PanelOrganizadorControlador {
         exit;
     }
 
+    public function corregirResultado() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metodo no permitido');
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $encuentroId = (int) ($_POST['encuentro_id'] ?? 0);
+        $torneoId = (int) ($_POST['torneo_id'] ?? 0);
+        $local = filter_var($_POST['resultado_local'] ?? null, FILTER_VALIDATE_FLOAT);
+        $visitante = filter_var($_POST['resultado_visitante'] ?? null, FILTER_VALIDATE_FLOAT);
+        if ($local === false || $visitante === false) {
+            $_SESSION['mensaje'] = 'Los resultados deben ser números válidos.';
+        } else {
+            $resultado = $this->modeloTorneo->corregirResultado($encuentroId, (int) $_SESSION['usuario_id'], $local, $visitante);
+            $_SESSION['mensaje'] = $resultado['mensaje'];
+        }
+        $ronda = (int) ($_POST['ronda'] ?? 0);
+        header('Location: ' . URL_BASE . 'index.php?c=panelOrganizador&a=administrar&seccion=resultados&id=' . $torneoId . ($ronda > 0 ? '&ronda=' . $ronda : ''));
+        exit;
+    }
+
         public function guardarEtapa() {
         Sesion::validarOrganizadorVerificado();
         $base = URL_BASE . 'index.php?c=panelOrganizador&a=crear';
@@ -584,26 +638,82 @@ class PanelOrganizadorControlador {
             $juegoId = (int) ($_POST['juego_id'] ?? 0);
             $formato = $_POST['formato'] ?? '';
             $cupo = (int) ($_POST['cupo_max_equipos'] ?? 0);
-            $formatos = ['liga', 'suizo', 'eliminacion_directa'];
- 
-            $cupoValido = $this->cupoValidoParaFormato($formato, $cupo);
             $descripcion = trim($_POST['descripcion'] ?? '');
             $reglas = trim($_POST['reglas'] ?? '');
             $modalidadId = (int) ($_POST['modalidad_id'] ?? 0);
             $sistemaPuntuacionId = (int) ($_POST['sistema_puntuacion_id'] ?? 0);
-            $modalidadValida = array_filter($this->modeloTorneo->obtenerModalidades(), static fn ($item) => (int) $item['id'] === $modalidadId) !== [];
-            $sistemaValido = $sistemaPuntuacionId === 0 || array_filter($this->modeloTorneo->obtenerSistemasPuntuacion(), static fn ($item) => (int) $item['id'] === $sistemaPuntuacionId) !== [];
-            if ($nombre === '' || !in_array($formato, $formatos, true) || $juegoId < 1
-                || !$this->modeloJuego->estaActivo($juegoId) || !$modalidadValida || !$sistemaValido
-                || $cupo < 2 || !$cupoValido) {
-                $_SESSION['mensaje'] = !$cupoValido && in_array($formato, $formatos, true)
-                    ? 'El cupo elegido no es válido para el formato de competencia seleccionado.'
-                    : 'Completa correctamente los datos básicos del torneo.';
-                $this->recordarFormulario(1, $cupoValido ? [] : ['cupo_max_equipos']);
+
+            // 1. Validar que la disciplina exista y esté activa
+            $juego = $this->modeloJuego->obtenerJuegoPorId($juegoId);
+            if (!$juego || empty($juego['activo'])) {
+                $_SESSION['mensaje'] = 'La disciplina seleccionada no existe o no se encuentra activa.';
+                $this->recordarFormulario(1, ['juego_id']);
                 header('Location: ' . $volverEtapa1);
                 exit;
             }
- 
+
+            // 2. Validar que la modalidad esté permitida específicamente para esta disciplina
+            $modalidadesPermitidas = $this->modeloJuego->obtenerModalidadesPermitidas($juegoId);
+            $idsModalidadesPermitidas = array_map(static fn ($m) => (int) $m['id'], $modalidadesPermitidas);
+            if (!in_array($modalidadId, $idsModalidadesPermitidas, true)) {
+                $_SESSION['mensaje'] = 'La modalidad seleccionada no está permitida para ' . $juego['nombre'] . '.';
+                $this->recordarFormulario(1, ['modalidad_id']);
+                header('Location: ' . $volverEtapa1);
+                exit;
+            }
+
+            // 3. Validar que el formato de competencia esté permitido para esta disciplina
+            $formatosPermitidos = $this->modeloJuego->obtenerFormatosPermitidos($juegoId);
+            $codigosFormatosPermitidos = array_column($formatosPermitidos, 'codigo');
+            if (!in_array($formato, $codigosFormatosPermitidos, true)) {
+                $_SESSION['mensaje'] = 'El formato de competencia seleccionado no está permitido para ' . $juego['nombre'] . '.';
+                $this->recordarFormulario(1, ['formato']);
+                header('Location: ' . $volverEtapa1);
+                exit;
+            }
+
+            // 4. Validar cupo según el formato
+            $cupoValido = $this->cupoValidoParaFormato($formato, $cupo);
+            if ($cupo < 2 || !$cupoValido) {
+                $_SESSION['mensaje'] = 'El cupo elegido no es válido para el formato de competencia seleccionado.';
+                $this->recordarFormulario(1, ['cupo_max_equipos']);
+                header('Location: ' . $volverEtapa1);
+                exit;
+            }
+
+            // 5. Determinar puntuación por victoria, empate y derrota
+            if ($sistemaPuntuacionId > 0) {
+                $sistemas = $this->modeloTorneo->obtenerSistemasPuntuacion();
+                $sistemaSeleccionado = null;
+                foreach ($sistemas as $s) {
+                    if ((int) $s['id'] === $sistemaPuntuacionId) {
+                        $sistemaSeleccionado = $s;
+                        break;
+                    }
+                }
+                if (!$sistemaSeleccionado) {
+                    $_SESSION['mensaje'] = 'El sistema de puntuación seleccionado no es válido.';
+                    $this->recordarFormulario(1, ['sistema_puntuacion_id']);
+                    header('Location: ' . $volverEtapa1);
+                    exit;
+                }
+                $puntosVictoria = (float) $sistemaSeleccionado['puntos_victoria'];
+                $puntosEmpate = (float) $sistemaSeleccionado['puntos_empate'];
+                $puntosDerrota = (float) $sistemaSeleccionado['puntos_derrota'];
+            } else {
+                $sistemaPuntuacionId = null;
+                $puntosVictoria = (float) ($juego['puntos_victoria'] ?? 3.0);
+                $puntosEmpate = (float) ($juego['puntos_empate'] ?? 1.0);
+                $puntosDerrota = (float) ($juego['puntos_derrota'] ?? 0.0);
+            }
+
+            if ($nombre === '') {
+                $_SESSION['mensaje'] = 'El nombre del torneo es obligatorio.';
+                $this->recordarFormulario(1);
+                header('Location: ' . $volverEtapa1);
+                exit;
+            }
+
             // Banner nuevo (opcional): si no se sube uno, se conserva el que ya tenía
             $banner = null;
             $archivoBanner = $_FILES['banner'] ?? null;
@@ -616,19 +726,22 @@ class PanelOrganizadorControlador {
                     exit;
                 }
             }
- 
+
             $datosGenerales = [
                 'nombre' => $nombre,
                 'juego_id' => $juegoId,
                 'formato' => $formato,
                 'cupo' => $cupo,
                 'modalidad_id' => $modalidadId,
-                'sistema_puntuacion_id' => $sistemaPuntuacionId ?: null,
+                'sistema_puntuacion_id' => $sistemaPuntuacionId,
+                'puntos_victoria' => $puntosVictoria,
+                'puntos_empate' => $puntosEmpate,
+                'puntos_derrota' => $puntosDerrota,
                 'descripcion' => $descripcion,
                 'reglas' => $reglas,
                 'banner_url' => $banner,
             ];
- 
+
             if ($torneoId > 0) {
                 if (!$this->modeloTorneo->actualizarEtapaGeneral($torneoId, $organizadorId, $datosGenerales)) {
                     $_SESSION['mensaje'] = 'No se pudieron guardar los cambios del torneo.';
@@ -687,6 +800,12 @@ class PanelOrganizadorControlador {
             if (!in_array($datos['tipo_resultado'], $tiposResultado, true) || $datos['mejor_de'] > 99) {
                 $_SESSION['mensaje'] = 'La configuración de resultados no es válida.';
                 $this->recordarFormulario(2, ['tipo_resultado', 'mejor_de']);
+                header('Location: ' . $volverEtapa2);
+                exit;
+            }
+            if ($datos['stream_url'] !== '' && (!filter_var($datos['stream_url'], FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $datos['stream_url']))) {
+                $_SESSION['mensaje'] = 'El link de transmisión debe ser una URL válida (http:// o https://).';
+                $this->recordarFormulario(2, ['stream_url']);
                 header('Location: ' . $volverEtapa2);
                 exit;
             }

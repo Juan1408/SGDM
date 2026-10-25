@@ -55,9 +55,19 @@ class TorneoControlador {
         if ($esJugadorLogueado) {
             $usuarioId = (int) $_SESSION['usuario_id'];
             $misEquipos = $this->modeloEquipo->obtenerEquiposDelJugador($usuarioId);
-            $misEquiposCapitan = array_values(array_filter($misEquipos, static fn ($equipo) => !empty($equipo['es_capitan'])));
+            $misEquiposCapitan = array_values(array_filter($misEquipos, static function ($equipo) use ($torneo) {
+                if (empty($equipo['es_capitan'])) {
+                    return false;
+                }
+                // Si el equipo tiene una disciplina definida, debe coincidir con la del torneo
+                if (!empty($equipo['juego_id']) && (int) $equipo['juego_id'] !== (int) $torneo['juego_id']) {
+                    return false;
+                }
+                return true;
+            }));
             $equipoIds = array_map(static fn ($equipo) => (int) $equipo['id'], $misEquipos);
-            $miInscripcion = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, $equipoIds);
+            $miInscripcion = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, $equipoIds, true);
+            $ultimaInscripcion = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, $equipoIds, false);
             $torneoGuardado = (new Guardado())->estaGuardado($usuarioId, 'torneo', $torneoId);
         }
         $agenda = $this->modeloTorneo->obtenerAgendaPublica($torneoId);
@@ -85,26 +95,155 @@ class TorneoControlador {
         $usuarioId = (int) $_SESSION['usuario_id'];
 
         $torneo = $this->modeloTorneo->obtenerTorneoPublico($torneoId);
-        $inscripcionesAbiertas = $torneo
-            && $torneo['estado'] === 'inscripciones_abiertas'
-            && (empty($torneo['fecha_limite_inscripcion']) || $torneo['fecha_limite_inscripcion'] >= date('Y-m-d'));
+        if (!$torneo) {
+            header('Location: ' . URL_BASE . 'index.php?c=torneo&a=catalogoPublico');
+            exit;
+        }
+
+        $hoy = date('Y-m-d');
+        $inscripcionesAbiertas = $torneo['estado'] === 'inscripciones_abiertas'
+            && (empty($torneo['fecha_inicio_inscripcion']) || $torneo['fecha_inicio_inscripcion'] <= $hoy)
+            && (empty($torneo['fecha_limite_inscripcion']) || $torneo['fecha_limite_inscripcion'] >= $hoy);
+
         if (!$inscripcionesAbiertas) {
+            $_SESSION['mensaje_error'] = 'Las inscripciones para este torneo no se encuentran abiertas en este momento.';
+            header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+            exit;
+        }
+
+        // 1. Validar que el cupo del torneo no esté lleno
+        $cuposOcupados = $this->modeloTorneo->contarConfirmados($torneoId);
+        if ($cuposOcupados >= (int) ($torneo['cupo_max_equipos'] ?? 0)) {
+            $_SESSION['mensaje_error'] = 'El cupo de participantes para este torneo está agotado.';
+            header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+            exit;
+        }
+
+        $esIndividual = strtolower(trim($torneo['nombre_modalidad'])) === 'individual';
+
+        // 2. Validar correspondencia entre tipo enviado y modalidad de la competencia
+        if ($esIndividual) {
+            if ($tipo !== 'usuario') {
+                $_SESSION['mensaje_error'] = 'Este torneo es individual. La inscripción debe ser personal.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            // Validar que no esté ya inscripto activamente
+            $yaInscripto = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, [], true);
+            if ($yaInscripto) {
+                $_SESSION['mensaje_error'] = 'Ya cuentas con una inscripción activa en este torneo.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            $ok = $this->modeloTorneo->inscribirse($torneoId, 'usuario', $usuarioId, $_SESSION['usuario_nombre'] ?? 'Jugador');
+            $_SESSION[$ok ? 'mensaje_exito' : 'mensaje_error'] = $ok
+                ? '¡Inscripción solicitada con éxito! Está pendiente de confirmación por el organizador.'
+                : 'No se pudo procesar la inscripción. Inténtalo de nuevo.';
+        } else {
+            if ($tipo !== 'equipo') {
+                $_SESSION['mensaje_error'] = 'Este torneo es por equipos. Debes seleccionar e inscribir a tu escuadra.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            $equipoId = (int) ($_POST['equipo_id'] ?? 0);
+            if ($equipoId <= 0 || !$this->modeloEquipo->esCapitan($equipoId, $usuarioId)) {
+                $_SESSION['mensaje_error'] = 'Debes ser capitán del equipo seleccionado para poder inscribirlo.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            $equipo = $this->modeloEquipo->obtenerPorId($equipoId);
+            if (!$equipo || empty($equipo['activo'])) {
+                $_SESSION['mensaje_error'] = 'El equipo seleccionado no existe o no se encuentra activo.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            // Validar compatibilidad de disciplina
+            if (!empty($equipo['juego_id']) && (int) $equipo['juego_id'] !== (int) $torneo['juego_id']) {
+                $_SESSION['mensaje_error'] = 'El equipo está configurado para otra disciplina y no puede competir en este torneo.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            // Validar cantidad minima de miembros activos
+            $miembrosEquipo = $this->modeloEquipo->obtenerMiembros($equipoId);
+            if (count($miembrosEquipo) < 2) {
+                $_SESSION['mensaje_error'] = 'El equipo debe contar con al menos 2 miembros activos para competir en un torneo colectivo.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            // Validar que ningun miembro este compitiendo en otro equipo en este mismo torneo
+            $miembrosEnConflicto = $this->modeloTorneo->obtenerMiembrosEnConflicto($torneoId, $equipoId);
+            if (!empty($miembrosEnConflicto)) {
+                $detalles = array_map(static fn ($m) => $m['nombre_completo'] . ' (' . $m['nombre_equipo'] . ')', $miembrosEnConflicto);
+                $_SESSION['mensaje_error'] = 'No se puede inscribir al equipo. Los siguientes miembros ya participan en otra escuadra en este torneo: ' . implode(', ', $detalles) . '.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            // Validar si el equipo ya tiene una inscripcion activa
+            $misEquipos = $this->modeloEquipo->obtenerEquiposDelJugador($usuarioId);
+            $equipoIds = array_map(static fn ($eq) => (int) $eq['id'], $misEquipos);
+            $yaInscripto = $this->modeloTorneo->obtenerInscripcionDelJugador($torneoId, $usuarioId, $equipoIds, true);
+            if ($yaInscripto) {
+                $_SESSION['mensaje_error'] = 'Ya registraste una inscripción activa en este torneo (con este u otro de tus equipos).';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
+            }
+
+            $ok = $this->modeloTorneo->inscribirse($torneoId, 'equipo', $equipoId, $equipo['nombre_equipo']);
+            $_SESSION[$ok ? 'mensaje_exito' : 'mensaje_error'] = $ok
+                ? '¡Inscripción del equipo solicitada con éxito! Está pendiente de confirmación por el organizador.'
+                : 'No se pudo procesar la inscripción del equipo.';
+        }
+
+        header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+        exit;
+    }
+
+    // Accion para que un jugador o capitan retire su inscripcion mientras sigan abiertas
+    public function cancelarInscripcion() {
+        Sesion::validarJugador();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . URL_BASE . 'index.php?c=torneo&a=catalogoPublico');
+            exit;
+        }
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
+
+        $torneoId = (int) ($_POST['torneo_id'] ?? 0);
+        $tipo = $_POST['tipo'] ?? '';
+        $usuarioId = (int) $_SESSION['usuario_id'];
+
+        $torneo = $this->modeloTorneo->obtenerTorneoPublico($torneoId);
+        if (!$torneo || $torneo['estado'] !== 'inscripciones_abiertas') {
+            $_SESSION['mensaje_error'] = 'Solo se pueden retirar inscripciones mientras el período de inscripción esté abierto.';
             header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
             exit;
         }
 
         if ($tipo === 'usuario') {
-        $this->modeloTorneo->inscribirse($torneoId, 'usuario', $usuarioId, $_SESSION['usuario_nombre'] ?? 'Jugador');
+            $ok = $this->modeloTorneo->cancelarInscripcionParticipante($torneoId, 'usuario', $usuarioId);
         } elseif ($tipo === 'equipo') {
             $equipoId = (int) ($_POST['equipo_id'] ?? 0);
-            //Verificamos que quien inscribe sea de verdad capitan de ese equipo
-            if ($equipoId > 0 && $this->modeloEquipo->esCapitan($equipoId, $usuarioId)) {
-                $equipo = $this->modeloEquipo->obtenerPorId($equipoId);
-                if ($equipo) {
-                    $this->modeloTorneo->inscribirse($torneoId, 'equipo', $equipoId, $equipo['nombre_equipo']);
-                }
+            if ($equipoId <= 0 || !$this->modeloEquipo->esCapitan($equipoId, $usuarioId)) {
+                $_SESSION['mensaje_error'] = 'Solo el capitán del equipo puede cancelar la inscripción.';
+                header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
+                exit;
             }
+            $ok = $this->modeloTorneo->cancelarInscripcionParticipante($torneoId, 'equipo', $equipoId);
+        } else {
+            $ok = false;
         }
+
+        $_SESSION[$ok ? 'mensaje_exito' : 'mensaje_error'] = $ok
+            ? 'Tu inscripción ha sido cancelada correctamente.'
+            : 'No se pudo cancelar la inscripción.';
 
         header('Location: ' . URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId);
         exit;

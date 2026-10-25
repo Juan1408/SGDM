@@ -11,9 +11,10 @@
 
 $nombre = $datos['nombre_completo'] ?? 'Jugador';
 $nivel = $datos['nivel'] ?? 1;
-$victorias = $record['victorias'];
-$derrotas = $record['derrotas'];
-$totalPartidos = $victorias + $derrotas;
+$victorias = (int) ($record['victorias'] ?? 0);
+$empates = (int) ($record['empates'] ?? 0);
+$derrotas = (int) ($record['derrotas'] ?? 0);
+$totalPartidos = $victorias + $empates + $derrotas;
 $winrate = $totalPartidos > 0 ? round(($victorias / $totalPartidos) * 100) : 0;
 $etiquetasInscripcion = [
     'pendiente' => 'Pendiente de aprobación',
@@ -65,8 +66,8 @@ $etiquetasInscripcion = [
             <dt>Win/Loss ratio</dt>
          </div>
          <div class="tarjeta-estadistica">
-            <dd><?php echo $victorias; ?>-<?php echo $derrotas; ?></dd>
-            <dt>Victorias-Derrotas</dt>
+            <dd><?php echo $victorias; ?>-<?php echo $empates; ?>-<?php echo $derrotas; ?></dd>
+            <dt>Récord (V - E - D)</dt>
          </div>
          <div class="tarjeta-estadistica">
             <dd><?php echo (int) $torneosActivos; ?></dd>

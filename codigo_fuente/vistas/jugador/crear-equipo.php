@@ -88,9 +88,9 @@
                <h2>Datos del equipo</h2>
 
                <div class="campo-grupo">
-                  <label for="crear-juego">Juego</label>
+                  <label for="crear-juego">Disciplina de competencia</label>
                   <select name="juego_id" id="crear-juego" required>
-                     <option value="">Seleccioná un juego</option>
+                     <option value="">Seleccioná una disciplina colectiva</option>
                      <?php foreach (($juegos ?? []) as $juego): ?>
                         <option value="<?php echo (int) $juego['id']; ?>"
                            <?php echo (isset($_POST['juego_id']) && (int) $_POST['juego_id'] === (int) $juego['id']) ? 'selected' : ''; ?>>

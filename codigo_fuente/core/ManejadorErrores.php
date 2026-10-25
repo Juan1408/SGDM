@@ -92,7 +92,7 @@ class ManejadorErrores {
 
             $contextoJson = json_encode($contexto);
             $usuarioId = $_SESSION['usuario_id'] ?? null;
-            $rolUsuario = $_SESSION['rol'] ?? null;
+            $rolUsuario = $_SESSION['rol_id'] ?? $_SESSION['rol'] ?? null;
 
             $sql = "INSERT INTO errores_sistema 
                         (hash_error, tipo_error, mensaje, archivo, linea, stack_trace, contexto_json, usuario_id, rol_usuario, cantidad_ocurrencias, estado) 

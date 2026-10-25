@@ -36,7 +36,7 @@ class GuardadosControlador {
         $usuarioId = $_SESSION['usuario_id'];
         $tipo = $_POST['tipo'] ?? '';
         $referenciaId = (int) ($_POST['referencia_id'] ?? 0);
-        $volverA = $_POST['volver_a'] ?? (URL_BASE . 'index.php?c=guardados&a=index');
+        $volverA = $this->sanitizarVolverA($_POST['volver_a'] ?? null);
 
         if (in_array($tipo, ['torneo', 'equipo'], true) && $referenciaId > 0) {
             $this->modeloGuardado->guardar($usuarioId, $tipo, $referenciaId);
@@ -58,7 +58,7 @@ class GuardadosControlador {
         $tipo = $_POST['tipo'] ?? '';
         $referenciaId = (int) ($_POST['referencia_id'] ?? 0);
 
-        $volverA = $_POST['volver_a'] ?? (URL_BASE . 'index.php?c=guardados&a=index');
+        $volverA = $this->sanitizarVolverA($_POST['volver_a'] ?? null);
 
         if (in_array($tipo, ['torneo', 'equipo'], true) && $referenciaId > 0) {
             $this->modeloGuardado->quitar($usuarioId, $tipo, $referenciaId);
@@ -66,7 +66,26 @@ class GuardadosControlador {
 
         header("Location: " . $volverA);
         exit;
-    
-}
+    }
+
+    // Valida y sanitiza la redirección para evitar vulnerabilidades de Open Redirect
+    private function sanitizarVolverA(?string $url): string {
+        $default = URL_BASE . 'index.php?c=guardados&a=index';
+        if (empty($url)) {
+            return $default;
+        }
+
+        // Si empieza con la base de la app
+        if (str_starts_with($url, URL_BASE)) {
+            return $url;
+        }
+
+        // Si es una ruta relativa que no comience con '//' (evita protocol-relative URLs)
+        if (str_starts_with($url, 'index.php') || (str_starts_with($url, '/') && !str_starts_with($url, '//'))) {
+            return URL_BASE . ltrim($url, '/');
+        }
+
+        return $default;
+    }
 
 }

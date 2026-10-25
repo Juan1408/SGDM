@@ -111,8 +111,10 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
          Volver a Mis torneos
       </a>
 
-      <?php if (!empty($datos['mensaje'])): ?>
-         <p class="success-message"><?php echo $escapar($datos['mensaje']); ?></p>
+      <?php if (!empty($datos['error'])): ?>
+         <p class="error-message"><i class="fa-solid fa-triangle-exclamation"></i> <?php echo $escapar($datos['error']); ?></p>
+      <?php elseif (!empty($datos['mensaje'])): ?>
+         <p class="success-message"><i class="fa-solid fa-circle-check"></i> <?php echo $escapar($datos['mensaje']); ?></p>
       <?php endif; ?>
 
             <header class="torneo-header">
@@ -788,7 +790,7 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                      <p>
                         <?php
                         if ($torneoEnCurso) {
-                            echo 'Cargá el marcador de cada partido. Una vez guardado, el resultado no se puede modificar.';
+                            echo 'Cargá el marcador de cada partido. Si cometés un error, podés corregir el marcador antes de que avancen rondas posteriores.';
                         } elseif ($torneo['estado'] === 'finalizado') {
                             echo 'El torneo finalizó. Estos son los resultados registrados.';
                         } elseif ($torneo['estado'] === 'cancelado') {
@@ -862,6 +864,46 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                                     Resultado:
                                     <strong><?php echo $formatoMarcador($partido['resultado_local']); ?> - <?php echo $formatoMarcador($partido['resultado_visitante']); ?></strong>
                                  </p>
+
+                                 <?php if ($torneoEnCurso): ?>
+                                    <div style="margin-top: 8px;">
+                                       <button type="button" class="fixture-programar-boton"
+                                          style="font-size: 0.8rem; padding: 4px 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: #93c5fd; border-radius: 4px; cursor: pointer;"
+                                          onclick="document.getElementById('modal-corregir-<?php echo (int) $partido['id']; ?>').showModal()">
+                                          <i class="fa-solid fa-pen-to-square"></i> Corregir marcador
+                                       </button>
+                                    </div>
+
+                                    <dialog class="programar-modal" id="modal-corregir-<?php echo (int) $partido['id']; ?>">
+                                       <form class="edit-form" method="post" action="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=corregirResultado"
+                                          onsubmit="return confirm('¿Confirmás la corrección del marcador? Las tablas y emparejamientos se recalcularán automáticamente.');">
+                                          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                          <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
+                                          <input type="hidden" name="encuentro_id" value="<?php echo (int) $partido['id']; ?>">
+                                          <input type="hidden" name="ronda" value="<?php echo (int) $partido['ronda']; ?>">
+
+                                          <h3>Corregir marcador: <?php echo $escapar(($partido['local_nombre'] ?? '') . ' vs ' . ($partido['visitante_nombre'] ?? '')); ?></h3>
+
+                                          <div class="edit-form__grid">
+                                             <div class="form-group">
+                                                <label for="corr_local_<?php echo (int) $partido['id']; ?>"><?php echo $escapar($partido['local_nombre'] ?? 'Local'); ?></label>
+                                                <input type="number" id="corr_local_<?php echo (int) $partido['id']; ?>" name="resultado_local" min="0" step="any" required
+                                                   value="<?php echo htmlspecialchars($partido['resultado_local']); ?>">
+                                             </div>
+                                             <div class="form-group">
+                                                <label for="corr_visitante_<?php echo (int) $partido['id']; ?>"><?php echo $escapar($partido['visitante_nombre'] ?? 'Visitante'); ?></label>
+                                                <input type="number" id="corr_visitante_<?php echo (int) $partido['id']; ?>" name="resultado_visitante" min="0" step="any" required
+                                                   value="<?php echo htmlspecialchars($partido['resultado_visitante']); ?>">
+                                             </div>
+                                          </div>
+
+                                          <div class="form-actions" style="margin-top: 15px;">
+                                             <button class="button-primary" type="submit">Guardar corrección</button>
+                                             <button class="button-secondary" type="button" onclick="this.closest('dialog').close()">Cancelar</button>
+                                          </div>
+                                       </form>
+                                    </dialog>
+                                 <?php endif; ?>
                               <?php elseif ($puedeCargar): ?>
                                  <form class="marcador-form" method="post"
                                  

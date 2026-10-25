@@ -26,8 +26,8 @@ class EquipoControlador {
 
     //Accion para mostrar el formulario de crear equipo
     public function crear(){
-        //Juegos activos para el select de disciplina del equipo
-        $juegos = \Juego::obtenerInstancia()->obtenerJuegosActivos();
+        //Juegos activos que admiten modalidad de equipos
+        $juegos = \Juego::obtenerInstancia()->obtenerJuegosParaEquipos();
         require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
     }
 
@@ -57,7 +57,7 @@ class EquipoControlador {
         $juegoId = (int) ($_POST['juego_id'] ?? 0);
 
         //Los juegos se recargan porque, si hay error, se vuelve a mostrar el formulario
-        $juegos = \Juego::obtenerInstancia()->obtenerJuegosActivos();
+        $juegos = \Juego::obtenerInstancia()->obtenerJuegosParaEquipos();
 
         //Validacion minima
         if (empty($nombreEquipo)) {
@@ -66,9 +66,9 @@ class EquipoControlador {
             return;
         }
 
-        //El equipo debe estar asociado a un juego activo (juego_id es FK a juegos)
-        if ($juegoId <= 0 || !\Juego::obtenerInstancia()->estaActivo($juegoId)) {
-            $error = "Seleccioná un juego válido para el equipo.";
+        //El equipo debe estar asociado a un juego activo que admita modalidad de equipos
+        if ($juegoId <= 0 || !\Juego::obtenerInstancia()->estaActivo($juegoId) || !\Juego::obtenerInstancia()->permiteEquipos($juegoId)) {
+            $error = "La disciplina seleccionada no admite modalidad por equipos o no se encuentra disponible.";
             require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
             return;
         }
@@ -134,6 +134,9 @@ if ($esJugador) {
                 return stripos($miembro['nombre_completo'], $filtroMiembro) !== false;
             });
         }
+
+        // Estadísticas reales del equipo en torneos
+        $estadisticas = $this->modeloEquipo->obtenerEstadisticasTorneos($equipoId);
 
         require_once __DIR__ . '/../vistas/jugador/perfil-equipo.php';
     }
@@ -302,6 +305,7 @@ if ($esJugador) {
 
         $miembros = $this->modeloEquipo->obtenerMiembros($equipoId);
         $capitanes = $this->modeloEquipo->obtenerCapitanes($equipoId);
+        $solicitudesPendientes = $this->modeloEquipo->obtenerSolicitudesPendientesDelEquipo($equipoId);
 
         if (empty($nombreEquipo)) {
             $error = "El nombre del equipo es obligatorio.";
@@ -313,6 +317,19 @@ if ($esJugador) {
             $error = "Ya existe otro equipo con ese nombre.";
             require_once __DIR__ . '/../vistas/jugador/gestionar-equipo.php';
             return;
+        }
+
+        // Blindaje Fase B: Bloquear cambio de disciplina si el equipo posee torneos activos
+        if (isset($_POST['juego_id'])) {
+            $nuevoJuegoId = (int) $_POST['juego_id'];
+            if ($nuevoJuegoId > 0 && $nuevoJuegoId !== (int) ($equipo['juego_id'] ?? 0)) {
+                $resCambio = $this->modeloEquipo->cambiarDisciplina($equipoId, $nuevoJuegoId);
+                if (!$resCambio['exito']) {
+                    $error = $resCambio['error'];
+                    require_once __DIR__ . '/../vistas/jugador/gestionar-equipo.php';
+                    return;
+                }
+            }
         }
 
         $this->modeloEquipo->actualizarDatos(
@@ -327,7 +344,7 @@ if ($esJugador) {
         exit;
     }
 
-        //Accion para que el capitan expulse a un miembro del equipo
+    //Accion para que el capitan expulse a un miembro del equipo
     public function expulsarMiembro(){
         if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
             header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
@@ -343,6 +360,12 @@ if ($esJugador) {
         //Solo el capitan de ESE equipo puede expulsar
         if ($equipoId <= 0 || !$this->modeloEquipo->esCapitan($equipoId, $usuarioId)) {
             header("Location: " . URL_BASE . "index.php?c=equipo&a=index");
+            exit;
+        }
+
+        // Blindaje Fase B: No se pueden expulsar miembros si el equipo disputa un torneo en curso
+        if ($this->modeloEquipo->tieneTorneosEnCurso($equipoId)) {
+            header("Location: " . URL_BASE . "index.php?c=equipo&a=gestionar&id=" . $equipoId . "&errorExpulsar=" . urlencode("No podés expulsar miembros mientras el equipo esté disputando un torneo en curso."));
             exit;
         }
 
