@@ -840,3 +840,22 @@ Validación y Pruebas Ejecutadas:
   - test_fase_c_seguridad_admin.php: 5 / 5 (100% PASS).
   - test_fases_remediacion.php: 10 / 10 (100% PASS).
   - test_e2e_simulacion_completa.php: 12 / 12 (100% PASS).
+
+58. Corrección de Inconsistencia SQL en Perfil de Equipo y Restauración de Estilos en Detalle de Error
+Objetivo: Subsanar el error de columna inexistente al consultar el perfil de equipos y restaurar la carga de hojas de estilo en la vista de detalle de errores del monitor administrativo.
+
+Inconsistencias Detectadas:
+1. Error SQLSTATE[42S22] en Equipo::obtenerPorId:
+   - En codigo_fuente/modelos/Equipo.php (línea 194), la consulta seleccionaba j.nombre_juego y j.icono_url sobre la tabla juegos.
+   - En el esquema relacional, los campos reales son j.nombre y j.imagen_url.
+   - Al invocar c=equipo&a=verPerfil&id=..., PDO lanzaba un Fatal Error 1054 por columna inexistente.
+2. Pérdida de Estilos Visuales en detalle_error.php:
+   - La vista codigo_fuente/vistas/admin/detalle_error.php tenía rutas CSS absolutas hardcodeadas a http://localhost/SGDM/codigo_fuente/publico/css/admin/....
+   - Al ejecutarse la aplicación dentro de un contenedor Docker o entorno con DocumentRoot directo (/var/www/html), el navegador intentaba resolver la URL externa hardcodeada y fallaba con 404, provocando que la pantalla se renderizara sin estilos ni tipografía.
+
+Solución Aplicada:
+1. Corrección de Consulta SQL en Equipo::obtenerPorId:
+   - Se actualizó la proyección a SELECT e.*, j.nombre AS nombre_juego, j.imagen_url AS juego_icono FROM equipos e LEFT JOIN juegos j ON j.id = e.juego_id.
+   - Mantiene el alias nombre_juego para retrocompatibilidad total con las vistas consumidoras y mapea correctamente la imagen del juego.
+2. Dinamización de Enlaces en detalle_error.php:
+   - Se reemplazaron las URLs fijas por la constante dinámica URL_BASE: URL_BASE . css/admin/base.css y URL_BASE . css/admin/detalle_error.css, además de normalizar el enlace de retorno al dashboard.

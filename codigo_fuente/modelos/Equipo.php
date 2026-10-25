@@ -191,7 +191,7 @@ class Equipo {
 
     //Metodo para traer los datos completos de un equipo por su ID
     public function obtenerPorId(int $id) {
-        $sql = "SELECT e.*, j.nombre_juego, j.icono_url AS juego_icono
+        $sql = "SELECT e.*, j.nombre AS nombre_juego, j.imagen_url AS juego_icono
                 FROM equipos e
                 LEFT JOIN juegos j ON j.id = e.juego_id
                 WHERE e.id = :id AND e.activo = 1 LIMIT 1";

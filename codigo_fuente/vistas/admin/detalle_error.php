@@ -7,9 +7,9 @@
     <title>Detalle del Error - Ascend</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Estilo base global para las variables de tema (Claro/Oscuro) -->
-    <link rel="stylesheet" href="http://localhost/SGDM/codigo_fuente/publico/css/admin/base.css">
+    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/base.css">
     <!-- Estilo específico -->
-    <link rel="stylesheet" href="http://localhost/SGDM/codigo_fuente/publico/css/admin/detalle_error.css">
+    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/detalle_error.css">
 </head>
 <body class="tema-admin">
 
@@ -21,7 +21,7 @@
     </script>
     
     <div class="container">
-    <a href="index.php?c=errorTracking&a=dashboard" class="btn-back">← Volver al Dashboard</a>
+    <a href="<?php echo URL_BASE; ?>index.php?c=errorTracking&a=dashboard" class="btn-back">← Volver al Dashboard</a>
     
     <div class="header">
         <h1><?= htmlspecialchars($error['mensaje']) ?></h1>
