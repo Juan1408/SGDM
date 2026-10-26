@@ -20,8 +20,6 @@
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-   <!-- Tailwind: solo se usa para el botón "Ver más miembros" -->
-   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -116,7 +114,7 @@
 
       <?php
          $bannerEstilo = !empty($torneo['banner_url'])
-            ? ' style="--td-banner: url(\'' . htmlspecialchars(addcslashes(URL_BASE . $torneo['banner_url'], "\"'()\\")) . '\');"'
+            ? ' style="--td-banner: url(\'' . htmlspecialchars(addcslashes((preg_match('#^https?://#i', $torneo['banner_url']) ? $torneo['banner_url'] : URL_BASE . ltrim($torneo['banner_url'], '/')), "\"'()\\")) . '\');"'
             : '';
       ?>
       <section class="td-hero"<?php echo $bannerEstilo; ?>>

@@ -59,7 +59,7 @@ $tiposActividad = [
 
 // Banner actual (si el borrador ya tiene uno propio)
 $bannerActual = !empty($torneo['banner_url'])
-    ? URL_BASE . $torneo['banner_url']
+    ? (preg_match('#^https?://#i', $torneo['banner_url']) ? $torneo['banner_url'] : URL_BASE . ltrim($torneo['banner_url'], '/'))
     : URL_BASE . 'img/banners/humo1.jpg';
 
 // Ubicación: presencial u online (la plataforma se guarda dentro de "ubicacion")
