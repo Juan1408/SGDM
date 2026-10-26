@@ -22,6 +22,22 @@ $itemActivoOrg = (($_GET['c'] ?? '') === 'panelOrganizador') ? ($mapaNavOrg[$acc
 $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ? ' activo' : '';
 ?>
 
+<?php
+//Foto del usuario logueado para el avatar y el panel del menu movil (si no tiene, se usa el icono)
+$urlFotoNav = '';
+try {
+   require_once __DIR__ . '/../../modelos/Conexion.php';
+   $stmtFotoNav = \App\Modelos\Conexion::getInstance()->getBD()->prepare('SELECT foto_perfil_url FROM usuarios WHERE id = :id LIMIT 1');
+   $stmtFotoNav->execute([':id' => (int) ($_SESSION['usuario_id'] ?? 0)]);
+   $fotoNav = trim((string) $stmtFotoNav->fetchColumn());
+   if ($fotoNav !== '') {
+      $urlFotoNav = preg_match('#^https?://#i', $fotoNav) ? $fotoNav : URL_BASE . ltrim($fotoNav, '/');
+   }
+} catch (\Throwable $e) {
+   $urlFotoNav = '';
+}
+?>
+
 <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
 <!-- footer.css se carga aca para que las vistas del organizador solo tengan que incluir footer.html -->
 <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -45,88 +61,9 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
       gap: 14px;
    }
 
-   .panel-mi-perfil-mobile {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: min(280px, 85vw);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 100px 1.5rem 40px;
-      background: rgba(7, 8, 18, 0.97);
-      backdrop-filter: blur(12px);
-      border-right: 1px solid rgba(0, 255, 238, 0.2);
-      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-      overflow-y: auto;
-      transition: left 0.35s cubic-bezier(0.1, 1, 0.1, 1);
-      z-index: 1005;
-   }
-
-   .panel-mi-perfil-mobile.active { left: 0; }
-
-   .panel-mi-perfil-mobile .encabezado-perfil {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 16px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-   }
-
-   .panel-mi-perfil-mobile .encabezado-perfil i {
-      font-size: 40px;
-      color: #00FFEE;
-   }
-
-   .panel-mi-perfil-mobile .etiqueta-seccion {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6a6a80;
-      margin: 14px 0 6px;
-   }
-
-   .panel-mi-perfil-mobile a,
-   .panel-mi-perfil-mobile button {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: #fff;
-      text-decoration: none;
-      font-family: inherit;
-      font-size: 15px;
-      padding: 10px 8px;
-      border-radius: 10px;
-      cursor: pointer;
-      text-align: left;
-   }
-
-   .panel-mi-perfil-mobile a:hover,
-   .panel-mi-perfil-mobile button:hover {
-      background: rgba(255, 255, 255, 0.06);
-   }
-
-   .panel-mi-perfil-mobile button.cerrar-sesion { color: #ff6b6b; margin-top: 10px; }
-   .panel-mi-perfil-mobile i { width: 18px; text-align: center; }
-
-   .overlay-fondo-jugador {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      display: none;
-   }
-   .overlay-fondo-jugador.active { display: block; }
-
    @media (min-width: 881px) {
       .avatar-mobile-toggle,
-      .panel-mi-perfil-mobile,
-      .overlay-fondo-jugador {
+      .panel-mi-perfil-mobile {
          display: none !important;
       }
 
@@ -193,7 +130,11 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
       </a>
 
       <button class="avatar-mobile-toggle" id="avatar-toggle-jugador" type="button" aria-label="Abrir menú de perfil">
-         <i class="fa-solid fa-circle-user"></i>
+         <?php if ($urlFotoNav !== ''): ?>
+            <img src="<?php echo htmlspecialchars($urlFotoNav); ?>" alt="Mi perfil">
+         <?php else: ?>
+            <i class="fa-solid fa-circle-user"></i>
+         <?php endif; ?>
       </button>
 
       <ul class="navbar-menu" id="nav-links">
@@ -256,8 +197,17 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
 
 <aside class="panel-mi-perfil-mobile" id="panel-perfil-mobile-jugador">
 
+   <button type="button" class="panel-cerrar" id="panel-perfil-cerrar" aria-label="Cerrar menú de perfil">
+      <span class="bar"></span>
+      <span class="bar"></span>
+   </button>
+
    <div class="encabezado-perfil">
-      <i class="fa-solid fa-circle-user"></i>
+      <?php if ($urlFotoNav !== ''): ?>
+         <img class="encabezado-foto" src="<?php echo htmlspecialchars($urlFotoNav); ?>" alt="Tu foto de perfil">
+      <?php else: ?>
+         <i class="fa-solid fa-circle-user"></i>
+      <?php endif; ?>
       <div>
          <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Mi cuenta'); ?></strong>
       </div>
@@ -369,6 +319,7 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
       });
 
       overlay.addEventListener("click", cerrarPaneles);
+      document.getElementById("panel-perfil-cerrar").addEventListener("click", cerrarPaneles);
 
       btnCampana.addEventListener("click", (evento) => {
          evento.stopPropagation();
@@ -420,4 +371,4 @@ $claseActivoOrg = static fn (string $item): string => $item === $itemActivoOrg ?
          ajustarRiel();
       }
    });
-</script>
+</script>

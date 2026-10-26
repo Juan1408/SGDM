@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    ESTILOS GENERALES Y CONTENEDOR
    Mobile first: la base es el menú hamburguesa /
    panel lateral. Desde 881px se muestra el menú
@@ -101,39 +101,47 @@
    background-color: #00FFEE;
 }
 
-/* --- MENÚ (panel lateral en mobile) --- */
+/* --- MENÚ MÓVIL (pantalla completa) ---
+   Se anima con opacidad en vez de deslizar. El overlay oscuro ya no hace falta:
+   el menú ocupa todo y no hay nada que oscurecer. */
 .navbar-menu {
    position: fixed;
    top: 0;
-   right: -100%; /* Escondido por defecto a la derecha */
+   left: 0;
 
-   width: min(270px, 80vw);
+   width: 100%;
    height: 100vh;
-   max-width: 100vw;
+   height: 100dvh;
 
    display: flex;
    flex-direction: column;
    align-items: flex-start;
    justify-content: flex-start;
-   gap: 1.8rem;
+   gap: 0;
 
-   padding: 100px 2rem 40px;
-   background: rgba(7, 8, 18, 0.96);
-   backdrop-filter: blur(12px);
-   border-left: 1px solid rgba(245, 17, 203, 0.2);
-   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+   padding: 100px 1.75rem 40px;
+   background:
+      radial-gradient(circle at 90% 0%, rgba(var(--color-violeta-rgb), 0.35), transparent 55%),
+      #070812;
+   overflow-y: auto;
 
    list-style: none;
-   transition: right 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(-14px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
    z-index: 1005;
 }
 
 .navbar-menu.active {
-   right: 0;
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
 }
 
 .navbar-menu li {
    width: 100%;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .navbar-menu li a,
@@ -144,10 +152,10 @@
 
    text-decoration: none;
    color: #fff;
-   font-size: 17px;
+   font-size: 22px;
    font-weight: 600;
-   padding: 8px 0;
-   transition: all 0.3s ease;
+   padding: 16px 0;
+   transition: color 0.25s ease;
 }
 
 .navbar-menu .auth-links a {
@@ -155,7 +163,7 @@
 }
 
 .navbar-menu li a:hover {
-   color: #00FFEE;
+   color: var(--color-violeta);
 }
 
 /* --- desplegable (TORNEOS) en mobile: acordeón dentro del panel --- */
@@ -175,7 +183,7 @@
 }
 
 .boton-desplegable:hover {
-   color: #00FFEE;
+   color: var(--color-violeta);
 }
 
 .contenido-desplegable {
@@ -188,8 +196,9 @@
    padding: 6px;
 
    background: rgba(255, 255, 255, 0.03);
-   border: 1px solid rgba(245, 17, 203, 0.15);
-   border-radius: 14px;
+   border: none;
+   border-left: 2px solid var(--color-violeta);
+   border-radius: 0;
    box-shadow: none;
 }
 
@@ -208,13 +217,13 @@
    color: #fff;
    text-decoration: none;
    border-radius: 10px;
-   font-size: 14px;
+   font-size: 17px;
    text-align: left;
 }
 
 .contenido-desplegable a:hover {
-   background: rgba(0, 255, 238, 0.12);
-   color: #00FFEE;
+   background: rgba(var(--color-violeta-rgb), 0.18);
+   color: var(--color-violeta);
 }
 
 .desplegable.open .contenido-desplegable {
@@ -300,10 +309,16 @@
       backdrop-filter: none;
       border-left: none;
       box-shadow: none;
+      overflow: visible;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: none;
    }
 
    .navbar-menu li {
       width: auto;
+      border-bottom: none;
    }
 
    .navbar-menu li a,
@@ -794,6 +809,143 @@
    }
 
 }
+/* ==========================================================================
+   PANEL DE PERFIL MÓVIL (jugador y organizador)
+   Pantalla completa, mismo estilo que el menú del navbar. En escritorio
+   se oculta desde el propio componente del navbar.
+   ========================================================================== */
+.panel-mi-perfil-mobile {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100vh;
+   height: 100dvh;
+
+   display: flex;
+   flex-direction: column;
+   gap: 0;
+
+   padding: 90px 1.75rem 40px;
+   background:
+      radial-gradient(circle at 10% 0%, rgba(var(--color-violeta-rgb), 0.35), transparent 55%),
+      #070812;
+   overflow-y: auto;
+
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(-14px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+   z-index: 1005;
+}
+
+.panel-mi-perfil-mobile.active {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
+}
+
+/* Botón de cerrar: dos barras en X, igual que el hamburguesa abierto */
+.panel-mi-perfil-mobile .panel-cerrar {
+   position: absolute;
+   top: 28px;
+   right: 1.25rem;
+   width: 40px;
+   height: 40px;
+   padding: 0;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+}
+
+.panel-cerrar .bar {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   margin: 0;
+   background-color: #00FFEE;
+}
+
+.panel-cerrar .bar:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+.panel-cerrar .bar:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.panel-mi-perfil-mobile .encabezado-perfil {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding-bottom: 20px;
+   margin-bottom: 8px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+   color: #fff;
+   font-size: 20px;
+}
+
+.panel-mi-perfil-mobile .encabezado-perfil i {
+   font-size: 64px;
+   color: #00FFEE;
+}
+
+.panel-mi-perfil-mobile .encabezado-foto {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+   flex-shrink: 0;
+}
+
+.panel-mi-perfil-mobile .etiqueta-seccion {
+   font-size: 12px;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: #8a8aa3;
+   margin: 22px 0 6px;
+}
+
+.panel-mi-perfil-mobile a,
+.panel-mi-perfil-mobile button.cerrar-sesion {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   width: 100%;
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+   color: #fff;
+   text-decoration: none;
+   font-family: inherit;
+   font-size: 20px;
+   font-weight: 600;
+   padding: 14px 0;
+   cursor: pointer;
+   text-align: left;
+   transition: color 0.25s ease;
+}
+
+.panel-mi-perfil-mobile a:hover {
+   color: var(--color-violeta);
+}
+
+.panel-mi-perfil-mobile button.cerrar-sesion {
+   color: #ff6b6b;
+   margin-top: 14px;
+   border-bottom: none;
+}
+
+.panel-mi-perfil-mobile i {
+   width: 24px;
+   text-align: center;
+}
+
+/* Foto del usuario en el botón de avatar del navbar móvil */
+.avatar-mobile-toggle img {
+   width: 38px;
+   height: 38px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+}
+
 /* ===== Botón "Volver arriba" ===== */
 
 #boton-volver-arriba {
