@@ -48,21 +48,32 @@ class Torneo {
         return $this->obtenerUltimosTorneosCreados($limite);
     }
 
-    //Metodo para inscribir a un jugador o equipo en un torneo
+    //Metodo para inscribir a un jugador o equipo en un torneo (con soporte de reintento en caso de rechazo previo)
     public function inscribirse(int $torneoId, string $tipo, int $referenciaId, string $nombre): bool {
-        $sql = "INSERT INTO participantes_torneo (torneo_id, tipo, referencia_id, nombre)
-                VALUES (:torneo_id, :tipo, :referencia_id, :nombre)";
-        $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([
-            ':torneo_id' => $torneoId,
-            ':tipo' => $tipo,
-            ':referencia_id' => $referenciaId,
-            ':nombre' => $nombre,
-        ]);
+        try {
+            $sql = "INSERT INTO participantes_torneo (torneo_id, tipo, referencia_id, nombre, estado, fecha_inscripcion, confirmado_por, fecha_confirmacion)
+                    VALUES (:torneo_id, :tipo, :referencia_id, :nombre, 'pendiente', CURRENT_TIMESTAMP, NULL, NULL)
+                    ON DUPLICATE KEY UPDATE
+                        estado = IF(estado IN ('rechazado', 'cancelado'), 'pendiente', estado),
+                        nombre = VALUES(nombre),
+                        fecha_inscripcion = IF(estado IN ('rechazado', 'cancelado'), CURRENT_TIMESTAMP, fecha_inscripcion),
+                        confirmado_por = IF(estado IN ('rechazado', 'cancelado'), NULL, confirmado_por),
+                        fecha_confirmacion = IF(estado IN ('rechazado', 'cancelado'), NULL, fecha_confirmacion)";
+            $stmt = $this->bd->prepare($sql);
+            return $stmt->execute([
+                ':torneo_id' => $torneoId,
+                ':tipo' => $tipo,
+                ':referencia_id' => $referenciaId,
+                ':nombre' => $nombre,
+            ]);
+        } catch (\PDOException $e) {
+            error_log("Error al inscribirse en torneo: " . $e->getMessage());
+            return false;
+        }
     }
 
     //Metodo para saber si el jugador (directo o via alguno de sus equipos) ya esta inscripto
-    public function obtenerInscripcionDelJugador(int $torneoId, int $usuarioId, array $equipoIds): ?array {
+    public function obtenerInscripcionDelJugador(int $torneoId, int $usuarioId, array $equipoIds, bool $soloActivas = true): ?array {
         $condiciones = ["(tipo = 'usuario' AND referencia_id = :usuarioId)"];
         $parametros = [':torneoId' => $torneoId, ':usuarioId' => $usuarioId];
 
@@ -76,11 +87,37 @@ class Torneo {
             $condiciones[] = "(tipo = 'equipo' AND referencia_id IN (" . implode(',', $marcadores) . "))";
         }
 
-        $sql = "SELECT * FROM participantes_torneo WHERE torneo_id = :torneoId AND (" . implode(' OR ', $condiciones) . ") LIMIT 1";
+        $filtroEstado = $soloActivas ? " AND estado IN ('confirmado', 'pendiente')" : "";
+        $sql = "SELECT * FROM participantes_torneo 
+                WHERE torneo_id = :torneoId AND (" . implode(' OR ', $condiciones) . "){$filtroEstado} 
+                ORDER BY FIELD(estado, 'confirmado', 'pendiente', 'rechazado', 'cancelado') LIMIT 1";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($parametros);
         $inscripcion = $stmt->fetch(PDO::FETCH_ASSOC);
         return $inscripcion ?: null;
+    }
+
+    //Metodo para detectar si miembros del equipo ya estan participando en otro equipo en este torneo
+    public function obtenerMiembrosEnConflicto(int $torneoId, int $equipoId): array {
+        $sql = "SELECT DISTINCT u.id, u.nombre_completo, e.nombre_equipo
+                FROM equipo_miembros em_nuevo
+                INNER JOIN usuarios u ON u.id = em_nuevo.usuario_id
+                INNER JOIN equipo_miembros em_existente ON em_existente.usuario_id = em_nuevo.usuario_id AND em_existente.es_activo = 1
+                INNER JOIN participantes_torneo pt ON pt.tipo = 'equipo' 
+                    AND pt.referencia_id = em_existente.equipo_id 
+                    AND pt.torneo_id = :torneoId
+                    AND pt.estado IN ('confirmado', 'pendiente')
+                INNER JOIN equipos e ON e.id = pt.referencia_id
+                WHERE em_nuevo.equipo_id = :equipoId
+                  AND em_nuevo.es_activo = 1
+                  AND pt.referencia_id <> :equipoIdMismo";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([
+            ':torneoId' => $torneoId,
+            ':equipoId' => $equipoId,
+            ':equipoIdMismo' => $equipoId,
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
         //Metodo para el detalle publico de un torneo puntual (ya publicado)
@@ -411,7 +448,7 @@ class Torneo {
                        t.fecha_inicio, t.fecha_fin,
                        j.nombre AS juego_nombre,
                        u.nombre_completo AS organizador_nombre,
-                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'aprobado') AS total_participantes
+                       (SELECT COUNT(*) FROM participantes_torneo WHERE torneo_id = t.id AND estado = 'confirmado') AS total_participantes
                 FROM torneos t
                 INNER JOIN juegos j ON t.juego_id = j.id
                 INNER JOIN usuarios u ON t.organizador_id = u.id
@@ -425,11 +462,11 @@ class Torneo {
     public function crearBorrador(array $datos, int $organizadorId): int {
         $sql = "INSERT INTO torneos
                     (nombre, juego_id, formato, estado, cupo_max_equipos, organizador_id,
-                    modalidad_id, sistema_puntuacion_id, tipo_resultado, mejor_de,
-                    banner_url, descripcion, reglas)
+                    modalidad_id, sistema_puntuacion_id, puntos_victoria, puntos_empate, puntos_derrota,
+                    tipo_resultado, mejor_de, banner_url, descripcion, reglas)
                 VALUES (:nombre, :juego_id, :formato, 'borrador', :cupo, :organizador_id,
-                        :modalidad_id, :sistema_puntuacion_id, :tipo_resultado, :mejor_de,
-                        :banner_url, :descripcion, :reglas)";
+                        :modalidad_id, :sistema_puntuacion_id, :puntos_victoria, :puntos_empate, :puntos_derrota,
+                        :tipo_resultado, :mejor_de, :banner_url, :descripcion, :reglas)";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([
             ':nombre' => $datos['nombre'],
@@ -439,6 +476,9 @@ class Torneo {
             ':organizador_id' => $organizadorId,
             ':modalidad_id' => $datos['modalidad_id'],
             ':sistema_puntuacion_id' => $datos['sistema_puntuacion_id'],
+            ':puntos_victoria' => $datos['puntos_victoria'] ?? 3.00,
+            ':puntos_empate' => $datos['puntos_empate'] ?? 1.00,
+            ':puntos_derrota' => $datos['puntos_derrota'] ?? 0.00,
             ':tipo_resultado' => $datos['tipo_resultado'],
             ':mejor_de' => $datos['mejor_de'],
             ':banner_url' => $datos['banner_url'],
@@ -457,6 +497,9 @@ class Torneo {
                     cupo_max_equipos = :cupo,
                     modalidad_id = :modalidad_id,
                     sistema_puntuacion_id = :sistema_puntuacion_id,
+                    puntos_victoria = :puntos_victoria,
+                    puntos_empate = :puntos_empate,
+                    puntos_derrota = :puntos_derrota,
                     descripcion = :descripcion,
                     reglas = :reglas,
                     banner_url = COALESCE(:banner_url, banner_url)
@@ -469,6 +512,9 @@ class Torneo {
             ':cupo' => $datos['cupo'],
             ':modalidad_id' => $datos['modalidad_id'],
             ':sistema_puntuacion_id' => $datos['sistema_puntuacion_id'],
+            ':puntos_victoria' => $datos['puntos_victoria'] ?? 3.00,
+            ':puntos_empate' => $datos['puntos_empate'] ?? 1.00,
+            ':puntos_derrota' => $datos['puntos_derrota'] ?? 0.00,
             ':descripcion' => $datos['descripcion'],
             ':reglas' => $datos['reglas'],
             ':banner_url' => $datos['banner_url'],
@@ -580,7 +626,8 @@ class Torneo {
                 AND fecha_inicio IS NOT NULL
                 AND fecha_fin IS NOT NULL";
         $stmt = $this->bd->prepare($sql);
-        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]);
+        //execute() devuelve true aunque no haya filas afectadas; rowCount distingue "publicado" de "no se pudo publicar"
+        return $stmt->execute([':id' => $torneoId, ':organizador_id' => $organizadorId]) && $stmt->rowCount() > 0;
     }
 
     public function actualizarGestion(int $torneoId, int $organizadorId, array $datos): bool {
@@ -628,7 +675,6 @@ class Torneo {
     }
 
     public function cambiarEstado(int $torneoId, int $organizadorId, string $estadoNuevo): bool {
-        $torneo = $this->obtenerBorrador($torneoId, $organizadorId);
         $transiciones = [
             'borrador' => ['inscripciones_abiertas', 'cancelado'],
             'inscripciones_abiertas' => ['en_curso', 'cancelado'],
@@ -636,42 +682,114 @@ class Torneo {
             'finalizado' => [],
             'cancelado' => [],
         ];
-        if (!$torneo || !in_array($estadoNuevo, $transiciones[$torneo['estado']] ?? [], true)) {
-            return false;
-        }
 
-        if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
-            return false;
-        }
-
+        $transaccionPropia = false;
         try {
-            $this->bd->beginTransaction();
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+
+            // Lock pesimista en InnoDB para evitar condiciones de carrera en transiciones concurrentes
+            $stmtTorneo = $this->bd->prepare(
+                "SELECT id, estado FROM torneos WHERE id = :id AND organizador_id = :organizador_id FOR UPDATE"
+            );
+            $stmtTorneo->execute([
+                ':id' => $torneoId,
+                ':organizador_id' => $organizadorId,
+            ]);
+            $torneo = $stmtTorneo->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$torneo) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return false;
+            }
+
+            $estadoAnterior = $torneo['estado'];
+
+            if (!in_array($estadoNuevo, $transiciones[$estadoAnterior] ?? [], true)) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return false;
+            }
+
+            // El podio se calcula y guarda dentro de la misma transacción que el cambio de estado
+            if ($estadoNuevo === 'finalizado' && !$this->generarPodio($torneoId)) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return false;
+            }
+
+            // Guarda de estado anterior estricta en el UPDATE
             $stmt = $this->bd->prepare(
-                "UPDATE torneos SET estado = :estado WHERE id = :id AND organizador_id = :organizador_id"
+                "UPDATE torneos SET estado = :estado WHERE id = :id AND organizador_id = :organizador_id AND estado = :estado_anterior"
             );
             $stmt->execute([
                 ':estado' => $estadoNuevo,
                 ':id' => $torneoId,
                 ':organizador_id' => $organizadorId,
+                ':estado_anterior' => $estadoAnterior,
             ]);
+            if ($stmt->rowCount() === 0) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return false;
+            }
+
+            // Al pasar a 'en_curso', las solicitudes que hayan quedado pendientes se descartan automáticamente
+            if ($estadoNuevo === 'en_curso') {
+                $descartarPendientes = $this->bd->prepare(
+                    "UPDATE participantes_torneo
+                     SET estado = 'rechazado'
+                     WHERE torneo_id = :torneo_id AND estado = 'pendiente'"
+                );
+                $descartarPendientes->execute([':torneo_id' => $torneoId]);
+            }
+
             $historial = $this->bd->prepare(
                 'INSERT INTO torneo_cambio_estado (torneo_id, estado_anterior, estado_nuevo, usuario_id)
                  VALUES (:torneo_id, :estado_anterior, :estado_nuevo, :usuario_id)'
             );
             $historial->execute([
                 ':torneo_id' => $torneoId,
-                ':estado_anterior' => $torneo['estado'],
+                ':estado_anterior' => $estadoAnterior,
                 ':estado_nuevo' => $estadoNuevo,
                 ':usuario_id' => $organizadorId,
             ]);
-            $this->bd->commit();
+
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return true;
         } catch (\Throwable $error) {
-            if ($this->bd->inTransaction()) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
                 $this->bd->rollBack();
             }
             return false;
         }
+    }
+
+    // Permite al jugador o capitan retirar/cancelar su inscripcion mientras las inscripciones sigan abiertas
+    public function cancelarInscripcionParticipante(int $torneoId, string $tipo, int $referenciaId): bool {
+        $stmt = $this->bd->prepare(
+            "UPDATE participantes_torneo
+             SET estado = 'cancelado'
+             WHERE torneo_id = :torneoId
+               AND tipo = :tipo
+               AND referencia_id = :referenciaId
+               AND estado IN ('pendiente', 'confirmado')"
+        );
+        $stmt->execute([
+            ':torneoId' => $torneoId,
+            ':tipo' => $tipo,
+            ':referenciaId' => $referenciaId,
+        ]);
+        return $stmt->rowCount() > 0;
     }
 
     private function generarPodio(int $torneoId): bool {
@@ -957,9 +1075,13 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-        public function generarFixture(int $torneoId, int $organizadorId): array {
+    public function generarFixture(int $torneoId, int $organizadorId): array {
         try {
-            $this->bd->beginTransaction();
+            $transaccionPropia = false;
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
             $torneoStmt = $this->bd->prepare(
                 "SELECT formato, estado, cupo_max_equipos FROM torneos
                  WHERE id = :torneo_id AND organizador_id = :organizador_id FOR UPDATE"
@@ -991,6 +1113,10 @@ class Torneo {
             $cantidad = count($participantes);
             if ($torneo['formato'] === 'eliminacion_directa' && ($cantidad & ($cantidad - 1)) !== 0) {
                 throw new \RuntimeException('La eliminación directa necesita 2, 4, 8, 16, 32 o 64 participantes.');
+            }
+            //El suizo actual empareja de a dos y no tiene bye: con cantidad impar quedaria un jugador sin partido
+            if ($torneo['formato'] === 'suizo' && $cantidad % 2 !== 0) {
+                throw new \RuntimeException('El sistema suizo necesita una cantidad par de participantes.');
             }
 
             // Se reemplaza el fixture anterior (todavía sin resultados) y el historial de emparejamientos suizos
@@ -1040,20 +1166,117 @@ class Torneo {
             } else {
                 $this->crearRondaSuiza($torneoId, $participantes, 1);
             }
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return ['ok' => true, 'mensaje' => 'Fixture generado correctamente.'];
         } catch (\Throwable $error) {
-            if ($this->bd->inTransaction()) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
                 $this->bd->rollBack();
             }
             return ['ok' => false, 'mensaje' => $error->getMessage()];
         }
     }
 
-        // Guarda fecha, hora y sede de un partido que todavía no se jugó
-    public function programarEncuentro(int $encuentroId, int $organizadorId, string $fechaHora, string $sede): bool {
+    /**
+     * Verifica si existen conflictos de horario o de cancha para un encuentro
+     * respecto a otros partidos programados en el mismo torneo.
+     *
+     * @param int $encuentroId ID del encuentro a evaluar (se excluye a sí mismo)
+     * @param string $fechaHora Fecha y hora propuesta ('Y-m-d H:i:s')
+     * @param string|null $sede Nombre o sede/cancha propuesta
+     * @return string|null Mensaje descriptivo del conflicto o null si la programación es válida
+     */
+    public function verificarConflictosProgramacion(int $encuentroId, string $fechaHora, ?string $sede = null): ?string {
+        $stmtEncuentro = $this->bd->prepare(
+            "SELECT e.id, e.torneo_id, e.ronda, e.participante_local_id, e.participante_visitante_id,
+                    t.ubicacion AS ubicacion_torneo
+             FROM torneo_encuentros e
+             INNER JOIN torneos t ON t.id = e.torneo_id
+             WHERE e.id = :id"
+        );
+        $stmtEncuentro->execute([':id' => $encuentroId]);
+        $encuentro = $stmtEncuentro->fetch(\PDO::FETCH_ASSOC);
+        if (!$encuentro) {
+            return 'El encuentro especificado no existe.';
+        }
+
+        $torneoId = (int) $encuentro['torneo_id'];
+        $canchaEfectiva = trim($sede ?? '') !== '' ? trim($sede) : trim($encuentro['ubicacion_torneo'] ?? '');
+
+        // 1. Conflicto de Cancha/Sede en el mismo horario o solapamiento (< 30 min)
+        if ($canchaEfectiva !== '') {
+            $stmtCancha = $this->bd->prepare(
+                "SELECT e.id, e.ronda,
+                        COALESCE(pl.nombre, 'Por definir') AS local_nombre,
+                        COALESCE(pv.nombre, 'Por definir') AS visitante_nombre,
+                        COALESCE(NULLIF(TRIM(e.cancha), ''), :ubicacion_torneo) AS cancha_ocupada,
+                        DATE_FORMAT(e.fecha_hora_programada, '%d/%m/%Y %H:%i') AS horario_ocupado
+                 FROM torneo_encuentros e
+                 INNER JOIN torneos t ON t.id = e.torneo_id
+                 LEFT JOIN participantes_torneo pl ON pl.id = e.participante_local_id
+                 LEFT JOIN participantes_torneo pv ON pv.id = e.participante_visitante_id
+                 WHERE e.torneo_id = :torneo_id
+                   AND e.id != :encuentro_id
+                   AND e.estado IN ('programado', 'aplazado')
+                   AND e.fecha_hora_programada IS NOT NULL
+                   AND ABS(TIMESTAMPDIFF(MINUTE, e.fecha_hora_programada, :fecha_hora)) < 30
+                   AND LOWER(TRIM(COALESCE(NULLIF(TRIM(e.cancha), ''), :ubicacion_torneo_def))) = LOWER(:cancha_efectiva)
+                 LIMIT 1"
+            );
+            $stmtCancha->execute([
+                ':torneo_id' => $torneoId,
+                ':encuentro_id' => $encuentroId,
+                ':fecha_hora' => $fechaHora,
+                ':ubicacion_torneo' => $encuentro['ubicacion_torneo'] ?? '',
+                ':ubicacion_torneo_def' => $encuentro['ubicacion_torneo'] ?? '',
+                ':cancha_efectiva' => $canchaEfectiva,
+            ]);
+            $colisionCancha = $stmtCancha->fetch(\PDO::FETCH_ASSOC);
+            if ($colisionCancha) {
+                return "Conflicto de sede: La cancha '{$canchaEfectiva}' ya se encuentra asignada al partido {$colisionCancha['local_nombre']} vs {$colisionCancha['visitante_nombre']} en ese mismo horario ({$colisionCancha['horario_ocupado']}).";
+            }
+        }
+
+        // 2. Conflicto de Participantes en el mismo horario o solapamiento (< 30 min)
+        $participantes = array_filter([
+            $encuentro['participante_local_id'] ? (int) $encuentro['participante_local_id'] : null,
+            $encuentro['participante_visitante_id'] ? (int) $encuentro['participante_visitante_id'] : null,
+        ]);
+
+        if (!empty($participantes)) {
+            $inClause = implode(',', array_map('intval', $participantes));
+            $stmtParticipante = $this->bd->prepare(
+                "SELECT e.id, e.ronda, p.nombre AS participante_nombre,
+                        DATE_FORMAT(e.fecha_hora_programada, '%d/%m/%Y %H:%i') AS horario_ocupado
+                 FROM torneo_encuentros e
+                 INNER JOIN participantes_torneo p ON p.id IN (e.participante_local_id, e.participante_visitante_id)
+                 WHERE e.torneo_id = :torneo_id
+                   AND e.id != :encuentro_id
+                   AND e.estado IN ('programado', 'aplazado')
+                   AND e.fecha_hora_programada IS NOT NULL
+                   AND ABS(TIMESTAMPDIFF(MINUTE, e.fecha_hora_programada, :fecha_hora)) < 30
+                   AND p.id IN ($inClause)
+                 LIMIT 1"
+            );
+            $stmtParticipante->execute([
+                ':torneo_id' => $torneoId,
+                ':encuentro_id' => $encuentroId,
+                ':fecha_hora' => $fechaHora,
+            ]);
+            $colisionPart = $stmtParticipante->fetch(\PDO::FETCH_ASSOC);
+            if ($colisionPart) {
+                return "Conflicto de horario: El participante '{$colisionPart['participante_nombre']}' ya tiene otro partido asignado en la Ronda {$colisionPart['ronda']} a las {$colisionPart['horario_ocupado']}.";
+            }
+        }
+
+        return null;
+    }
+
+    // Guarda fecha, hora y sede de un partido que todavía no se jugó
+    public function programarEncuentro(int $encuentroId, int $organizadorId, string $fechaHora, string $sede): array {
         $existe = $this->bd->prepare(
-            "SELECT e.id FROM torneo_encuentros e
+            "SELECT e.id, e.torneo_id FROM torneo_encuentros e
              INNER JOIN torneos t ON t.id = e.torneo_id
              WHERE e.id = :id AND t.organizador_id = :organizador_id
                AND e.estado IN ('programado', 'aplazado')
@@ -1061,22 +1284,38 @@ class Torneo {
         );
         $existe->execute([':id' => $encuentroId, ':organizador_id' => $organizadorId]);
         if (!$existe->fetchColumn()) {
-            return false;
+            return ['ok' => false, 'mensaje' => 'El partido no se encuentra disponible para programar.'];
+        }
+
+        // Detección de colisiones y conflictos de programación (Fase D)
+        $conflicto = $this->verificarConflictosProgramacion($encuentroId, $fechaHora, $sede);
+        if ($conflicto !== null) {
+            return ['ok' => false, 'mensaje' => $conflicto];
         }
 
         $actualizar = $this->bd->prepare(
             'UPDATE torneo_encuentros SET fecha_hora_programada = :fecha_hora, cancha = :sede WHERE id = :id'
         );
-        return $actualizar->execute([
+        $exito = $actualizar->execute([
             ':fecha_hora' => $fechaHora,
-            ':sede' => $sede !== '' ? $sede : null,
+            ':sede' => trim($sede) !== '' ? trim($sede) : null,
             ':id' => $encuentroId,
         ]);
+
+        if (!$exito) {
+            return ['ok' => false, 'mensaje' => 'Error al guardar la programación en la base de datos.'];
+        }
+
+        return ['ok' => true, 'mensaje' => 'Partido programado correctamente.'];
     }
 
     public function guardarResultado(int $encuentroId, int $organizadorId, float $local, float $visitante): array {
         try {
-            $this->bd->beginTransaction();
+            $transaccionPropia = false;
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
             $consulta = $this->bd->prepare(
                 "SELECT e.id, e.torneo_id, e.participante_local_id, e.participante_visitante_id,
                         e.estado, t.formato, t.estado AS estado_torneo
@@ -1118,10 +1357,129 @@ class Torneo {
             } elseif ($encuentro['formato'] === 'suizo') {
                 $this->avanzarSuizo((int) $encuentro['torneo_id']);
             }
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return ['ok' => true, 'mensaje' => 'Resultado guardado correctamente.'];
         } catch (\Throwable $error) {
-            if ($this->bd->inTransaction()) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            return ['ok' => false, 'mensaje' => $error->getMessage()];
+        }
+    }
+
+    // Permite al organizador corregir un marcador previamente cargado, recalculando posiciones o llaves
+    public function corregirResultado(int $encuentroId, int $organizadorId, float $local, float $visitante): array {
+        $transaccionPropia = false;
+        try {
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+            $consulta = $this->bd->prepare(
+                "SELECT e.id, e.torneo_id, e.ronda, e.participante_local_id, e.participante_visitante_id,
+                        e.resultado_local, e.resultado_visitante, e.participante_ganador_id,
+                        e.estado, t.formato, t.estado AS estado_torneo
+                 FROM torneo_encuentros e
+                 INNER JOIN torneos t ON t.id = e.torneo_id
+                 WHERE e.id = :encuentro_id AND t.organizador_id = :organizador_id
+                 FOR UPDATE"
+            );
+            $consulta->execute([':encuentro_id' => $encuentroId, ':organizador_id' => $organizadorId]);
+            $encuentro = $consulta->fetch(PDO::FETCH_ASSOC);
+
+            if (!$encuentro || $encuentro['estado'] !== 'finalizado' || $encuentro['estado_torneo'] !== 'en_curso') {
+                throw new \RuntimeException('Solo se pueden corregir partidos finalizados de un torneo en curso.');
+            }
+            if ($local < 0 || $visitante < 0 || ($encuentro['formato'] === 'eliminacion_directa' && $local === $visitante)) {
+                throw new \RuntimeException('El resultado no es válido para este formato.');
+            }
+
+            $torneoId = (int) $encuentro['torneo_id'];
+            $ronda = (int) $encuentro['ronda'];
+            $ganadorAnterior = $encuentro['participante_ganador_id'] !== null ? (int) $encuentro['participante_ganador_id'] : null;
+
+            $nuevoGanador = $local > $visitante
+                ? (int) $encuentro['participante_local_id']
+                : ($visitante > $local ? (int) $encuentro['participante_visitante_id'] : null);
+
+            // Validaciones y propagación según el formato:
+            if ($encuentro['formato'] === 'eliminacion_directa') {
+                if ($ganadorAnterior !== null && $nuevoGanador !== null && $ganadorAnterior !== $nuevoGanador) {
+                    // Si el ganador anterior cambió, verificamos si ya disputó partidos en rondas posteriores
+                    $stmtPost = $this->bd->prepare(
+                        "SELECT COUNT(*) FROM torneo_encuentros
+                         WHERE torneo_id = :torneo_id AND ronda > :ronda
+                           AND (participante_local_id = :ganador_ant_loc OR participante_visitante_id = :ganador_ant_vis)
+                           AND estado = 'finalizado'"
+                    );
+                    $stmtPost->execute([
+                        ':torneo_id' => $torneoId,
+                        ':ronda' => $ronda,
+                        ':ganador_ant_loc' => $ganadorAnterior,
+                        ':ganador_ant_vis' => $ganadorAnterior,
+                    ]);
+                    if ((int) $stmtPost->fetchColumn() > 0) {
+                        throw new \RuntimeException('No se puede cambiar el ganador porque el participante ya disputó partidos en rondas posteriores.');
+                    }
+
+                    // Si la ronda siguiente fue programada pero no disputada, actualizamos el participante
+                    $stmtActualizarSiguiente = $this->bd->prepare(
+                        "UPDATE torneo_encuentros
+                         SET participante_local_id = IF(participante_local_id = :ganador_ant1, :ganador_nuevo1, participante_local_id),
+                             participante_visitante_id = IF(participante_visitante_id = :ganador_ant2, :ganador_nuevo2, participante_visitante_id)
+                         WHERE torneo_id = :torneo_id AND ronda = :ronda_sig
+                           AND estado = 'programado'"
+                    );
+                    $stmtActualizarSiguiente->execute([
+                        ':ganador_ant1' => $ganadorAnterior,
+                        ':ganador_nuevo1' => $nuevoGanador,
+                        ':ganador_ant2' => $ganadorAnterior,
+                        ':ganador_nuevo2' => $nuevoGanador,
+                        ':torneo_id' => $torneoId,
+                        ':ronda_sig' => $ronda + 1,
+                    ]);
+                }
+            } elseif ($encuentro['formato'] === 'suizo') {
+                // En sistema suizo, no se pueden alterar rondas previas si rondas posteriores ya finalizaron
+                $stmtSuizoPost = $this->bd->prepare(
+                    "SELECT COUNT(*) FROM torneo_encuentros
+                     WHERE torneo_id = :torneo_id AND ronda > :ronda AND estado = 'finalizado'"
+                );
+                $stmtSuizoPost->execute([':torneo_id' => $torneoId, ':ronda' => $ronda]);
+                if ((int) $stmtSuizoPost->fetchColumn() > 0) {
+                    throw new \RuntimeException('No se puede corregir un partido de una ronda anterior cuando rondas posteriores ya han finalizado.');
+                }
+            }
+
+            // Actualizamos el marcador y ganador del encuentro
+            $actualizar = $this->bd->prepare(
+                "UPDATE torneo_encuentros
+                 SET resultado_local = :local, resultado_visitante = :visitante,
+                     participante_ganador_id = :ganador,
+                     modificado_por_usuario_id = :usuario_id
+                 WHERE id = :id"
+            );
+            $actualizar->execute([
+                ':local' => $local,
+                ':visitante' => $visitante,
+                ':ganador' => $nuevoGanador,
+                ':usuario_id' => $organizadorId,
+                ':id' => $encuentroId,
+            ]);
+
+            // Recalculamos tabla de posiciones si es liga o suizo
+            if ($encuentro['formato'] === 'liga' || $encuentro['formato'] === 'suizo') {
+                $this->recalcularPosiciones($torneoId);
+            }
+
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
+            return ['ok' => true, 'mensaje' => 'El resultado ha sido corregido y las tablas fueron actualizadas correctamente.'];
+        } catch (\Throwable $error) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
                 $this->bd->rollBack();
             }
             return ['ok' => false, 'mensaje' => $error->getMessage()];
@@ -1281,15 +1639,19 @@ class Torneo {
         $torneo = $this->bd->prepare(
             "SELECT t.puntos_victoria, t.puntos_empate, t.puntos_derrota,
                     s.puntos_victoria AS sistema_victoria, s.puntos_empate AS sistema_empate,
-                    s.puntos_derrota AS sistema_derrota
-             FROM torneos t LEFT JOIN sistemas_puntuacion s ON s.id = t.sistema_puntuacion_id
+                    s.puntos_derrota AS sistema_derrota,
+                    j.puntos_victoria AS juego_victoria, j.puntos_empate AS juego_empate,
+                    j.puntos_derrota AS juego_derrota
+             FROM torneos t
+             LEFT JOIN sistemas_puntuacion s ON s.id = t.sistema_puntuacion_id
+             LEFT JOIN juegos j ON j.id = t.juego_id
              WHERE t.id = :torneo_id"
         );
         $torneo->execute([':torneo_id' => $torneoId]);
         $reglas = $torneo->fetch(PDO::FETCH_ASSOC) ?: [];
-        $victoria = $reglas['sistema_victoria'] ?? $reglas['puntos_victoria'] ?? 3;
-        $empate = $reglas['sistema_empate'] ?? $reglas['puntos_empate'] ?? 1;
-        $derrota = $reglas['sistema_derrota'] ?? $reglas['puntos_derrota'] ?? 0;
+        $victoria = $reglas['sistema_victoria'] ?? $reglas['puntos_victoria'] ?? $reglas['juego_victoria'] ?? 3;
+        $empate = $reglas['sistema_empate'] ?? $reglas['puntos_empate'] ?? $reglas['juego_empate'] ?? 1;
+        $derrota = $reglas['sistema_derrota'] ?? $reglas['puntos_derrota'] ?? $reglas['juego_derrota'] ?? 0;
 
         $partidos = $this->bd->prepare(
             "SELECT participante_local_id, participante_visitante_id, resultado_local, resultado_visitante
@@ -1421,17 +1783,80 @@ class Torneo {
     }
        
         //Elimina (cancela) a un participante confirmado mientras las inscripciones sigan abiertas
-    public function quitarParticipante(int $inscripcionId, int $organizadorId): bool {
-        $sql = "UPDATE participantes_torneo p
-                INNER JOIN torneos t ON t.id = p.torneo_id
-                SET p.estado = 'cancelado'
-                WHERE p.id = :id
-                  AND p.estado = 'confirmado'
-                  AND t.estado = 'inscripciones_abiertas'
-                  AND t.organizador_id = :organizador_id";
-        $stmt = $this->bd->prepare($sql);
-        $stmt->execute([':id' => $inscripcionId, ':organizador_id' => $organizadorId]);
-        return $stmt->rowCount() > 0;
+    //Si el organizador ya habia pre-generado un fixture, se invalida para evitar partidos fantasmas
+    public function quitarParticipante(int $inscripcionId, int $organizadorId): array {
+        $transaccionPropia = false;
+        try {
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+
+            $stmtInfo = $this->bd->prepare(
+                "SELECT p.id, p.torneo_id, t.estado
+                 FROM participantes_torneo p
+                 INNER JOIN torneos t ON t.id = p.torneo_id
+                 WHERE p.id = :id
+                   AND p.estado = 'confirmado'
+                   AND t.estado = 'inscripciones_abiertas'
+                   AND t.organizador_id = :organizador_id
+                 FOR UPDATE"
+            );
+            $stmtInfo->execute([':id' => $inscripcionId, ':organizador_id' => $organizadorId]);
+            $participante = $stmtInfo->fetch(PDO::FETCH_ASSOC);
+
+            if (!$participante) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return [
+                    'ok' => false,
+                    'fixture_invalidado' => false,
+                    'mensaje' => 'No se pudo eliminar al participante. Solo se puede mientras las inscripciones estén abiertas.'
+                ];
+            }
+
+            $torneoId = (int) $participante['torneo_id'];
+
+            // Pasamos al participante a estado 'cancelado'
+            $stmtUpdate = $this->bd->prepare("UPDATE participantes_torneo SET estado = 'cancelado' WHERE id = :id");
+            $stmtUpdate->execute([':id' => $inscripcionId]);
+
+            // Verificamos si ya se había generado un fixture previo para este torneo
+            $stmtFixture = $this->bd->prepare("SELECT COUNT(*) FROM torneo_encuentros WHERE torneo_id = :torneo_id");
+            $stmtFixture->execute([':torneo_id' => $torneoId]);
+            $hayFixture = ((int) $stmtFixture->fetchColumn()) > 0;
+
+            $fixtureInvalidado = false;
+            if ($hayFixture) {
+                // Invalidamos el fixture obsoleto para no dejar partidos con un participante cancelado
+                $this->bd->prepare("DELETE FROM torneo_encuentros WHERE torneo_id = :torneo_id")->execute([':torneo_id' => $torneoId]);
+                $this->bd->prepare("DELETE FROM torneo_suizo_parejas WHERE torneo_id = :torneo_id")->execute([':torneo_id' => $torneoId]);
+                $this->bd->prepare("DELETE FROM torneo_posiciones WHERE torneo_id = :torneo_id")->execute([':torneo_id' => $torneoId]);
+                $fixtureInvalidado = true;
+            }
+
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
+
+            return [
+                'ok' => true,
+                'fixture_invalidado' => $fixtureInvalidado,
+                'mensaje' => $fixtureInvalidado
+                    ? 'Participante eliminado. El fixture previo fue invalidado debido al cambio de participantes; deberás generarlo nuevamente.'
+                    : 'Participante eliminado del torneo.'
+            ];
+        } catch (\Throwable $th) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            return [
+                'ok' => false,
+                'fixture_invalidado' => false,
+                'mensaje' => 'Error al eliminar participante: ' . $th->getMessage()
+            ];
+        }
     }
 
         //Trae todas las inscripciones del jugador (directas o via sus equipos), con el torneo y su estado
@@ -1525,10 +1950,10 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Trae el record de victorias/derrotas del jugador en partidos ya finalizados
+    //Trae el record de victorias/empates/derrotas del jugador en partidos ya finalizados
     public function obtenerRecordDelJugador(int $usuarioId, array $equipoIds): array {
         $participacionIds = $this->obtenerParticipacionesDelJugador($usuarioId, $equipoIds);
-        if (empty($participacionIds)) return ['victorias' => 0, 'derrotas' => 0];
+        if (empty($participacionIds)) return ['victorias' => 0, 'empates' => 0, 'derrotas' => 0];
 
         $idsTexto = implode(',', array_map('intval', $participacionIds));
         $sql = "SELECT
@@ -1537,7 +1962,11 @@ class Torneo {
                         WHEN estado = 'finalizado' AND participante_ganador_id IS NOT NULL
                         AND participante_ganador_id NOT IN ($idsTexto)
                         AND (participante_local_id IN ($idsTexto) OR participante_visitante_id IN ($idsTexto))
-                        THEN 1 ELSE 0 END) AS derrotas
+                        THEN 1 ELSE 0 END) AS derrotas,
+                    SUM(CASE
+                        WHEN estado = 'finalizado' AND participante_ganador_id IS NULL
+                        AND (participante_local_id IN ($idsTexto) OR participante_visitante_id IN ($idsTexto))
+                        THEN 1 ELSE 0 END) AS empates
                 FROM torneo_encuentros
                 WHERE estado = 'finalizado'
                 AND (participante_local_id IN ($idsTexto) OR participante_visitante_id IN ($idsTexto))";
@@ -1546,6 +1975,7 @@ class Torneo {
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         return [
             'victorias' => (int) ($resultado['victorias'] ?? 0),
+            'empates' => (int) ($resultado['empates'] ?? 0),
             'derrotas' => (int) ($resultado['derrotas'] ?? 0)
         ];
     }
@@ -1554,12 +1984,59 @@ class Torneo {
     // METODOS DEL ADMINISTRADOR GENERAL
     // ============================================================================
 
+    // Eliminación en cascada segura de un torneo por el Administrador General
     public function eliminarPorAdmin(int $torneoId): bool {
+        $transaccionPropia = false;
         try {
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+
+            // Verificamos si el torneo existe
+            $stmtCheck = $this->bd->prepare("SELECT id FROM torneos WHERE id = :id FOR UPDATE");
+            $stmtCheck->execute([':id' => $torneoId]);
+            if (!$stmtCheck->fetchColumn()) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return false;
+            }
+
+            // Eliminación ordenada en cascada de todas las dependencias referenciales
+            $tablasDependientes = [
+                'torneo_encuentros',
+                'torneo_suizo_parejas',
+                'torneo_posiciones',
+                'torneo_actividades',
+                'torneo_comentarios',
+                'torneo_cambio_estado',
+                'torneo_config',
+                'participantes_torneo',
+            ];
+
+            foreach ($tablasDependientes as $tabla) {
+                $this->bd->prepare("DELETE FROM {$tabla} WHERE torneo_id = :id")
+                         ->execute([':id' => $torneoId]);
+            }
+
+            // Eliminar registros de favoritos/guardados polimórficos
+            $this->bd->prepare("DELETE FROM guardados WHERE tipo = 'torneo' AND referencia_id = :id")
+                     ->execute([':id' => $torneoId]);
+
+            // Finalmente eliminamos la fila principal del torneo
             $stmt = $this->bd->prepare("DELETE FROM torneos WHERE id = :id");
-            return $stmt->execute([':id' => $torneoId]);
+            $resultado = $stmt->execute([':id' => $torneoId]);
+
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
+            return $resultado;
         } catch (\Throwable $th) {
-            error_log("Error eliminando torneo por admin: " . $th->getMessage());
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            error_log("Error eliminando torneo por admin en cascada: " . $th->getMessage());
             return false;
         }
     }

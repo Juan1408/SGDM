@@ -44,7 +44,8 @@
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $jugador['id']; ?>" class="boton-accion">Editar</a>
                             <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario" style="display:inline-block;">
                                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="id" value="<?php echo $jugador['id']; ?>">
+                                <input type="hidden" name="id" value="<?php echo (int) $jugador['id']; ?>">
+                                <input type="hidden" name="rol_id" value="3">
                                 <button type="submit" class="boton-secundario">
                                     <?php echo $jugador['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
                                 </button>
@@ -54,12 +55,9 @@
                                 action="<?php echo URL_BASE; ?>index.php?c=usuario&a=eliminarUsuario"
                                 onsubmit="return confirm('¿Eliminar este usuario?');">
                                 <input type="hidden" name="id" value="<?php echo (int) $jugador['id']; ?>">
+                                <input type="hidden" name="rol_id" value="3">
                                 <input type="hidden" name="csrf_token"
-                                    fix.md 2026-10-07
-                                    6 / 11
-                                    value="<?php echo
-                                            htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8');
-                                            ?>">
+                                    value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="boton-peligro">Eliminar cuenta</button>
                             </form>
 

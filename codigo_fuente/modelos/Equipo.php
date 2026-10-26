@@ -33,16 +33,17 @@ class Equipo {
     }
 
      //Metodo para crear un equipo (columnas reales de la tabla 'equipos')
-    public function crearEquipo(string $nombreEquipo, int $creadoPor, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?string $escudoUrl = null, ?string $bannerUrl = null, ?string $codigoInvitacion = null){
+    public function crearEquipo(string $nombreEquipo, int $creadoPor, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?string $escudoUrl = null, ?string $bannerUrl = null, ?string $codigoInvitacion = null, ?int $juegoId = null){
         //Preparamos la consulta SQL con las columnas que realmente existen en 'equipos'
-        $sql = "INSERT INTO equipos (nombre_equipo, creado_por, descripcion, ubicacion, anio_fundacion, escudo_url, banner_url, codigo_invitacion)
-                VALUES (:nombreEquipo, :creadoPor, :descripcion, :ubicacion, :anioFundacion, :escudoUrl, :bannerUrl, :codigoInvitacion)";
+        $sql = "INSERT INTO equipos (nombre_equipo, creado_por, juego_id, descripcion, ubicacion, anio_fundacion, escudo_url, banner_url, codigo_invitacion)
+                VALUES (:nombreEquipo, :creadoPor, :juegoId, :descripcion, :ubicacion, :anioFundacion, :escudoUrl, :bannerUrl, :codigoInvitacion)";
         //Preparamos la consulta para evitar inyección SQL
         $stmt = $this->bd->prepare($sql);
         //Ejecutamos la consulta pasandole los datos
         $stmt->execute([
             ':nombreEquipo' => $nombreEquipo,
             ':creadoPor' => $creadoPor,
+            ':juegoId' => $juegoId,
             ':descripcion' => $descripcion,
             ':ubicacion' => $ubicacion,
             ':anioFundacion' => $anioFundacion,
@@ -72,18 +73,20 @@ class Equipo {
 
     //Metodo para crear un equipo completo: el equipo + el creador como miembro + el creador como capitan principal
     //Usamos una transaccion porque son 3 inserciones relacionadas: si una falla, no queremos que las otras queden a medias
-    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null): array {        
+    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?int $juegoId = null): array {
+        $transaccionPropia = false;
         try {
-            $this->bd->beginTransaction();
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
 
             $codigoInvitacion = $this->generarCodigoInvitacion();
 
             //1. Creamos el equipo (escudo y banner quedan null por ahora, se suben en un paso aparte)
-            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, null, null, $codigoInvitacion);
+            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, null, null, $codigoInvitacion, $juegoId);
             //2. El creador queda como miembro del equipo
-            $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-            $stmtMiembro = $this->bd->prepare($sqlMiembro);
-            $stmtMiembro->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
+            $this->agregarMiembro((int) $equipoId, $usuarioId);
 
             //3. El creador queda como capitan principal (asignado_por: se asigna a si mismo, no hay nadie mas todavia)
             $sqlCapitan = "INSERT INTO equipo_capitanes (equipo_id, usuario_id, asignado_por, es_capitan_principal) VALUES (:equipoId, :usuarioIdCapitan, :usuarioIdAsigna, 1)";
@@ -94,19 +97,37 @@ class Equipo {
                 ':usuarioIdAsigna' => $usuarioId
             ]);
 
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
 
             return ['exito' => true, 'equipoId' => $equipoId];
         } catch (\Exception $e) {
             //Si algo fallo, deshacemos todo (no queremos un equipo sin capitan, o un capitan sin equipo)
-            $this->bd->rollBack();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
             return ['exito' => false, 'error' => $e->getMessage()];
         }
     }
 
+    //Metodo interno para sumar (o reactivar) a un usuario como miembro activo del equipo.
+    //Usamos ON DUPLICATE KEY UPDATE porque la PK es (equipo_id, usuario_id): si el jugador
+    //ya habia estado en el equipo (expulsado o se fue), hay que reactivar su fila en lugar de fallar.
+    private function agregarMiembro(int $equipoId, int $usuarioId): void {
+        $sql = "INSERT INTO equipo_miembros (equipo_id, usuario_id, es_activo, fecha_union)
+                VALUES (:equipoId, :usuarioId, 1, CURRENT_TIMESTAMP)
+                ON DUPLICATE KEY UPDATE es_activo = 1, fecha_union = CURRENT_TIMESTAMP";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
+    }
+
         //Metodo para eliminar un equipo (Soft Delete)
-    //Faltan ajustes de restricciones de integridad referencial
-    public function eliminarEquipo(int $id){
+    //Blindaje Fase B: Bloquear eliminacion si tiene inscripciones o torneos activos
+    public function eliminarEquipo(int $id): bool {
+        if ($this->tieneTorneosActivos($id)) {
+            return false;
+        }
         //Desactivamos el equipo en lugar de borrarlo completamente
         $sql = "UPDATE equipos SET activo = 0 WHERE id = :id";
         $stmt = $this->bd->prepare($sql);
@@ -145,6 +166,7 @@ class Equipo {
         $sql = "SELECT
                     e.id,
                     e.nombre_equipo,
+                    e.juego_id,
                     e.escudo_url,
                     e.descripcion,
                     EXISTS (
@@ -169,7 +191,10 @@ class Equipo {
 
     //Metodo para traer los datos completos de un equipo por su ID
     public function obtenerPorId(int $id) {
-        $sql = "SELECT * FROM equipos WHERE id = :id AND activo = 1 LIMIT 1";
+        $sql = "SELECT e.*, j.nombre AS nombre_juego, j.imagen_url AS juego_icono
+                FROM equipos e
+                LEFT JOIN juegos j ON j.id = e.juego_id
+                WHERE e.id = :id AND e.activo = 1 LIMIT 1";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([':id' => $id]);
         $equipo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -219,8 +244,17 @@ class Equipo {
     //Metodo para crear una solicitud de union a un equipo
     //$iniciadoPor: quien la origino (el propio jugador pidiendo entrar, o el capitan invitando)
     public function crearSolicitud(int $equipoId, int $usuarioId, int $iniciadoPor, ?string $mensaje = null): bool {
+        //ON DUPLICATE KEY UPDATE permite volver a postularse despues de un rechazo:
+        //la PK logica es (equipo_id, usuario_id), asi que reutilizamos esa fila y la dejamos pendiente otra vez.
         $sql = "INSERT INTO solicitudes_equipo (equipo_id, usuario_id, iniciado_por, mensaje, estado)
-                VALUES (:equipoId, :usuarioId, :iniciadoPor, :mensaje, 'pendiente')";
+                VALUES (:equipoId, :usuarioId, :iniciadoPor, :mensaje, 'pendiente')
+                ON DUPLICATE KEY UPDATE
+                    iniciado_por = VALUES(iniciado_por),
+                    mensaje = VALUES(mensaje),
+                    estado = 'pendiente',
+                    fecha_solicitud = CURRENT_TIMESTAMP,
+                    fecha_respuesta = NULL,
+                    respondido_por = NULL";
         $stmt = $this->bd->prepare($sql);
         return $stmt->execute([
             ':equipoId' => $equipoId,
@@ -250,8 +284,12 @@ class Equipo {
     //Metodo para aceptar o rechazar una invitacion recibida
     //Si se acepta, ademas de cambiar el estado, se suma al jugador como miembro real del equipo
     public function responderInvitacion(int $solicitudId, int $usuarioId, bool $aceptar): array {
+        $transaccionPropia = false;
         try {
-            $this->bd->beginTransaction();
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
 
             //Verificamos que la solicitud sea de este usuario y siga pendiente (evita que alguien responda invitaciones ajenas)
             $sqlVerificar = "SELECT equipo_id FROM solicitudes_equipo WHERE id = :id AND usuario_id = :usuarioId AND estado = 'pendiente' LIMIT 1 FOR UPDATE";
@@ -260,7 +298,9 @@ class Equipo {
             $solicitud = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
 
             if (!$solicitud) {
-                $this->bd->rollBack();
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
                 return ['exito' => false, 'error' => 'La solicitud no existe o ya fue respondida.'];
             }
 
@@ -276,17 +316,19 @@ class Equipo {
                 ':id' => $solicitudId
             ]);
 
-            //Si acepto, lo sumamos de verdad como miembro del equipo
+            //Si acepto, lo sumamos de verdad como miembro del equipo (reactivandolo si ya habia estado)
             if ($aceptar) {
-                $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-                $stmtMiembro = $this->bd->prepare($sqlMiembro);
-                $stmtMiembro->execute([':equipoId' => $solicitud['equipo_id'], ':usuarioId' => $usuarioId]);
+                $this->agregarMiembro((int) $solicitud['equipo_id'], $usuarioId);
             }
 
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return ['exito' => true];
         } catch (\Exception $e) {
-            $this->bd->rollBack();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
             return ['exito' => false, 'error' => $e->getMessage()];
         }
     }
@@ -334,6 +376,64 @@ class Equipo {
         return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
     }
 
+    /**
+     * Verifica si el equipo se encuentra participando activamente en torneos en curso.
+     * Retorna true si tiene participantes en estado 'confirmado' en torneos 'en_curso'.
+     */
+    public function tieneTorneosEnCurso(int $equipoId): bool {
+        $sql = "SELECT COUNT(*) FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                WHERE pt.tipo = 'equipo'
+                  AND pt.referencia_id = :equipo_id
+                  AND pt.estado = 'confirmado'
+                  AND t.estado = 'en_curso'";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipo_id' => $equipoId]);
+        return ((int) $stmt->fetchColumn()) > 0;
+    }
+
+    /**
+     * Verifica si el equipo tiene torneos activos (en_curso o inscripciones_abiertas confirmadas/pendientes)
+     */
+    public function tieneTorneosActivos(int $equipoId): bool {
+        $sql = "SELECT COUNT(*) FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                WHERE pt.tipo = 'equipo'
+                  AND pt.referencia_id = :equipo_id
+                  AND pt.estado IN ('confirmado', 'pendiente')
+                  AND t.estado IN ('en_curso', 'inscripciones_abiertas')";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipo_id' => $equipoId]);
+        return ((int) $stmt->fetchColumn()) > 0;
+    }
+
+    /**
+     * Permite cambiar la disciplina deportiva del equipo si no tiene torneos activos y la nueva disciplina admite equipos
+     */
+    public function cambiarDisciplina(int $equipoId, int $nuevoJuegoId): array {
+        if ($this->tieneTorneosActivos($equipoId)) {
+            return [
+                'exito' => false,
+                'error' => 'No podés cambiar la disciplina deportiva mientras el equipo tenga inscripciones activas o torneos en curso.'
+            ];
+        }
+
+        $sqlCheck = "SELECT COUNT(*) FROM juego_modalidades_permitidas WHERE juego_id = :juego_id AND modalidad_id = 2";
+        $stmtCheck = $this->bd->prepare($sqlCheck);
+        $stmtCheck->execute([':juego_id' => $nuevoJuegoId]);
+        if ((int) $stmtCheck->fetchColumn() === 0) {
+            return [
+                'exito' => false,
+                'error' => 'La disciplina seleccionada no admite modalidad por equipos.'
+            ];
+        }
+
+        $sql = "UPDATE equipos SET juego_id = :juego_id WHERE id = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':juego_id' => $nuevoJuegoId, ':id' => $equipoId]);
+        return ['exito' => true];
+    }
+
     //Metodo para actualizar los datos editables de un equipo (no toca creado_por, codigo_invitacion, ni activo)
     public function actualizarDatos(int $equipoId, string $nombreEquipo, ?string $ubicacion, ?int $anioFundacion, ?string $descripcion): bool {
         $sql = "UPDATE equipos
@@ -349,8 +449,13 @@ class Equipo {
         ]);
     }
 
-        //Metodo para expulsar a un miembro del equipo (soft delete, igual que se hace con equipos)
+    //Metodo para expulsar a un miembro del equipo (soft delete, igual que se hace con equipos)
+    //Blindaje Fase B: No se puede expulsar miembros mientras el equipo esté disputando un torneo en curso
     public function expulsarMiembro(int $equipoId, int $usuarioId): bool {
+        if ($this->tieneTorneosEnCurso($equipoId)) {
+            return false;
+        }
+
         $sql = "UPDATE equipo_miembros SET es_activo = 0 WHERE equipo_id = :equipoId AND usuario_id = :usuarioId";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
@@ -375,8 +480,24 @@ class Equipo {
 
     //Metodo para que el capitan acepte o rechace una solicitud que un jugador mando a su equipo
     public function responderSolicitudRecibida(int $solicitudId, int $equipoId, int $respondidoPor, bool $aceptar): array {
+        $transaccionPropia = false;
         try {
-            $this->bd->beginTransaction();
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+
+            //Solo un capitan del equipo puede aceptar/rechazar solicitudes (defensa en profundidad,
+            //aunque el controlador ya lo valida)
+            $sqlCapitan = "SELECT 1 FROM equipo_capitanes WHERE equipo_id = :equipoId AND usuario_id = :respondidoPor LIMIT 1";
+            $stmtCapitan = $this->bd->prepare($sqlCapitan);
+            $stmtCapitan->execute([':equipoId' => $equipoId, ':respondidoPor' => $respondidoPor]);
+            if (!$stmtCapitan->fetch(PDO::FETCH_ASSOC)) {
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
+                return ['exito' => false, 'error' => 'Solo un capitán del equipo puede responder esta solicitud.'];
+            }
 
             //Verificamos que la solicitud sea de ESTE equipo y siga pendiente
             $sqlVerificar = "SELECT usuario_id FROM solicitudes_equipo WHERE id = :id AND equipo_id = :equipoId AND estado = 'pendiente' LIMIT 1 FOR UPDATE";
@@ -385,7 +506,9 @@ class Equipo {
             $solicitud = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
 
             if (!$solicitud) {
-                $this->bd->rollBack();
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
                 return ['exito' => false, 'error' => 'La solicitud no existe o ya fue respondida.'];
             }
 
@@ -401,23 +524,30 @@ class Equipo {
                 ':id' => $solicitudId
             ]);
 
-            //Si se acepto, sumamos al jugador que pidio entrar como miembro real
+            //Si se acepto, sumamos al jugador que pidio entrar como miembro real (reactivandolo si ya habia estado)
             if ($aceptar) {
-                $sqlMiembro = "INSERT INTO equipo_miembros (equipo_id, usuario_id) VALUES (:equipoId, :usuarioId)";
-                $stmtMiembro = $this->bd->prepare($sqlMiembro);
-                $stmtMiembro->execute([':equipoId' => $equipoId, ':usuarioId' => $solicitud['usuario_id']]);
+                $this->agregarMiembro($equipoId, (int) $solicitud['usuario_id']);
             }
 
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return ['exito' => true];
         } catch (\Exception $e) {
-            $this->bd->rollBack();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
             return ['exito' => false, 'error' => $e->getMessage()];
         }
     }
 
         //Metodo para designar a un miembro como capitan adicional (sub-capitan)
     public function hacerCapitan(int $equipoId, int $usuarioId, int $asignadoPor): bool {
+        //Solo se puede nombrar capitan a alguien que sea miembro activo del equipo
+        if (!$this->esMiembro($equipoId, $usuarioId)) {
+            return false;
+        }
+
         //Si ya es capitan no hacemos nada (evita el error de clave duplicada)
         if ($this->esCapitan($equipoId, $usuarioId)) {
             return false;
@@ -436,9 +566,21 @@ class Equipo {
     //Metodo para que un capitan deje el equipo
     //Si hay otro capitan ya designado, ese pasa a ser el principal automaticamente.
     //Si es el unico capitan, no se le permite irse (tiene que asignar uno primero).
+    //Blindaje Fase B: No se puede abandonar el equipo mientras esté disputando un torneo en curso.
     public function dejarEquipo(int $equipoId, int $usuarioId): array {
+        if ($this->tieneTorneosEnCurso($equipoId)) {
+            return [
+                'exito' => false,
+                'error' => 'No podés abandonar el equipo mientras esté disputando un torneo en curso.'
+            ];
+        }
+
+        $transaccionPropia = false;
         try {
-            $this->bd->beginTransaction();
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
 
             //Buscamos si hay OTRO capitan en este equipo (distinto al que se quiere ir)
             $sqlOtroCapitan = "SELECT usuario_id FROM equipo_capitanes WHERE equipo_id = :equipoId AND usuario_id != :usuarioId LIMIT 1 FOR UPDATE";
@@ -447,7 +589,9 @@ class Equipo {
             $otroCapitan = $stmtOtroCapitan->fetch(PDO::FETCH_ASSOC);
 
             if (!$otroCapitan) {
-                $this->bd->rollBack();
+                if ($transaccionPropia && $this->bd->inTransaction()) {
+                    $this->bd->rollBack();
+                }
                 return ['exito' => false, 'error' => 'Sos el único capitán del equipo. Asigná otro capitán antes de irte.'];
             }
 
@@ -466,10 +610,14 @@ class Equipo {
             $stmtSacarMiembro = $this->bd->prepare($sqlSacarMiembro);
             $stmtSacarMiembro->execute([':equipoId' => $equipoId, ':usuarioId' => $usuarioId]);
 
-            $this->bd->commit();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
             return ['exito' => true];
         } catch (\Exception $e) {
-            $this->bd->rollBack();
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
             return ['exito' => false, 'error' => $e->getMessage()];
         }
     }
@@ -514,6 +662,95 @@ class Equipo {
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($parametros);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Calcula estadísticas reales del equipo en torneos: partidas jugadas, victorias, empates y torneos ganados
+    public function obtenerEstadisticasTorneos(int $equipoId): array {
+        $stmtPt = $this->bd->prepare(
+            "SELECT pt.id, pt.torneo_id, pt.nombre, t.estado AS torneo_estado, t.formato AS torneo_formato
+             FROM participantes_torneo pt
+             INNER JOIN torneos t ON t.id = pt.torneo_id
+             WHERE pt.tipo = 'equipo' AND pt.referencia_id = :equipo_id"
+        );
+        $stmtPt->execute([':equipo_id' => $equipoId]);
+        $participaciones = $stmtPt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($participaciones)) {
+            return [
+                'partidas' => 0,
+                'victorias' => 0,
+                'empates' => 0,
+                'derrotas' => 0,
+                'torneos_ganados' => 0,
+            ];
+        }
+
+        $ptIds = array_column($participaciones, 'id');
+        $ptIdsTexto = implode(',', array_map('intval', $ptIds));
+
+        $sql = "SELECT
+                    COUNT(*) AS partidas,
+                    SUM(CASE WHEN participante_ganador_id IN ($ptIdsTexto) THEN 1 ELSE 0 END) AS victorias,
+                    SUM(CASE WHEN participante_ganador_id IS NULL THEN 1 ELSE 0 END) AS empates,
+                    SUM(CASE WHEN participante_ganador_id IS NOT NULL AND participante_ganador_id NOT IN ($ptIdsTexto) THEN 1 ELSE 0 END) AS derrotas
+                FROM torneo_encuentros
+                WHERE estado = 'finalizado'
+                  AND (participante_local_id IN ($ptIdsTexto) OR participante_visitante_id IN ($ptIdsTexto))";
+        $stmtEnc = $this->bd->prepare($sql);
+        $stmtEnc->execute();
+        $encStats = $stmtEnc->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        $torneosGanados = 0;
+        foreach ($participaciones as $part) {
+            $torneoId = (int) $part['torneo_id'];
+            $ptId = (int) $part['id'];
+            $nombreEquipo = $part['nombre'];
+
+            // 1. Podio configurado
+            $stmtPodio = $this->bd->prepare("SELECT valor FROM torneo_config WHERE torneo_id = :t_id AND clave = 'podio'");
+            $stmtPodio->execute([':t_id' => $torneoId]);
+            $valPodio = $stmtPodio->fetchColumn();
+            if ($valPodio) {
+                $podio = json_decode($valPodio, true);
+                if (isset($podio['primero']) && $podio['primero'] === $nombreEquipo) {
+                    $torneosGanados++;
+                    continue;
+                }
+            }
+
+            // 2. Si el torneo esta finalizado pero no tiene podio en json_config:
+            if ($part['torneo_estado'] === 'finalizado') {
+                if (in_array($part['torneo_formato'], ['liga', 'suizo'], true)) {
+                    $stmtPos = $this->bd->prepare(
+                        "SELECT participante_id FROM torneo_posiciones
+                         WHERE torneo_id = :t_id
+                         ORDER BY puntos DESC, diferencia_goles DESC, puntos_favor DESC LIMIT 1"
+                    );
+                    $stmtPos->execute([':t_id' => $torneoId]);
+                    if ((int) $stmtPos->fetchColumn() === $ptId) {
+                        $torneosGanados++;
+                    }
+                } else {
+                    $stmtFinal = $this->bd->prepare(
+                        "SELECT participante_ganador_id FROM torneo_encuentros
+                         WHERE torneo_id = :t_id AND estado = 'finalizado'
+                         ORDER BY ronda DESC, id DESC LIMIT 1"
+                    );
+                    $stmtFinal->execute([':t_id' => $torneoId]);
+                    if ((int) $stmtFinal->fetchColumn() === $ptId) {
+                        $torneosGanados++;
+                    }
+                }
+            }
+        }
+
+        return [
+            'partidas' => (int) ($encStats['partidas'] ?? 0),
+            'victorias' => (int) ($encStats['victorias'] ?? 0),
+            'empates' => (int) ($encStats['empates'] ?? 0),
+            'derrotas' => (int) ($encStats['derrotas'] ?? 0),
+            'torneos_ganados' => $torneosGanados,
+        ];
     }
 
 }

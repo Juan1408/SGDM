@@ -23,15 +23,17 @@ class Sesion {
      */
     public static function iniciarSesion(){
         if (session_status() === PHP_SESSION_NONE) {
-            // Seguridad: Configurar parámetros de cookie antes de iniciar la sesión
-            session_set_cookie_params([
-                'lifetime' => 1800,
-                'path'     => '/',
-                'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on', // Solo en HTTPS si está activo
-                'httponly' => true,      // Inaccesible desde JavaScript (mitiga XSS)
-                'samesite' => 'Lax'      // Protección básica anti-CSRF
-            ]);
-            session_start();
+            // Seguridad: Configurar parámetros de cookie antes de iniciar la sesión (si no se enviaron cabeceras)
+            if (!headers_sent()) {
+                session_set_cookie_params([
+                    'lifetime' => 1800,
+                    'path'     => '/',
+                    'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on', // Solo en HTTPS si está activo
+                    'httponly' => true,      // Inaccesible desde JavaScript (mitiga XSS)
+                    'samesite' => 'Lax'      // Protección básica anti-CSRF
+                ]);
+            }
+            @session_start();
         }
     }
 
@@ -57,7 +59,48 @@ class Sesion {
         }
     }
 
-    //Verifica si el usuario está logueado
+    /**
+     * Verifica en tiempo real contra la base de datos si el usuario de la sesión sigue activo
+     * y sincroniza su rol actual (Baneo en caliente de usuarios suspendidos y actualización de privilegios).
+     * Sigue la política Fail-Closed: si la BD falla o no responde, no permite accesos no autorizados.
+     */
+    public static function verificarUsuarioActivo(): bool {
+        if (!isset($_SESSION['usuario_id'])) {
+            return false;
+        }
+
+        require_once __DIR__ . '/../modelos/Conexion.php';
+        try {
+            $bd = \App\Modelos\Conexion::getInstance()->getBD();
+            $stmt = $bd->prepare("SELECT esta_activo, rol_id FROM usuarios WHERE id = :id LIMIT 1");
+            $stmt->execute([':id' => (int) $_SESSION['usuario_id']]);
+            $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$usuario) {
+                return false;
+            }
+
+            if ((int) $usuario['esta_activo'] !== 1) {
+                return false;
+            }
+
+            // Sincronización en caliente de rol_id ante promociones o degradaciones administrativas
+            if (isset($usuario['rol_id'])) {
+                $_SESSION['rol_id'] = (int) $usuario['rol_id'];
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            // Fail-closed por seguridad: ante caída o bloqueo de BD, denegar acceso y loguear
+            if (php_sapi_name() === 'cli' && empty($_SESSION['usuario_id'])) {
+                return true;
+            }
+            error_log("Error de seguridad en verificarUsuarioActivo: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    //Verifica si el usuario está logueado y si su cuenta sigue activa
     public static function estaLogueado(){
         self::iniciarSesion();
         
@@ -73,16 +116,35 @@ class Sesion {
             }
         }
         
-        return isset($_SESSION['usuario_id']);
+        if (!isset($_SESSION['usuario_id'])) {
+            return false;
+        }
+
+        // Baneo en caliente: verificar vigencia de la cuenta en tiempo real
+        if (!self::verificarUsuarioActivo()) {
+            self::destruir();
+            if (!headers_sent()) {
+                header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=mostrarLogin&error=cuenta_suspendida");
+                exit;
+            }
+            return false;
+        }
+
+        return true;
     }
 
     //Si no esta logueado redirige al login
     public static function requerirLogin() {
         if (!self::estaLogueado()) {
-            //Redirigimos al login
-            header("Location: " . (\defined('URL_BASE') ? \URL_BASE : '/'));
-            //Detenemos la ejecución del script
-            exit;
+            if (!headers_sent()) {
+                $url = (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=auth&a=mostrarLogin";
+                if (isset($_GET['error'])) {
+                    $url .= "&error=" . urlencode($_GET['error']);
+                }
+                header("Location: " . $url);
+                exit;
+            }
+            return;
         }
     }
 
@@ -150,10 +212,12 @@ class Sesion {
         }
         
         $_SESSION = []; //Vaciamos el array
-        session_destroy(); //Elimina completamente la sesión
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_destroy(); //Elimina completamente la sesión
+        }
 
         //Ciberseguridad OWASP - Eliminación de cookies de sesión
-        if (ini_get("session.use_cookies")) {
+        if (!headers_sent() && ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), "", time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
         }

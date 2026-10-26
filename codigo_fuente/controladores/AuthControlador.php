@@ -24,6 +24,18 @@ class AuthControlador {
         if (Sesion::estaLogueado()) {
             $this->redirigirPorRol($_SESSION['rol_id']);
         }
+
+        $error = '';
+        if (isset($_GET['error'])) {
+            if ($_GET['error'] === 'cuenta_suspendida') {
+                $error = "Tu cuenta ha sido suspendida o desactivada por la administración.";
+            } elseif ($_GET['error'] === 'acceso_denegado') {
+                $error = "No tienes permisos para acceder a esa sección.";
+            } elseif ($_GET['error'] === 'rol_invalido') {
+                $error = "Rol de usuario no válido.";
+            }
+        }
+
         //si no esta logueado cargamos el archivo login.php
         require __DIR__ . '/../vistas/auth/login.php';
     }

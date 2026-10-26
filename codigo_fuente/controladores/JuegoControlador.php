@@ -83,20 +83,28 @@ class JuegoControlador {
         }
     }
 
-    //Metodo para cambiar el estado de un juego (Baja logica)
+    // Metodo para cambiar el estado de un juego (Baja logica protegida con POST y CSRF)
     public function cambiarEstado() {
-        if (isset($_GET['id'])){
-            $juegoId = (int)$_GET['id'];
-            if ($this->modeloJuego->cambiarEstado($juegoId)){
-                $_SESSION['mensaje'] = "Estado del juego actualizado";
-            }else{
-                $_SESSION['mensaje'] = "Error al actualizar el estado del juego";
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $_SESSION['mensaje'] = "Método no permitido. La actualización requiere una solicitud POST válida.";
+            header("Location: " . URL_BASE . "index.php?c=juego&a=index");
+            exit;
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $juegoId = isset($_POST['id']) ? (int)$_POST['id'] : null;
+        if ($juegoId) {
+            if ($this->modeloJuego->cambiarEstado($juegoId)) {
+                $_SESSION['mensaje'] = "Estado del juego actualizado exitosamente.";
+            } else {
+                $_SESSION['mensaje'] = "Error al actualizar el estado del juego.";
             }
-        }else{
-            $_SESSION['mensaje'] = "ID del juego no proporcionado";
+        } else {
+            $_SESSION['mensaje'] = "ID del juego no proporcionado.";
         }
         
-        //Redirigimos al usuario a la lista de juegos
+        // Redirigimos al usuario a la lista de juegos
         header("Location: " . URL_BASE . "index.php?c=juego&a=index");
         exit;
     }

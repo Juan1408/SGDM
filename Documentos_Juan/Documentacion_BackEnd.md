@@ -508,3 +508,354 @@ usuario de aplicacion funcional y todos los servicios principales activos.
 La portada de Docker y XAMPP respondieron HTTP 200. Docker contiene usuarios
 de ejemplo por la migracion 002, mientras XAMPP no; esa diferencia es de datos
 iniciales y no de estructura.
+
+49. Consistencia de Creación de Torneos y Disciplinas Deportivas (Reglas de Negocio en Runtime)
+Objetivo: Garantizar que las restricciones configuradas por el Administrador General para cada disciplina (formatos permitidos, modalidades habilitadas y sistema de puntuación) se respeten estrictamente en la interfaz de usuario, en el controlador del organizador, en los modelos y en el motor de base de datos.
+
+Hallazgos de Inconsistencia Detectados:
+1. En el asistente de creación de torneos (etapa 1 y etapa 2), el formulario permitía elegir cualquier formato (Liga, Suizo, Eliminación Directa) o modalidad (Individual, Equipos) sin respetar las restricciones del catálogo de disciplinas (por ejemplo, Ajedrez estaba configurado exclusivamente para modalidad Individual y formato Suizo con puntuación fija, pero el formulario permitía crearlo como Liga o con modalidad por Equipos).
+2. Se permitía seleccionar "Puntuación Personalizada" en disciplinas que poseían puntuación fija reglamentaria predeterminada por la administración (Ajedrez con 1.00 por victoria, 0.50 por empate y 0.00 por derrota).
+3. El organizador podía manipular los valores por POST evadiendo la interfaz sin que el backend validara la coherencia contra las tablas relacionales de la disciplina.
+
+Solución Aplicada:
+- Frontend (vistas/organizador/crear-torneo.php): Se inyectaron metadatos en data-attributes en el selector de disciplinas (formatos permitidos, modalidades permitidas, puntos fijos de victoria, empate y derrota). Se desarrolló un script reactivo que sincroniza dinámicamente las opciones disponibles: deshabilita y oculta modalidades/formatos incompatibles, preselecciona las válidas y bloquea la personalización de puntos cuando la disciplina cuenta con valores oficiales definidos.
+- Backend (controladores/PanelOrganizadorControlador.php y FormatoControlador.php): Se incorporó validación estricta en guardarEtapa() comprobando la disciplina contra las tablas intermedias juego_modalidades_permitidas y juego_formatos_permitidos.
+- Triggers de Base de Datos (migraciones/007_restricciones_disciplinas.sql): Se crearon los triggers trg_torneo_validar_disciplina_ins y trg_torneo_validar_disciplina_upd, que operan como barrera de integridad física rechazando inserciones directas con SIGNAL SQLSTATE '45000' ante cualquier intento de registrar un torneo con combinaciones incompatibles.
+
+50. Fase 1 de Remediación: Integridad de Equipos y Disciplinas Colectivas
+Objetivo: Restringir la creación de equipos exclusivamente a disciplinas colectivas e impedir que jugadores participen en múltiples equipos rivales dentro de un mismo torneo.
+
+Hallazgos Detectados:
+1. Cualquier jugador podía registrar un equipo deportivo asociado a disciplinas individuales (como Ajedrez o Tenis de Mesa individual).
+2. No existía validación para impedir que un jugador integrara simultáneamente la plantilla de dos equipos rivales inscriptos en el mismo torneo, abriendo la puerta a que un competidor disputara partidos contra sí mismo o adulterara resultados.
+3. Se permitía la postulación de equipos que no alcanzaban la nómina mínima de integrantes activos.
+
+Solución Aplicada:
+- Modelo Juego.php: Se incorporaron los métodos obtenerJuegosParaEquipos() (filtrando exclusivamente registros con modalidad_id = 2) y permiteEquipos(int $juegoId): bool.
+- Controlador EquipoControlador.php: Se actualizaron crear() y procesarCreacion() restringiendo el catálogo desplegable y validando en el servidor que la disciplina seleccionada acepte equipos.
+- Vista crear-equipo.php: Se clarificó la etiqueta y selector hacia "Disciplina colectiva de competencia".
+- Modelo Torneo.php: Se desarrolló el método obtenerMiembrosEnConflicto(int $torneoId, int $equipoId): array, que cruza en tiempo real equipo_miembros con participantes_torneo en estado confirmado o pendiente para detectar jugadores compartidos.
+- Controlador TorneoControlador.php: En la acción inscribirse(), se validó la inexistencia de jugadores en conflicto y se exigió una nómina mínima de al menos 2 integrantes activos.
+
+51. Fase 2 de Remediación: Ciclo de Vida de Inscripciones (Reintento, Retiro y Limpieza)
+Objetivo: Garantizar un flujo consistente en el ciclo de vida de inscripciones, habilitando la re-postulación tras rechazo o cancelación, permitiendo el retiro voluntario del jugador y saneando solicitudes huérfanas al iniciar el torneo.
+
+Hallazgos Detectados:
+1. Al rechazar o cancelar una inscripción, la restricción de unicidad UNIQUE KEY unico_participante (torneo_id, tipo, referencia_id) impedía que el usuario o equipo volviera a enviar una solicitud, arrojando un error de clave duplicada (SQLSTATE 23000).
+2. La vista de detalle del torneo bloqueaba indefinidamente los botones de inscripción si existía un registro histórico en estado rechazado o cancelado.
+3. No existía opción para que un jugador o capitán retirara una solicitud que permaneciera en estado pendiente de aprobación.
+4. Al pasar el torneo a estado en_curso, las solicitudes que el organizador no había respondido quedaban permanentemente en estado pendiente, ensuciando los listados y métricas.
+
+Solución Aplicada:
+- Modelo Torneo.php: Se reformuló inscribirse() utilizando la cláusula ON DUPLICATE KEY UPDATE, reactivando registros previos en 'rechazado' o 'cancelado' hacia 'pendiente' y renovando la marca temporal.
+- Modelo Torneo.php: Se parametrizó obtenerInscripcionDelJugador() con el argumento $soloActivas = true por defecto, separando las solicitudes activas de las históricas para no bloquear la interfaz.
+- Modelo Torneo.php: Se implementó cancelarInscripcionParticipante(int $torneoId, string $tipo, int $referenciaId): bool para cancelar postulaciones pendientes mientras las inscripciones sigan abiertas.
+- Modelo Torneo.php: En cambiarEstado(), al transicionar el torneo a 'en_curso', se ejecuta de forma atómica y reentrante un UPDATE que descarta automáticamente todas las solicitudes pendientes pasándolas a 'rechazado'.
+- Controlador TorneoControlador.php y Vista detalle-torneo.php: Se habilitó la acción cancelarInscripcion() con validación de rol, token CSRF y capitanía. En la vista se integró el botón "Retirar solicitud" y se añadió un aviso contextual que mantiene disponible el formulario de inscripción si hubo un rechazo o cancelación previa.
+
+52. Fase 3 de Remediación: Calidad de Datos, Récord Deportivo y Seguridad Perimetral
+Objetivo: Asegurar la veracidad estadística deportiva, erradicar valores fijos hardcodeados y proteger la aplicación contra vulnerabilidades de redirección abierta.
+
+Hallazgos Detectados:
+1. El cálculo del récord del jugador en el panel personal sumaba únicamente victorias y derrotas, ignorando empates en deportes que contemplan tablas o paridad reglamentaria.
+2. El perfil público de equipo (perfil-equipo.php) presentaba métricas hardcodeadas en HTML estático (38 Partidas, 24 Victorias, 3 Torneos ganados).
+3. El controlador GuardadosControlador.php procesaba redirecciones directas desde el parámetro volver_a sin validar el destino, exponiendo la aplicación a ataques de Open Redirect (CWE-601).
+
+Solución Aplicada:
+- Modelo Torneo.php: Se refactorizó obtenerRecordDelJugador() para computar empates reales analizando encuentros finalizados con participante_ganador_id IS NULL.
+- Vista dashboard.php: Se adaptaron las métricas del jugador hacia el formato deportivo estándar Récord (V - E - D) y se corrigió el porcentaje de efectividad.
+- Modelo Equipo.php y Controlador EquipoControlador.php: Se desarrolló obtenerEstadisticasTorneos(int $equipoId): array, calculando dinámicamente desde las tablas torneo_encuentros, participantes_torneo, torneo_posiciones y torneo_config las partidas jugadas, victorias, empates, derrotas y torneos ganados. En la vista se reemplazaron los valores estáticos por datos reales de la base de datos.
+- Controlador GuardadosControlador.php: Se implementó el método sanitizarVolverA(?string $url): string, neutralizando URLs externas y protocol-relative (//evil.com), restringiendo los saltos a rutas internas legítimas.
+- Validación Integral: Se ejecutó la suite de pruebas tests/test_fases_remediacion.php, verificando el 100% de aprobación en tiempo de ejecución.
+
+53. Fase A de Remediación: Integridad de Fixture y Rectificación de Marcadores en Runtime
+Objetivo: Prevenir encuentros huérfanos ("partidos fantasma") al modificar participantes confirmados, permitir la rectificación segura de marcadores por parte del organizador ante errores tipográficos y garantizar la consistencia en tablas de posiciones y cuadros eliminatorios.
+
+Hallazgos de Inconsistencia Detectados:
+1. Fixtures Huérfanos por Cancelación de Participante: Si el organizador pre-generaba el fixture de un torneo con inscripciones abiertas y posteriormente cancelaba o eliminaba a un participante confirmado mediante quitarParticipante(), el fixture previo permanecía intacto en la base de datos con partidos asignados a un competidor en estado 'cancelado'. Esto provocaba partidos fantasmas irresolubles al iniciar el torneo.
+2. Ausencia de Rectificación de Marcadores: Una vez cargado el resultado de un partido mediante guardarResultado(), el encuentro pasaba irreversiblemente a estado 'finalizado'. No existía ningún endpoint, método de modelo ni interfaz visual que permitiera al organizador corregir un marcador cargado por error sin intervenir manualmente la base de datos.
+3. Desincronización y Ruptura de Llaves Eliminatorias: Si un marcador se alteraba indebidamente en eliminación directa cuando ya se habían generado rondas posteriores, la llave quedaba corrupta (el ganador nuevo no se propagaba a la final, o peor aún, se permitía alterar el ganador de semifinales cuando la final ya había sido disputada por el ganador original). Asimismo, en torneos de liga y suizo, no existía recálculo dinámico de posiciones ante cambios de marcadores.
+
+Primera Solución Intentada y Errores Encontrados en Tiempo de Ejecución:
+- Error 1: Transacciones PDO Anidadas (PDOException: There is already an active transaction).
+  - Lo que se intentó hacer: En los métodos generarFixture(), guardarResultado(), corregirResultado() y quitarParticipante() se abría incondicionalmente una transacción con $this->bd->beginTransaction() y se cerraba con $this->bd->commit().
+  - Por qué falló: Cuando estos métodos eran invocados desde un contexto donde ya existía una transacción activa (por ejemplo, suites de pruebas unitarias o transacciones compuestas de negocio), MySQL y PDO arrojaron excepciones fatales debido a que PDO no admite beginTransaction() anidados. Además, en los bloques catch, ejecutar $this->bd->rollBack() abortaba de forma imprevista la transacción externa superior.
+  - Solución definitiva aplicada: Se refactorizaron todos los métodos transaccionales del modelo implementando el patrón de transacciones reentrantes:
+    ```php
+    $transaccionPropia = false;
+    if (!$this->bd->inTransaction()) {
+        $this->bd->beginTransaction();
+        $transaccionPropia = true;
+    }
+    // ... operaciones ...
+    if ($transaccionPropia && $this->bd->inTransaction()) {
+        $this->bd->commit();
+    }
+    // en catch:
+    if ($transaccionPropia && $this->bd->inTransaction()) {
+        $this->bd->rollBack();
+    }
+    ```
+- Error 2: Reutilización de placeholders con el mismo nombre en PDO (SQLSTATE[HY093]: Invalid parameter number).
+  - Lo que se intentó hacer: En la consulta $stmtPost de corregirResultado() se evaluaba si el participante anterior había jugado rondas posteriores mediante:
+    `WHERE (participante_local_id = :ganador_anterior OR participante_visitante_id = :ganador_anterior)`
+    pasando únicamente un elemento [':ganador_anterior' => $ganadorAnterior] en el array asociativo de execute().
+  - Por qué falló: Al operar con PDO sobre MySQL con emulación de consultas deshabilitada (modo nativo seguro), la reutilización del mismo nombre de parámetro sin correspondencia 1 a 1 de argumentos generó el fallo `SQLSTATE[HY093]: Invalid parameter number`.
+  - Solución definitiva aplicada: Se asignaron identificadores únicos e independientes a cada marcador (:ganador_ant_loc y :ganador_ant_vis) y se vincularon explícitamente en el execute(), garantizando compatibilidad total con cualquier configuración de PDO.
+
+Solución Final Aplicada y Arquitectura de la Solución:
+1. Invalidación Automática de Fixtures Obsoletos (modelos/Torneo.php - quitarParticipante()):
+   - Al remover a un participante confirmado mientras las inscripciones están abiertas, el método consulta si ya existen registros en `torneo_encuentros`.
+   - Si existía fixture previo, se eliminan atómicamente los registros de `torneo_encuentros`, `torneo_suizo_parejas` y `torneo_posiciones`, retornando `['ok' => true, 'fixture_invalidado' => true, 'mensaje' => 'Participante eliminado. El fixture previo fue invalidado...']`.
+   - En el controlador `PanelOrganizadorControlador.php`, la acción `quitarParticipante()` captura el mensaje y alerta al organizador que debe regenerar el fixture con la nueva nómina.
+2. Mecanismo de Rectificación de Resultados (modelos/Torneo.php - corregirResultado()):
+   - Permite al organizador rectificar marcadores de partidos en estado 'finalizado' pertenecientes a torneos en estado 'en_curso'.
+   - Para torneos de Liga y Suizo: Recalcula de forma transparente la tabla completa de posiciones llamando a `recalcularPosiciones($torneoId)`.
+   - Para torneos de Eliminación Directa:
+     - Evalúa si el nuevo marcador altera la identidad del ganador.
+     - Si el ganador cambia, verifica mediante `$stmtPost` si el ganador anterior ya disputó partidos en rondas posteriores (ronda > ronda_actual y estado = 'finalizado'). Si ya disputó partidos posteriores, **bloquea la corrección** arrojando una excepción informativa para proteger la integridad histórica de la competencia.
+     - Si la ronda siguiente está programada pero no se ha disputado, actualiza automáticamente el cupo en el partido de la ronda siguiente (`ronda + 1`), propagando al nuevo competidor sin romper la llave.
+3. Controlador y Ruteo Seguro:
+   - En `controladores/PanelOrganizadorControlador.php` se implementó la acción `corregirResultado()` con verificación de sesión, rol de organizador, validación de token CSRF, casteo y sanitización estricta de marcadores flotantes (`floatval`).
+   - Se registró `'corregirResultado'` en la lista blanca de métodos del enrutador en `publico/index.php`.
+4. Interfaz de Usuario y UX del Organizador (vistas/organizador/administrar-torneo.php):
+   - En cada tarjeta de encuentro finalizado, cuando el torneo está en curso, se añadió el botón "Corregir marcador" estilizado con icono `fa-pen-to-square`.
+   - Se diseñó un modal emergente accesible con el formulario de corrección que precarga el marcador actual y envía la rectificación vía POST con su token CSRF.
+5. Validación Automatizada (tests/test_fase_a_fixtures.php):
+   - Se implementó una suite completa de pruebas que valida:
+     - 1.1 y 1.2: Generación e invalidación de fixture al dar de baja un participante.
+     - 2.1 y 2.2: Carga inicial y corrección de marcador en liga con recálculo dinámico de posiciones y puntos.
+     - 3.1: Generación automática de la final tras semifinales en eliminación directa.
+     - 3.2: Propagación exitosa del nuevo ganador a la final al corregir la semifinal (antes de jugarse la final).
+     - 3.3: Bloqueo estricto ante el intento de rectificar semifinales cuando la final ya fue disputada.
+   - Resultado: 7 / 7 pruebas aprobadas exitosamente (100% PASS).
+
+54. Fase B de Remediación: Blindaje y Bloqueo de Modificaciones de Equipos y Plantillas en Competencia
+Objetivo: Blindar el roster de los equipos deportivos durante competiciones en curso, impidiendo que miembros o capitanes abandonen el equipo o sean expulsados afectando la integridad de los partidos programados, e impedir la alteración o disolución de equipos con compromisos competitivos activos.
+
+Hallazgos de Inconsistencia Detectados:
+1. Abandono o Expulsión de Miembros en Pleno Torneo: Un capitán podía expulsar a miembros de la plantilla o abandonar el equipo mediante `dejarEquipo()` mientras el equipo se encontraba disputando partidos en un torneo en estado `en_curso`, lo que provocaba que equipos quedaran por debajo de la nómina reglamentaria o alteraran competidores a mitad de fixture.
+2. Cambio de Disciplina Deportiva en Equipos Inscriptos: No existía salvaguarda para evitar que el equipo cambiara su disciplina deportiva (`juego_id`) mientras tenía postulaciones pendientes, confirmadas o torneos en curso, lo que creaba una inconsistencia de tipo de deporte respecto al torneo inscripto.
+3. Eliminación (Soft Delete) de Equipos con Torneos Activos: El método `eliminarEquipo()` desactivaba al equipo (`activo = 0`) sin comprobar si participaba en torneos vigentes, dejando registros rotos en fixtures y tablas de posiciones.
+
+Primera Solución Intentada y Errores Encontrados en Tiempo de Ejecución:
+- Error Detectado: Transacciones no reentrantes en `crearEquipoCompleto()`, `responderInvitacion()` y `responderSolicitudRecibida()` (`PDOException: There is no active transaction` y `Undefined array key "equipoId"`).
+- Lo que se intentó hacer: Al ejecutar la suite de pruebas unitarias/integración de Fase B bajo una transacción global de testing, la invocación de `crearEquipoCompleto()` ejecutó un `$this->bd->beginTransaction()` incondicional, arrojando excepción de colisión transaccional en MySQL PDO y abortando prematuramente con `rollBack()`.
+- Solución definitiva aplicada: Se refactorizaron todos los métodos transaccionales del modelo `Equipo.php` implementando el patrón de transacciones reentrantes (`$transaccionPropia`), permitiendo que el método participe limpiamente en transacciones superiores o inicie una propia según corresponda sin abortar estados externos.
+
+Solución Final Aplicada y Arquitectura de la Solución:
+1. Métodos de Verificación de Compromisos Deportivos (`modelos/Equipo.php`):
+   - `tieneTorneosEnCurso(int $equipoId): bool`: Verifica si el equipo posee participantes en estado `confirmado` en torneos `en_curso`.
+   - `tieneTorneosActivos(int $equipoId): bool`: Verifica si el equipo posee participantes en estado `confirmado` o `pendiente` en torneos `en_curso` o `inscripciones_abiertas`.
+2. Blindaje de Roster (`dejarEquipo` y `expulsarMiembro`):
+   - En `Equipo::dejarEquipo()`: Se rechaza la salida si el equipo tiene torneos en curso, retornando el mensaje: *"No podés abandonar el equipo mientras esté disputando un torneo en curso."*
+   - En `Equipo::expulsarMiembro()` y `EquipoControlador::expulsarMiembro()`: Se bloquea la expulsión si el equipo está en curso y se redirige con el parámetro `&errorExpulsar=` para alertar al capitán en la interfaz.
+3. Blindaje de Disciplina y Eliminación (`cambiarDisciplina` y `eliminarEquipo`):
+   - En `Equipo::cambiarDisciplina()` y `EquipoControlador::actualizarEquipo()`: Se bloquea cualquier mutación de `juego_id` si el equipo tiene torneos activos, y se valida además que la nueva disciplina permita modalidad colectiva (`modalidad_id = 2`).
+   - En `Equipo::eliminarEquipo()`: Se rechaza el soft-delete si el equipo tiene torneos activos.
+4. Enriquecimiento de Modelo y UX (`Equipo::obtenerPorId` y `vistas/jugador/gestionar-equipo.php`):
+   - `obtenerPorId()` incluye `nombre_juego` e icono de la disciplina deportiva vía `LEFT JOIN juegos`.
+   - En `gestionar-equipo.php` se visualiza la disciplina deportiva asignada con advertencia de bloqueo y se añadió el contenedor para renderizar alertas `errorExpulsar`.
+5. Validación Automatizada (`tests/test_fase_b_equipos.php`):
+   - Se implementaron 12 pruebas automatizadas que cubren el bloqueo de expulsión, abandono, cambio de disciplina y eliminación en torneos en curso, así como su correcto desbloqueo operativo una vez que la competencia finaliza.
+   - Resultado: 12 / 12 pruebas aprobadas exitosamente (100% PASS).
+55. Fase C de Remediación: Seguridad, Baneo en Caliente y Eliminación en Cascada Segura de Torneos por Administrador
+Objetivo: Garantizar la seguridad operativa y el control administrativo del sistema mediante la expulsión e invalidación inmediata ("baneo en caliente") de sesiones activas de usuarios suspendidos o desactivados por la administración, y posibilitar la eliminación atómica y segura de torneos sin violaciones de clave foránea (FK) en bases de datos relacionales.
+
+Hallazgos de Inconsistencia Detectados:
+1. Sesiones Fantasma de Usuarios Suspendidos ("Baneo en Frío"): Cuando un administrador desactivaba o suspendía una cuenta de usuario (`esta_activo = 0`) desde el panel administrativo, el usuario continuaba operando normalmente mientras su sesión PHP (`$_SESSION`) siguiera viva. Podía seguir creando torneos, inscribiéndose o publicando comentarios hasta que cerrara sesión manualmente o caducara la cookie de sesión, permitiendo acciones no autorizadas a usuarios sancionados.
+2. Fallo de Eliminación Administrativa de Torneos por Restricción de Claves Foráneas: Al intentar eliminar un torneo desde la administración (`Torneo::eliminarPorAdmin()`), la sentencia `DELETE FROM torneos WHERE id = :id` arrojaba un error fatal `SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails`. Esto ocurría porque múltiples tablas hijas (`torneo_encuentros`, `torneo_suizo_parejas`, `torneo_posiciones`, `torneo_actividades`, `torneo_comentarios`, `torneo_cambio_estado`, `torneo_config`, `participantes_torneo` y la tabla polimórfica `guardados`) mantienen referencias de clave foránea sin cláusula `ON DELETE CASCADE` a nivel motor.
+
+Primera Solución Intentada y Errores Encontrados en Tiempo de Ejecución:
+- Error 1: Fallo de headers y cookies de sesión en entornos CLI y testing (`session_set_cookie_params(): Session cookie parameters cannot be changed after headers have already been sent` y `Cannot modify header information`).
+  - Lo que se intentó hacer: En `Sesion::estaLogueado()`, al detectar `esta_activo = 0`, se invocaba directamente `self::destruir()` y `header('Location: ...')`. En entornos de consola o suites de pruebas PHP CLI donde la salida de texto ya había comenzado, esto generaba warnings fatales de PHP.
+  - Solución definitiva aplicada: Se blindaron las llamadas de destrucción de cookies y emisión de encabezados HTTP con `if (!headers_sent())` y el operador de control `@session_destroy()`, permitiendo que la lógica de seguridad opere de forma limpia tanto en el servidor web como en entornos de pruebas automatizadas por consola.
+- Error 2: Bloqueo de eliminación por registros huérfanos o desorden en el borrado relacional.
+  - Lo que se intentó hacer: Intentar borrar inicialmente solo encuentros y participantes.
+  - Por qué falló: Tablas secundarias como `torneo_suizo_parejas`, `torneo_posiciones`, `torneo_actividades`, `torneo_comentarios`, `torneo_cambio_estado`, `torneo_config` y `guardados` mantenían bloqueada la eliminación por dependencia de clave foránea.
+  - Solución definitiva aplicada: Se implementó un algoritmo de purga relacional en cascada atómica en `Torneo::eliminarPorAdmin()` que elimina en orden estricto de precedencia todas las 8 tablas hijas directas más la referencia polimórfica en `guardados` dentro de una transacción reentrante (`$transaccionPropia`). Si ocurre cualquier imprevisto, la operación se revierte en su totalidad (`rollBack`).
+- Error 3: Violación de trigger `trg_torneo_validar_disciplina_ins` en el test automatizado.
+  - Lo que se intentó hacer: Insertar un torneo dummy seleccionando el primer `juego_id` activo disponible en la base de datos con modalidad 1 y formato 'liga'.
+  - Por qué falló: MySQL activó el trigger de integridad deportiva `trg_torneo_validar_disciplina_ins` arrojando `SQLSTATE[45000]: 1644 Integridad fallida: la modalidad no está permitida para esta disciplina`.
+  - Solución definitiva aplicada: Se ajustó la consulta de selección del fixture de prueba para validar que el juego admitiera tanto `modalidad_id = 1` como `formato = 'liga'` consultando `juego_modalidades_permitidas` y `juego_formatos_permitidos`.
+
+Solución Final Aplicada y Arquitectura de la Solución:
+1. Mecanismo de Baneo en Caliente (`codigo_fuente/ayudantes/Sesion.php`):
+   - Se añadió el método estático `Sesion::verificarUsuarioActivo(): bool`, el cual consulta en tiempo real a la base de datos (`SELECT esta_activo FROM usuarios WHERE id = :id LIMIT 1`) verificando el estado del usuario logueado en la sesión activa.
+   - En `Sesion::estaLogueado()`: Antes de validar la expiración y retornar `true`, invoca `verificarUsuarioActivo()`. Si el usuario fue suspendido o desactivado por un administrador (`esta_activo == 0`):
+     - Destruye la sesión de inmediato mediante `self::destruir()`.
+     - Si los headers no han sido enviados, redirige de inmediato a `index.php?c=auth&a=mostrarLogin&error=cuenta_suspendida`.
+     - Retorna `false`, cortando en el acto la ejecución de cualquier controlador protegido.
+2. Manejo de Alertas de Suspensión (`codigo_fuente/controladores/AuthControlador.php`):
+   - En `AuthControlador::mostrarLogin()` se implementó la captura del parámetro `error=cuenta_suspendida`, inyectando el mensaje de advertencia: *"Tu cuenta ha sido suspendida o desactivada por la administración. Si consideras que se trata de un error, contacta a soporte."*
+3. Eliminación Atómica en Cascada Segura (`codigo_fuente/modelos/Torneo.php` - `eliminarPorAdmin()`):
+   - Se refactorizó íntegramente `eliminarPorAdmin(int $torneoId): bool` implementando el patrón transaccional reentrante (`$transaccionPropia = false`).
+   - Se ejecuta una secuencia de eliminación en orden estricto de integridad relacional:
+     1. `torneo_encuentros` (`torneo_id = :id`)
+     2. `torneo_suizo_parejas` (`torneo_id = :id`)
+     3. `torneo_posiciones` (`torneo_id = :id`)
+     4. `torneo_actividades` (`torneo_id = :id`)
+     5. `torneo_comentarios` (`torneo_id = :id`)
+     6. `torneo_cambio_estado` (`torneo_id = :id`)
+     7. `torneo_config` (`torneo_id = :id`)
+     8. `participantes_torneo` (`torneo_id = :id`)
+     9. `guardados` (`tipo = 'torneo' AND referencia_id = :id`)
+     10. `torneos` (`id = :id`)
+   - Si no existía el torneo o no se afectaron filas, retorna `false`. Si la eliminación tiene éxito, confirma la transacción (`commit`) y retorna `true`.
+4. Validación Automatizada (`tests/test_fase_c_seguridad_admin.php`):
+   - Se construyó una suite de pruebas que valida:
+     - 1.1: Usuario activo validado normalmente (`verificarUsuarioActivo: true`, `estaLogueado: true`).
+     - 1.2: Detección en tiempo real del baneo al cambiar `esta_activo = 0` en base de datos, destruyendo la sesión y bloqueando el acceso.
+     - 2.1: Creación de torneo de prueba con dependencias completas en 9 tablas relacionales (11 registros vinculados).
+     - 2.2: Eliminación en cascada exitosa sin violaciones de integridad FK, dejando en 0 el torneo principal y todas sus tablas asociadas.
+     - 2.3: Manejo defensivo ante IDs inexistentes retornando `false`.
+   - Resultado: 5 / 5 pruebas aprobadas exitosamente (100% PASS).
+
+56. Fase D de Remediación: Detección y Advertencia de Conflictos de Horario y Canchas en la Programación de Partidos
+Objetivo: Prevenir la superposición de horarios y la sobreasignación de canchas/sedes durante la programación y reprogramación de encuentros deportivos por parte del organizador, garantizando la viabilidad física del cronograma y alertando en tiempo real ante colisiones de sede o participantes.
+
+Hallazgos de Inconsistencia Detectados:
+1. Asignación Ciega de Canchas y Sedes sin Detección de Colisiones: En el método `Torneo::programarEncuentro()`, la fecha, hora y sede se actualizaban directamente con un `UPDATE torneo_encuentros SET fecha_hora_programada = :fecha_hora, cancha = :sede WHERE id = :id` sin verificar si la misma cancha ya había sido reservada para otro encuentro en esa misma fecha y franja horaria. Esto permitía sobrecargar una cancha física con múltiples partidos en simultáneo.
+2. Superposición Horaria de Participantes (Partidos Simultáneos): No existía ninguna validación que impidiera programar a un mismo participante (jugador o equipo) en dos partidos distintos a la misma hora o con minutos de diferencia dentro del torneo, creando situaciones absurdas donde un competidor debía disputar dos partidos al mismo tiempo.
+3. Tratamiento Indiferenciado de Mensajes en la Vista de Administración: El controlador almacenaba errores de programación en la variable genérica `$_SESSION['mensaje']`, renderizándose siempre como un mensaje verde `.success-message` en `administrar-torneo.php`, lo que confundía al organizador haciéndole creer que una operación fallida había sido exitosa.
+
+Primera Solución Intentada y Errores Encontrados en Tiempo de Ejecución:
+- Error 1: Sensibilidad a mayúsculas, minúsculas y espacios en nombres de canchas.
+  - Lo que se intentó hacer: Comparar directamente `$sede == $canchaRegistrada`.
+  - Por qué falló: Un organizador que escribía `"Cancha 1"` para el primer partido y `"cancha 1"` o `"  Cancha 1  "` para el segundo no disparaba el conflicto debido a discrepancias tipográficas simples.
+  - Solución definitiva aplicada: Se normalizaron las cadenas en SQL y PHP mediante `LOWER(TRIM(...))` y se aplicó coalescencia con la ubicación general del torneo (`COALESCE(NULLIF(TRIM(e.cancha), ''), :ubicacion_torneo)`) para cubrir también las canchas asignadas por defecto.
+- Error 2: Falsos positivos durante la reprogramación de un partido existente.
+  - Lo que se intentó hacer: Buscar colisiones en la tabla con la misma fecha y hora.
+  - Por qué falló: Si el organizador simplemente actualizaba la cancha de un partido ya programado a las 15:00, el sistema detectaba que "ya existía un partido a las 15:00" (el mismo partido) y bloqueaba la edición.
+  - Solución definitiva aplicada: Se incorporó la cláusula de exclusión `e.id != :encuentro_id`, permitiendo reprogramar o editar un encuentro sin colisionar contra sí mismo.
+- Error 3: Solapamiento temporal en horarios contiguos no idénticos (ej. 15:00 y 15:15).
+  - Lo que se intentó hacer: Validar únicamente igualdad exacta de timestamp (`e.fecha_hora_programada = :fecha_hora`).
+  - Por qué falló: Partidos programados a las 15:00 y a las 15:10 en la misma cancha eludían el bloqueo a pesar de superponerse físicamente.
+  - Solución definitiva aplicada: Se implementó una ventana de proximidad temporal en minutos mediante `ABS(TIMESTAMPDIFF(MINUTE, e.fecha_hora_programada, :fecha_hora)) < 30`, bloqueando tanto la coincidencia al mismo minuto como solapamientos temporales incompatibles (< 30 min).
+
+Solución Final Aplicada y Arquitectura de la Solución:
+1. Método Preventivo de Detección de Conflictos (`codigo_fuente/modelos/Torneo.php` - `verificarConflictosProgramacion()`):
+   - Consulta el encuentro especificado obteniendo `torneo_id`, `ronda`, participantes locales/visitantes y la ubicación por defecto del torneo.
+   - Determina la cancha efectiva (personalizada o por defecto).
+   - Valida conflictos de sede: Comprueba si existe otro encuentro en estado `programado` o `aplazado` en el mismo torneo dentro de la ventana de 30 minutos asignado a la misma cancha. Retorna un mensaje específico con los nombres de los equipos y la hora ocupada.
+   - Valida conflictos de participantes: Si el encuentro tiene participantes asignados, comprueba si alguno de ellos ya tiene otro partido programado en ese mismo rango horario. Retorna un mensaje específico con el nombre del participante y la ronda del partido previo.
+2. Programación Segura con Retorno Estructurado (`Torneo::programarEncuentro()`):
+   - Invoca preventivamente `verificarConflictosProgramacion()`. Si se detecta un conflicto, aborta la actualización y retorna `['ok' => false, 'mensaje' => $conflicto]`.
+   - Si no hay colisiones, ejecuta el `UPDATE` y retorna `['ok' => true, 'mensaje' => 'Partido programado correctamente.']`.
+3. Controlador y Flujo de Sesión (`codigo_fuente/controladores/PanelOrganizadorControlador.php`):
+   - En `programarEncuentro()`: Evalúa el retorno estructurado del modelo; si `ok === false`, setea `$_SESSION['error']` con la causa exacta del conflicto.
+   - En `administrar()`: Pasa `'error' => $_SESSION['error'] ?? null` al template y limpia atómicamente ambas variables de sesión.
+4. Interfaz de Usuario y UX del Organizador (`codigo_fuente/vistas/organizador/administrar-torneo.php`):
+   - Se adaptó la vista para renderizar una alerta destacada en rojo `.error-message` con icono `fa-triangle-exclamation` cuando exista un error o conflicto, y la alerta verde `.success-message` con icono `fa-circle-check` ante operaciones exitosas.
+5. Validación Automatizada (`tests/test_fase_d_programacion.php`):
+   - Se diseñó una suite automatizada que verifica:
+     - 1.1: Programación inicial exitosa sin conflictos.
+     - 2.1: Bloqueo inmediato por cancha ocupada en el mismo horario exacto.
+     - 2.2: Bloqueo por cancha ocupada normalizando mayúsculas, minúsculas y espacios.
+     - 2.3: Bloqueo por solapamiento temporal (< 30 min) en la misma cancha.
+     - 3.1: Bloqueo por participante ya comprometido a la misma hora en otro partido.
+     - 3.2: Bloqueo por participante con solapamiento temporal (< 30 min).
+     - 4.1: Reprogramación del mismo encuentro sin falsos positivos contra sí mismo.
+     - 4.2: Programación válida en horario separado (>= 30 min).
+   - Resultado: 8 / 8 pruebas aprobadas exitosamente (100% PASS).
+
+57. Resolución de Deudas Técnicas de Auditoría, Limpieza de Semillas y Blindaje Operativo
+Objetivo: Atender de forma integral las deudas técnicas y vulnerabilidades identificadas durante la auditoría de arquitectura y seguridad (C1, A1, A2, A3, A4, M8, M9), sanear el entorno de base de datos eliminando scripts de semillas obsoletos que corrompen el modelo relacional, corregir la sobrepoblación de usuarios administradores y blindar los métodos mutantes con POST y tokens CSRF.
+
+Inconsistencias y Hallazgos Detectados:
+1. Hallazgo C1 (Crítico): Acciones Destructivas por GET sin Validación CSRF:
+   - TorneoAdminControlador::eliminar leía el ID desde $_GET['id'] y ejecutaba directamente la cascada total irreversible de torneos.
+   - JuegoControlador::cambiarEstado ejecutaba la baja lógica de disciplinas mediante un simple enlace GET.
+   - Navegaciones top-level o ataques de CSRF podían gatillar la eliminación de competencias o disciplinas con la sesión administrativa abierta.
+2. Hallazgo A1 y A2 (Alto): verificarUsuarioActivo() Falla Abierto y Rol Desincronizado en Sesión:
+   - En Sesion.php, el bloque catch (\Throwable) ante cualquier error de conexión o saturación retornaba true, permitiendo que usuarios suspendidos eludieran la suspensión si la base de datos demoraba o fallaba puntualmente.
+   - El rol del usuario ($_SESSION['rol_id']) quedaba estático desde el momento del login. Si un administrador degradaba a un organizador o le revocaba permisos, éste continuaba operando con privilegios hasta que expirara su cookie de sesión.
+3. Hallazgo A3 (Alto): Carrera Concurrente en Torneo::cambiarEstado:
+   - El estado del torneo se consultaba fuera de transacción y sin bloqueo (obtenerBorrador()).
+   - El UPDATE no comprobaba el estado anterior en la cláusula WHERE, permitiendo que dos peticiones concurrentes colisionaran o que el torneo cambiara de estado de forma inconsistente.
+4. Hallazgo A4 (Alto): Fuga de Información Sensible al Fallar Conexión PDO:
+   - En Conexion.php, el bloque catch (PDOException $e) ejecutaba die("Error al conectar..." . $e->getMessage()), exponiendo host, usuario, DSN y detalles internos de infraestructura ante una falla en el motor de base de datos.
+5. Inconsistencias de Semillas y Cuentas Administrativas:
+   - El archivo 002_datos_ejemplo.sql contenía datos de la primera versión del sistema que introducían datos que corrompen la integridad referencial.
+   - La base de datos contenía 18 usuarios con rol_id = 1 (Administrador General), originados por generadores masivos aleatorios (generador_semillas.php), cuando el sistema en desarrollo únicamente requiere un administrador de control.
+   - Existía un torneo residual de pruebas (__TEST_TORNEO_ELIMINACION__ ID 1220) alojado en la base de datos de desarrollo.
+6. Hallazgos Menores M8 y M9:
+   - stream_url en la creación y edición de torneos no validaba la estructura formal de una URL con FILTER_VALIDATE_URL.
+   - ManejadorErrores leía $_SESSION['rol'] en lugar de $_SESSION['rol_id'], registrando siempre NULL en el campo rol_usuario de la tabla errores_sistema.
+
+Solución Aplicada y Arquitectura de Remediación:
+1. Reemplazo y Limpieza de Semillas Fundacionales (002_datos_base.sql):
+   - Se eliminó definitivamente el archivo obsoleto 002_datos_ejemplo.sql.
+   - Se generó base_de_datos/migraciones/002_datos_base.sql conteniendo estrictamente las tablas maestras y catálogos requeridos (permisos, roles, rol_permisos, modalidades, sistemas_puntuacion, juegos, politicas_contrasenas, logros, formatos_torneo).
+   - Se conservaron de forma controlada exclusivamente las tres identidades esenciales de prueba solicitadas:
+     - admin@ascend.com (ID 1, Administrador General).
+     - organizador@ascend.com (ID 2, Organizador con perfil verificado).
+     - jugador@ascend.com (ID 3, Jugador con perfil y logros iniciales).
+2. Saneamiento de Base de Datos y Purga de Administradores Sintéticos:
+   - Se eliminó el torneo residual 1220 de forma limpia mediante cascada atómica.
+   - Se ejecutó un script de saneamiento que degradó a los 17 usuarios sintéticos testN@ejemplo.com a participantes (rol_id = 3), dejando a admin@ascend.com como el único Administrador General activo de la plataforma.
+3. Blindaje de Operaciones Destructivas contra CSRF y Métodos GET (TorneoAdminControlador, JuegoControlador, Vistas Admin):
+   - TorneoAdminControlador::eliminar: Ahora verifica estrictamente $_SERVER['REQUEST_METHOD'] === 'POST', valida el token CSRF mediante Sesion::requerirTokensCSRF() y obtiene el ID desde $_POST['id'].
+   - En vistas/admin/torneos/torneos_index.php, se reemplazó el enlace <a> por un <form method="POST"> con input oculto de token CSRF, confirmación JavaScript preventiva y botón con estilos idénticos.
+   - JuegoControlador::cambiarEstado: Se migró a POST con validación obligatoria de Sesion::requerirTokensCSRF().
+   - En vistas/admin/juegos/juegos_index.php, se adaptó el botón a un formulario POST con token CSRF.
+   - En publico/index.php, la regla de solo lectura en modo suplantación bloquea cualquier intento de mutación administrativa.
+4. Seguridad Fail-Closed y Sincronización Dinámica de Privilegios (Sesion.php):
+   - En Sesion::verificarUsuarioActivo(), se modificó la consulta a SELECT esta_activo, rol_id FROM usuarios WHERE id = :id LIMIT 1.
+   - Si la consulta arroja que el usuario fue suspendido (esta_activo !== 1), retorna false y la sesión es destruida de inmediato.
+   - Si el rol cambió en la base de datos, se sincroniza en caliente $_SESSION['rol_id'] = (int) $usuario['rol_id'].
+   - Política Fail-Closed: Ante cualquier fallo o excepción en la consulta, se registra en error_log y se retorna false (bloqueando accesos no verificados), permitiendo bypass únicamente en ejecuciones CLI que no tengan sesión activa.
+5. Bloqueo Pesimista y Guarda Atómica de Estado Anterior (Torneo::cambiarEstado):
+   - Dentro de la transacción atómica, se ejecuta SELECT id, estado FROM torneos WHERE id = :id AND organizador_id = :organizador_id FOR UPDATE para serializar transiciones concurrentes sobre el mismo registro.
+   - Se valida la matriz de transiciones permitidas contra el estado actual bloqueado.
+   - La sentencia de actualización incorpora la guarda de estado anterior:
+     UPDATE torneos SET estado = :estado WHERE id = :id AND organizador_id = :organizador_id AND estado = :estado_anterior
+   - Se valida rowCount() === 1. Si otra transacción alteró el estado en simultáneo, el UPDATE no afecta filas y se efectúa rollBack().
+6. Supresión de Fuga de Información (Conexion.php):
+   - Se eliminó la instrucción die() con mensajes detallados de PDO.
+   - Ante errores de conexión, el detalle técnico se envía a error_log y se lanza una PDOException con mensaje seguro y genérico, permitiendo que ManejadorErrores capture la excepción y renderice la vista amigable 500.
+7. Telemetría de Errores y Validación de URLs (ManejadorErrores.php, PanelOrganizadorControlador.php):
+   - En ManejadorErrores.php, se ajustó la captura a $rolUsuario = $_SESSION['rol_id'] ?? $_SESSION['rol'] ?? null;.
+   - En PanelOrganizadorControlador.php (tanto en la edición del torneo como en la etapa 2 de creación), se implementó la validación estricta de stream_url utilizando filter_var($streamUrl, FILTER_VALIDATE_URL) y la expresión regular #^https?://#i.
+
+Plan de Reorganización y Estandarización de Scripts SQL (Próxima Implementación):
+- Arquitectura de Scripts en 3 Capas Limpias:
+  - 001_esquema_base.sql: Definición pura DDL (CREATE TABLE, índices, foreign keys) con integridad referencial consolidada, incorporando de raíz los tipos y columnas corregidos sin necesidad de scripts de parches (004, 005).
+  - 002_catalogos_y_usuarios_base.sql: Únicamente datos semilla obligatorios para el arranque del sistema (tablas maestras de configuración y las 3 cuentas canónicas: admin, organizador y jugador).
+  - 003_seed_pruebas_qa.sql: Semilla sintética de torneos, equipos y partidos para ambientes de staging/QA. Se unificará para que ningún generador aleatorio vuelva a introducir administradores masivos; todos los usuarios sintéticos se definirán estrictamente como jugadores (rol_id = 3) y organizadores (rol_id = 2).
+- Depuración de Generadores Aleatorios:
+  - Sustituir generador_semillas.php por un seeder controlado y determinista con IDs fijos e inserciones idempotentes.
+
+Validación y Pruebas Ejecutadas:
+- Suite Dedicada tests/test_deudas_tecnicas_auditoria.php:
+  - 1.1 - 1.3: Verificación de baneo fail-closed y sincronización dinámica de rol_id en caliente (PASS).
+  - 2.1 - 2.2: Transiciones de estado legítimas y rechazo atómico de transiciones inválidas en Torneo::cambiarEstado (PASS).
+  - 3.1: Captura correcta de rol_id en ManejadorErrores (PASS).
+  - 4.1 - 4.2: Exigencia de método POST y token CSRF en TorneoAdminControlador::eliminar y JuegoControlador::cambiarEstado (PASS).
+  - 5.1: Validación de stream_url mediante FILTER_VALIDATE_URL (PASS).
+  - Resultado: 9 / 9 pruebas aprobadas exitosamente (100% PASS).
+- Regresión Completa de Suites Anteriores:
+  - test_fase_a_fixtures.php: 7 / 7 (100% PASS).
+  - test_fase_b_equipos.php: 12 / 12 (100% PASS).
+  - test_fase_c_seguridad_admin.php: 5 / 5 (100% PASS).
+  - test_fases_remediacion.php: 10 / 10 (100% PASS).
+  - test_e2e_simulacion_completa.php: 12 / 12 (100% PASS).
+
+58. Corrección de Inconsistencia SQL en Perfil de Equipo y Restauración de Estilos en Detalle de Error
+Objetivo: Subsanar el error de columna inexistente al consultar el perfil de equipos y restaurar la carga de hojas de estilo en la vista de detalle de errores del monitor administrativo.
+
+Inconsistencias Detectadas:
+1. Error SQLSTATE[42S22] en Equipo::obtenerPorId:
+   - En codigo_fuente/modelos/Equipo.php (línea 194), la consulta seleccionaba j.nombre_juego y j.icono_url sobre la tabla juegos.
+   - En el esquema relacional, los campos reales son j.nombre y j.imagen_url.
+   - Al invocar c=equipo&a=verPerfil&id=..., PDO lanzaba un Fatal Error 1054 por columna inexistente.
+2. Pérdida de Estilos Visuales en detalle_error.php:
+   - La vista codigo_fuente/vistas/admin/detalle_error.php tenía rutas CSS absolutas hardcodeadas a http://localhost/SGDM/codigo_fuente/publico/css/admin/....
+   - Al ejecutarse la aplicación dentro de un contenedor Docker o entorno con DocumentRoot directo (/var/www/html), el navegador intentaba resolver la URL externa hardcodeada y fallaba con 404, provocando que la pantalla se renderizara sin estilos ni tipografía.
+
+Solución Aplicada:
+1. Corrección de Consulta SQL en Equipo::obtenerPorId:
+   - Se actualizó la proyección a SELECT e.*, j.nombre AS nombre_juego, j.imagen_url AS juego_icono FROM equipos e LEFT JOIN juegos j ON j.id = e.juego_id.
+   - Mantiene el alias nombre_juego para retrocompatibilidad total con las vistas consumidoras y mapea correctamente la imagen del juego.
+2. Dinamización de Enlaces en detalle_error.php:
+   - Se reemplazaron las URLs fijas por la constante dinámica URL_BASE: URL_BASE . css/admin/base.css y URL_BASE . css/admin/detalle_error.css, además de normalizar el enlace de retorno al dashboard.

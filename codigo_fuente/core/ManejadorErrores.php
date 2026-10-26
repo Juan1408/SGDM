@@ -11,6 +11,56 @@ class ManejadorErrores {
     public static function capturarExcepcion(Throwable $e) {
         $tipoError = ($e instanceof \PDOException || strpos(strtolower($e->getMessage()), 'sql') !== false) ? 'base_de_datos' : 'codigo';
         self::registrarError($e->getMessage(), $e->getFile(), $e->getLine(), $e->getTraceAsString(), $tipoError);
+        self::responderError500();
+    }
+
+    /**
+     * Devuelve una respuesta 500 controlada en lugar de dejar un 200 vacío.
+     * El detalle técnico queda en errores_sistema; al usuario solo se le
+     * muestra un mensaje genérico.
+     */
+    private static function responderError500(): void {
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
+        if (!headers_sent()) {
+            http_response_code(500);
+            header('Content-Type: text/html; charset=utf-8');
+        }
+
+        // Descarta cualquier salida parcial que haya quedado en el buffer.
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        $nombreApp = defined('APP_NOMBRE') ? APP_NOMBRE : 'SGDM';
+        $nombreApp = htmlspecialchars($nombreApp, ENT_QUOTES, 'UTF-8');
+
+        echo '<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error interno</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; background: #f5f6f8; color: #1f2933; margin: 0; }
+        main { max-width: 560px; margin: 12vh auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,.08); }
+        h1 { font-size: 1.4rem; margin-top: 0; }
+        p { line-height: 1.5; }
+        a { color: #1d4ed8; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Ocurrió un error interno</h1>
+        <p>La aplicación no pudo completar la operación. El incidente quedó registrado para su revisión.</p>
+        <p><a href="' . (defined('URL_BASE') ? htmlspecialchars(URL_BASE, ENT_QUOTES, 'UTF-8') : '/') . '">Volver al inicio</a></p>
+        <p><small>' . $nombreApp . '</small></p>
+    </main>
+</body>
+</html>';
+        exit;
     }
 
     public static function capturarErrorPhp($nivel, $mensaje, $archivo, $linea) {
@@ -42,7 +92,7 @@ class ManejadorErrores {
 
             $contextoJson = json_encode($contexto);
             $usuarioId = $_SESSION['usuario_id'] ?? null;
-            $rolUsuario = $_SESSION['rol'] ?? null;
+            $rolUsuario = $_SESSION['rol_id'] ?? $_SESSION['rol'] ?? null;
 
             $sql = "INSERT INTO errores_sistema 
                         (hash_error, tipo_error, mensaje, archivo, linea, stack_trace, contexto_json, usuario_id, rol_usuario, cantidad_ocurrencias, estado) 

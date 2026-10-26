@@ -4,9 +4,9 @@
 const games = [
    { title: "Valorant", category: "eSports", text: "Torneos competitivos por equipos, con partidas rápidas, rankings y resultados.", img: "img/juegos/valorant.jpg" },
    { title: "Ajedrez", category: "Mental", text: "Competencias mentales para jugadores estratégicos.", img: "img/juegos/chess.jpg" },
-   { title: "UNO", category: "Mesa", text: "Torneos de juegos de mesa y cartas para competir de forma simple y divertida.", img: "img/torneos/uno.jpeg" },
+   { title: "UNO", category: "Mesa", text: "Torneos de juegos de mesa y cartas para competir de forma simple y divertida.", img: "img/juegos/uno.jpg" },
    { title: "Rocket League", category: "eSports", text: "Competencias rápidas de autos y fútbol.", img: "img/juegos/fly.jpg" },
-   { title: "CS2", category: "eSports", text: "Torneos tácticos de precisión y estrategia.", img: "img/torneos/bn.jpg" }
+   { title: "CS2", category: "eSports", text: "Torneos tácticos de precisión y estrategia.", img: "img/bn.jpg" }
 ];
 
 let currentGame = 0;

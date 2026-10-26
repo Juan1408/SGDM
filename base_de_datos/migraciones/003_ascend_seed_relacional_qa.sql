@@ -2,6 +2,12 @@
 -- Datos sintéticos. No usar en producción.
 -- Usa IDs reservados desde 1000 y corre en orden respetando las FK.
 -- Contraseña de prueba compartida: hash bcrypt ya usado por el proyecto.
+--
+-- IMPORTANTE: pensado para una base recién creada (001 + 002). No es
+-- totalmente idempotente: algunas inserciones dependen de IDs reservados y
+-- de AUTO_INCREMENT. Para reimportarlo, recrear la base antes de ejecutarlo.
+-- Las posiciones de los torneos QA se recalculan al final a partir de los
+-- encuentros finalizados y de la configuración de puntuación de cada torneo.
 USE ascend;
 SET NAMES utf8mb4;
 -- Relaciones válidas del catálogo multideportivo (idempotentes).
@@ -158,7 +164,7 @@ INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1200,'semilla_q
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1200,'Reunión técnica QA','reunion','2026-01-01','18:00:00'),(1200,'Jornada de competencia','competencia','2026-01-01','20:00:00'),(1200,'Premiación','premiacion','2026-01-05','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1201,'Copa QA 02',2,'Torneo sintético para pruebas integrales','eliminacion_directa','en_curso',16,2,'2026-01-01','2026-12-01','2026-02-02','2026-02-06','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1001,2,2,3,0,0,'puntos',3);
+VALUES (1201,'Copa QA 02',2,'Torneo sintético para pruebas integrales','liga','en_curso',16,2,'2026-01-01','2026-12-01','2026-02-02','2026-02-06','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1001,2,2,3,0,0,'puntos',3);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1201,'semilla_qa','true'),(1201,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1201,'Reunión técnica QA','reunion','2026-02-02','18:00:00'),(1201,'Jornada de competencia','competencia','2026-02-02','20:00:00'),(1201,'Premiación','premiacion','2026-02-06','21:00:00');
 INSERT IGNORE INTO torneos
@@ -173,12 +179,12 @@ INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1203,'semilla_q
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1203,'Reunión técnica QA','reunion','2026-04-04','18:00:00'),(1203,'Jornada de competencia','competencia','2026-04-04','20:00:00'),(1203,'Premiación','premiacion','2026-04-08','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1204,'Copa QA 05',5,'Torneo sintético para pruebas integrales','eliminacion_directa','finalizado',16,2,'2026-01-01','2026-12-01','2026-05-05','2026-05-09','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1004,1,2,2,0.5,0,'booleano',3);
+VALUES (1204,'Copa QA 05',5,'Torneo sintético para pruebas integrales','eliminacion_directa','finalizado',16,2,'2026-01-01','2026-12-01','2026-05-05','2026-05-09','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1004,2,2,2,0.5,0,'booleano',3);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1204,'semilla_qa','true'),(1204,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1204,'Reunión técnica QA','reunion','2026-05-05','18:00:00'),(1204,'Jornada de competencia','competencia','2026-05-05','20:00:00'),(1204,'Premiación','premiacion','2026-05-09','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1205,'Copa QA 06',1,'Torneo sintético para pruebas integrales','suizo','en_curso',16,2,'2026-01-01','2026-12-01','2026-06-06','2026-06-10','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1005,2,3,3,1,0,'rondas',5);
+VALUES (1205,'Copa QA 06',1,'Torneo sintético para pruebas integrales','liga','en_curso',16,2,'2026-01-01','2026-12-01','2026-06-06','2026-06-10','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1005,2,3,3,1,0,'rondas',5);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1205,'semilla_qa','true'),(1205,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1205,'Reunión técnica QA','reunion','2026-06-06','18:00:00'),(1205,'Jornada de competencia','competencia','2026-06-06','20:00:00'),(1205,'Premiación','premiacion','2026-06-10','21:00:00');
 INSERT IGNORE INTO torneos
@@ -198,25 +204,22 @@ INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1208,'semilla_q
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1208,'Reunión técnica QA','reunion','2026-09-09','18:00:00'),(1208,'Jornada de competencia','competencia','2026-09-09','20:00:00'),(1208,'Premiación','premiacion','2026-09-13','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1209,'Copa QA 10',5,'Torneo sintético para pruebas integrales','liga','en_curso',16,2,'2026-01-01','2026-12-01','2026-01-10','2026-01-14','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1003,1,1,2,0.5,0,'booleano',1);
+VALUES (1209,'Copa QA 10',5,'Torneo sintético para pruebas integrales','liga','finalizado',16,2,'2026-01-01','2026-12-01','2026-01-10','2026-01-14','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1003,2,1,2,0.5,0,'booleano',1);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1209,'semilla_qa','true'),(1209,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1209,'Reunión técnica QA','reunion','2026-01-10','18:00:00'),(1209,'Jornada de competencia','competencia','2026-01-10','20:00:00'),(1209,'Premiación','premiacion','2026-01-14','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1210,'Copa QA 11',1,'Torneo sintético para pruebas integrales','eliminacion_directa','inscripciones_abiertas',16,2,'2026-01-01','2026-12-01','2026-02-11','2026-02-15','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1004,2,2,3,1,0,'rondas',3);
+VALUES (1210,'Copa QA 11',1,'Torneo sintético para pruebas integrales','liga','inscripciones_abiertas',16,2,'2026-01-01','2026-12-01','2026-02-11','2026-02-15','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1004,2,2,3,1,0,'rondas',3);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1210,'semilla_qa','true'),(1210,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1210,'Reunión técnica QA','reunion','2026-02-11','18:00:00'),(1210,'Jornada de competencia','competencia','2026-02-11','20:00:00'),(1210,'Premiación','premiacion','2026-02-15','21:00:00');
 INSERT IGNORE INTO torneos
 (id,nombre,juego_id,descripcion,formato,estado,cupo_max_equipos,cupo_min_equipos,fecha_inicio_inscripcion,fecha_limite_inscripcion,fecha_inicio,fecha_fin,reglas,premios,ubicacion,localidad,comunidad,organizador_id,modalidad_id,sistema_puntuacion_id,puntos_victoria,puntos_empate,puntos_derrota,tipo_resultado,mejor_de)
-VALUES (1211,'Copa QA 12',2,'Torneo sintético para pruebas integrales','suizo','borrador',16,2,'2026-01-01','2026-12-01','2026-03-12','2026-03-16','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1005,2,3,3,0,0,'puntos',5);
+VALUES (1211,'Copa QA 12',2,'Torneo sintético para pruebas integrales','liga','borrador',16,2,'2026-01-01','2026-12-01','2026-03-12','2026-03-16','Reglas de prueba; resultados ficticios','Trofeo QA','Arena de pruebas','Montevideo','Uruguay',1005,2,3,3,0,0,'puntos',5);
 INSERT IGNORE INTO torneo_config (torneo_id,clave,valor) VALUES (1211,'semilla_qa','true'),(1211,'reglas_version','1');
 INSERT IGNORE INTO torneo_actividades (torneo_id,titulo,tipo,fecha,hora) VALUES (1211,'Reunión técnica QA','reunion','2026-03-12','18:00:00'),(1211,'Jornada de competencia','competencia','2026-03-12','20:00:00'),(1211,'Premiación','premiacion','2026-03-16','21:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1300,1200,'equipo',1100,'Escuadra QA 01','confirmado',1000,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1301,1200,'equipo',1105,'Escuadra QA 06','confirmado',1000,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1302,1200,'equipo',1110,'Escuadra QA 11','confirmado',1000,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1200,1300,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1200,1301,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1200,1302,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1400,1200,1,1300,1302,'2026-01-02 20:00:00','Cancha 1',3,1,'finalizado',1300,1000);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1400,'mvp','Jugador QA 1010'),(1400,'duracion_minutos','45'),(1400,'observacion','Resultado ficticio para QA');
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1200,'borrador','inscripciones_abiertas','Apertura inicial QA',1000),(1200,'inscripciones_abiertas','finalizado','Transición sintética QA',1000);
@@ -224,32 +227,25 @@ INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_a
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1303,1201,'equipo',1101,'Escuadra QA 02','confirmado',1001,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1304,1201,'equipo',1106,'Escuadra QA 07','confirmado',1001,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1305,1201,'equipo',1111,'Escuadra QA 12','confirmado',1001,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1201,1303,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1201,1304,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1201,1305,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1404,1201,1,1303,1305,'2026-02-02 20:00:00','Cancha 1',3,1,'finalizado',1303,1001);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1404,'mvp','Jugador QA 1010'),(1404,'duracion_minutos','45'),(1404,'observacion','Resultado ficticio para QA');
+INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1405,1201,1,1303,1304,'2026-02-03 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1001);
+INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1406,1201,2,1304,1305,'2026-02-04 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1001);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1201,'borrador','inscripciones_abiertas','Apertura inicial QA',1001),(1201,'inscripciones_abiertas','en_curso','Transición sintética QA',1001);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1201,1035,'Jugador QA','jugador.qa26@ascend.test','Comentario de prueba del torneo 1201',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1306,1202,'equipo',1102,'Escuadra QA 03','confirmado',1002,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1307,1202,'equipo',1107,'Escuadra QA 08','confirmado',1002,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1202,1306,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1202,1307,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1408,1202,1,1306,1307,'2026-03-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1002);
 INSERT IGNORE INTO torneo_suizo_parejas (torneo_id,participante_a_id,participante_b_id,ronda,ya_se_enfrentaron,fecha_encuentro) VALUES (1202,1306,1307,1,1,'2026-03-01 20:00:00');
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1202,'borrador','inscripciones_abiertas','Apertura inicial QA',1002),(1202,'inscripciones_abiertas','inscripciones_abiertas','Transición sintética QA',1002);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1202,1036,'Jugador QA','jugador.qa27@ascend.test','Comentario de prueba del torneo 1202',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1308,1203,'equipo',1103,'Escuadra QA 04','confirmado',1003,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1309,1203,'equipo',1108,'Escuadra QA 09','confirmado',1003,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1203,1308,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1203,1309,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1412,1203,1,1308,1309,'2026-04-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1003);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1203,'borrador','inscripciones_abiertas','Apertura inicial QA',1003),(1203,'inscripciones_abiertas','borrador','Transición sintética QA',1003);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1203,1037,'Jugador QA','jugador.qa28@ascend.test','Comentario de prueba del torneo 1203',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1310,1204,'equipo',1104,'Escuadra QA 05','confirmado',1004,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1311,1204,'equipo',1109,'Escuadra QA 10','confirmado',1004,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1204,1310,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1204,1311,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1416,1204,1,1310,1311,'2026-05-02 20:00:00','Cancha 1',3,1,'finalizado',1310,1004);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1416,'mvp','Jugador QA 1010'),(1416,'duracion_minutos','45'),(1416,'observacion','Resultado ficticio para QA');
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1204,'borrador','inscripciones_abiertas','Apertura inicial QA',1004),(1204,'inscripciones_abiertas','finalizado','Transición sintética QA',1004);
@@ -257,34 +253,25 @@ INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_a
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1312,1205,'equipo',1100,'Escuadra QA 01','confirmado',1005,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1313,1205,'equipo',1105,'Escuadra QA 06','confirmado',1005,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1314,1205,'equipo',1110,'Escuadra QA 11','confirmado',1005,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1205,1312,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1205,1313,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1205,1314,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1420,1205,1,1312,1314,'2026-06-02 20:00:00','Cancha 1',3,1,'finalizado',1312,1005);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1420,'mvp','Jugador QA 1010'),(1420,'duracion_minutos','45'),(1420,'observacion','Resultado ficticio para QA');
-INSERT IGNORE INTO torneo_suizo_parejas (torneo_id,participante_a_id,participante_b_id,ronda,ya_se_enfrentaron,fecha_encuentro) VALUES (1205,1312,1313,1,1,'2026-03-01 20:00:00');
+INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1421,1205,1,1312,1313,'2026-06-03 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1005);
+INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1422,1205,2,1313,1314,'2026-06-04 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1005);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1205,'borrador','inscripciones_abiertas','Apertura inicial QA',1005),(1205,'inscripciones_abiertas','en_curso','Transición sintética QA',1005);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1205,1039,'Jugador QA','jugador.qa30@ascend.test','Comentario de prueba del torneo 1205',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1315,1206,'equipo',1101,'Escuadra QA 02','confirmado',1000,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1316,1206,'equipo',1106,'Escuadra QA 07','confirmado',1000,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1317,1206,'equipo',1111,'Escuadra QA 12','confirmado',1000,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1206,1315,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1206,1316,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1206,1317,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1424,1206,1,1315,1317,'2026-07-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1000);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1206,'borrador','inscripciones_abiertas','Apertura inicial QA',1000),(1206,'inscripciones_abiertas','inscripciones_abiertas','Transición sintética QA',1000);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1206,1040,'Jugador QA','jugador.qa31@ascend.test','Comentario de prueba del torneo 1206',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1318,1207,'equipo',1102,'Escuadra QA 03','confirmado',1001,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1319,1207,'equipo',1107,'Escuadra QA 08','confirmado',1001,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1207,1318,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1207,1319,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1428,1207,1,1318,1319,'2026-08-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1001);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1207,'borrador','inscripciones_abiertas','Apertura inicial QA',1001),(1207,'inscripciones_abiertas','borrador','Transición sintética QA',1001);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1207,1041,'Jugador QA','jugador.qa32@ascend.test','Comentario de prueba del torneo 1207',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1320,1208,'equipo',1103,'Escuadra QA 04','confirmado',1002,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1321,1208,'equipo',1108,'Escuadra QA 09','confirmado',1002,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1208,1320,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1208,1321,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1432,1208,1,1320,1321,'2026-09-02 20:00:00','Cancha 1',3,1,'finalizado',1320,1002);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1432,'mvp','Jugador QA 1010'),(1432,'duracion_minutos','45'),(1432,'observacion','Resultado ficticio para QA');
 INSERT IGNORE INTO torneo_suizo_parejas (torneo_id,participante_a_id,participante_b_id,ronda,ya_se_enfrentaron,fecha_encuentro) VALUES (1208,1320,1321,1,1,'2026-03-01 20:00:00');
@@ -292,31 +279,90 @@ INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1208,1042,'Jugador QA','jugador.qa33@ascend.test','Comentario de prueba del torneo 1208',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1322,1209,'equipo',1104,'Escuadra QA 05','confirmado',1003,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1323,1209,'equipo',1109,'Escuadra QA 10','confirmado',1003,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1209,1322,4,3,0,0,12,5,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1209,1323,4,2,1,1,10,6,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1436,1209,1,1322,1323,'2026-01-02 20:00:00','Cancha 1',3,1,'finalizado',1322,1003);
 INSERT IGNORE INTO resultados_detalle (encuentro_id,tipo_dato,valor) VALUES (1436,'mvp','Jugador QA 1010'),(1436,'duracion_minutos','45'),(1436,'observacion','Resultado ficticio para QA');
-INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1209,'borrador','inscripciones_abiertas','Apertura inicial QA',1003),(1209,'inscripciones_abiertas','en_curso','Transición sintética QA',1003);
+INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1209,'borrador','inscripciones_abiertas','Apertura inicial QA',1003),(1209,'inscripciones_abiertas','en_curso','Transición sintética QA',1003),(1209,'en_curso','finalizado','Cierre sintético QA',1003);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1209,1043,'Jugador QA','jugador.qa34@ascend.test','Comentario de prueba del torneo 1209',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1324,1210,'equipo',1100,'Escuadra QA 01','confirmado',1004,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1325,1210,'equipo',1105,'Escuadra QA 06','confirmado',1004,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1326,1210,'equipo',1110,'Escuadra QA 11','confirmado',1004,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1210,1324,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1210,1325,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1210,1326,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1440,1210,1,1324,1326,'2026-02-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1004);
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1210,'borrador','inscripciones_abiertas','Apertura inicial QA',1004),(1210,'inscripciones_abiertas','inscripciones_abiertas','Transición sintética QA',1004);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1210,1044,'Jugador QA','jugador.qa35@ascend.test','Comentario de prueba del torneo 1210',1);
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1327,1211,'equipo',1101,'Escuadra QA 02','confirmado',1005,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1328,1211,'equipo',1106,'Escuadra QA 07','confirmado',1005,'2026-01-02 12:00:00');
 INSERT IGNORE INTO participantes_torneo (id,torneo_id,tipo,referencia_id,nombre,estado,confirmado_por,fecha_confirmacion) VALUES (1329,1211,'equipo',1111,'Escuadra QA 12','confirmado',1005,'2026-01-02 12:00:00');
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1211,1327,4,3,0,0,12,5,6,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1211,1328,4,2,1,1,10,6,3,0);
-INSERT IGNORE INTO torneo_posiciones (torneo_id,participante_id,partidos_jugados,partidos_ganados,partidos_empatados,partidos_perdidos,puntos_favor,puntos_contra,puntos,sanciones_puntos) VALUES (1211,1329,4,1,0,2,8,7,0,0);
 INSERT IGNORE INTO torneo_encuentros (id,torneo_id,ronda,participante_local_id,participante_visitante_id,fecha_hora_programada,cancha,resultado_local,resultado_visitante,estado,participante_ganador_id,modificado_por_usuario_id) VALUES (1444,1211,1,1327,1329,'2026-03-02 20:00:00','Cancha 1',NULL,NULL,'programado',NULL,1005);
-INSERT IGNORE INTO torneo_suizo_parejas (torneo_id,participante_a_id,participante_b_id,ronda,ya_se_enfrentaron,fecha_encuentro) VALUES (1211,1327,1328,1,1,'2026-03-01 20:00:00');
 INSERT IGNORE INTO torneo_cambio_estado (torneo_id,estado_anterior,estado_nuevo,motivo,usuario_id) VALUES (1211,'borrador','inscripciones_abiertas','Apertura inicial QA',1005),(1211,'inscripciones_abiertas','borrador','Transición sintética QA',1005);
 INSERT IGNORE INTO torneo_comentarios (torneo_id,usuario_id,nombre_autor,email_autor,comentario,aprobado) VALUES (1211,1045,'Jugador QA','jugador.qa36@ascend.test','Comentario de prueba del torneo 1211',1);
+
+-- Posiciones de los torneos QA derivadas de los encuentros finalizados.
+-- Se recalculan desde cero para que partidos jugados/ganados/empatados/perdidos
+-- y puntos sean coherentes con los resultados y la configuración de cada torneo.
+DELETE FROM torneo_posiciones WHERE torneo_id BETWEEN 1200 AND 1211;
+
+INSERT INTO torneo_posiciones
+    (torneo_id, participante_id, partidos_jugados, partidos_ganados,
+     partidos_empatados, partidos_perdidos, puntos_favor, puntos_contra, puntos, sanciones_puntos)
+SELECT
+    p.torneo_id,
+    p.id,
+    COALESCE(e.partidos_jugados, 0),
+    COALESCE(e.partidos_ganados, 0),
+    COALESCE(e.partidos_empatados, 0),
+    COALESCE(e.partidos_perdidos, 0),
+    COALESCE(e.puntos_favor, 0),
+    COALESCE(e.puntos_contra, 0),
+    COALESCE(e.partidos_ganados, 0) * t.puntos_victoria
+        + COALESCE(e.partidos_empatados, 0) * t.puntos_empate
+        + COALESCE(e.partidos_perdidos, 0) * t.puntos_derrota,
+    0
+FROM participantes_torneo p
+INNER JOIN torneos t ON t.id = p.torneo_id
+LEFT JOIN (
+    SELECT
+        lados.torneo_id,
+        lados.participante_id,
+        COUNT(*) AS partidos_jugados,
+        SUM(lados.gano) AS partidos_ganados,
+        SUM(lados.empato) AS partidos_empatados,
+        SUM(CASE WHEN lados.gano = 0 AND lados.empato = 0 THEN 1 ELSE 0 END) AS partidos_perdidos,
+        SUM(lados.puntos_favor) AS puntos_favor,
+        SUM(lados.puntos_contra) AS puntos_contra
+    FROM (
+        SELECT e.torneo_id,
+               e.participante_local_id AS participante_id,
+               CASE WHEN e.participante_ganador_id = e.participante_local_id
+                          OR e.resultado_local > e.resultado_visitante
+                    THEN 1 ELSE 0 END AS gano,
+               CASE WHEN e.participante_ganador_id IS NULL
+                          AND e.resultado_local = e.resultado_visitante
+                    THEN 1 ELSE 0 END AS empato,
+               e.resultado_local AS puntos_favor,
+               e.resultado_visitante AS puntos_contra
+        FROM torneo_encuentros e
+        WHERE e.estado = 'finalizado'
+          AND e.torneo_id BETWEEN 1200 AND 1211
+        UNION ALL
+        SELECT e.torneo_id,
+               e.participante_visitante_id,
+               CASE WHEN e.participante_ganador_id = e.participante_visitante_id
+                          OR e.resultado_visitante > e.resultado_local
+                    THEN 1 ELSE 0 END,
+               CASE WHEN e.participante_ganador_id IS NULL
+                          AND e.resultado_visitante = e.resultado_local
+                    THEN 1 ELSE 0 END,
+               e.resultado_visitante,
+               e.resultado_local
+        FROM torneo_encuentros e
+        WHERE e.estado = 'finalizado'
+          AND e.torneo_id BETWEEN 1200 AND 1211
+    ) AS lados
+    GROUP BY lados.torneo_id, lados.participante_id
+) AS e ON e.torneo_id = p.torneo_id AND e.participante_id = p.id
+WHERE p.torneo_id BETWEEN 1200 AND 1211
+  AND p.estado = 'confirmado';
+
 INSERT IGNORE INTO usuario_logros (usuario_id,logro_id,estado,progreso_actual,progreso_objetivo) VALUES (1010,1,'en_curso',2,10);
 INSERT IGNORE INTO usuario_logros (usuario_id,logro_id,estado,progreso_actual,progreso_objetivo) VALUES (1010,2,'bloqueado',3,10);
 INSERT IGNORE INTO usuario_logros (usuario_id,logro_id,estado,progreso_actual,progreso_objetivo) VALUES (1010,3,'desbloqueado',4,10);
@@ -756,7 +802,6 @@ INSERT IGNORE INTO logs_acceso (email_intentado,usuario_id,exito,ip_origen,user_
 INSERT IGNORE INTO logs_actividad (usuario_id,accion,descripcion,ip_origen,user_agent) VALUES (1051,'seed.qa','Actividad sintética de prueba','192.0.2.48','QA Browser/1.0');
 INSERT IGNORE INTO historial_contrasenas (usuario_id,hash_anterior) VALUES (1051,'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
 INSERT IGNORE INTO newsletter_subscriptores (email,activo) VALUES ('newsletter.qa001@ascend.test',1), ('newsletter.qa002@ascend.test',1), ('newsletter.qa003@ascend.test',1), ('newsletter.qa004@ascend.test',1), ('newsletter.qa005@ascend.test',1), ('newsletter.qa006@ascend.test',1), ('newsletter.qa007@ascend.test',1), ('newsletter.qa008@ascend.test',1), ('newsletter.qa009@ascend.test',1), ('newsletter.qa010@ascend.test',1), ('newsletter.qa011@ascend.test',1), ('newsletter.qa012@ascend.test',1), ('newsletter.qa013@ascend.test',1), ('newsletter.qa014@ascend.test',1), ('newsletter.qa015@ascend.test',1), ('newsletter.qa016@ascend.test',1), ('newsletter.qa017@ascend.test',1), ('newsletter.qa018@ascend.test',1), ('newsletter.qa019@ascend.test',1), ('newsletter.qa020@ascend.test',1), ('newsletter.qa021@ascend.test',1), ('newsletter.qa022@ascend.test',1), ('newsletter.qa023@ascend.test',1), ('newsletter.qa024@ascend.test',1), ('newsletter.qa025@ascend.test',1), ('newsletter.qa026@ascend.test',1), ('newsletter.qa027@ascend.test',1), ('newsletter.qa028@ascend.test',1), ('newsletter.qa029@ascend.test',1), ('newsletter.qa030@ascend.test',1);
-INSERT IGNORE INTO politicas_contrasenas (id,longitud_minima,requiere_mayuscula,requiere_minuscula,requiere_numero,requiere_caracter_especial,expiracion_dias,historial_cantidad,actualizado_por) VALUES (1000,10,1,1,1,1,120,8,1000);
 INSERT IGNORE INTO sesiones_activas (usuario_id,token_sesion,ip_origen,user_agent,expira_en,activa) VALUES (1000,'qa-session-1000-token','192.0.2.1','QA Browser/1.0',CURRENT_TIMESTAMP + INTERVAL 7 DAY,1);
 INSERT IGNORE INTO sesiones_activas (usuario_id,token_sesion,ip_origen,user_agent,expira_en,activa) VALUES (1001,'qa-session-1001-token','192.0.2.2','QA Browser/1.0',CURRENT_TIMESTAMP + INTERVAL 7 DAY,1);
 INSERT IGNORE INTO sesiones_activas (usuario_id,token_sesion,ip_origen,user_agent,expira_en,activa) VALUES (1002,'qa-session-1002-token','192.0.2.3','QA Browser/1.0',CURRENT_TIMESTAMP + INTERVAL 7 DAY,1);

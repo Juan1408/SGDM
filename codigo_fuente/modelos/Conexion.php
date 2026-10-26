@@ -18,7 +18,8 @@ class Conexion {
         $config = require __DIR__ . '/../configuracion/base_de_datos.php';
 
         //Preparamos los parametros de la conexion
-        $dns = 'mysql:host=' . $config['host'] . ";dbname=" . $config['bdnombre'] . ";charset=" . $config['charset'];
+        $puerto = $config['puerto'] ?? '3306';
+        $dns = 'mysql:host=' . $config['host'] . ';port=' . $puerto . ";dbname=" . $config['bdnombre'] . ";charset=" . $config['charset'];
         
         //Intentamos la conexion aplicando try catch
         try {
@@ -30,8 +31,9 @@ class Conexion {
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (PDOException $e) {
-            //Si la base de datos esta caida, detenemos todo y mostramos el mensaje de error
-            die("Error al conectar a la base de datos" . $e->getMessage());
+            // Evitar fuga de credenciales/host: loguear el detalle interno y lanzar excepción genérica
+            error_log("Error crítico al conectar a la base de datos: " . $e->getMessage());
+            throw new PDOException("No se pudo establecer la conexión con la base de datos. Por favor, intente más tarde.");
         }
     }
                

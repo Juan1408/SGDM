@@ -62,12 +62,16 @@ class FormatoControlador {
         $modeloJuego = new \Juego();
         $modalidades = $modeloJuego->obtenerModalidadesPermitidas((int)$juegoId);
         $formatos = $modeloJuego->obtenerFormatosPermitidos((int)$juegoId);
+        $juego = $modeloJuego->obtenerJuegoPorId((int)$juegoId);
 
-        // Devolver como JSON (Modalidades y Formatos)
+        // Devolver como JSON (Modalidades, Formatos y Puntos por defecto)
         header('Content-Type: application/json');
         echo json_encode([
             'modalidades' => $modalidades,
-            'formatos' => $formatos
+            'formatos' => $formatos,
+            'puntos_victoria' => $juego ? (float)$juego['puntos_victoria'] : 3.0,
+            'puntos_empate' => $juego ? (float)$juego['puntos_empate'] : 1.0,
+            'puntos_derrota' => $juego ? (float)$juego['puntos_derrota'] : 0.0,
         ]);
         exit;
     }

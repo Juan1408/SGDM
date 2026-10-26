@@ -125,6 +125,14 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
                </div>
 
                <div class="campo-grupo">
+                  <label>Disciplina deportiva</label>
+                  <div class="codigo-invitacion-box" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 14px; border-radius: 8px;">
+                     <span><i class="fa-solid fa-trophy" style="color: var(--color-primario, #ff4655); margin-right: 8px;"></i><?php echo htmlspecialchars($equipo['nombre_juego'] ?? 'No especificada'); ?></span>
+                  </div>
+                  <small style="color: var(--color-texto-secundario, #94a3b8); font-size: 0.82rem; margin-top: 4px; display: block;">La disciplina asignada queda fija mientras el equipo participe en torneos.</small>
+               </div>
+
+               <div class="campo-grupo">
                   <label>Código de invitación</label>
                   <div class="codigo-invitacion-box">
                      <span id="codigo-invitacion-texto"><?php echo htmlspecialchars($codigoInvitacion); ?></span>
@@ -142,6 +150,10 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
             <!-- ============================== -->
             <section class="tarjeta-equipo">
                <h2>Miembros del equipo</h2>
+
+               <?php if (isset($_GET['errorExpulsar'])): ?>
+                  <div class="mensaje-error" style="margin-bottom: 15px;"><?php echo htmlspecialchars($_GET['errorExpulsar']); ?></div>
+               <?php endif; ?>
 
                <?php if (empty($miembros)): ?>
                   <p class="lista-vacia">Este equipo todavía no tiene miembros.</p>
