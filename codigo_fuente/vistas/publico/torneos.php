@@ -55,8 +55,6 @@ $tipoDeJuego = static function (string $categoria): string {
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-   <!-- Tailwind: solo se usa para el botón "Ver más fechas" -->
-   <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
@@ -221,7 +219,7 @@ $tipoDeJuego = static function (string $categoria): string {
                       data-estado="<?php echo htmlspecialchars($torneo['estado']); ?>"
                       data-proximo="<?php echo $esProximo ? '1' : '0'; ?>">
                   <article class="torneo-tarjeta">
-                        <img src="<?php echo htmlspecialchars($torneo['banner_url'] ? URL_BASE . $torneo['banner_url'] : URL_BASE . 'img/torneos/card1.jpg'); ?>" alt="<?php echo htmlspecialchars($torneo['nombre']); ?>">
+                        <img src="<?php echo htmlspecialchars($torneo['banner_url'] ? (preg_match('#^https?://#i', $torneo['banner_url']) ? $torneo['banner_url'] : URL_BASE . ltrim($torneo['banner_url'], '/')) : URL_BASE . 'img/torneos/card1.jpg'); ?>" alt="<?php echo htmlspecialchars($torneo['nombre']); ?>">
                         <div class="tarjeta-contenido">
                            <h2><?php echo htmlspecialchars($torneo['nombre']); ?></h2>
 
