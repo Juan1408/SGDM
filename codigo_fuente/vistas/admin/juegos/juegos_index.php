@@ -35,8 +35,9 @@
                         <span class="estado-inactivo">Inactivo</span>
                     <?php endif; ?>
                     </td>
+                    <td class="acciones-tabla">
                         <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=juego&a=cambiarEstado" style="display:inline;">
-                            <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::obtenerTokenCSRF(); ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
                             <input type="hidden" name="id" value="<?php echo $juego['id']; ?>">
                             <button type="submit" class="boton-secundario" style="cursor:pointer; border:none;">
                                 <?php echo $juego['activo'] ? 'Desactivar' : 'Activar'; ?>
