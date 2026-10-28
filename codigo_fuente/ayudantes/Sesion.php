@@ -12,6 +12,7 @@
 namespace App\Ayudantes;
 
 use App\Ayudantes\Auditoria;
+use App\Modelos\Conexion;
 
 require_once __DIR__ . '/../configuracion/constantes.php';
 require_once __DIR__ . '/../ayudantes/Auditorias.php';
@@ -53,9 +54,16 @@ class Sesion {
         //Control de tiempo de expiración (Timeboxing)
         $_SESSION['expiracion_sesion'] = time() + 1800; //30 minutos
 
-        //Registramos el login en la auditoria
+        //Persistimos ultimo_acceso, el intento exitoso y la sesion activa (panel admin)
+        self::registrarAccesoExitoso($usuarioBD);
+
+        //Registramos el login en la auditoria sin bloquear el acceso si falla el registro
         if (class_exists('App\Ayudantes\Auditoria')) {
-            Auditoria::registrar('LOGIN_EXITOSO', "El usuario " . $_SESSION['email'] . " realizó inicio de sesión");
+            try {
+                Auditoria::registrar('LOGIN_EXITOSO', "El usuario " . $_SESSION['email'] . " realizó inicio de sesión");
+            } catch (\Throwable $e) {
+                error_log('No se pudo registrar LOGIN_EXITOSO en logs_actividad: ' . $e->getMessage());
+            }
         }
     }
 
@@ -129,6 +137,9 @@ class Sesion {
             }
             return false;
         }
+
+        //Mantenemos fresca la sesion activa para la ficha de auditoria (cada 5 minutos)
+        self::tocarSesionActiva();
 
         return true;
     }
@@ -206,9 +217,16 @@ class Sesion {
     public static function destruir(){
         self::iniciarSesion();
         
+        //Cerramos la fila de sesion activa antes de vaciar la sesion
+        self::marcarSesionInactiva();
+
         // Registrar en auditoría antes de vaciar la sesión
         if (isset($_SESSION['email']) && class_exists('App\Ayudantes\Auditoria')) {
-            Auditoria::registrar('LOGOUT_EXITOSO', "El usuario " . $_SESSION['email'] . " cerró su sesión");
+            try {
+                Auditoria::registrar('LOGOUT_EXITOSO', "El usuario " . $_SESSION['email'] . " cerró su sesión");
+            } catch (\Throwable $e) {
+                error_log('No se pudo registrar LOGOUT_EXITOSO en logs_actividad: ' . $e->getMessage());
+            }
         }
         
         $_SESSION = []; //Vaciamos el array
@@ -220,6 +238,171 @@ class Sesion {
         if (!headers_sent() && ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), "", time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+        }
+    }
+
+    // ========================================================================
+    // REGISTRO DE ACCESOS Y SESIONES ACTIVAS (auditoría para el panel admin)
+    // Estas escrituras son de mejor esfuerzo: nunca deben impedir el login,
+    // el logout ni la navegación normal de la plataforma.
+    // ========================================================================
+
+    private static function obtenerBdAuditoria(): ?\PDO {
+        try {
+            require_once __DIR__ . '/../modelos/Conexion.php';
+            return Conexion::getInstance()->getBD();
+        } catch (\Throwable $e) {
+            error_log('No se pudo obtener la conexión para auditoría: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    //Huella de la sesión actual. Nunca se expone en pantalla ni se guarda en claro.
+    private static function tokenSesionActual(): string {
+        return hash('sha256', session_id() ?: 'sesion-sin-id');
+    }
+
+    private static function ipActual(): string {
+        return (string) ($_SERVER['REMOTE_ADDR'] ?? 'Desconocida');
+    }
+
+    private static function userAgentActual(): string {
+        return substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? 'Desconocido'), 0, 1000);
+    }
+
+    /**
+     * Actualiza ultimo_acceso, registra el intento exitoso y abre la sesión activa.
+     */
+    public static function registrarAccesoExitoso(array $usuarioBD): void {
+        $bd = self::obtenerBdAuditoria();
+        if ($bd === null) {
+            return;
+        }
+
+        $usuarioId = (int) ($usuarioBD['id'] ?? 0);
+        $email = (string) ($usuarioBD['email'] ?? '');
+        $ip = self::ipActual();
+        $userAgent = self::userAgentActual();
+
+        try {
+            $stmt = $bd->prepare("UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = :id");
+            $stmt->execute([':id' => $usuarioId]);
+
+            $stmt = $bd->prepare(
+                "INSERT INTO logs_acceso (email_intentado, usuario_id, exito, ip_origen, user_agent, mensaje_error)
+                 VALUES (:email, :usuario_id, 1, :ip, :user_agent, NULL)"
+            );
+            $stmt->execute([
+                ':email' => $email,
+                ':usuario_id' => $usuarioId > 0 ? $usuarioId : null,
+                ':ip' => $ip,
+                ':user_agent' => $userAgent,
+            ]);
+
+            if (session_id() !== '') {
+                $token = self::tokenSesionActual();
+                $stmt = $bd->prepare(
+                    "INSERT INTO sesiones_activas (usuario_id, token_sesion, ip_origen, user_agent, expira_en, activa)
+                     VALUES (:usuario_id, :token, :ip, :user_agent, DATE_ADD(NOW(), INTERVAL 7 DAY), 1)
+                     ON DUPLICATE KEY UPDATE
+                        usuario_id = VALUES(usuario_id),
+                        ip_origen = VALUES(ip_origen),
+                        user_agent = VALUES(user_agent),
+                        ultima_actividad = NOW(),
+                        expira_en = VALUES(expira_en),
+                        activa = 1"
+                );
+                $stmt->execute([
+                    ':usuario_id' => $usuarioId,
+                    ':token' => $token,
+                    ':ip' => $ip,
+                    ':user_agent' => $userAgent,
+                ]);
+                $_SESSION['sesion_touch'] = time();
+            }
+        } catch (\Throwable $e) {
+            error_log('No se pudo registrar el acceso exitoso: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Registra un intento de acceso fallido en logs_acceso (sin exponer la contraseña).
+     */
+    public static function registrarAccesoFallido(string $email, ?int $usuarioId, string $mensaje): void {
+        $bd = self::obtenerBdAuditoria();
+        if ($bd === null) {
+            return;
+        }
+
+        try {
+            $stmt = $bd->prepare(
+                "INSERT INTO logs_acceso (email_intentado, usuario_id, exito, ip_origen, user_agent, mensaje_error)
+                 VALUES (:email, :usuario_id, 0, :ip, :user_agent, :mensaje)"
+            );
+            $stmt->execute([
+                ':email' => substr($email, 0, 255),
+                ':usuario_id' => $usuarioId && $usuarioId > 0 ? $usuarioId : null,
+                ':ip' => self::ipActual(),
+                ':user_agent' => self::userAgentActual(),
+                ':mensaje' => substr($mensaje, 0, 500),
+            ]);
+        } catch (\Throwable $e) {
+            error_log('No se pudo registrar el acceso fallido: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Marca como inactiva la fila de sesión asociada a la sesión HTTP actual.
+     */
+    public static function marcarSesionInactiva(): void {
+        if (session_id() === '') {
+            return;
+        }
+
+        $bd = self::obtenerBdAuditoria();
+        if ($bd === null) {
+            return;
+        }
+
+        try {
+            $stmt = $bd->prepare("UPDATE sesiones_activas SET activa = 0 WHERE token_sesion = :token");
+            $stmt->execute([':token' => self::tokenSesionActual()]);
+        } catch (\Throwable $e) {
+            error_log('No se pudo marcar la sesión como inactiva: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Refresca ultima_actividad como máximo una vez cada cinco minutos.
+     */
+    public static function tocarSesionActiva(): void {
+        if (empty($_SESSION['usuario_id']) || session_id() === '') {
+            return;
+        }
+
+        $ahora = time();
+        if (isset($_SESSION['sesion_touch']) && ($ahora - (int) $_SESSION['sesion_touch']) < 300) {
+            return;
+        }
+        $_SESSION['sesion_touch'] = $ahora;
+
+        $bd = self::obtenerBdAuditoria();
+        if ($bd === null) {
+            return;
+        }
+
+        try {
+            $stmt = $bd->prepare(
+                "UPDATE sesiones_activas
+                 SET ultima_actividad = NOW(), activa = 1
+                 WHERE token_sesion = :token AND usuario_id = :usuario_id"
+            );
+            $stmt->execute([
+                ':token' => self::tokenSesionActual(),
+                ':usuario_id' => (int) $_SESSION['usuario_id'],
+            ]);
+        } catch (\Throwable $e) {
+            error_log('No se pudo actualizar la actividad de la sesión: ' . $e->getMessage());
         }
     }
 

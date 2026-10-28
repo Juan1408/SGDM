@@ -95,7 +95,6 @@ class PanelJugadorControlador {
         $usuarioId = $_SESSION['usuario_id'];
 
         $nombreCompleto = trim($_POST['nombre_completo'] ?? '');
-        $email = trim($_POST['email'] ?? '');
         $bio = trim($_POST['bio'] ?? '');
         $ciudad = trim($_POST['ciudad'] ?? '');
         $pais = trim($_POST['pais'] ?? '');
@@ -110,14 +109,14 @@ class PanelJugadorControlador {
 
         //Lo escrito, para volver a mostrarlo si hay un error
         $enviados = [
-            'nombre_completo' => $nombreCompleto, 'email' => $email, 'bio' => $bio,
+            'nombre_completo' => $nombreCompleto, 'bio' => $bio,
             'ciudad' => $ciudad, 'pais' => $pais, 'fecha_nacimiento' => $fechaNacimiento,
             'discord_tag' => $discord, 'instagram_url' => $instagram, 'twitter_url' => $twitter,
             'campos_publicos' => $camposPublicos
         ];
 
         //Validaciones
-        $error = $this->validarPerfil($usuarioId, $nombreCompleto, $email, $fechaNacimiento, $discord, $instagram, $twitter, $bio);
+        $error = $this->validarPerfil($nombreCompleto, $fechaNacimiento, $discord, $instagram, $twitter, $bio);
 
         //Imagenes (opcionales): si no se sube nada, se conserva la que ya estaba
         $fotoUrl = null;
@@ -138,7 +137,7 @@ class PanelJugadorControlador {
             return;
         }
 
-        $datosUsuario = ['nombre_completo' => $nombreCompleto, 'email' => $email, 'foto_perfil_url' => $fotoUrl];
+        $datosUsuario = ['nombre_completo' => $nombreCompleto, 'foto_perfil_url' => $fotoUrl];
         $datosPerfil = [
             'bio' => $bio, 'ciudad' => $ciudad, 'pais' => $pais, 'fecha_nacimiento' => $fechaNacimiento,
             'discord_tag' => $discord, 'instagram_url' => $instagram, 'twitter_url' => $twitter,
@@ -151,25 +150,18 @@ class PanelJugadorControlador {
             return;
         }
 
-        //Actualizamos el nombre/email en sesion para que se reflejen sin tener que volver a loguearse
+        //Actualizamos el nombre en sesion para que se refleje sin tener que volver a loguearse
         $_SESSION['usuario_nombre'] = $nombreCompleto;
-        $_SESSION['email'] = $email;
 
         header("Location: " . URL_BASE . "index.php?c=panelJugador&a=perfil&exito=1");
         exit;
     }
 
     //Devuelve '' si todo esta bien, o el mensaje de error
-    private function validarPerfil(int $usuarioId, string $nombre, string $email, string $fechaNacimiento,
+    private function validarPerfil(string $nombre, string $fechaNacimiento,
                                   string $discord, string $instagram, string $twitter, string $bio): string {
-        if ($nombre === '' || $email === '') {
-            return "El nombre y el email son obligatorios.";
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "El email ingresado no es valido.";
-        }
-        if ($this->modeloJugador->emailEnUso($email, $usuarioId)) {
-            return "Ese email ya esta en uso por otra cuenta.";
+        if ($nombre === '') {
+            return "El nombre es obligatorio.";
         }
         if (mb_strlen($bio) > 500) {
             return "La biografia no puede superar los 500 caracteres.";

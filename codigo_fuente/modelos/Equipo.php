@@ -753,4 +753,249 @@ class Equipo {
         ];
     }
 
+    // ============================================================================
+    // FICHA DE EQUIPO PARA EL ADMINISTRADOR (solo lectura + renombre)
+    // ============================================================================
+
+    /**
+     * Reúne todos los datos de la ficha administrativa de un equipo.
+     * No filtra por activo: el administrador debe poder auditar equipos dados de baja.
+     *
+     * @return array|false
+     */
+    public function obtenerFichaAdmin(int $equipoId) {
+        if ($equipoId <= 0) {
+            return false;
+        }
+
+        $stmt = $this->bd->prepare(
+            "SELECT e.*, j.nombre AS nombre_juego, j.imagen_url AS juego_icono,
+                    u.nombre_completo AS creador_nombre, u.email AS creador_email
+             FROM equipos e
+             LEFT JOIN juegos j ON j.id = e.juego_id
+             INNER JOIN usuarios u ON u.id = e.creado_por
+             WHERE e.id = :id
+             LIMIT 1"
+        );
+        $stmt->execute([':id' => $equipoId]);
+        $equipo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$equipo) {
+            return false;
+        }
+
+        $participaciones = $this->obtenerParticipacionesAdmin($equipoId);
+        $partidos = $this->obtenerPartidosAdmin($equipoId, 15);
+
+        $stmtSolicitudes = $this->bd->prepare(
+            "SELECT COUNT(*) FROM solicitudes_equipo WHERE equipo_id = :id AND estado = 'pendiente'"
+        );
+        $stmtSolicitudes->execute([':id' => $equipoId]);
+        $solicitudesPendientes = (int) $stmtSolicitudes->fetchColumn();
+
+        return [
+            'equipo' => $equipo,
+            'capitanes' => $this->obtenerCapitanes($equipoId),
+            'miembros' => $this->obtenerMiembros($equipoId),
+            'participaciones' => $participaciones,
+            'partidos' => $partidos,
+            'resumen' => $this->obtenerEstadisticasTorneos($equipoId),
+            'solicitudes_pendientes' => $solicitudesPendientes,
+        ];
+    }
+
+    /**
+     * Participaciones del equipo con su posición y estadísticas por torneo.
+     */
+    public function obtenerParticipacionesAdmin(int $equipoId): array {
+        $sql = "SELECT pt.id, pt.torneo_id, pt.nombre AS nombre_participante,
+                       pt.estado AS estado_inscripcion, pt.fecha_inscripcion,
+                       t.nombre AS torneo_nombre, t.estado AS torneo_estado, t.formato,
+                       t.fecha_inicio, t.fecha_fin,
+                       pos.partidos_jugados, pos.partidos_ganados, pos.partidos_empatados,
+                       pos.partidos_perdidos, pos.puntos, pos.puntos_favor, pos.puntos_contra,
+                       pos.diferencia_goles,
+                       CASE WHEN pos.participante_id IS NULL THEN NULL ELSE (
+                           SELECT COUNT(*) + 1
+                           FROM torneo_posiciones p2
+                           WHERE p2.torneo_id = pt.torneo_id
+                             AND (
+                                 p2.puntos > pos.puntos
+                                 OR (p2.puntos = pos.puntos AND p2.diferencia_goles > pos.diferencia_goles)
+                                 OR (p2.puntos = pos.puntos AND p2.diferencia_goles = pos.diferencia_goles
+                                     AND p2.puntos_favor > pos.puntos_favor)
+                             )
+                       ) END AS posicion
+                FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                LEFT JOIN torneo_posiciones pos
+                       ON pos.torneo_id = pt.torneo_id AND pos.participante_id = pt.id
+                WHERE pt.tipo = 'equipo' AND pt.referencia_id = :equipo_id
+                ORDER BY t.fecha_inicio DESC, t.id DESC";
+
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipo_id' => $equipoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Últimos partidos del equipo con rival, condición y resultado (V/E/D/P).
+     */
+    public function obtenerPartidosAdmin(int $equipoId, int $limite = 15): array {
+        $sql = "SELECT enc.id, enc.torneo_id, t.nombre AS torneo_nombre, enc.ronda,
+                       enc.fecha_hora_programada, enc.estado,
+                       enc.resultado_local, enc.resultado_visitante,
+                       IF(enc.participante_local_id = pt.id, 'Local', 'Visitante') AS condicion,
+                       COALESCE(rival.nombre, 'Sin rival') AS rival_nombre,
+                       CASE
+                           WHEN enc.estado = 'finalizado' AND enc.participante_ganador_id = pt.id THEN 'V'
+                           WHEN enc.estado = 'finalizado' AND enc.participante_ganador_id IS NULL THEN 'E'
+                           WHEN enc.estado = 'finalizado' THEN 'D'
+                           ELSE 'P'
+                       END AS resultado
+                FROM torneo_encuentros enc
+                INNER JOIN torneos t ON t.id = enc.torneo_id
+                INNER JOIN participantes_torneo pt
+                        ON pt.torneo_id = enc.torneo_id
+                       AND pt.tipo = 'equipo'
+                       AND pt.referencia_id = :equipo_id
+                       AND (enc.participante_local_id = pt.id OR enc.participante_visitante_id = pt.id)
+                LEFT JOIN participantes_torneo rival
+                       ON rival.id = IF(enc.participante_local_id = pt.id,
+                                        enc.participante_visitante_id,
+                                        enc.participante_local_id)
+                ORDER BY COALESCE(enc.fecha_hora_programada, enc.creado_en) DESC, enc.id DESC
+                LIMIT :limite";
+
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':equipo_id', $equipoId, PDO::PARAM_INT);
+        $stmt->bindValue(':limite', max(1, $limite), PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Renombra un equipo y sincroniza las copias denormalizadas del nombre:
+     * participantes_torneo.nombre y los podios guardados como JSON en torneo_config.
+     *
+     * Todo ocurre en una única transacción. Si algo falla, no se cambia nada.
+     *
+     * @return array{exito:bool,error?:string,anterior?:string,nuevo?:string}
+     */
+    public function renombrarEquipoAdmin(int $equipoId, string $nuevoNombre): array {
+        if ($equipoId <= 0) {
+            return ['exito' => false, 'error' => 'El equipo indicado no es válido.'];
+        }
+
+        $nuevoNombre = trim(preg_replace('/\s+/u', ' ', $nuevoNombre));
+        if ($nuevoNombre === '' || mb_strlen($nuevoNombre, 'UTF-8') < 2) {
+            return ['exito' => false, 'error' => 'El nombre del equipo debe tener al menos 2 caracteres.'];
+        }
+        if (mb_strlen($nuevoNombre, 'UTF-8') > 100) {
+            return ['exito' => false, 'error' => 'El nombre del equipo no puede superar los 100 caracteres.'];
+        }
+
+        try {
+            $this->bd->beginTransaction();
+
+            $stmt = $this->bd->prepare("SELECT nombre_equipo FROM equipos WHERE id = :id FOR UPDATE");
+            $stmt->execute([':id' => $equipoId]);
+            $actual = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$actual) {
+                $this->bd->rollBack();
+                return ['exito' => false, 'error' => 'El equipo no existe.'];
+            }
+
+            $nombreAnterior = $actual['nombre_equipo'];
+            if ($nombreAnterior === $nuevoNombre) {
+                $this->bd->commit();
+                return ['exito' => true, 'anterior' => $nombreAnterior, 'nuevo' => $nuevoNombre];
+            }
+
+            $stmt = $this->bd->prepare(
+                "SELECT id FROM equipos WHERE nombre_equipo = :nombre AND id <> :id LIMIT 1"
+            );
+            $stmt->execute([':nombre' => $nuevoNombre, ':id' => $equipoId]);
+            if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+                $this->bd->rollBack();
+                return ['exito' => false, 'error' => 'Ya existe otro equipo con ese nombre.'];
+            }
+
+            $stmt = $this->bd->prepare("UPDATE equipos SET nombre_equipo = :nombre WHERE id = :id");
+            $stmt->execute([':nombre' => $nuevoNombre, ':id' => $equipoId]);
+
+            $stmt = $this->bd->prepare(
+                "UPDATE participantes_torneo
+                 SET nombre = :nombre
+                 WHERE tipo = 'equipo' AND referencia_id = :id"
+            );
+            $stmt->execute([':nombre' => $nuevoNombre, ':id' => $equipoId]);
+
+            // Sincronizamos los podios (JSON) de los torneos donde participa el equipo.
+            $stmt = $this->bd->prepare(
+                "SELECT DISTINCT torneo_id FROM participantes_torneo
+                 WHERE tipo = 'equipo' AND referencia_id = :id"
+            );
+            $stmt->execute([':id' => $equipoId]);
+            $torneoIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $stmtPodio = $this->bd->prepare(
+                "SELECT valor FROM torneo_config
+                 WHERE torneo_id = :torneo_id AND clave = 'podio' FOR UPDATE"
+            );
+            $stmtGuardar = $this->bd->prepare(
+                "UPDATE torneo_config SET valor = :valor
+                 WHERE torneo_id = :torneo_id AND clave = 'podio'"
+            );
+
+            foreach ($torneoIds as $torneoId) {
+                $stmtPodio->execute([':torneo_id' => (int) $torneoId]);
+                $fila = $stmtPodio->fetch(PDO::FETCH_ASSOC);
+                if (!$fila || empty($fila['valor'])) {
+                    continue;
+                }
+
+                $podio = json_decode($fila['valor'], true);
+                if (!is_array($podio)) {
+                    continue;
+                }
+
+                $cambio = false;
+                foreach (['primero', 'segundo', 'tercero'] as $puesto) {
+                    if (isset($podio[$puesto]) && $podio[$puesto] === $nombreAnterior) {
+                        $podio[$puesto] = $nuevoNombre;
+                        $cambio = true;
+                    }
+                }
+
+                if ($cambio) {
+                    $stmtGuardar->execute([
+                        ':valor' => json_encode($podio, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                        ':torneo_id' => (int) $torneoId,
+                    ]);
+                }
+            }
+
+            $this->bd->commit();
+
+            return ['exito' => true, 'anterior' => $nombreAnterior, 'nuevo' => $nuevoNombre];
+        } catch (\PDOException $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            if ($e->getCode() === '23000') {
+                return ['exito' => false, 'error' => 'Ya existe otro equipo con ese nombre.'];
+            }
+            error_log('Error al renombrar equipo ID ' . $equipoId . ': ' . $e->getMessage());
+            return ['exito' => false, 'error' => 'No se pudo renombrar el equipo. Intentá nuevamente.'];
+        } catch (\Throwable $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            error_log('Error inesperado al renombrar equipo ID ' . $equipoId . ': ' . $e->getMessage());
+            return ['exito' => false, 'error' => 'No se pudo renombrar el equipo. Intentá nuevamente.'];
+        }
+    }
+
 }

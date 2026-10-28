@@ -81,7 +81,16 @@ class AuthControlador {
         if ($usuarioEncontrado && password_verify($contrasena, $usuarioEncontrado['contrasena_hash'])){
             //Si la cuenta esta inactiva no lo dejamos pasar
             if ($usuarioEncontrado['esta_activo'] == 0){
+                Sesion::registrarAccesoFallido($email, (int) $usuarioEncontrado['id'], 'Cuenta inactiva');
                 $error = "Tu cuenta esta inactiva. Por favor, contacta al administrador.";
+                require_once __DIR__ . '/../vistas/auth/login.php';
+                return;
+            }
+
+            //La verificación de correo es obligatoria: sin ella no se habilita el acceso.
+            if ((int) ($usuarioEncontrado['email_verificado'] ?? 0) !== 1) {
+                Sesion::registrarAccesoFallido($email, (int) $usuarioEncontrado['id'], 'Email no verificado');
+                $error = "Tu correo electrónico aún no está verificado. Revisá el enlace de verificación que se mostró al registrarte.";
                 require_once __DIR__ . '/../vistas/auth/login.php';
                 return;
             }
@@ -97,6 +106,11 @@ class AuthControlador {
         } else {
             // Si algo falla recargamos la vista de login con un mensaje de error
             $seguridadAuth->registrarIntentoFallido($ipUsuario);
+            Sesion::registrarAccesoFallido(
+                $email,
+                $usuarioEncontrado ? (int) $usuarioEncontrado['id'] : null,
+                'Credenciales incorrectas'
+            );
             $error = "Credenciales incorrectas. Verifique su email y contraseña.";
             require_once __DIR__ . '/../vistas/auth/login.php';
             return; 

@@ -30,13 +30,28 @@ document.addEventListener('DOMContentLoaded', function() {
     banner.style.zIndex = '999999';
     banner.style.boxShadow = '0 4px 6px rgba(0,0,0,0.3)';
     
-    // Contenido HTML del banner
-    banner.innerHTML = `
-        Estás en modo suplantación (Ver como). 
-        <a href="${window.URL_RESTAURAR_SESION}" style="color: #fff; text-decoration: none; margin-left: 15px; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.4); transition: background 0.2s;">
-            <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 5px;"></i> Deshacer y volver al Administrador
-        </a>
-    `;
+    // Contenido del banner: la restauración es POST con token CSRF.
+    banner.appendChild(document.createTextNode('Estás en modo suplantación (Ver como). '));
+
+    var formulario = document.createElement('form');
+    formulario.method = 'POST';
+    formulario.action = window.URL_RESTAURAR_SESION;
+    formulario.style.display = 'inline-block';
+    formulario.style.marginLeft = '15px';
+
+    var token = document.createElement('input');
+    token.type = 'hidden';
+    token.name = 'csrf_token';
+    token.value = window.CSRF_TOKEN_SUPLANTACION || '';
+    formulario.appendChild(token);
+
+    var boton = document.createElement('button');
+    boton.type = 'submit';
+    boton.style.cssText = 'color: #fff; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.4); cursor: pointer; font: inherit;';
+    boton.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 5px;"></i> Deshacer y volver al Administrador';
+    formulario.appendChild(boton);
+
+    banner.appendChild(formulario);
     
     // Inyectamos el banner al principio del body
     document.body.prepend(banner);

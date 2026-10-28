@@ -18,7 +18,7 @@
 | 4 | Demo | 4:30 – 6:00 | M2 | Ver el sistema funcionando |
 | 5 | Alcance | 6:00 – 7:30 | M1 | Qué está y qué no, sin ambigüedad |
 | 6 | Arquitectura | 7:30 – 9:00 | M2 | MVC, capas y Docker |
-| 7 | Base de datos | 9:00 – 11:00 | M3 | 41 tablas, 6 migraciones, seed real |
+| 7 | Base de datos | 9:00 – 11:00 | M3 | 41 tablas, 7 migraciones, seed real |
 | 8 | Seguridad | 11:00 – 13:00 | M4 | RBAC, CSRF, bcrypt, cabeceras |
 | 9 | Toolkit de operación | 13:00 – 15:00 | M4 | La entrega de Sistemas Operativos |
 | 10 | Cinco materias | 15:00 – 16:30 | M1 | Integración, no cinco proyectos pegados |
@@ -43,7 +43,7 @@ Si alguien se traba, el siguiente retoma con “y eso conecta con…”. Nadie c
 
 1. Stack levantado y verificado:
    `docker compose -f docker/docker-compose.yml ps` → `sgdm_web`, `sgdm_db` healthy.
-2. Base con los números de la demo: **41 tablas, 51 usuarios, 18 torneos**.
+2. Base con los números de la demo: **41 tablas, 52 usuarios, 20 torneos** (el seed base trae 51 y 18; hay dos torneos de prueba agregados).
 3. Tres pestañas listas: catálogo público, sesión de jugador, sesión de organizador. **No dejar contraseñas visibles.**
 4. Torneo **1217** abierto en el detalle y ranking listo para mostrar.
 5. Video de 90 segundos descargado en local y capturas en una carpeta. No depender de la red.
@@ -159,9 +159,9 @@ Un solo punto de entrada y ningún controlador hablando SQL directamente. Eso es
 
 **Qué decir:**
 
-“La base es el contrato del sistema. **41 tablas** y **seis migraciones** versionadas: esquema, catálogos, seed, autenticación, correcciones y ampliación del seed. Cada migración tiene un orden y un propósito; no se importa un archivo suelto y se espera que salga bien.
+“La base es el contrato del sistema. **41 tablas** y **siete migraciones** versionadas: esquema, catálogos, seed, autenticación, correcciones, ampliación del seed y restricciones de disciplinas. Cada migración tiene un orden y un propósito; no se importa un archivo suelto y se espera que salga bien.
 
-El seed no es decorativo. Cubre liga, eliminación directa y suizo, en individual y por equipos, con **18 torneos, 23 equipos, 81 participantes y 87 encuentros**. Eso permite que la demo y las pruebas tengan casos reales: inscripciones en cuatro estados, posiciones, historial y podios.
+El seed no es decorativo. Cubre liga, eliminación directa y suizo, en individual y por equipos, con **18 torneos, 23 equipos, 81 participantes y 87 encuentros** (en la base actual hay 20 torneos: dos se crearon en pruebas). Eso permite que la demo y las pruebas tengan casos reales: inscripciones en cuatro estados, posiciones, historial y podios.
 
 Y todo se reconstruye desde un volumen vacío con un comando. La frase: la calidad de los datos define la calidad de la demo. Si la base tuviera tres filas, la demo no podría contar nada.”
 
@@ -207,7 +207,7 @@ Validamos sintaxis **32 de 32** y ayuda **24 de 24**. La ejecución real de los 
 
 **Qué decir:**
 
-“**Ingeniería de software:** requisitos, arquitectura MVC, auditoría técnica y checklist de entrega. **Full stack:** PHP, routing, sesiones, vistas por rol y formularios validados; las rutas de los tres roles respondieron 200 en el dry run. **Bases de datos:** 41 tablas, seis migraciones, seed, respaldo y replicación. **Ciberseguridad:** RBAC, CSRF, bcrypt, cabeceras y menor privilegio. **Sistemas operativos:** LAMP/Docker, systemd, logs, respaldos, replicación y procesos.
+“**Ingeniería de software:** requisitos, arquitectura MVC, auditoría técnica y checklist de entrega. **Full stack:** PHP, routing, sesiones, vistas por rol y formularios validados; las rutas de los tres roles respondieron 200 en el dry run. **Bases de datos:** 41 tablas, siete migraciones, seed, respaldo y replicación. **Ciberseguridad:** RBAC, CSRF, bcrypt, cabeceras y menor privilegio. **Sistemas operativos:** LAMP/Docker, systemd, logs, respaldos, replicación y procesos.
 
 No son cinco proyectos pegados: es el mismo flujo mirado desde cinco materias. La misma base que usa la demo es la que se respalda y se replica; el mismo servidor que corre Apache es el que se audita y se monitorea.”
 
@@ -219,7 +219,7 @@ No son cinco proyectos pegados: es el mismo flujo mirado desde cinco materias. L
 
 **Qué decir:**
 
-“**32 de 32** scripts con sintaxis válida. **24 de 24** con ayuda operativa. **16 de 16** rutas públicas y **18 de 18** rutas de administración con HTTP 200. Verificamos el stack desde un volumen vacío, la base con 41 tablas, 51 usuarios y 18 torneos, los tres paneles en navegador y la suite local.
+“**32 de 32** scripts con sintaxis válida. **24 de 24** con ayuda operativa. **16 de 16** rutas públicas y **18 de 18** rutas de administración con HTTP 200. Verificamos el stack desde un volumen vacío, la base con 41 tablas (51 usuarios y 18 torneos en la verificación del 21/10; hoy 52 y 20), los tres paneles en navegador y la suite local.
 
 Lo que **no** verificamos todavía: los instaladores y operaciones del toolkit en una VM Linux, la restauración real de un respaldo y la replicación maestro-esclavo real. No convertimos análisis estático en prueba funcional. El informe de aceptación del toolkit queda **bloqueado** hasta contar con esa VM.
 
@@ -292,7 +292,7 @@ Cualquier respuesta concreta sirve si termina en aprendizaje: por ejemplo, haber
 
 - **M1** controla el tiempo y da la palabra.
 - **M2** no toca el teclado hasta que la demo esté en pantalla completa.
-- **M3** tiene a mano las cifras: 41 tablas, 51 usuarios, 18 torneos, 87 encuentros.
+- **M3** tiene a mano las cifras: 41 tablas, 52 usuarios, 20 torneos, 87 encuentros.
 - **M4** tiene a mano los límites: VM Linux, restauración y replicación reales pendientes.
 - Si el jurado interrumpe, se responde corto y se retoma desde la diapositiva actual, no desde el principio.
 

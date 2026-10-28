@@ -87,7 +87,7 @@ Cinco pasos. Si te trabás, volvé al paso 2.
 2. **La decisión.** “La decisión fue borrado físico con confirmación y registro de auditoría.”
 3. **El motivo.** “Porque un torneo con encuentros y posiciones no se puede ‘ocultar’ sin dejar datos huérfanos o inconsistentes; el histórico se conserva en una sección aparte para los torneos que sí deben quedar consultables.”
 4. **La evidencia.** “Está en `TorneoAdminControlador::eliminar()` y en la tabla `logs_actividad`.”
-5. **El límite o el siguiente paso.** “Lo que hoy falta es que sea POST con CSRF; hoy se dispara por GET. Es deuda declarada y la corrección es acotada.”
+5. **El límite o el siguiente paso.** “El borrado ya exige POST con token CSRF y rechaza el GET; lo que falta es una confirmación del servidor, porque hoy solo hay un `confirm()` del navegador. Es deuda menor y la corrección es acotada.”
 
 Si la pregunta es de una materia que no es tu área, hacé el paso 1 y 5 y cedé: “Eso lo responde [compañero], que lo implementó.”
 
@@ -217,9 +217,9 @@ Cross-Site Request Forgery: un sitio externo hace que el navegador del usuario e
 
 **Evidencia:** `Sesion::generarTokenCSRF()`, `validarTokenCSRF()`.
 
-**Límite real:** quedan dos acciones que cambian estado por GET y sin token: `torneoAdmin/eliminar` y `juego/cambiarEstado`. Son defectos, no decisiones. Están declarados y la corrección es acotada.
+**Límite real:** las dos acciones que antes cambiaban estado por GET ya exigen POST + token: `torneoAdmin/eliminar` (`TorneoAdminControlador.php:113-120`) y `juego/cambiarEstado` (`JuegoControlador.php:87-94`) responden con redirección si el método no es POST y llaman a `requerirTokensCSRF()`. Lo que queda es que la confirmación es del navegador, no del servidor.
 
-**Cómo decirlo:** “La política es POST + token para todo lo que cambia estado. Tenemos dos excepciones que incumplen la política; las conocemos y están en la lista de corrección.”
+**Cómo decirlo:** “La política es POST + token para todo lo que cambia estado. Esas dos excepciones se cerraron. Quedan dos GET que escriben, y ninguno es un agujero: el logout, que solo destruye la sesión, y la verificación de email, que usa un token de un solo uso con vencimiento.”
 
 ### B3. ¿Por qué no alcanza con validar en JavaScript?
 
@@ -353,17 +353,17 @@ Con claves únicas y validaciones en el modelo. Por ejemplo, la inscripción de 
 
 **Precisión:** son declaraciones, no necesariamente 64 relaciones distintas; algunas tablas declaran más de una FK. Decir “64 declaraciones” es exacto.
 
-### C6. ¿Por qué seis migraciones y no una?
+### C6. ¿Por qué siete migraciones y no una?
 
-Porque la base evolucionó: `001` es el esquema, `002` los datos base, `003` la semilla relacional de QA, `004` las tablas de autenticación, `005` correcciones idempotentes y `006` una ampliación idempotente de la semilla. Separarlas permite aplicar solo lo que falta en una base existente.
+Porque la base evolucionó: `001` es el esquema, `002` los datos base, `003` la semilla relacional de QA, `004` las tablas de autenticación, `005` correcciones idempotentes, `006` una ampliación idempotente de la semilla y `007` restricciones de disciplinas con dos triggers que validan modalidad y formato al crear o editar un torneo. Separarlas permite aplicar solo lo que falta en una base existente.
 
 **Límite:** `003` no es idempotente y está pensada para base limpia. Sobre una base existente se aplica `005`, y `006` si ya tenía `003`. Está documentado en el README y en la verificación.
 
 **Trampa:** “¿Y si aplico `001` sobre la base en uso?” No: contiene `DROP TABLE` y borra datos. Es la advertencia explícita del README.
 
-### C7. ¿Por qué los datos de demo son 51 usuarios y 18 torneos?
+### C7. ¿Por qué los datos de demo son 52 usuarios y 20 torneos?
 
-Porque la semilla está pensada para probar todos los formatos sin crear nada a mano: 23 equipos, 81 participantes, 87 encuentros y 76 filas de posiciones, con una liga de 8 equipos (1212), eliminación directa de equipos (1213), suizo individual (1214), liga individual de 10 (1215), eliminación individual (1216) y un torneo abierto con inscripciones en todos los estados (1217).
+La semilla base crea 51 usuarios y 18 torneos; en la base actual hay 52 y 20 porque se agregaron dos torneos de prueba. La semilla está pensada para probar todos los formatos sin crear nada a mano: 23 equipos, 81 participantes, 87 encuentros y 76 filas de posiciones, con una liga de 8 equipos (1212), eliminación directa de equipos (1213), suizo individual (1214), liga individual de 10 (1215), eliminación individual (1216) y un torneo abierto con inscripciones en todos los estados (1217).
 
 **Evidencia:** `README.md`; `006_seed_qa_ampliado.sql`.
 
@@ -646,7 +646,7 @@ Decilas así. No las maquilles.
 1. **Alta de administradores:** “El panel permite listar, editar y cambiar el rol, pero no crear administradores. Es una funcionalidad planificada que quedó fuera del alcance.”
 2. **Auditoría:** “Registramos login, logout, política de contraseña y cambios de torneo. Bloqueo, borrado y cambio de rol de usuarios no se auditan; la tabla `auditoria_cambios` está en el esquema pero sin uso.”
 3. **Política de contraseña:** “Se aplica en el registro. La expiración y el historial están configurados pero no se aplican, porque no hay flujo de cambio de contraseña.”
-4. **CSRF:** “La política es POST + token. Quedan dos acciones por GET sin token: borrar torneo y cambiar estado de juego. Están identificadas para corrección.”
+4. **CSRF:** “La política es POST + token para las acciones de negocio. Borrar torneo y cambiar estado de juego, que iban por GET, hoy rechazan el GET y exigen token. Quedan dos GET que escriben, ambos con justificación: el logout, que solo cierra la sesión, y la verificación de email, con token de un solo uso y vencimiento.”
 5. **Borrado de torneos:** “Es físico e irreversible, con auditoría. La confirmación actual es del navegador, no del servidor; el histórico se conserva en la sección Historial.”
 6. **Recuperación de contraseña:** “No está implementada; el login lo informa explícitamente.”
 7. **Email:** “No hay envío real de correo; las alertas son notificaciones internas.”
@@ -678,7 +678,7 @@ Decilas así. No las maquilles.
 
 ### F5. “¿Qué decisión revertirías?”
 
-“El borrado físico de torneos por GET. La decisión de fondo —borrado físico— la sostengo; lo que revertiría es la vía de invocación. Debería ser POST con confirmación y token desde el primer día.”
+“No el borrado físico: esa decisión la sostengo. Revertiría el hábito de cerrar un cambio sin volver a abrir las pantallas que toca. El 24/10 pasamos dos formularios de GET a POST con token y quedó mal escrito el nombre del método en las vistas de juegos y torneos: las dos páginas devolvían error 500 hasta que las abrimos. La corrección era de dos líneas; lo que faltó fue un smoke test de las pantallas afectadas, y eso es lo que cambiaría.”
 
 ### F6. “¿Cómo sé que lo que decís es cierto?”
 

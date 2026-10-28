@@ -133,14 +133,16 @@ class AdminTest extends TestCase {
      */
     public function test_dashboard_admin_cuenta_torneos_activos() {
         $organizadorId = $this->crearUsuarioFalso(2);
-        $this->modeloJuego->crearJuego('LoL', 'MOBA', 3, 1, 0);
+        // El modelo escribe las tablas puente en la misma transacción; sin ellas
+        // los triggers de la migración 007 rechazan la creación de torneos.
+        $this->modeloJuego->crearJuego('LoL', 'MOBA', 3, 1, 0, [2], ['liga']);
         $juegos = $this->modeloJuego->obtenerTodosLosJuegos();
         $juegoId = $juegos[0]['id'];
 
         $sql = "INSERT INTO torneos (nombre, organizador_id, juego_id, estado, modalidad_id, tipo_resultado, formato, cupo_max_equipos) VALUES 
-                ('Torneo 1', ?, ?, 'en_curso', 1, 'goles', 'liga', 4),
-                ('Torneo 2', ?, ?, 'inscripciones_abiertas', 1, 'goles', 'liga', 4),
-                ('Torneo 3', ?, ?, 'finalizado', 1, 'goles', 'liga', 4)";
+                ('Torneo 1', ?, ?, 'en_curso', 2, 'goles', 'liga', 4),
+                ('Torneo 2', ?, ?, 'inscripciones_abiertas', 2, 'goles', 'liga', 4),
+                ('Torneo 3', ?, ?, 'finalizado', 2, 'goles', 'liga', 4)";
                 
         $stmt = $this->bd->prepare($sql);
         $stmt->execute([$organizadorId, $juegoId, $organizadorId, $juegoId, $organizadorId, $juegoId]);

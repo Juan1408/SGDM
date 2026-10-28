@@ -39,7 +39,7 @@ $rutasPermitidas = [
     'admin' => ['dashboard', 'editarPerfil'],
     'alerta' => ['index', 'enviar'],
     'auth' => ['mostrarLogin', 'procesarLogin', 'mostrarRegistro', 'procesarRegistro', 'verificarEmail', 'logout'],
-    'equipoAdmin' => ['index'],
+    'equipoAdmin' => ['index', 'ver', 'actualizarNombre'],
     'equipo' => ['crear', 'index', 'procesarCreacion', 'verPerfil', 'solicitarUnion', 'solicitudes', 'responderInvitacion', 'gestionar', 'responderSolicitudRecibida', 'invitarJugador', 'actualizarEquipo', 'expulsarMiembro', 'buscarJugadoresAjax', 'hacerCapitan', 'dejarEquipo'],
     'auditoria' => ['index'],
     'errorTracking' => ['dashboard', 'verDetalle', 'accionError'],
@@ -57,7 +57,7 @@ $rutasPermitidas = [
     'resultadoGlobal' => ['index'],
     'torneoAdmin' => ['index', 'editar', 'actualizar', 'eliminar'],
     'torneoHistorial' => ['index'],
-    'usuario' => ['index', 'cambiarEstadoUsuario', 'editarUsuario', 'verComo', 'restaurarSesion', 'actualizarUsuario', 'eliminarUsuario']
+    'usuario' => ['index', 'ver', 'cambiarEstadoUsuario', 'editarUsuario', 'verComo', 'restaurarSesion', 'actualizarUsuario', 'eliminarUsuario']
 ];
 
 if (!isset($rutasPermitidas[$controlador]) ||
@@ -75,8 +75,39 @@ if (isset($_SESSION['admin_antes_suplantar']) && $_SERVER['REQUEST_METHOD'] === 
     if (!($controlador === 'usuario' && $accion === 'restaurarSesion')) {
         $_SESSION['mensaje'] = "Acción bloqueada: Modo Suplantación es de Solo Lectura.";
         $_SESSION['mensaje_tipo'] = "error";
-        $referer = $_SERVER['HTTP_REFERER'] ?? URL_BASE . 'index.php?c=admin&a=dashboard';
-        header("Location: " . $referer);
+
+        //Destino por defecto: el panel del rol suplantado.
+        $destinoBloqueo = URL_BASE . 'index.php';
+        $rolSuplantado = (int) ($_SESSION['rol_id'] ?? 0);
+        if ($rolSuplantado === 1) {
+            $destinoBloqueo = URL_BASE . 'index.php?c=admin&a=dashboard';
+        } elseif ($rolSuplantado === 2) {
+            $destinoBloqueo = URL_BASE . 'index.php?c=panelOrganizador&a=dashboard';
+        } elseif ($rolSuplantado === 3) {
+            $destinoBloqueo = URL_BASE . 'index.php?c=panelJugador&a=dashboard';
+        }
+
+        //Solo aceptamos volver a la misma página si el Referer pertenece al mismo origen.
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+        if ($referer !== '') {
+            $esquemaBase = parse_url(URL_BASE, PHP_URL_SCHEME);
+            $hostBase = parse_url(URL_BASE, PHP_URL_HOST);
+            $puertoBase = parse_url(URL_BASE, PHP_URL_PORT);
+
+            $esquemaRef = parse_url($referer, PHP_URL_SCHEME);
+            $hostRef = parse_url($referer, PHP_URL_HOST);
+            $puertoRef = parse_url($referer, PHP_URL_PORT);
+
+            if ($hostBase && $hostRef
+                && $esquemaBase && $esquemaRef
+                && strcasecmp($esquemaBase, $esquemaRef) === 0
+                && strcasecmp($hostBase, $hostRef) === 0
+                && $puertoBase === $puertoRef) {
+                $destinoBloqueo = $referer;
+            }
+        }
+
+        header("Location: " . $destinoBloqueo);
         exit;
     }
 }
@@ -118,8 +149,10 @@ if (file_exists($rutaArchivo)) {
 if (isset($_SESSION['admin_antes_suplantar'])) {
     $urlRestaurar = (\defined('URL_BASE') ? \URL_BASE : '/') . "index.php?c=usuario&a=restaurarSesion";
     $rutaScript = (\defined('URL_BASE') ? \URL_BASE : '/') . "js/admin/suplantacion.js";
-    
-    // Inyectamos solo la variable global y el enlace al archivo estático JS
-    echo "<script>window.URL_RESTAURAR_SESION = '" . $urlRestaurar . "';</script>";
+    $tokenRestaurar = Sesion::generarTokenCSRF();
+
+    // Inyectamos la URL, el token CSRF y el enlace al archivo estático JS
+    echo "<script>window.URL_RESTAURAR_SESION = " . json_encode($urlRestaurar) . ";"
+        . "window.CSRF_TOKEN_SUPLANTACION = " . json_encode($tokenRestaurar) . ";</script>";
     echo "<script src=\"" . $rutaScript . "\"></script>";
 }

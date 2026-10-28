@@ -52,7 +52,7 @@ $modNombres = array_column($modalidades, 'nombre');
 $formCodigos = array_column($formatos, 'codigo');
 
 reportar("Ajedrez solo permite modalidad Individual", in_array('individual', $modNombres) && !in_array('equipos', $modNombres), "Modalidades: " . implode(', ', $modNombres));
-reportar("Ajedrez solo permite formato Suizo", in_array('suizo', $formCodigos) && !in_array('liga', $formCodigos) && !in_array('eliminacion_directa', $formCodigos), "Formatos: " . implode(', ', $formCodigos));
+reportar("Ajedrez permite exactamente Suizo y Liga", count($formCodigos) === 2 && in_array('suizo', $formCodigos) && in_array('liga', $formCodigos) && !in_array('eliminacion_directa', $formCodigos), "Formatos: " . implode(', ', $formCodigos));
 reportar("Puntuacion definida de Ajedrez es 1.00 / 0.50 / 0.00", (float)$ajedrez['puntos_victoria'] == 1.0 && (float)$ajedrez['puntos_empate'] == 0.5 && (float)$ajedrez['puntos_derrota'] == 0.0, "V={$ajedrez['puntos_victoria']}, E={$ajedrez['puntos_empate']}, D={$ajedrez['puntos_derrota']}");
 
 // 2. TRIGGER DE BASE DE DATOS (PROTECCION SQL)
@@ -61,13 +61,13 @@ $triggerBloqueoFormato = false;
 $msgFormato = '';
 try {
     $stmt = $db->prepare("INSERT INTO torneos (organizador_id, juego_id, modalidad_id, nombre, formato, estado, cupo_max_equipos, fecha_inicio_inscripcion, fecha_limite_inscripcion, fecha_inicio, fecha_fin) 
-                          VALUES (2, 5, 1, 'Torneo Ajedrez Invalido Liga', 'liga', 'borrador', 16, NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 10 DAY), DATE_ADD(NOW(), INTERVAL 15 DAY))");
+                          VALUES (2, 5, 1, 'Torneo Ajedrez Invalido Eliminacion', 'eliminacion_directa', 'borrador', 16, NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 10 DAY), DATE_ADD(NOW(), INTERVAL 15 DAY))");
     $stmt->execute();
 } catch (\PDOException $e) {
     $msgFormato = $e->getMessage();
     $triggerBloqueoFormato = (strpos($e->getMessage(), '1644') !== false && strpos($e->getMessage(), 'formato') !== false);
 }
-reportar("Trigger bloquea insercion directa de formato incompatible (Ajedrez + Liga)", $triggerBloqueoFormato, $msgFormato);
+reportar("Trigger bloquea insercion directa de formato incompatible (Ajedrez + Eliminacion)", $triggerBloqueoFormato, $msgFormato);
 
 $triggerBloqueoModalidad = false;
 $msgMod = '';

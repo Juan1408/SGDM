@@ -106,7 +106,7 @@
                             </a>
 
                             <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=eliminar" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este torneo? Esta acción es totalmente irreversible y eliminará todos los partidos asociados.');">
-                                <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::obtenerTokenCSRF(); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
                                 <input type="hidden" name="id" value="<?php echo $torneo['id']; ?>">
                                 <button type="submit" class="btn-icono" title="Eliminar" style="background:none;border:none;cursor:pointer;padding:0;">
                                     <i class="fa-solid fa-trash"></i>

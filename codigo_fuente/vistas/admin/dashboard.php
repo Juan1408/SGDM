@@ -1,5 +1,12 @@
 <?php
 /** @var String $vistaInyectada */
+// Título opcional por vista (por defecto se mantiene el saludo del dashboard)
+$tituloPantalla = isset($tituloPantalla) && is_string($tituloPantalla) && $tituloPantalla !== ''
+    ? $tituloPantalla
+    : 'Bienvenido, ' . ($_SESSION['usuario_nombre'] ?? 'Administrador') . '!';
+
+// Hojas de estilo adicionales opcionales, relativas a publico/ (ej: css/admin/ficha.css)
+$estilosExtra = isset($estilosExtra) && is_array($estilosExtra) ? $estilosExtra : [];
 ?>
 
 <!DOCTYPE html>
@@ -8,13 +15,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - ASCEND</title>
+    <title><?php echo htmlspecialchars($tituloPantalla); ?> - ASCEND</title>
     <!-- Estilos cargados en paralelo (Sin @import) para máxima velocidad (HTTP/2) -->
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/base.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/layout.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/componentes.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/utilidades.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/admin/perfil.css">
+    <?php foreach ($estilosExtra as $hojaEstilo): ?>
+        <?php if (is_string($hojaEstilo) && $hojaEstilo !== ''): ?>
+            <link rel="stylesheet" href="<?php echo URL_BASE . htmlspecialchars(ltrim($hojaEstilo, '/'), ENT_QUOTES, 'UTF-8'); ?>">
+        <?php endif; ?>
+    <?php endforeach; ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Script Anti-FOUC (Flash of Unstyled Content): Aplica el tema oscuro antes de renderizar el DOM -->
@@ -86,9 +98,7 @@
 
         <main class="area-contenido" id="area-contenido">
             <!--Aca le vamos a dar la bienvenida al administrador con el nombre que traiga de la base de datos-->
-            <h1 class="titulo-pantalla">
-                Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Administrador'); ?>!
-            </h1>
+            <h1 class="titulo-pantalla"><?php echo htmlspecialchars($tituloPantalla); ?></h1>
 
             <!-- Aca inyectamos las tarjetas y tablas de la vista -->
             <?php require_once __DIR__ . '/' . $vistaInyectada; ?>

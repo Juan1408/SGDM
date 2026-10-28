@@ -138,20 +138,20 @@ class Jugador {
     }
 
     //Metodo para actualizar el perfil del jugador (datos de cuenta + datos deportivos)
-    //$datosUsuario: nombre_completo, email, foto_perfil_url (null = no cambia)
+    //El email no se actualiza desde el perfil: la verificación de correo pertenece
+    //al usuario y un cambio sin re-verificación la invalidaría.
+    //$datosUsuario: nombre_completo, foto_perfil_url (null = no cambia)
     //$datosPerfil: bio, ciudad, pais, fecha_nacimiento, discord_tag, instagram_url, twitter_url,
     //              banner_url (null = no cambia), campos_publicos (texto "bio,edad,...")
     public function actualizarPerfil(int $usuarioId, array $datosUsuario, array $datosPerfil): bool {
         //1. Actualizamos los datos generales en 'usuarios'
         $sqlUsuario = "UPDATE usuarios
             SET nombre_completo = :nombre_completo,
-                email = :email,
                 foto_perfil_url = COALESCE(:foto, foto_perfil_url)
             WHERE id = :id";
         $stmtUsuario = $this->bd->prepare($sqlUsuario);
         $okUsuario = $stmtUsuario->execute([
             ':nombre_completo' => $datosUsuario['nombre_completo'],
-            ':email' => $datosUsuario['email'],
             ':foto' => $datosUsuario['foto_perfil_url'] ?? null,
             ':id' => $usuarioId
         ]);

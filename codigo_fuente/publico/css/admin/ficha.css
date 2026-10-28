@@ -1,0 +1,414 @@
+/* =========================================
+   FICHAS ADMINISTRATIVAS (equipos / usuarios)
+   Se carga solo en las vistas que la solicitan mediante $estilosExtra.
+   Usa las variables de base.css para respetar el modo claro/oscuro.
+   ========================================= */
+
+.ficha-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ficha-encabezado > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ficha-aviso {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-advertencia);
+  background-color: var(--bg-advertencia-translucido);
+}
+
+.ficha-aviso-neutro {
+  color: var(--color-texto-secundario);
+  background-color: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+}
+
+.ficha-nota-legal {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--color-primario);
+  background-color: var(--color-fondo-panel);
+  color: var(--color-texto-secundario);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.ficha-nota-legal i {
+  margin-top: 2px;
+  color: var(--color-primario);
+}
+
+/* ------------------------------------------------------------------
+   Cabecera del equipo
+   ------------------------------------------------------------------ */
+.ficha-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  background-color: var(--color-fondo-panel);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+}
+
+.ficha-hero-escudo {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+}
+
+.ficha-hero-escudo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+  padding: 8px;
+}
+
+.ficha-hero-avatar img,
+.ficha-hero-avatar .ficha-hero-escudo-vacio {
+  border-radius: 50%;
+}
+
+.ficha-hero-escudo-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-principal);
+  border: 1px dashed var(--color-borde);
+  color: var(--color-texto-secundario);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.ficha-hero-datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.ficha-hero-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ficha-hero-titulo h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--color-texto-principal);
+  overflow-wrap: anywhere;
+}
+
+.ficha-hero-disciplina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.ficha-separador {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
+.ficha-hero-descripcion {
+  margin: 0 0 16px;
+  color: var(--color-texto-principal);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 80ch;
+}
+
+.ficha-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px 20px;
+  margin: 0;
+}
+
+.ficha-meta dt {
+  margin: 0 0 2px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-texto-secundario);
+}
+
+.ficha-meta dd {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--color-texto-principal);
+  overflow-wrap: anywhere;
+}
+
+.ficha-meta-perfil {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.ficha-meta-ancho {
+  grid-column: 1 / -1;
+}
+
+/* ------------------------------------------------------------------
+   Tarjetas de resumen
+   ------------------------------------------------------------------ */
+.ficha-resumen {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ficha-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px;
+  background-color: var(--color-fondo-panel);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+}
+
+.ficha-tarjeta-numero {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-primario);
+}
+
+.ficha-tarjeta-etiqueta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-texto-secundario);
+}
+
+/* ------------------------------------------------------------------
+   Secciones
+   ------------------------------------------------------------------ */
+.ficha-seccion {
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: var(--color-fondo-panel);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+}
+
+.ficha-seccion-cabecera {
+  margin-bottom: 16px;
+}
+
+.ficha-seccion-cabecera h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  color: var(--color-texto-principal);
+}
+
+.ficha-seccion-cabecera h3 i {
+  margin-right: 6px;
+  color: var(--color-primario);
+}
+
+.ficha-seccion-cabecera .texto-ayuda {
+  margin: 0;
+}
+
+.ficha-vacio {
+  margin: 0;
+  padding: 12px 0;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.ficha-subtexto {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: var(--color-texto-secundario);
+}
+
+/* ------------------------------------------------------------------
+   Formulario de renombre
+   ------------------------------------------------------------------ */
+.ficha-formulario-renombre {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.ficha-formulario-renombre .grupo-formulario {
+  margin: 0;
+}
+
+.ficha-ayuda-campo {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--color-texto-secundario);
+}
+
+.ficha-formulario-acciones {
+  display: flex;
+  gap: 10px;
+}
+
+/* ------------------------------------------------------------------
+   Capitanes y jugadores
+   ------------------------------------------------------------------ */
+.ficha-capitanes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ficha-capitanes li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.ficha-capitanes li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ficha-capitan-nombre {
+  font-weight: 600;
+  color: var(--color-texto-principal);
+  text-decoration: none;
+}
+
+.ficha-capitan-nombre:hover {
+  text-decoration: underline;
+}
+
+.ficha-jugador {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ficha-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ficha-avatar-vacio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------------
+   Resultados de partidos
+   ------------------------------------------------------------------ */
+.ficha-resultado {
+  display: inline-block;
+  min-width: 78px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ficha-resultado-victoria {
+  color: var(--color-exito);
+  background-color: var(--bg-exito-translucido);
+}
+
+.ficha-resultado-empate {
+  color: var(--color-advertencia);
+  background-color: var(--bg-advertencia-translucido);
+}
+
+.ficha-resultado-derrota {
+  color: var(--color-peligro);
+  background-color: var(--bg-peligro-translucido);
+}
+
+.ficha-resultado-pendiente {
+  color: var(--color-texto-secundario);
+  background-color: var(--color-fondo-principal);
+}
+
+.ficha-seccion code {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto-principal);
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------
+   Adaptación a pantallas medianas y grandes
+   ------------------------------------------------------------------ */
+@media (min-width: 640px) {
+  .ficha-hero {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .ficha-resumen {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .ficha-resumen {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}

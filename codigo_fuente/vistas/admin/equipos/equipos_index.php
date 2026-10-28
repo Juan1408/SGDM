@@ -69,7 +69,7 @@
             <?php else: ?>
                 <?php foreach($datos['equipos'] as $equipo): ?>
                     <tr>
-                        <td><?php echo $equipo['id']; ?></td>
+                        <td><?php echo (int) $equipo['id']; ?></td>
                         <td>
                             <?php if(!empty($equipo['escudo_url'])): ?>
                                 <img src="<?php echo htmlspecialchars($equipo['escudo_url']); ?>" alt="Logo" class="img-escudo-tabla">
@@ -79,7 +79,7 @@
                         </td>
                         <td class="texto-negrita"><?php echo htmlspecialchars($equipo['nombre_equipo']); ?></td>
                         <td><?php echo htmlspecialchars($equipo['lider_nombre']); ?></td>
-                        <td><span class="badge"><?php echo $equipo['total_miembros']; ?></span></td>
+                        <td><span class="badge"><?php echo (int) $equipo['total_miembros']; ?></span></td>
                         <td><?php echo date('d/m/Y', strtotime($equipo['fecha_creacion'])); ?></td>
                         <td>
                             <?php if($equipo['activo'] == 1): ?>
@@ -89,9 +89,10 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <button class="btn-icono btn-deshabilitado" title="Ver Equipo (Próximamente)" disabled>
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
+                            <a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=ver&id=<?php echo (int) $equipo['id']; ?>"
+                               class="boton-accion" title="Ver ficha del equipo">
+                                <i class="fa-solid fa-eye"></i> Ver ficha
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

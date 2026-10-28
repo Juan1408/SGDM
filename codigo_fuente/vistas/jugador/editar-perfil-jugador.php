@@ -100,8 +100,10 @@ $opcionesPrivacidad = [
 
                <label class="editar-campo">
                   <span>Email</span>
-                  <input type="email" name="email" maxlength="150" required
-                     value="<?php echo htmlspecialchars($datos['email'] ?? ''); ?>">
+                  <input type="email" value="<?php echo htmlspecialchars($datos['email'] ?? ''); ?>" readonly disabled>
+                  <span class="editar-ayuda">
+                     El correo no se modifica desde tu perfil: cambiarlo invalidaría su verificación.
+                  </span>
                </label>
 
                <label class="editar-campo editar-campo-ancho">

@@ -28,8 +28,9 @@ class Usuario {
 
     //Metodo para buscar a un usuario por su email
     public function buscarPorEmail(string $email) {
-        //Escribimos la consulta SQL usando un marcador por seguridad (:email)
-        $sql = "SELECT * FROM usuarios WHERE email = :email AND esta_activo = 1 LIMIT 1"; 
+        //Buscamos por email sin filtrar por estado: el login necesita distinguir
+        //una cuenta suspendida de unas credenciales inexistentes.
+        $sql = "SELECT * FROM usuarios WHERE email = :email LIMIT 1";
 
         //Preparamos la consulta para evitar inyección SQL
         $stmt = $this->bd->prepare($sql);
@@ -219,22 +220,88 @@ class Usuario {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Metodo para actualizar los datos de un usuario
+    /**
+     * Actualiza los datos administrativos del usuario.
+     * El email no se modifica: la verificación de correo pertenece al usuario
+     * y un cambio desde el panel la invalidaría.
+     *
+     * El cambio de rol se sincroniza con la tabla hija correspondiente dentro
+     * de la misma transacción para que el panel del rol destino no quede vacío.
+     */
     public function actualizarUsuario(int $usuarioId, array $datos) {
-        $sql = "UPDATE usuarios
-            SET nombre_completo = :nombre_completo,
-                email = :email,
-                rol_id = :rol
-            WHERE id = :id";
+        $rolId = (int) $datos['rol_id'];
 
+        try {
+            $this->bd->beginTransaction();
+
+            $sql = "UPDATE usuarios
+                SET nombre_completo = :nombre_completo,
+                    rol_id = :rol
+                WHERE id = :id";
+            $stmt = $this->bd->prepare($sql);
+            $stmt->execute([
+                'nombre_completo' => $datos['nombre_completo'],
+                'rol' => $rolId,
+                'id' => $usuarioId
+            ]);
+
+            //No pisamos un perfil existente: solo creamos la fila si falta.
+            if ($rolId === 2) {
+                $stmt = $this->bd->prepare("SELECT 1 FROM perfiles_organizadores WHERE usuario_id = :id LIMIT 1");
+                $stmt->execute([':id' => $usuarioId]);
+
+                if (!$stmt->fetchColumn()) {
+                    $stmt = $this->bd->prepare(
+                        "INSERT INTO perfiles_organizadores (usuario_id, nombre_organizacion, verificado_oficial)
+                         SELECT id, 'Organizador Independiente', 0 FROM usuarios WHERE id = :id"
+                    );
+                    $stmt->execute([':id' => $usuarioId]);
+                }
+            } elseif ($rolId === 3) {
+                $stmt = $this->bd->prepare("SELECT 1 FROM perfiles_jugadores WHERE usuario_id = :id LIMIT 1");
+                $stmt->execute([':id' => $usuarioId]);
+
+                if (!$stmt->fetchColumn()) {
+                    $stmt = $this->bd->prepare(
+                        "INSERT INTO perfiles_jugadores (usuario_id, apodo_gamertag)
+                         SELECT id, LEFT(SUBSTRING_INDEX(email, '@', 1), 50) FROM usuarios WHERE id = :id"
+                    );
+                    $stmt->execute([':id' => $usuarioId]);
+                }
+            }
+
+            $this->bd->commit();
+            return true;
+        } catch (\Throwable $e) {
+            if ($this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Dependencias visibles de un usuario antes de cambiarle el rol.
+     * Es informativo: el cambio no transfiere automáticamente esas responsabilidades.
+     */
+    public function obtenerImpactoRol(int $usuarioId): array {
+        $sql = "SELECT
+            (SELECT COUNT(*) FROM torneos WHERE organizador_id = :torneos) AS torneos,
+            (SELECT COUNT(*) FROM equipos WHERE creado_por = :equipos) AS equipos,
+            (SELECT COUNT(*) FROM equipo_capitanes WHERE usuario_id = :capitanias) AS capitanias";
         $stmt = $this->bd->prepare($sql);
-
-        return $stmt->execute([
-            'nombre_completo' => $datos['nombre_completo'],
-            'email' => $datos['email'],
-            'rol' => $datos['rol_id'],
-            'id' => $usuarioId
+        $stmt->execute([
+            ':torneos' => $usuarioId,
+            ':equipos' => $usuarioId,
+            ':capitanias' => $usuarioId,
         ]);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'torneos' => (int) ($fila['torneos'] ?? 0),
+            'equipos' => (int) ($fila['equipos'] ?? 0),
+            'capitanias' => (int) ($fila['capitanias'] ?? 0),
+        ];
     }
 
     //Metodo para actualizar perfil (nombre y teléfono unicamente)
@@ -252,28 +319,36 @@ class Usuario {
         ]);
     }
 
-    //Metodo para eliminar un usuario. Si tiene historial asociado, se desactiva
-    //en lugar de romper la integridad referencial.
+    /**
+     * Baja lógica del usuario.
+     * No se borra la fila: se conservan perfiles, equipos, capitanías, torneos,
+     * historial y auditoría. La sesión se invalida en la siguiente petición
+     * porque verificarUsuarioActivo() exige esta_activo = 1.
+     */
     public function eliminarUsuario(int $usuarioId): array {
         try {
-            $stmt = $this->bd->prepare("DELETE FROM usuarios WHERE id = :id");
+            $stmt = $this->bd->prepare("SELECT esta_activo FROM usuarios WHERE id = :id LIMIT 1");
             $stmt->execute([':id' => $usuarioId]);
+            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt->rowCount() === 0) {
+            if ($fila === false) {
                 return ['exito' => false, 'mensaje' => 'El usuario no existe.'];
             }
 
-            return ['exito' => true, 'mensaje' => 'Usuario eliminado correctamente.'];
-        } catch (\PDOException $e) {
-            if ($e->getCode() === '23000') {
-                $stmt = $this->bd->prepare("UPDATE usuarios SET esta_activo = 0 WHERE id = :id");
-                $stmt->execute([':id' => $usuarioId]);
-                return [
-                    'exito' => true,
-                    'mensaje' => 'El usuario tiene historial asociado; se desactivó en lugar de eliminarse.'
-                ];
+            if ((int) $fila['esta_activo'] === 0) {
+                return ['exito' => true, 'mensaje' => 'El usuario ya estaba dado de baja.'];
             }
-            throw $e;
+
+            $stmt = $this->bd->prepare("UPDATE usuarios SET esta_activo = 0 WHERE id = :id");
+            $stmt->execute([':id' => $usuarioId]);
+
+            return [
+                'exito' => true,
+                'mensaje' => 'Usuario dado de baja correctamente. Su historial se conserva.'
+            ];
+        } catch (\PDOException $e) {
+            error_log('Error al dar de baja al usuario ID ' . $usuarioId . ': ' . $e->getMessage());
+            return ['exito' => false, 'mensaje' => 'No se pudo dar de baja al usuario. Intentá nuevamente.'];
         }
     }
 
@@ -398,5 +473,206 @@ class Usuario {
             }
             return ['exito' => false, 'mensaje' => 'Error al verificar el token: ' . $e->getMessage()];
         }
+    }
+
+    // ============================================================================
+    // FICHA DE USUARIO PARA EL ADMINISTRADOR (SOLO LECTURA)
+    // No se selecciona contrasena_hash ni token_sesion: nunca deben mostrarse.
+    // ============================================================================
+
+    /**
+     * Reúne los datos de identidad, perfiles, equipos, actividad y accesos de un usuario.
+     *
+     * @return array|false
+     */
+    public function obtenerFichaAdmin(int $usuarioId) {
+        if ($usuarioId <= 0) {
+            return false;
+        }
+
+        $sql = "SELECT u.id, u.nombre_completo, u.email, u.telefono, u.foto_perfil_url,
+                       u.rol_id, u.esta_activo, u.email_verificado, u.fecha_registro, u.ultimo_acceso,
+                       r.nombre_rol
+                FROM usuarios u
+                INNER JOIN roles r ON r.id = u.rol_id
+                WHERE u.id = :id
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$usuario) {
+            return false;
+        }
+
+        return [
+            'usuario' => $usuario,
+            'perfil_jugador' => $this->obtenerPerfilJugadorAdmin($usuarioId),
+            'perfil_organizador' => $this->obtenerPerfilOrganizadorAdmin($usuarioId),
+            'equipos' => $this->obtenerEquiposDelUsuario($usuarioId),
+            'participaciones' => $this->obtenerParticipacionesDeUsuario($usuarioId),
+            'accesos' => $this->obtenerAccesosRecientes($usuarioId, 10),
+            'resumen_accesos' => $this->obtenerResumenAccesos($usuarioId),
+            'sesiones' => $this->obtenerSesionesAdmin($usuarioId),
+            'actividad' => $this->obtenerActividadReciente($usuarioId, 10),
+            'metricas' => $this->obtenerMetricasUsuario($usuarioId),
+        ];
+    }
+
+    private function obtenerPerfilJugadorAdmin(int $usuarioId) {
+        $sql = "SELECT apodo_gamertag, bio, banner_url, nivel, experiencia_puntos,
+                       pais, ciudad, fecha_nacimiento, discord_tag,
+                       instagram_url, twitter_url, campos_publicos, actualizado_en
+                FROM perfiles_jugadores
+                WHERE usuario_id = :id
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $perfil ?: null;
+    }
+
+    private function obtenerPerfilOrganizadorAdmin(int $usuarioId) {
+        $sql = "SELECT nombre_organizacion, bio_organizacion, banner_url, localidad,
+                       telefono_contacto, sitio_web, verificado_oficial, campos_publicos, actualizado_en
+                FROM perfiles_organizadores
+                WHERE usuario_id = :id
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $perfil ?: null;
+    }
+
+    /**
+     * Equipos en los que participa el usuario, incluyendo membresías inactivas
+     * para que el administrador pueda auditar el historial completo.
+     */
+    public function obtenerEquiposDelUsuario(int $usuarioId): array {
+        $sql = "SELECT e.id, e.nombre_equipo, e.escudo_url, e.activo, e.juego_id,
+                       em.posicion, em.numero_camiseta, em.es_activo AS membresia_activa, em.fecha_union,
+                       EXISTS (
+                           SELECT 1 FROM equipo_capitanes ec
+                           WHERE ec.equipo_id = e.id AND ec.usuario_id = em.usuario_id
+                       ) AS es_capitan
+                FROM equipo_miembros em
+                INNER JOIN equipos e ON e.id = em.equipo_id
+                WHERE em.usuario_id = :id
+                ORDER BY em.es_activo DESC, e.nombre_equipo ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Participaciones individuales del usuario (tipo 'usuario' en participantes_torneo).
+     */
+    public function obtenerParticipacionesDeUsuario(int $usuarioId): array {
+        $sql = "SELECT pt.id, pt.torneo_id, pt.nombre AS nombre_participante, pt.estado,
+                       pt.fecha_inscripcion, t.nombre AS torneo_nombre, t.estado AS torneo_estado,
+                       pos.partidos_jugados, pos.partidos_ganados, pos.partidos_empatados,
+                       pos.partidos_perdidos, pos.puntos
+                FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                LEFT JOIN torneo_posiciones pos
+                       ON pos.torneo_id = pt.torneo_id AND pos.participante_id = pt.id
+                WHERE pt.tipo = 'usuario' AND pt.referencia_id = :id
+                ORDER BY t.fecha_inicio DESC, t.id DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Historial de intentos de acceso del usuario (exitosos y fallidos).
+     */
+    public function obtenerAccesosRecientes(int $usuarioId, int $limite = 10): array {
+        $sql = "SELECT id, exito, ip_origen, user_agent, mensaje_error, fecha_hora
+                FROM logs_acceso
+                WHERE usuario_id = :id
+                ORDER BY fecha_hora DESC, id DESC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':id', $usuarioId, PDO::PARAM_INT);
+        $stmt->bindValue(':limite', max(1, $limite), PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Totales de accesos del usuario y fecha del último intento fallido.
+     */
+    public function obtenerResumenAccesos(int $usuarioId): array {
+        $sql = "SELECT COUNT(*) AS total,
+                       COALESCE(SUM(exito = 1), 0) AS exitosos,
+                       COALESCE(SUM(exito = 0), 0) AS fallidos,
+                       MAX(CASE WHEN exito = 0 THEN fecha_hora END) AS ultimo_fallido
+                FROM logs_acceso
+                WHERE usuario_id = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'total' => (int) ($fila['total'] ?? 0),
+            'exitosos' => (int) ($fila['exitosos'] ?? 0),
+            'fallidos' => (int) ($fila['fallidos'] ?? 0),
+            'ultimo_fallido' => $fila['ultimo_fallido'] ?? null,
+        ];
+    }
+
+    /**
+     * Sesiones registradas del usuario. Se excluye token_sesion deliberadamente.
+     */
+    public function obtenerSesionesAdmin(int $usuarioId): array {
+        $sql = "SELECT id, ip_origen, user_agent, ultima_actividad, creado_en, expira_en, activa
+                FROM sesiones_activas
+                WHERE usuario_id = :id
+                ORDER BY activa DESC, ultima_actividad DESC
+                LIMIT 10";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Últimas acciones del usuario registradas en logs_actividad.
+     */
+    public function obtenerActividadReciente(int $usuarioId, int $limite = 10): array {
+        $sql = "SELECT id, accion, descripcion, ip_origen, fecha_hora
+                FROM logs_actividad
+                WHERE usuario_id = :id
+                ORDER BY fecha_hora DESC, id DESC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':id', $usuarioId, PDO::PARAM_INT);
+        $stmt->bindValue(':limite', max(1, $limite), PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Contadores globales del usuario para el resumen de la ficha.
+     */
+    public function obtenerMetricasUsuario(int $usuarioId): array {
+        // Placeholders distintos: la conexión usa prepares nativos y no admite
+        // reutilizar el mismo parámetro nombrado en varias posiciones.
+        $sql = "SELECT
+                    (SELECT COUNT(*) FROM equipos WHERE creado_por = :id_creados) AS equipos_creados,
+                    (SELECT COUNT(*) FROM torneos WHERE organizador_id = :id_torneos) AS torneos_organizados,
+                    (SELECT COUNT(*) FROM equipo_miembros WHERE usuario_id = :id_miembros AND es_activo = 1) AS equipos_activos";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([
+            ':id_creados' => $usuarioId,
+            ':id_torneos' => $usuarioId,
+            ':id_miembros' => $usuarioId,
+        ]);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'equipos_creados' => (int) ($fila['equipos_creados'] ?? 0),
+            'torneos_organizados' => (int) ($fila['torneos_organizados'] ?? 0),
+            'equipos_activos' => (int) ($fila['equipos_activos'] ?? 0),
+        ];
     }
 }

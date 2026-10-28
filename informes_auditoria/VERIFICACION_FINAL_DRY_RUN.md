@@ -5,6 +5,8 @@
 **Base:** commit `902a2fe` + correcciones de la auditoría incluidas en esta rama  
 **Objetivo:** levantar el stack completo desde un volumen vacío con el compose final y dejar evidencia ejecutada para la entrega.
 
+> **Nota de vigencia:** este informe describe el dry run con la semilla `001`–`006`. La migración posterior `008_semilla_consistente.sql` renombró las cuentas `organizador.qaN`/`jugador.qaNN` a correos con nombres reales (por ejemplo `lucia.fernandez@ascend.test`) y amplió torneos, notificaciones y guardados. El listado vigente está en `Documentos_Juan/Usuarios_Sembrados.md`; los nombres “QA” que aparecen aquí corresponden a la evidencia histórica de esa ejecución.
+
 ---
 
 ## 1. Entorno ejecutado

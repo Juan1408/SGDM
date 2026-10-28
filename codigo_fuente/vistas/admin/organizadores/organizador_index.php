@@ -30,7 +30,7 @@
             <tbody>
                 <?php foreach ($datos['organizadores'] as $organizador): ?>
                     <tr>
-                        <td><?php echo $organizador['id']; ?></td>
+                        <td><?php echo (int) $organizador['id']; ?></td>
                         <td>
                             <strong><?php echo htmlspecialchars($organizador['nombre_completo']); ?></strong><br>
                             <small class="texto-secundario"><?php echo htmlspecialchars($organizador['nombre_organizacion']); ?></small>
@@ -77,11 +77,11 @@
                                     </button>
                                 </form>
                             <?php endif; ?>
-                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo $organizador['id']; ?>" style="display:inline-block;">
+                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=ver&id=<?php echo (int) $organizador['id']; ?>&origen=organizadores" class="boton-accion">Ver ficha</a>
+                            <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=verComo&id=<?php echo (int) $organizador['id']; ?>" style="display:inline-block;">
                                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="boton-accion">Ver Como</button>
                             </form>
-                            <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo $organizador['id']; ?>" class="boton-accion">Editar</a>
                             <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario" style="display:inline-block;">
                                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <input type="hidden" name="id" value="<?php echo (int) $organizador['id']; ?>">
