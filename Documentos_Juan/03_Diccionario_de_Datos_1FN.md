@@ -45,6 +45,7 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 - **usuario_logros_1fn** (<u>*`usuario_id`*</u>, <u>*`logro_id`*</u>, `estado`, `progreso_actual`, `progreso_objetivo`, `fecha_desbloqueo`)
 - **guardados_1fn** (<u>`id`</u>, *`usuario_id`*, `tipo`, `referencia_id`, `fecha_guardado`)
 - **juego_modalidades_permitidas_1fn** (<u>*`juego_id`*</u>, <u>*`modalidad_id`*</u>)
+- **aceptaciones_legales_1fn** (<u>`id`</u>, *`usuario_id`*, `tipo_documento`, `version`, `aceptado_en`, `ip_origen`, `user_agent`)
 
 ---
 

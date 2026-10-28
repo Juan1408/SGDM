@@ -859,3 +859,62 @@ Solución Aplicada:
    - Mantiene el alias nombre_juego para retrocompatibilidad total con las vistas consumidoras y mapea correctamente la imagen del juego.
 2. Dinamización de Enlaces en detalle_error.php:
    - Se reemplazaron las URLs fijas por la constante dinámica URL_BASE: URL_BASE . css/admin/base.css y URL_BASE . css/admin/detalle_error.css, además de normalizar el enlace de retorno al dashboard.
+
+59. Registro de Aceptación de Términos y Condiciones y Política de Privacidad
+Objetivo: Exigir y dejar constancia de la aceptación de ambos documentos legales al crear una cuenta, sin alterar las tablas existentes y sin inventar aceptaciones para usuarios anteriores.
+
+Diseño de datos:
+1. Migración 011_aceptaciones_legales.sql:
+   - Crea la tabla aceptaciones_legales con id, usuario_id, tipo_documento (ENUM terminos/privacidad), version, aceptado_en, ip_origen y user_agent.
+   - Usa una clave única compuesta (usuario_id, tipo_documento, version) para impedir duplicados y conservar el historial de versiones.
+   - La FK usuario_id referencia usuarios(id) con ON DELETE CASCADE y ON UPDATE CASCADE. Es una migración aditiva e idempotente (CREATE TABLE IF NOT EXISTS): no ejecuta ALTER sobre usuarios ni modifica semillas.
+   - La tabla también se incorporó a 001_ascend.sql para que una instalación limpia de Docker la cree desde el inicio.
+2. Versiones centralizadas:
+   - VERSION_TERMINOS y VERSION_PRIVACIDAD se definen en configuracion/constantes.php y se reutilizan en el registro, las páginas legales y la ficha administrativa.
+
+Flujo de registro:
+1. La vista auth/registro.php incorpora la casilla obligatoria aceptar_terminos con enlaces a Términos y Condiciones y Política de Privacidad (target="_blank" y rel="noopener noreferrer").
+2. AuthControlador::procesarRegistro repite la validación en el servidor: si el valor no es 1, vuelve a mostrar el formulario con un mensaje y no invoca al modelo. El atributo required del navegador no es la única defensa.
+3. Usuario::registrarUsuario normaliza y valida las versiones, la IP (FILTER_VALIDATE_IP) y el user-agent (recorte a 255 caracteres) antes de abrir la transacción.
+4. Dentro de la misma transacción que crea la cuenta y el token de verificación se insertan dos filas, una por documento. Cualquier fallo revierte la cuenta completa: no puede quedar un usuario sin constancia.
+5. La ficha administrativa de usuario consulta las aceptaciones y las muestra en modo solo lectura (documento, versión vigente o anterior, fecha, IP y navegador). No existe acción para editar ni revocar la constancia, porque es un registro probatorio.
+
+Seguridad y alcance normativo:
+- La constancia se apoya en Ley 18.331 (protección de datos personales) y se conserva mientras exista la cuenta o sea necesaria para demostrar el consentimiento.
+- Es una aceptación electrónica simple; no se presenta como firma digital certificada ni firma electrónica avanzada de la Ley 18.600.
+- Los usuarios creados antes de la migración no reciben registros retroactivos.
+
+Validación ejecutada:
+- tests/unitarias/AceptacionLegalTest.php: 10 pruebas y 42 aserciones en el corte inicial (registro con y sin aceptación, versiones vacías, duplicados, ficha sin hash, usuario sin constancia, reversión por fallo de inserción, saneamiento de IP/user-agent y organizadores). Con los casos de correo inválido de la sección 60 son 16 ejecuciones y 66 aserciones.
+- Suite completa en ese corte: 32 pruebas y 169 aserciones, aprobada tanto en PHP 8.0.30/MariaDB 10.4.32 como en el contenedor Docker con PHP 8.2.29. Tras la sección 60: 38 pruebas y 193 aserciones.
+- tests/e2e/registro_aceptacion_e2e.sh: flujo HTTP completo, incluyendo POST sin aceptación, rechazo de correo con formato inválido, POST válido, reenvío sin duplicados y ficha administrativa.
+- Idempotencia: la migración se aplicó dos veces sobre ascend_test y el SHOW CREATE TABLE resultó idéntico en ambas ejecuciones (md5 bfaeab001f9a6b5065157b3fec39e3a1).
+- Verificación visual en escritorio (1440 px) y móvil emulado (390 px): la casilla, los enlaces y el ajuste de línea se renderizan sin desbordes.
+
+60. Validación del Formato de Correo en el Registro y Bloqueo del Doble Envío
+Objetivo: Cerrar el alta de cuentas con correos de formato inválido y evitar que un doble envío del formulario muestre un error aunque la cuenta ya se haya creado.
+
+Síntoma reportado: al rechazarse un registro (por ejemplo, por una contraseña mal escrita), se sospechó que el correo quedaba convertido en usuario.
+
+Diagnóstico reproducido sobre ascend_test (2026-10-28):
+1. Contraseña sin carácter especial, contraseña con un símbolo no aceptado por la política y confirmación distinta: el servidor rechazó y la tabla usuarios quedó sin filas. El alta no persiste datos parciales.
+2. Correo sin arroba o con dominio inválido y contraseña válida: el navegador no lo frenaba en un POST manual y el servidor lo aceptaba. El usuario sí se creaba. Ese era el hueco real de validación.
+3. Dos POST simultáneos con el mismo correo: uno creó la cuenta y el otro recibió "ya se encuentra registrado". La cuenta es legítima (la creó el primer POST), pero el segundo mensaje puede hacer creer que todo falló.
+4. Se identificó en la base Docker una cuenta creada el 2026-10-24 con inicios de sesión posteriores; no se borró. No corresponde a un alta fantasma de esta prueba.
+
+Solución aplicada:
+1. AuthControlador::procesarRegistro valida el correo con FILTER_VALIDATE_EMAIL y longitud máxima de 255 antes de invocar al modelo. El atributo type=email queda solo como ayuda del navegador.
+2. Usuario::registrarUsuario repite la validación como defensa en profundidad, antes de buscar duplicados y de abrir la transacción.
+3. login.js bloquea el segundo envío del formulario de registro (bandera, preventDefault y botón deshabilitado con el texto "Registrando..."), con reintento a los 15 segundos si la página no navegó. La vista incorpora id="formulario-registro".
+4. No hubo cambios de esquema, migraciones ni datos.
+
+Validación ejecutada:
+- AceptacionLegalTest: 16 ejecuciones y 66 aserciones. Se agregaron seis casos de correo inválido (sin arroba, sin dominio, doble arroba, punto doble, espacio y más de 255 caracteres) que verifican rechazo, cero usuarios y cero constancias.
+- Suite completa: 38 pruebas y 193 aserciones, aprobada en PHP 8.0.30/MariaDB 10.4.32 y en Docker PHP 8.2.29/MySQL 8.0.46.
+- registro_aceptacion_e2e.sh incorpora el paso 1b: POST con correo sin arroba, contraseña válida y aceptación marcada; exige el mensaje de error y cero usuarios/constancias.
+- Reproducción manual A-F: antes del cambio, los correos inválidos creaban usuario; después, no. El alta con datos válidos sigue funcionando.
+- Guardia de doble envío verificada en navegador: dos eventos submit sintéticos; el primero no se cancela y deshabilita el botón, el segundo se cancela.
+
+Límites:
+- FILTER_VALIDATE_EMAIL comprueba formato, no la existencia del buzón ni errores de tipeo en dominios válidos (por ejemplo, gmail.con).
+- La guardia de doble envío es del navegador. Un cliente que omita JavaScript puede repetir el POST; la restricción UNIQUE y la transacción impiden duplicar la cuenta y las constancias.

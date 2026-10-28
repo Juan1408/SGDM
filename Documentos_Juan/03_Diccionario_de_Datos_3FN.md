@@ -3,7 +3,7 @@
 ---
 
 ## 🎯 1. Propósito del Documento
-Este documento especifica el **Esquema de las Relaciones** en **Tercera Forma Normal (3FN)** para la base de datos del sistema **SGDM ASCEND**. Corresponde a la estructura física final de las 35 tablas del script `ascend.sql`, habiendo eliminado todas las **Dependencias Funcionales Transitivas** e implementado el patrón de Herencia de Tablas (Class Table Inheritance 1:1).
+Este documento especifica el **Esquema de las Relaciones** en **Tercera Forma Normal (3FN)** para la base de datos del sistema **SGDM ASCEND**. Corresponde a la estructura física final de las 42 tablas del esquema (migraciones `001`–`011`), habiendo eliminado todas las **Dependencias Funcionales Transitivas** e implementado el patrón de Herencia de Tablas (Class Table Inheritance 1:1).
 
 ---
 
@@ -19,7 +19,7 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 
 ---
 
-## 🏛️ 3. Esquema de las Relaciones (37 Tablas en 3FN)
+## 🏛️ 3. Esquema de las Relaciones (42 Tablas en 3FN)
 
 ### Base de datos "ASCEND"
 
@@ -62,6 +62,9 @@ Siguiendo el estándar académico formal para esquemas de relaciones relacionale
 35. **logs_actividad** (<u>`id`</u>, *`usuario_id`*, `accion`, `descripcion`, `ip_origen`, `user_agent`, `fecha_hora`)
 38. **guardados** (<u>`id`</u>, *`usuario_id`*, `tipo`, `referencia_id`, `fecha_guardado`)
 39. **juego_modalidades_permitidas** (<u>*`juego_id`*</u>, <u>*`modalidad_id`*</u>)
+40. **aceptaciones_legales** (<u>`id`</u>, *`usuario_id`*, `tipo_documento`, `version`, `aceptado_en`, `ip_origen`, `user_agent`)
+41. **intentos_login** (<u>`ip_origen`</u>, `intentos`, `ultimo_intento`, `bloqueado_hasta`)
+42. **errores_sistema** (<u>`id`</u>, `hash_error`, `tipo_error`, `mensaje`, `archivo`, `linea`, `stack_trace`, `contexto_json`, *`usuario_id`*, `rol_usuario`, `cantidad_ocurrencias`, `primera_vez`, `ultima_vez`, `estado`, `detalles_resolucion`)
 
 ---
 

@@ -289,7 +289,20 @@ CREATE TABLE tokens_recuperacion (
     CONSTRAINT fk_token_recup_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
--- 2.6 sesiones_activas: Control de sesiones concurrentes e información de dispositivos
+-- 2.6 aceptaciones_legales: Constancia inmutable de aceptación de documentos legales
+CREATE TABLE aceptaciones_legales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tipo_documento ENUM('terminos', 'privacidad') NOT NULL,
+    version VARCHAR(20) NOT NULL,
+    aceptado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_origen VARCHAR(45) NULL,
+    user_agent VARCHAR(255) NULL,
+    UNIQUE KEY uq_aceptacion (usuario_id, tipo_documento, version),
+    CONSTRAINT fk_aceptacion_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+-- 2.7 sesiones_activas: Control de sesiones concurrentes e información de dispositivos
 CREATE TABLE sesiones_activas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -305,7 +318,7 @@ CREATE TABLE sesiones_activas (
     CONSTRAINT fk_sesion_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
--- 2.7 logs_acceso: Registro inmutable de intentos de inicio de sesión (Auditoría de Seguridad)
+-- 2.8 logs_acceso: Registro inmutable de intentos de inicio de sesión (Auditoría de Seguridad)
 CREATE TABLE logs_acceso (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email_intentado VARCHAR(255),
@@ -318,7 +331,7 @@ CREATE TABLE logs_acceso (
     CONSTRAINT fk_log_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
--- 2.8 errores_sistema: Monitoreo de Errores y Excepciones
+-- 2.9 errores_sistema: Monitoreo de Errores y Excepciones
 CREATE TABLE errores_sistema (
     id INT AUTO_INCREMENT PRIMARY KEY,
     hash_error VARCHAR(64) UNIQUE NOT NULL,

@@ -17,10 +17,14 @@
 #   bash tests/e2e/seguridad_admin_e2e.sh
 #
 # Uso contra el MySQL de Docker (servidor web aparte o el de docker compose):
+#   El cliente mysql de XAMPP (MariaDB) no negocia caching_sha2_password con
+#   MySQL 8. Usá un wrapper que ejecute el cliente dentro del contenedor:
+#     printf '#!/usr/bin/env bash\nexec docker exec -i sgdm_db mysql "$@"\n' \
+#       > /tmp/e2e-docker-mysql && chmod +x /tmp/e2e-docker-mysql
 #   BASE_URL=http://127.0.0.1:8082 DB_NAME=ascend_test \
-#   MYSQL_BIN=/c/xampp/mysql/bin/mysql.exe \
-#   MYSQL_HOST=127.0.0.1 MYSQL_PORT=3307 MYSQL_PASSWORD=root123 \
-#   START_SERVER=0 bash tests/e2e/seguridad_admin_e2e.sh
+#   MYSQL_BIN=/tmp/e2e-docker-mysql MYSQL_HOST= MYSQL_PORT= \
+#   MYSQL_PASSWORD=root123 START_SERVER=0 \
+#   bash tests/e2e/seguridad_admin_e2e.sh
 #
 # Requisitos: curl, mysql, php y la base ascend_test migrada.
 # El script crea y elimina sus propios usuarios (prefijo único por ejecución).
@@ -172,6 +176,7 @@ curl -sS -b "$TMP/reg.cookies" -c "$TMP/reg.cookies" -o "$TMP/registro.html" \
     --data-urlencode "contrasena=$PASSWORD" \
     --data-urlencode "contrasena_confirmar=$PASSWORD" \
     --data-urlencode "rol=jugador" \
+    --data-urlencode "aceptar_terminos=1" \
     "$BASE_URL/index.php?c=auth&a=procesarRegistro"
 
 assert_contains "$(cat "$TMP/registro.html")" "verificar tu correo" "El registro no mostró el enlace de verificación."

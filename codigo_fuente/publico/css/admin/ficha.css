@@ -412,3 +412,11 @@
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
+
+/* Aceptación de documentos legales */
+.ficha-aceptacion-detalle {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}

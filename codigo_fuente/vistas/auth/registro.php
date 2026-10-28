@@ -39,7 +39,7 @@
           </div>
         <?php endif; ?>
 
-        <form action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarRegistro" method="POST">
+        <form id="formulario-registro" action="<?php echo URL_BASE; ?>index.php?c=auth&a=procesarRegistro" method="POST">
           <input type="hidden" name="csrf_token" value="<?php echo \App\Ayudantes\Sesion::generarTokenCSRF(); ?>">
           <div class="input-group">
             <input type="text" name="nombre_completo" id="registro-nombre" required value="<?php echo htmlspecialchars($_POST['nombre_completo'] ?? ''); ?>">
@@ -81,6 +81,18 @@
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
               <i class="fa-regular fa-eye-slash"></i>
             </button>
+          </div>
+
+          <div class="aceptacion-legal">
+            <input type="checkbox" name="aceptar_terminos" id="aceptar_terminos" value="1" required
+                   <?php echo (isset($_POST['aceptar_terminos']) && $_POST['aceptar_terminos'] === '1') ? 'checked' : ''; ?>>
+            <label for="aceptar_terminos">
+              He leído y acepto los
+              <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a>
+              y la
+              <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>
+              de ASCEND.
+            </label>
           </div>
 
           <button type="submit" class="auth-btn">Registrarse</button>

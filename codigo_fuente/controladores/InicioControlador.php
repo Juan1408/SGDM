@@ -3,8 +3,7 @@ namespace App\Controladores;
 
 /**
  * Controlador publico general (Inicio, Contacto, Juegos, Nosotros, Rankings,
- * Perfil Publico Organizador, En Construccion). Paso 1: solo pasa las vistas
- * por el router, sin traer datos reales todavia.
+ * Terminos y Condiciones, Politica de Privacidad, En Construccion).
  */
 class InicioControlador {
 
@@ -26,6 +25,16 @@ class InicioControlador {
     //Pantalla generica para secciones que todavia no estan programadas
     public function enConstruccion(){
         require_once __DIR__ . '/../vistas/publico/en-construccion.php';
+    }
+
+    //Terminos y Condiciones de uso: pagina publica, sin consultas a la base de datos
+    public function terminos(){
+        require_once __DIR__ . '/../vistas/publico/terminos.php';
+    }
+
+    //Politica de Privacidad: pagina publica, sin consultas a la base de datos
+    public function privacidad(){
+        require_once __DIR__ . '/../vistas/publico/privacidad.php';
     }
 
      //Pagina de contacto

@@ -40,6 +40,7 @@ erDiagram
     USUARIOS ||--o{ TOKENS_RECUPERACION : "genera (1:N)"
     USUARIOS ||--o{ SESIONES_ACTIVAS : "inicia (1:N)"
     USUARIOS ||--o{ LOGS_ACCESO : "registra intento (1:N)"
+    USUARIOS ||--o{ ACEPTACIONES_LEGALES : "acepta documentos (1:N)"
     USUARIOS ||--o{ NOTIFICACIONES : "recibe (1:N)"
     
     USUARIOS ||--o{ EQUIPOS : "crea / funda (1:N)"
@@ -67,9 +68,22 @@ erDiagram
 
 ---
 
-## 📖 4. Diccionario de Tablas Completo (37 Tablas)
+## 📖 4. Diccionario de Tablas Completo (42 Tablas)
 
 ## 📖 Diccionario de Tablas Completo (Auto-Generado desde MySQL en 3FN)
+
+### Tabla: `aceptaciones_legales`
+| Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id` | `int(11)` | No | **PK** | `NULL` | auto_increment |
+| `usuario_id` | `int(11)` | No | **FK/IDX** | `NULL` |  |
+| `tipo_documento` | `enum('terminos','privacidad')` | No | **UNIQUE** | `NULL` |  |
+| `version` | `varchar(20)` | No | **UNIQUE** | `NULL` |  |
+| `aceptado_en` | `timestamp` | No | - | current_timestamp() |  |
+| `ip_origen` | `varchar(45)` | Sí | - | NULL |  |
+| `user_agent` | `varchar(255)` | Sí | - | NULL |  |
+
+---
 
 ### Tabla: `auditoria_cambios`
 | Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
@@ -127,6 +141,27 @@ erDiagram
 
 ---
 
+### Tabla: `errores_sistema`
+| Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id` | `int(11)` | No | **PK** | `NULL` | auto_increment |
+| `hash_error` | `varchar(64)` | No | **UNIQUE** | `NULL` |  |
+| `tipo_error` | `varchar(50)` | Sí | - | NULL |  |
+| `mensaje` | `text` | No | - | `NULL` |  |
+| `archivo` | `varchar(255)` | No | - | `NULL` |  |
+| `linea` | `int(11)` | No | - | `NULL` |  |
+| `stack_trace` | `text` | No | - | `NULL` |  |
+| `contexto_json` | `longtext` | Sí | - | NULL |  |
+| `usuario_id` | `int(11)` | Sí | **FK/IDX** | NULL |  |
+| `rol_usuario` | `varchar(50)` | Sí | - | NULL |  |
+| `cantidad_ocurrencias` | `int(11)` | Sí | - | 1 |  |
+| `primera_vez` | `timestamp` | No | - | current_timestamp() |  |
+| `ultima_vez` | `timestamp` | No | - | current_timestamp() | on update current_timestamp() |
+| `estado` | `enum('nuevo','revision','resuelto')` | Sí | - | nuevo |  |
+| `detalles_resolucion` | `text` | Sí | - | NULL |  |
+
+---
+
 ### Tabla: `historial_contrasenas`
 | Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
 | :--- | :--- | :---: | :---: | :--- | :--- |
@@ -134,6 +169,16 @@ erDiagram
 | `usuario_id` | `int(11)` | No | **FK/IDX** | `NULL` |  |
 | `hash_anterior` | `text` | No | - | `NULL` |  |
 | `fecha_cambio` | `timestamp` | No | - | current_timestamp() |  |
+
+---
+
+### Tabla: `intentos_login`
+| Columna | Tipo de Dato | Nulo | Clave | Valor por Defecto | Extra |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `ip_origen` | `varchar(45)` | No | **PK** | `NULL` |  |
+| `intentos` | `int(11)` | No | - | 1 |  |
+| `ultimo_intento` | `timestamp` | No | - | current_timestamp() |  |
+| `bloqueado_hasta` | `datetime` | Sí | - | NULL |  |
 
 ---
 
@@ -614,6 +659,7 @@ erDiagram
 | `name="contrasena"` | `POST` | `$_POST['contrasena']` | `string` | `usuarios` | `contrasena_hash` | `password_hash($_POST['contrasena'], PASSWORD_BCRYPT, ['cost' => 10])`. |
 | `name="rol"` | `POST` | `$_POST['rol']` | `int` | `usuarios` | `rol_id` | `(int)$_POST['rol']`. Comprobar que exista en tabla `roles`. |
 | `name="telefono"` | `POST` | `$_POST['telefono']` | `string` | `usuarios` | `telefono` | Expresión regular para números telefónicos. |
+| `name="aceptar_terminos"` | `POST` | `$_POST['aceptar_terminos']` | `string` | `aceptaciones_legales` | `tipo_documento`, `version` | Debe valer `1`; el servidor rechaza el registro si falta. Inserta dos filas (`terminos` y `privacidad`) con `VERSION_TERMINOS`/`VERSION_PRIVACIDAD` en la misma transacción, más `aceptado_en`, `ip_origen` y `user_agent`. |
 | `id="inputOrganizacion"` | `POST` | `$_POST['organizacion']`| `string`| `perfiles_organizadores` | `nombre_organizacion` | Requerido si el rol es Organizador. |
 | `id="inputLocalidad"` | `POST` | `$_POST['localidad']` | `string` | `perfiles_organizadores` | `localidad` | Sanitización de caracteres especiales. |
 | `id="inputBiografia"` | `POST` | `$_POST['biografia']` | `string` | `perfiles_organizadores` | `bio_organizacion` | Longitud máxima 300 caracteres. |

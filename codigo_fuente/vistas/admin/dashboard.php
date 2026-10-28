@@ -112,8 +112,8 @@ $estilosExtra = isset($estilosExtra) && is_array($estilosExtra) ? $estilosExtra 
                 <p>&copy; 2026 ASCEND. Todos los derechos reservados.</p>
             </div>
             <div class="pie-enlaces">
-                <a href="#">Términos de Servicio</a>
-                <a href="#">Política de Privacidad</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=terminos">Términos y Condiciones</a>
+                <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=privacidad">Política de Privacidad</a>
                 <a href="#">Centro de Ayuda</a>
             </div>
         </div>

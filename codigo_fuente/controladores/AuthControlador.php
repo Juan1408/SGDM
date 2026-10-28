@@ -8,6 +8,7 @@ use App\Ayudantes\Sesion; //Para manejar sesiones
 
 require_once __DIR__ . '/../modelos/Usuario.php';
 require_once __DIR__ . '/../ayudantes/Sesion.php';
+require_once __DIR__ . '/../configuracion/constantes.php';
 
 class AuthControlador {
 
@@ -160,6 +161,22 @@ class AuthControlador {
             return;
         }
 
+        // El formato del correo se valida en el servidor: el atributo type=email
+        // del navegador se puede omitir o eludir y no debe decidir el alta.
+        if (mb_strlen($email, 'UTF-8') > 255 || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            $error = "Ingresá un correo electrónico válido.";
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
+        // La aceptación de los documentos legales es obligatoria. Se valida en
+        // el servidor aunque el formulario use el atributo required.
+        if (($_POST['aceptar_terminos'] ?? '') !== '1') {
+            $error = "Debés aceptar los Términos y Condiciones y la Política de Privacidad para crear tu cuenta.";
+            require __DIR__ . '/../vistas/auth/registro.php';
+            return;
+        }
+
         if ($contrasena !== $contrasenaConfirmar) {
             $error = "Las contraseñas no coinciden.";
             require __DIR__ . '/../vistas/auth/registro.php';
@@ -183,7 +200,14 @@ class AuthControlador {
             'telefono' => $telefono,
             'contrasena' => $contrasena,
             'rol_id' => $rolId,
-            'nombre_organizacion' => trim($_POST['nombre_organizacion'] ?? ($nombre . ' Org'))
+            'nombre_organizacion' => trim($_POST['nombre_organizacion'] ?? ($nombre . ' Org')),
+            // Las versiones las decide el servidor; nunca se toman del formulario.
+            'aceptaciones' => [
+                'terminos' => VERSION_TERMINOS,
+                'privacidad' => VERSION_PRIVACIDAD,
+            ],
+            'aceptacion_ip' => $_SERVER['REMOTE_ADDR'] ?? null,
+            'aceptacion_user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
         ];
 
         $resultado = $this->modeloUsuario->registrarUsuario($datos);

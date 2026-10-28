@@ -1,7 +1,8 @@
 # 📊 Código Mermaid para el Diagrama Entidad-Relación (DER) de "ASCEND"
 
 > **Propósito del Documento:**  
-> Este documento contiene el código oficial en sintaxis **Mermaid (`erDiagram`)** para generar el **Diagrama Entidad-Relación (DER/ERD)** completo de la base de datos de **SGDM ASCEND** (las 35 tablas físicas).  
+> Este documento contiene el código oficial en sintaxis **Mermaid (`erDiagram`)** para generar el **Diagrama Entidad-Relación (DER/ERD)** completo de la base de datos de **SGDM ASCEND** (las 42 tablas físicas).
+>
 > 
 > La sintaxis ha sido formateada y optimizada para ser 100% compatible con **[Mermaid.ai](https://mermaid.ai/)**, **[Mermaid Live Editor](https://mermaid.live/)**, Draw.io y visualizadores de Markdown en GitHub.
 
@@ -123,6 +124,16 @@ erDiagram
         boolean exito
         string ip_origen
         datetime fecha_hora
+    }
+
+    ACEPTACIONES_LEGALES {
+        int id PK
+        int usuario_id FK
+        string tipo_documento UK
+        string version UK
+        datetime aceptado_en
+        string ip_origen
+        string user_agent
     }
 
     %% ==========================================
@@ -388,6 +399,28 @@ erDiagram
         datetime fecha_guardado
     }
 
+    ERRORES_SISTEMA {
+        int id PK
+        string hash_error UK
+        string tipo_error
+        text mensaje
+        string archivo
+        int linea
+        text stack_trace
+        int usuario_id FK
+        string estado
+        int cantidad_ocurrencias
+        datetime primera_vez
+        datetime ultima_vez
+    }
+
+    INTENTOS_LOGIN {
+        string ip_origen PK
+        int intentos
+        datetime ultimo_intento
+        datetime bloqueado_hasta
+    }
+
     %% ==========================================
     %% RELACIONES ENTRE TABLAS
     %% ==========================================
@@ -402,6 +435,8 @@ erDiagram
     USUARIOS ||--o{ TOKENS_RECUPERACION : "genera tokens clave"
     USUARIOS ||--o{ SESIONES_ACTIVAS : "inicia sesiones"
     USUARIOS ||--o{ LOGS_ACCESO : "registra accesos"
+    USUARIOS ||--o{ ACEPTACIONES_LEGALES : "acepta documentos legales"
+    USUARIOS ||--o{ ERRORES_SISTEMA : "origina errores"
     USUARIOS ||--o{ NOTIFICACIONES : "recibe notificaciones"
 
     USUARIOS ||--o{ EQUIPOS : "funda equipos"
@@ -448,5 +483,5 @@ erDiagram
 1. Copia todo el bloque de código que está arriba dentro de ````mermaid ... ````.
 2. Ingresa a **[Mermaid Live Editor](https://mermaid.live/)** o a tu cuenta en **[Mermaid.ai](https://mermaid.ai/)**.
 3. Pega el código en el panel de edición de la izquierda.
-4. El diagrama se renderizará automáticamente a la derecha mostrando las 35 tablas con sus campos (`PK`, `FK`, `UK`), tipos de datos y relaciones.
+4. El diagrama se renderizará automáticamente a la derecha mostrando las 42 tablas con sus campos (`PK`, `FK`, `UK`), tipos de datos y relaciones.
 5. Puedes exportarlo como **PNG en alta resolución** o en archivo vectorial **SVG**.

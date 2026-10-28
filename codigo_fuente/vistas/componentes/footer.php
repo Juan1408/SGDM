@@ -18,6 +18,8 @@
          <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Torneos</a>
          <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=rankings">Rankings</a>
          <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=contacto">Contacto</a>
+         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=terminos">Términos y Condiciones</a>
+         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=privacidad">Política de Privacidad</a>
 
       </div>
       <div class="footer-links">

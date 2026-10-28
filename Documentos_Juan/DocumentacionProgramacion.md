@@ -522,7 +522,7 @@ SGDM — ASCEND
 3. Todas las consultas SQL usan prepared statements.
 4. Las contraseñas se hashean con `password_hash()`.
 5. Los controladores validan permisos vía `Sesion::requerirRol()`.
-6. Los formularios tienen validación frontend Y backend.
+6. Los formularios tienen validación frontend Y backend. En el registro, el correo se valida además en el servidor con `FILTER_VALIDATE_EMAIL` (controlador y modelo); `type=email` es solo una ayuda del navegador.
 
 ---
 

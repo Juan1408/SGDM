@@ -18,7 +18,20 @@ $resumenAccesos = $datos['resumen_accesos'];
 $sesiones = $datos['sesiones'];
 $actividad = $datos['actividad'];
 $metricas = $datos['metricas'];
+$aceptaciones = $datos['aceptaciones'] ?? [];
 $esMiCuenta = !empty($datos['es_mi_cuenta']);
+
+$documentosLegales = [
+    'terminos' => ['titulo' => 'Términos y Condiciones', 'version' => VERSION_TERMINOS],
+    'privacidad' => ['titulo' => 'Política de Privacidad', 'version' => VERSION_PRIVACIDAD],
+];
+$ultimaAceptacion = [];
+foreach ($aceptaciones as $aceptacion) {
+    $tipoDocumento = $aceptacion['tipo_documento'] ?? '';
+    if ($tipoDocumento !== '' && !isset($ultimaAceptacion[$tipoDocumento])) {
+        $ultimaAceptacion[$tipoDocumento] = $aceptacion;
+    }
+}
 
 $rolId = (int) $usuario['rol_id'];
 $volverUrl = $datos['volver_url'] ?? '';
@@ -180,6 +193,44 @@ $etiquetaTorneo = [
     Información personal y de auditoría mostrada con fines de control interno de la plataforma.
     No se incluyen contraseñas, hashes ni tokens de sesión.
 </p>
+
+<!-- Aceptación de documentos legales -->
+<section class="ficha-seccion">
+    <header class="ficha-seccion-cabecera">
+        <h3><i class="fa-solid fa-file-signature"></i> Aceptación de documentos legales</h3>
+        <span class="texto-ayuda">Registro inmutable: el equipo administrador no puede modificarlo ni revocarlo.</span>
+    </header>
+
+    <dl class="ficha-meta ficha-meta-perfil">
+        <?php foreach ($documentosLegales as $tipoDocumento => $documento): ?>
+            <?php $aceptacion = $ultimaAceptacion[$tipoDocumento] ?? null; ?>
+            <div>
+                <dt><?php echo htmlspecialchars($documento['titulo'], ENT_QUOTES, 'UTF-8'); ?></dt>
+                <dd>
+                    <?php if ($aceptacion === null): ?>
+                        <span class="badge badge-danger">Sin registro</span>
+                        <span class="ficha-aceptacion-detalle">
+                            Cuenta creada antes de la versión <?php echo htmlspecialchars($documento['version'], ENT_QUOTES, 'UTF-8'); ?>.
+                        </span>
+                    <?php else: ?>
+                        <?php if ((string) $aceptacion['version'] === (string) $documento['version']): ?>
+                            <span class="badge badge-success">Vigente</span>
+                        <?php else: ?>
+                            <span class="badge badge-danger">Versión anterior</span>
+                        <?php endif; ?>
+                        <span class="ficha-aceptacion-detalle">
+                            v<?php echo htmlspecialchars($aceptacion['version'], ENT_QUOTES, 'UTF-8'); ?>
+                            · <?php echo $formatearFecha($aceptacion['aceptado_en']); ?>
+                            <?php if (!empty($aceptacion['ip_origen'])): ?>
+                                · IP <?php echo htmlspecialchars($aceptacion['ip_origen'], ENT_QUOTES, 'UTF-8'); ?>
+                            <?php endif; ?>
+                        </span>
+                    <?php endif; ?>
+                </dd>
+            </div>
+        <?php endforeach; ?>
+    </dl>
+</section>
 
 <!-- Perfil especializado -->
 <section class="ficha-seccion">

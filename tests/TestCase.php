@@ -28,6 +28,7 @@ abstract class TestCase extends BaseTestCase {
         $this->bd->query("TRUNCATE TABLE perfiles_jugadores");
         $this->bd->query("TRUNCATE TABLE perfiles_organizadores");
         $this->bd->query("TRUNCATE TABLE tokens_verificacion_email");
+        $this->bd->query("TRUNCATE TABLE aceptaciones_legales");
         $this->bd->query("TRUNCATE TABLE logs_acceso");
         $this->bd->query("TRUNCATE TABLE sesiones_activas");
         $this->bd->query("TRUNCATE TABLE logs_actividad");

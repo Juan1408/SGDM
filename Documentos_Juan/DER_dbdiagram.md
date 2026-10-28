@@ -113,6 +113,20 @@ Table logs_acceso [headercolor: #1E88E5] {
   fecha_hora datetime
 }
 
+Table aceptaciones_legales [headercolor: #1E88E5] {
+  id int [pk, increment]
+  usuario_id int [not null]
+  tipo_documento varchar [not null]
+  version varchar [not null]
+  aceptado_en datetime
+  ip_origen varchar
+  user_agent varchar
+
+  indexes {
+    (usuario_id, tipo_documento, version) [unique]
+  }
+}
+
 TableGroup Autenticacion_Usuarios {
   usuarios
   perfiles_jugadores
@@ -121,6 +135,7 @@ TableGroup Autenticacion_Usuarios {
   tokens_recuperacion
   sesiones_activas
   logs_acceso
+  aceptaciones_legales
 }
 
 // ==========================================
@@ -444,6 +459,31 @@ Table logs_actividad [headercolor: #546E7A] {
   fecha_hora datetime
 }
 
+Table errores_sistema [headercolor: #546E7A] {
+  id int [pk, increment]
+  hash_error varchar [unique]
+  tipo_error varchar
+  mensaje text
+  archivo varchar
+  linea int
+  stack_trace text
+  contexto_json text
+  usuario_id int
+  rol_usuario varchar
+  cantidad_ocurrencias int
+  primera_vez datetime
+  ultima_vez datetime
+  estado varchar
+  detalles_resolucion text
+}
+
+Table intentos_login [headercolor: #546E7A] {
+  ip_origen varchar [pk]
+  intentos int
+  ultimo_intento datetime
+  bloqueado_hasta datetime
+}
+
 TableGroup Comunicacion_Auditoria {
   notificaciones
   newsletter_subscriptores
@@ -451,6 +491,8 @@ TableGroup Comunicacion_Auditoria {
   politicas_contrasenas
   historial_contrasenas
   logs_actividad
+  errores_sistema
+  intentos_login
 }
 
 // ==========================================
@@ -467,6 +509,8 @@ Ref: tokens_verificacion_email.usuario_id > usuarios.id
 Ref: tokens_recuperacion.usuario_id > usuarios.id
 Ref: sesiones_activas.usuario_id > usuarios.id
 Ref: logs_acceso.usuario_id > usuarios.id
+Ref: aceptaciones_legales.usuario_id > usuarios.id
+Ref: errores_sistema.usuario_id > usuarios.id
 Ref: notificaciones.usuario_id > usuarios.id
 Ref: historial_contrasenas.usuario_id > usuarios.id
 Ref: logs_actividad.usuario_id > usuarios.id

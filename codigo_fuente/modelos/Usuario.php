@@ -355,9 +355,27 @@ class Usuario {
     //Metodo para registrar un nuevo usuario en el sistema con generacion de token de verificacion por email
     public function registrarUsuario(array $datos): array {
         $email = trim(strtolower($datos['email'] ?? ''));
+        // Defensa en profundidad: el alta no depende de que el controlador
+        // haya validado el formato ni de la validación nativa del navegador.
+        if ($email === '' || mb_strlen($email, 'UTF-8') > 255
+            || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            return ['exito' => false, 'mensaje' => 'Ingresá un correo electrónico válido.'];
+        }
         if ($this->buscarPorEmail($email)) {
             return ['exito' => false, 'mensaje' => 'El correo electrónico ya se encuentra registrado.'];
         }
+
+        // La aceptación es obligatoria y la decide el servidor, nunca el cliente.
+        // Se valida antes de abrir la transacción para no dejar rastros parciales.
+        $aceptaciones = $this->normalizarAceptaciones($datos['aceptaciones'] ?? null);
+        if ($aceptaciones === null) {
+            return [
+                'exito' => false,
+                'mensaje' => 'Debés aceptar los Términos y Condiciones y la Política de Privacidad para crear tu cuenta.'
+            ];
+        }
+        $ipAceptacion = $this->normalizarIp($datos['aceptacion_ip'] ?? null);
+        $userAgentAceptacion = $this->normalizarUserAgent($datos['aceptacion_user_agent'] ?? null);
 
         try {
             $this->bd->beginTransaction();
@@ -409,6 +427,22 @@ class Usuario {
                 ':token' => $token
             ]);
 
+            // Constancia de aceptación: dos filas, una por documento, dentro de
+            // la misma transacción. Si falla, el rollback deja la cuenta sin crear.
+            $sqlAceptacion = "INSERT INTO aceptaciones_legales
+                                  (usuario_id, tipo_documento, version, ip_origen, user_agent)
+                              VALUES (:usuario_id, :tipo_documento, :version, :ip_origen, :user_agent)";
+            $stmtAceptacion = $this->bd->prepare($sqlAceptacion);
+            foreach ($aceptaciones as $tipoDocumento => $versionDocumento) {
+                $stmtAceptacion->execute([
+                    ':usuario_id' => $usuarioId,
+                    ':tipo_documento' => $tipoDocumento,
+                    ':version' => $versionDocumento,
+                    ':ip_origen' => $ipAceptacion,
+                    ':user_agent' => $userAgentAceptacion,
+                ]);
+            }
+
             $this->bd->commit();
 
             return [
@@ -433,6 +467,43 @@ class Usuario {
             }
             return ['exito' => false, 'mensaje' => 'No se pudo completar el registro. Intentá nuevamente.'];
         }
+    }
+
+    /**
+     * Valida y normaliza las aceptaciones legales recibidas del controlador.
+     * Devuelve null si falta un documento o la versión no es válida.
+     */
+    private function normalizarAceptaciones($aceptaciones) {
+        if (!is_array($aceptaciones)) {
+            return null;
+        }
+
+        $normalizadas = [];
+        foreach (['terminos', 'privacidad'] as $tipoDocumento) {
+            $version = trim((string) ($aceptaciones[$tipoDocumento] ?? ''));
+            if ($version === '' || mb_strlen($version, 'UTF-8') > 20) {
+                return null;
+            }
+            $normalizadas[$tipoDocumento] = $version;
+        }
+
+        return $normalizadas;
+    }
+
+    private function normalizarIp($ip) {
+        $ip = trim((string) $ip);
+        if ($ip === '' || filter_var($ip, FILTER_VALIDATE_IP) === false) {
+            return null;
+        }
+        return mb_substr($ip, 0, 45, 'UTF-8');
+    }
+
+    private function normalizarUserAgent($userAgent) {
+        $userAgent = trim((string) $userAgent);
+        if ($userAgent === '') {
+            return null;
+        }
+        return mb_substr($userAgent, 0, 255, 'UTF-8');
     }
 
     //Metodo para verificar token de activacion de correo electronico
@@ -509,6 +580,7 @@ class Usuario {
             'usuario' => $usuario,
             'perfil_jugador' => $this->obtenerPerfilJugadorAdmin($usuarioId),
             'perfil_organizador' => $this->obtenerPerfilOrganizadorAdmin($usuarioId),
+            'aceptaciones' => $this->obtenerAceptacionesLegales($usuarioId),
             'equipos' => $this->obtenerEquiposDelUsuario($usuarioId),
             'participaciones' => $this->obtenerParticipacionesDeUsuario($usuarioId),
             'accesos' => $this->obtenerAccesosRecientes($usuarioId, 10),
@@ -517,6 +589,24 @@ class Usuario {
             'actividad' => $this->obtenerActividadReciente($usuarioId, 10),
             'metricas' => $this->obtenerMetricasUsuario($usuarioId),
         ];
+    }
+
+    /**
+     * Constancias de aceptación legal del usuario, de la más reciente a la más
+     * antigua. Es información de solo lectura para la ficha administrativa.
+     */
+    public function obtenerAceptacionesLegales(int $usuarioId): array {
+        if ($usuarioId <= 0) {
+            return [];
+        }
+
+        $sql = "SELECT tipo_documento, version, aceptado_en, ip_origen, user_agent
+                FROM aceptaciones_legales
+                WHERE usuario_id = :id
+                ORDER BY tipo_documento ASC, aceptado_en DESC, id DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     private function obtenerPerfilJugadorAdmin(int $usuarioId) {

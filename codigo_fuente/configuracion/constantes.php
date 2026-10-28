@@ -56,3 +56,13 @@ if (!defined('RUTA_SUBIDAS')) {
 
 // Zona horaria estándar para registros y auditoría
 date_default_timezone_set('America/Montevideo');
+
+// Versiones vigentes de los documentos legales.
+// Se usan en las vistas públicas y en el alta de cuenta para que el texto
+// mostrado y la constancia guardada no puedan desincronizarse.
+if (!defined('VERSION_TERMINOS')) {
+    define('VERSION_TERMINOS', '1.0');
+}
+if (!defined('VERSION_PRIVACIDAD')) {
+    define('VERSION_PRIVACIDAD', '1.0');
+}
