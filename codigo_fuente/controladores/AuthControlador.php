@@ -119,6 +119,14 @@ class AuthControlador {
     }   
 }
 
+    // Punto único de acceso al modelo de políticas de contraseñas.
+    // Todos los render de registro cargan la política desde acá para mostrar
+    // siempre la misma regla que valida el servidor, incluso tras un error.
+    private function modeloPoliticaContrasena(): \App\Modelos\PoliticaContrasena {
+        require_once __DIR__ . '/../modelos/PoliticaContrasena.php';
+        return new \App\Modelos\PoliticaContrasena();
+    }
+
     //Accion para mostrar la pantalla del formulario de registro
     public function mostrarRegistro() {
         if (Sesion::estaLogueado()) {
@@ -126,9 +134,7 @@ class AuthControlador {
         }
 
         // Obtener la política de contraseñas para enviarla a la vista
-        require_once __DIR__ . '/../modelos/PoliticaContrasena.php';
-        $politicaModelo = new \App\Modelos\PoliticaContrasena();
-        $politica = $politicaModelo->obtenerPoliticaVigente();
+        $politica = $this->modeloPoliticaContrasena()->obtenerPoliticaVigente();
 
         require __DIR__ . '/../vistas/auth/registro.php';
     }
@@ -140,10 +146,15 @@ class AuthControlador {
             exit;
         }
 
+        // La política se carga antes de cualquier render de error: la vista
+        // debe mostrar siempre los requisitos vigentes y no un valor fijo.
+        $politicaModelo = $this->modeloPoliticaContrasena();
+        $politica = $politicaModelo->obtenerPoliticaVigente();
+
         // Seguridad: Validar Token CSRF
         if (!Sesion::validarTokenCSRF($_POST['csrf_token'] ?? '')) {
             $error = "Petición no válida (CSRF Token incorrecto). Intente nuevamente.";
-            require_once __DIR__ . '/../vistas/auth/registro.php';
+            require __DIR__ . '/../vistas/auth/registro.php';
             return;
         }
 
@@ -183,10 +194,8 @@ class AuthControlador {
             return;
         }
 
-        // Validación dinámica contra Políticas de Contraseñas
-        require_once __DIR__ . '/../modelos/PoliticaContrasena.php';
-        $politicaModelo = new \App\Modelos\PoliticaContrasena();
-        $validacion = $politicaModelo->validarPassword($contrasena);
+        // Validación dinámica contra Políticas de Contraseñas (misma política ya cargada)
+        $validacion = $politicaModelo->validarPassword($contrasena, $politica);
         
         if (!$validacion['valido']) {
             $error = implode('<br>', $validacion['errores']);

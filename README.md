@@ -129,6 +129,10 @@ Limitaciones conocidas:
 - Las **credenciales de demo son públicas**; no usar este despliegue como producción sin cambiarlas, activar HTTPS y revisar el endurecimiento del servidor.
 - Es una entrega académica/MVP: no incluye email real, recuperación de contraseña ni auditoría de seguridad productiva.
 
+### Formatos de torneo
+
+La página pública `index.php?c=inicio&a=formatos` explica los tres formatos que la plataforma implementa: liga, eliminación directa y sistema suizo. Está enlazada desde el pie de página (`#liga`, `#eliminacion-directa` y `#suizo`) y describe, para cada uno, cómo se arma el fixture, cómo se cuentan los puntos y cómo se define el campeón. Incluye una tabla comparativa y una guía de controles para organizadores (cantidad de participantes, regeneración del fixture, corrección de resultados y cierre del torneo). Es una página estática: no consulta la base de datos ni modifica el esquema.
+
 ### Administración de equipos y usuarios
 
 El panel de administración incorpora dos fichas administrativas, una acción de renombre y la edición controlada de usuarios:
@@ -248,6 +252,14 @@ bash tests/e2e/registro_aceptacion_e2e.sh
 ```
 
 Comprueba que las páginas legales publican la versión vigente, que la casilla es obligatoria y sus enlaces abren en otra pestaña, que un POST sin aceptación no crea la cuenta, que un correo con formato inválido tampoco la crea, que un POST con aceptación crea el usuario y las dos constancias (versión, IP, fecha), que un reenvío no duplica filas y que la ficha administrativa muestra la aceptación sin ofrecer acciones de edición o revocación. El formulario además bloquea el doble envío desde `login.js`; se verificó en navegador que el segundo evento `submit` se cancela.
+
+`tests/e2e/formatos_e2e.sh` verifica la página de formatos sin necesidad de base de datos:
+
+```bash
+PHP_BIN=/c/xampp/php/php.exe bash tests/e2e/formatos_e2e.sh
+```
+
+Comprueba que la ruta responde 200, que existen las cinco secciones con sus anclas, que el contenido coincide con las reglas del modelo (todos contra todos, 2/4/8/16/32/64, cantidad par en el suizo, desempates por diferencia de goles y prohibición de empates en eliminación directa) y que el pie enlaza cada formato a su ancla en lugar de `enConstruccion`.
 
 ## Comandos útiles
 

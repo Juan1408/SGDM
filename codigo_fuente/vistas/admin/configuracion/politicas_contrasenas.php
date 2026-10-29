@@ -26,7 +26,11 @@ $politica = $datos['politica'] ?? [];
         <!-- BLOQUE 1: COMPLEJIDAD DE LA CLAVE -->
         <fieldset class="mb-4">
             <legend><i class="fa-solid fa-key me-2"></i>Requisitos de Complejidad</legend>
-            <p class="texto-ayuda">Configura los caracteres obligatorios que debe incluir la contraseña de un Jugador o Organizador al registrarse o cambiar su clave.</p>
+            <p class="texto-ayuda">
+                Configura los caracteres obligatorios que debe incluir la contraseña de un Jugador o Organizador al registrarse o cambiar su clave.
+                <strong>Estos requisitos se aplican a las contraseñas nuevas.</strong>
+                Los usuarios ya registrados conservan su contraseña actual: esta política no las revalida ni los obliga a cambiarla.
+            </p>
 
             <div class="campo-grupo mb-3">
                 <label for="longitud_minima" class="fw-bold">Longitud Mínima de Contraseña (Caracteres):</label>
@@ -39,7 +43,7 @@ $politica = $datos['politica'] ?? [];
                        required 
                        class="campo-requerido form-control style-input"
                        style="max-width: 200px;">
-                <small class="texto-ayuda">Recomendado: 8 o más caracteres.</small>
+                <small class="texto-ayuda">Aplica a las altas nuevas. Recomendado: 8 o más caracteres.</small>
             </div>
 
             <div class="opciones-checkbox mt-3">

@@ -26,9 +26,9 @@
 
          <h4>Torneos</h4>
 
-         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Liga</a>
-         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Eliminación Directa</a>
-         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Sistema Suizo</a>
+         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=formatos#liga">Liga</a>
+         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=formatos#eliminacion-directa">Eliminación Directa</a>
+         <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=formatos#suizo">Sistema Suizo</a>
       </div>
       <div class="footer-links">
 

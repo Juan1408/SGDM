@@ -141,7 +141,10 @@ body {
 }
 
 .input-group input:focus + label,
-.input-group input:valid + label {
+.input-group input:valid + label,
+/* Con minlength, una clave corta sigue siendo :invalid: la etiqueta también
+   debe subir en cuanto hay texto para no taparlo. */
+.password-group input:not(:placeholder-shown) + label {
    top: 3px;
    transform: translateY(0);
    color: #00FFEE;
@@ -400,6 +403,28 @@ body {
    text-decoration: underline;
 }
 
+
+/* REQUISITOS DE LA CONTRASEÑA EN EL REGISTRO (SEGÚN LA POLÍTICA VIGENTE) */
+.requisitos-contrasena {
+   list-style: none;
+   margin: -12px 0 22px;
+   padding: 0;
+   font-size: 0.82rem;
+   line-height: 1.5;
+   color: rgba(255, 255, 255, 0.68);
+}
+
+.requisitos-contrasena li {
+   display: flex;
+   align-items: flex-start;
+   gap: 7px;
+}
+
+.requisitos-contrasena i {
+   color: var(--color-secundario);
+   font-size: 0.72rem;
+   margin-top: 3px;
+}
 
 /* ACEPTACIÓN DE DOCUMENTOS LEGALES EN EL REGISTRO */
 .aceptacion-legal {

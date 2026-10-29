@@ -1,0 +1,511 @@
+/* =========================================================
+   FORMATOS DE TORNEO — Liga, eliminación directa y suizo
+   Mobile first, misma estética que las páginas legales.
+========================================================= */
+
+.formatos-hero {
+   position: relative;
+   padding: 150px 0 55px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+   background:
+      radial-gradient(circle at 12% 18%, rgba(167, 1, 250, 0.30), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgba(0, 255, 238, 0.14), transparent 38%),
+      #06040d;
+   overflow: hidden;
+}
+
+.formatos-hero::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+   background-size: 58px 58px;
+   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 85%);
+   pointer-events: none;
+}
+
+.formatos-hero-contenido {
+   position: relative;
+   z-index: 1;
+   max-width: 1180px;
+   margin: 0 auto;
+   padding: 0 6%;
+}
+
+.formatos-etiqueta {
+   color: var(--color-secundario);
+   text-transform: uppercase;
+   font-size: 13px;
+   font-weight: 700;
+   letter-spacing: 2px;
+   margin-bottom: 14px;
+}
+
+.formatos-hero h1 {
+   font-size: clamp(2rem, 5vw, 3.4rem);
+   line-height: 1.1;
+   letter-spacing: -0.5px;
+   margin-bottom: 18px;
+}
+
+.formatos-hero h1 span {
+   background: linear-gradient(90deg, var(--color-secundario), var(--color-violeta));
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+   color: transparent;
+}
+
+.formatos-resumen {
+   max-width: 800px;
+   color: #c7c1ea;
+   font-size: 1rem;
+   line-height: 1.8;
+}
+
+.formatos-resumen strong {
+   color: #ffffff;
+}
+
+.formatos-meta {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px 22px;
+   margin-top: 24px;
+   color: #8b8ba0;
+   font-size: 0.86rem;
+}
+
+.formatos-meta i {
+   color: var(--color-secundario);
+   margin-right: 6px;
+}
+
+.formatos-meta a {
+   color: var(--color-secundario);
+   text-decoration: none;
+}
+
+.formatos-meta a:hover {
+   text-decoration: underline;
+}
+
+/* =========================
+   CUERPO: índice + documento
+========================= */
+
+.formatos-cuerpo {
+   max-width: 1180px;
+   margin: 0 auto;
+   padding: 55px 6% 90px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 34px;
+   align-items: start;
+}
+
+.formatos-indice {
+   background: #0b0916;
+   border: 1px solid var(--borde-suave);
+   border-radius: 16px;
+   padding: 22px;
+}
+
+.formatos-indice h2 {
+   color: var(--color-secundario);
+   font-size: 0.76rem;
+   font-weight: 700;
+   text-transform: uppercase;
+   letter-spacing: 1.6px;
+   margin-bottom: 10px;
+}
+
+.formatos-indice ol {
+   list-style: none;
+   counter-reset: indice;
+}
+
+.formatos-indice li {
+   counter-increment: indice;
+}
+
+.formatos-indice a {
+   display: flex;
+   gap: 10px;
+   padding: 8px 0;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+   color: #aaaac2;
+   font-size: 0.85rem;
+   line-height: 1.4;
+   text-decoration: none;
+   transition: color var(--transicion);
+}
+
+.formatos-indice a::before {
+   content: counter(indice, decimal-leading-zero);
+   color: rgba(0, 255, 238, 0.65);
+   font-size: 0.72rem;
+   font-weight: 700;
+   padding-top: 2px;
+}
+
+.formatos-indice a:hover {
+   color: var(--color-secundario);
+}
+
+.formatos-indice .formatos-indice-otro {
+   margin-top: 16px;
+   padding-top: 14px;
+   border-top: 1px solid var(--borde-suave);
+}
+
+.formatos-indice .formatos-indice-otro a {
+   border-bottom: 0;
+   color: var(--color-secundario);
+}
+
+.formatos-indice .formatos-indice-otro a::before {
+   content: none;
+}
+
+.formatos-documento {
+   background: linear-gradient(180deg, #0d0b18 0%, #08070f 100%);
+   border: 1px solid var(--borde-suave);
+   border-radius: 20px;
+   padding: 30px 22px;
+   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+   min-width: 0;
+}
+
+.formatos-documento section {
+   scroll-margin-top: 105px;
+   padding-bottom: 30px;
+   margin-bottom: 30px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.formatos-documento section:last-child {
+   padding-bottom: 0;
+   margin-bottom: 0;
+   border-bottom: 0;
+}
+
+.formatos-documento h2 {
+   display: flex;
+   align-items: baseline;
+   gap: 12px;
+   font-size: 1.28rem;
+   line-height: 1.35;
+   margin-bottom: 14px;
+}
+
+.formatos-numero {
+   flex-shrink: 0;
+   color: var(--color-secundario);
+   font-size: 0.8rem;
+   font-weight: 700;
+   letter-spacing: 1px;
+}
+
+.formatos-documento h3 {
+   font-size: 1rem;
+   margin: 22px 0 8px;
+   color: #ffffff;
+}
+
+.formatos-documento p,
+.formatos-documento li {
+   color: #c7c1ea;
+   font-size: 0.94rem;
+   line-height: 1.8;
+}
+
+.formatos-documento p + p {
+   margin-top: 12px;
+}
+
+.formatos-documento strong {
+   color: #ffffff;
+}
+
+.formatos-documento a {
+   color: var(--color-secundario);
+   text-decoration: underline;
+   text-underline-offset: 3px;
+}
+
+/* Ficha de datos rápidos de cada formato */
+
+.formatos-datos {
+   list-style: none;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 10px;
+   margin: 22px 0 0;
+   padding: 0;
+}
+
+.formatos-datos li {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   padding: 12px 14px;
+   border: 1px solid var(--borde-suave);
+   border-radius: 12px;
+   background: rgba(255, 255, 255, 0.02);
+   font-size: 0.88rem;
+   line-height: 1.55;
+}
+
+.formatos-datos i {
+   color: var(--color-secundario);
+   margin-top: 3px;
+}
+
+/* Párrafo "Conviene cuando" */
+
+.formatos-cuando {
+   margin-top: 20px;
+   padding: 14px 16px;
+   border-left: 3px solid var(--color-violeta);
+   border-radius: 0 12px 12px 0;
+   background: rgba(167, 1, 250, 0.07);
+}
+
+/* Avisos */
+
+.formatos-aviso {
+   margin: 22px 0;
+   padding: 16px 18px;
+   border-left: 3px solid var(--color-secundario);
+   border-radius: 0 12px 12px 0;
+   background: rgba(0, 255, 238, 0.06);
+   color: #d9fbfa;
+   font-size: 0.9rem;
+   line-height: 1.7;
+}
+
+.formatos-aviso--violeta {
+   border-left-color: var(--color-violeta);
+   background: rgba(167, 1, 250, 0.10);
+   color: #eadcff;
+}
+
+.formatos-aviso strong {
+   color: #ffffff;
+}
+
+/* Tabla comparativa */
+
+.formatos-tabla-contenedor {
+   margin: 18px 0 0;
+   overflow-x: auto;
+   border: 1px solid var(--borde-suave);
+   border-radius: 12px;
+}
+
+.formatos-tabla-ayuda {
+   display: none;
+   margin-top: 10px;
+   color: #8b8ba0;
+   font-size: 0.8rem;
+}
+
+.formatos-tabla {
+   width: 100%;
+   min-width: 560px;
+   border-collapse: collapse;
+   font-size: 0.86rem;
+}
+
+.formatos-tabla th,
+.formatos-tabla td {
+   padding: 12px 14px;
+   text-align: left;
+   vertical-align: top;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.formatos-tabla th {
+   color: var(--color-secundario);
+   background: rgba(0, 255, 238, 0.05);
+   font-size: 0.76rem;
+   text-transform: uppercase;
+   letter-spacing: 0.8px;
+}
+
+.formatos-tabla td {
+   color: #c7c1ea;
+   line-height: 1.65;
+}
+
+.formatos-tabla tbody tr:last-child td {
+   border-bottom: 0;
+}
+
+/* Pasos para organizadores */
+
+.formatos-pasos {
+   list-style: none;
+   counter-reset: paso;
+   margin: 18px 0 0;
+   padding: 0;
+   display: grid;
+   gap: 12px;
+}
+
+.formatos-pasos li {
+   counter-increment: paso;
+   position: relative;
+   padding: 14px 16px 14px 52px;
+   border: 1px solid var(--borde-suave);
+   border-radius: 14px;
+   background: rgba(255, 255, 255, 0.02);
+   font-size: 0.9rem;
+   line-height: 1.7;
+}
+
+.formatos-pasos li::before {
+   content: counter(paso);
+   position: absolute;
+   top: 14px;
+   left: 16px;
+   width: 24px;
+   height: 24px;
+   display: grid;
+   place-items: center;
+   border-radius: 50%;
+   background: rgba(0, 255, 238, 0.12);
+   color: var(--color-secundario);
+   font-size: 0.72rem;
+   font-weight: 700;
+}
+
+/* Pie del documento */
+
+.formatos-pie-documento {
+   margin-top: 34px;
+   padding: 20px;
+   border: 1px dashed rgba(0, 255, 238, 0.35);
+   border-radius: 14px;
+   background: rgba(0, 255, 238, 0.035);
+}
+
+.formatos-pie-documento p {
+   font-size: 0.86rem;
+   color: #aaaac2;
+}
+
+.formatos-pie-documento strong {
+   color: var(--color-secundario);
+}
+
+.formatos-enlace-volver {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   margin-top: 12px;
+   color: var(--color-secundario);
+   font-size: 0.88rem;
+   font-weight: 600;
+   text-decoration: none;
+}
+
+.formatos-enlace-volver:hover {
+   text-decoration: underline;
+}
+
+/* =========================
+   TABLET Y ESCRITORIO
+========================= */
+
+@media (min-width: 601px) {
+   .formatos-datos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+@media (min-width: 901px) {
+
+   .formatos-cuerpo {
+      grid-template-columns: 258px minmax(0, 1fr);
+      gap: 42px;
+   }
+
+   .formatos-indice {
+      position: sticky;
+      top: 104px;
+      max-height: calc(100vh - 128px);
+      overflow-y: auto;
+   }
+
+   .formatos-documento {
+      padding: 46px 52px;
+   }
+
+   .formatos-documento h2 {
+      font-size: 1.45rem;
+   }
+}
+
+@media (max-width: 600px) {
+   .formatos-tabla-ayuda {
+      display: block;
+   }
+}
+
+/* =========================
+   IMPRESIÓN
+========================= */
+
+@media print {
+
+   .navbar,
+   .footer,
+   .formatos-indice,
+   .formatos-enlace-volver {
+      display: none !important;
+   }
+
+   body {
+      background: #ffffff;
+      color: #000000;
+   }
+
+   .formatos-hero,
+   .formatos-documento {
+      background: #ffffff;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+   }
+
+   .formatos-hero {
+      padding-bottom: 20px;
+   }
+
+   .formatos-hero h1,
+   .formatos-hero h1 span,
+   .formatos-documento h2,
+   .formatos-documento h3,
+   .formatos-documento p,
+   .formatos-documento li,
+   .formatos-documento strong,
+   .formatos-tabla td,
+   .formatos-tabla th {
+      color: #000000 !important;
+      -webkit-text-fill-color: #000000;
+      background: transparent !important;
+   }
+
+   .formatos-cuerpo {
+      display: block;
+      padding: 0;
+   }
+
+   .formatos-documento section {
+      page-break-inside: avoid;
+   }
+}

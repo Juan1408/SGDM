@@ -3,7 +3,8 @@ namespace App\Controladores;
 
 /**
  * Controlador publico general (Inicio, Contacto, Juegos, Nosotros, Rankings,
- * Terminos y Condiciones, Politica de Privacidad, En Construccion).
+ * Terminos y Condiciones, Politica de Privacidad, Formatos de torneo,
+ * En Construccion).
  */
 class InicioControlador {
 
@@ -37,7 +38,12 @@ class InicioControlador {
         require_once __DIR__ . '/../vistas/publico/privacidad.php';
     }
 
-     //Pagina de contacto
+     //Formatos de torneo: pagina publica explicativa, sin consultas a la base de datos
+    public function formatos(){
+        require_once __DIR__ . '/../vistas/publico/formatos.php';
+    }
+
+    //Pagina de contacto
     public function contacto(){
         require_once __DIR__ . '/../vistas/publico/contacto.php';
     }

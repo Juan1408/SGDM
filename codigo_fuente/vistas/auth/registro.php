@@ -1,3 +1,14 @@
+<?php
+// La política vigente llega desde AuthControlador en todos los render del
+// formulario. Si faltara, se usa la política por defecto de la aplicación.
+require_once __DIR__ . '/../../modelos/PoliticaContrasena.php';
+$politica = (isset($politica) && is_array($politica)) ? $politica : [];
+$longitudMinima = (int) ($politica['longitud_minima'] ?? 8);
+if ($longitudMinima < 1) {
+    $longitudMinima = 8;
+}
+$requisitosContrasena = \App\Modelos\PoliticaContrasena::describirRequisitos($politica);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -68,15 +79,23 @@
           </div>
 
           <div class="input-group password-group">
-            <input type="password" name="contrasena" id="registro-password" required>
-            <label for="registro-password">Contraseña (Mínimo <?php echo isset($politica['longitud_minima']) ? $politica['longitud_minima'] : 8; ?> caracteres)</label>
+            <input type="password" name="contrasena" id="registro-password" required
+                   minlength="<?php echo $longitudMinima; ?>" placeholder=" ">
+            <label for="registro-password">Contraseña (Mínimo <?php echo $longitudMinima; ?> caracteres)</label>
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
               <i class="fa-regular fa-eye-slash"></i>
             </button>
           </div>
 
+          <ul class="requisitos-contrasena" aria-label="Requisitos de la contraseña">
+            <?php foreach ($requisitosContrasena as $requisito): ?>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> <?php echo htmlspecialchars($requisito); ?></li>
+            <?php endforeach; ?>
+          </ul>
+
           <div class="input-group password-group">
-            <input type="password" name="contrasena_confirmar" id="registro-password-confirmar" required>
+            <input type="password" name="contrasena_confirmar" id="registro-password-confirmar" required
+                   minlength="<?php echo $longitudMinima; ?>" placeholder=" ">
             <label for="registro-password-confirmar">Confirmar contraseña</label>
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
               <i class="fa-regular fa-eye-slash"></i>

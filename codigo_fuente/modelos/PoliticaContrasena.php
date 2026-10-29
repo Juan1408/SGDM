@@ -98,13 +98,46 @@ class PoliticaContrasena {
     }
 
     /**
+     * Describe en texto claro los requisitos que la política exige a una
+     * contraseña nueva. La vista de registro y las pruebas comparten esta
+     * descripción para que lo mostrado y lo validado no se desincronicen.
+     *
+     * @param array $politica Fila de politicas_contrasenas
+     * @return string[] Lista de requisitos activos
+     */
+    public static function describirRequisitos(array $politica): array {
+        $longitud = (int) ($politica['longitud_minima'] ?? 8);
+        if ($longitud < 1) {
+            $longitud = 8;
+        }
+
+        $requisitos = ["Al menos {$longitud} caracteres."];
+
+        if (!empty($politica['requiere_mayuscula'])) {
+            $requisitos[] = 'Al menos una letra mayúscula (A-Z).';
+        }
+        if (!empty($politica['requiere_minuscula'])) {
+            $requisitos[] = 'Al menos una letra minúscula (a-z).';
+        }
+        if (!empty($politica['requiere_numero'])) {
+            $requisitos[] = 'Al menos un número (0-9).';
+        }
+        if (!empty($politica['requiere_caracter_especial'])) {
+            $requisitos[] = 'Al menos un carácter especial (!@#$%^&*...).';
+        }
+
+        return $requisitos;
+    }
+
+    /**
      * Valida una contraseña plana contra las políticas activas en la base de datos.
      *
      * @param string $password Contraseña recibida del formulario
+     * @param array|null $politica Política ya cargada; si es null se consulta la vigente
      * @return array Resultado ['valido' => bool, 'errores' => array]
      */
-    public function validarPassword(string $password): array {
-        $politica = $this->obtenerPoliticaVigente();
+    public function validarPassword(string $password, ?array $politica = null): array {
+        $politica = $politica ?? $this->obtenerPoliticaVigente();
         $errores = [];
 
         // 1. Longitud mínima

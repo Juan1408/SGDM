@@ -918,3 +918,33 @@ Validación ejecutada:
 Límites:
 - FILTER_VALIDATE_EMAIL comprueba formato, no la existencia del buzón ni errores de tipeo en dominios válidos (por ejemplo, gmail.con).
 - La guardia de doble envío es del navegador. Un cliente que omita JavaScript puede repetir el POST; la restricción UNIQUE y la transacción impiden duplicar la cuenta y las constancias.
+
+61. Página Pública de Formatos de Torneo
+Objetivo: Reemplazar los enlaces del pie que llevaban a "en construcción" para liga, eliminación directa y sistema suizo por contenido real, porque los tres formatos ya estaban implementados en el modelo.
+
+Diagnóstico (2026-10-28):
+1. En vistas/componentes/footer.php, los tres enlaces del bloque "Torneos" apuntaban a index.php?c=inicio&a=enConstruccion.
+2. modelo/Torneo.php ya implementa los tres formatos: liga todos contra todos con descanso si la cantidad es impar, eliminación directa con llaves de 2/4/8/16/32/64 y sistema suizo con cantidad par, rondas por potencia de 2, emparejamiento por puntos y sin revanchas.
+3. El mensaje "Pantalla en Construcción" desinformaba sobre funcionalidad existente.
+
+Solución aplicada:
+1. Nueva acción InicioControlador::formatos() y vista publico/formatos.php: cinco secciones (liga, eliminación directa, suizo, comparativa y guía para organizadores), sin consultas a la base de datos.
+2. Nueva hoja css/publico/formatos.css, mobile first, con la misma estética que las páginas legales; la tabla comparativa se desplaza horizontalmente en pantallas angostas.
+3. Se agregó 'formatos' a la whitelist de rutas de publico/index.php.
+4. El pie enlaza a index.php?c=inicio&a=formatos#liga, #eliminacion-directa y #suizo.
+5. No hubo cambios de esquema, migraciones ni datos.
+
+Contenido verificado contra el código:
+- Liga: n − 1 fechas con cantidad par; descanso sin puntos con cantidad impar; puntos por victoria/empate/derrota configurables; desempate por puntos, diferencia de goles, puntos a favor y orden de inscripción (Torneo::generarPodio).
+- Eliminación directa: sólo 2/4/8/16/32/64 (validación al generar el fixture); sorteo inicial; avance automático de ganadores; empate rechazado al cargar resultado; campeón y subcampeón de la final y tercero entre los semifinalistas.
+- Suizo: cantidad par obligatoria; rondas = menor potencia de 2 que alcanza a los participantes; orden por puntos y emparejamiento sin repetir rival; la ronda siguiente se genera cuando la actual está completa.
+
+Validación ejecutada:
+- tests/e2e/formatos_e2e.sh: HTTP 200, ausencia del aviso de en construcción, cinco anclas, contenido alineado con el modelo y enlaces del pie apuntando a cada ancla (cero referencias a enConstruccion para los tres formatos).
+- Suite completa sin cambios: 38 pruebas y 193 aserciones en PHP 8.0.30 / MariaDB 10.4.32.
+- Verificación visual en escritorio y móvil emulado (390 px): sin desbordes; la tabla comparativa muestra su propio desplazamiento y la ayuda "Deslizá la tabla".
+
+Límites:
+- La página es contenido estático: si cambian las reglas de un formato, hay que actualizarla a mano; no se genera desde la base.
+- Sólo documenta los tres formatos implementados; no promete modalidades futuras.
+- Los enlaces a redes sociales del pie y "Centro de Ayuda" del dashboard siguen siendo marcadores sin destino propio; se dejaron fuera de este cambio.

@@ -1,4 +1,10 @@
 Documentos_Juan/
+documentacion/
+informes_auditoria
+presentacion/
+generaador_semillas.php/
+test.php/
+scratch/
 
 /vendor/
 composer.phar
@@ -8,9 +14,11 @@ scratch/
 
 codigo_fuente/publico/img/torneos/subidos/
 codigo_fuente/publico/img/perfiles/subidos/
-codigo_fuente/logs/*.log
+codigo_fuente/logs/*.loggo_fuente/backups/
+
 
 codigo_fuente/publico/img/juegos/subidos/
 
 administracion_sistemas/
 administracion_sistemas.zip
+
