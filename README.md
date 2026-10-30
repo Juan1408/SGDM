@@ -14,7 +14,7 @@ SGDM/
 │   ├── configuracion/    # Constantes y conexión a la base
 │   └── core/             # Sesión, CSRF, errores
 ├── base_de_datos/
-│   └── migraciones/      # 001 → 011 (esquema, semillas, triggers, consistencia, escudos, plantillas y aceptaciones legales)
+│   └── migraciones/      # 001 → 003 (esquema completo, datos base y semilla QA unificada)
 ├── docker/               # Dockerfile, vhost de Apache y docker-compose.yml
 ├── tests/                # PHPUnit (unitarias e integración)
 └── publico/              # Recursos estáticos heredados (no se sirven en Docker)
@@ -45,17 +45,9 @@ Servicios:
 
 La base se inicializa **solo la primera vez** que se crea el volumen `sgdm_datos`. MySQL ejecuta automáticamente los archivos de `base_de_datos/migraciones/` en orden alfabético:
 
-1. `001_ascend.sql` — esquema completo.
-2. `002_datos_base.sql` — catálogos y datos base.
-3. `003_ascend_seed_relacional_qa.sql` — datos sintéticos de QA (solo para una base limpia; no es idempotente).
-4. `004_actualizar_auth.sql` — tablas de autenticación.
-5. `005_correcciones_esquema.sql` — correcciones idempotentes.
-6. `006_seed_qa_ampliado.sql` — ampliación idempotente de la semilla QA (más torneos, formatos y estados).
-7. `007_restricciones_disciplinas.sql` — triggers que validan modalidad y formato contra el catálogo de cada juego.
-8. `008_semilla_consistente.sql` — normaliza la semilla: 9 disciplinas, nombres y correos reales, relaciones válidas, calendarios, notificaciones, guardados, solicitudes, podios y contraseña única de demo. Es idempotente y solo debe aplicarse sobre datos de siembra.
-9. `009_equipos_futbol_escudos.sql` — deja Fútbol 5 con 16 equipos (renombra los 4 de la semilla y crea 12 nuevos), asigna los 16 escudos y abre la Copa Ciudad de Fútbol 5 (`1203`) con los 16 equipos inscriptos. Idempotente.
-10. `010_plantillas_equipos_futbol.sql` — completa las plantillas de los 12 equipos nuevos (`1133`–`1144`) con capitán principal y al menos dos miembros activos, y corrige tres membresías cruzadas que `009` había dejado en el torneo `1203`. Solo datos; idempotente.
-11. `011_aceptaciones_legales.sql` — crea la tabla `aceptaciones_legales`, que guarda la constancia de aceptación de Términos y Condiciones y Política de Privacidad por usuario, tipo de documento, versión, fecha, IP y user-agent. Es aditiva e idempotente; no modifica tablas existentes.
+1. `001_ascend.sql` — esquema completo (42 tablas, índices, tabla `aceptaciones_legales`, `intentos_login`, `politicas_contrasenas` y declaraciones DCL).
+2. `002_datos_base.sql` — catálogos maestros y las 3 cuentas principales (`admin@ascend.com`, `organizador@ascend.com`, `jugador@ascend.com`) con contraseña `Admin123!`.
+3. `003_ascend_seed_relacional_qa.sql` — semilla completa unificada de demostración y QA (9 disciplinas, 51 usuarios, 45 equipos incluidos los 16 de Fútbol 5 con escudos y plantillas, 26 torneos, triggers de integridad, comentarios, actividades y notificaciones).
 
 > **Escudos de equipos:** las imágenes se sirven desde `codigo_fuente/publico/img/equipos/`, no desde `base_de_datos/migraciones` (esa carpeta se monta solo en MySQL y Apache no la publica). `009` apunta a rutas relativas, así que el mismo dato funciona en XAMPP y en Docker. Cada `UPDATE`/`INSERT` de `009_equipos_futbol_escudos.sql` indica el archivo que espera; si falta un PNG, ese equipo muestra la imagen rota.
 
@@ -69,7 +61,7 @@ docker compose -f docker/docker-compose.yml exec db \
 
 Debe devolver `42` tablas, `51` usuarios y `26` torneos.
 
-La semilla ampliada deja datos para probar todos los formatos sin crear nada a mano: 9 disciplinas activas (3 esports, 3 deportes físicos y 3 juegos de mesa; 2 de equipos y 1 individual por tipo, cada una con exactamente 2 formatos), 45 equipos, 129 participantes, 97 encuentros, 111 filas de posiciones, 151 notificaciones, 84 guardados, 14 solicitudes de equipo, 29 comentarios y 68 actividades. Después de `010`, los 16 equipos de Fútbol 5 tienen capitán y plantilla mínima (172 membresías y 45 capitanías en total), de modo que cumplen la regla de inscripción de al menos 2 miembros activos. Incluye una liga de 16 equipos de fútbol con escudo propio (`1203`), una liga completa de 8 equipos (`1212`), una eliminación directa de equipos (`1213`), un suizo individual (`1214`), una liga individual de 10 (`1215`), una eliminación individual (`1216`), un torneo abierto con inscripciones confirmadas, pendientes, rechazadas y canceladas (`1217`) y torneos para Truco, Catan, Tenis y EA Sports FC 26 (`1218`–`1225`). Cada jugador tiene perfil, equipos, guardados y notificaciones; cada organizador tiene agenda, solicitudes y comentarios en su panel.
+La semilla ampliada deja datos para probar todos los formatos sin crear nada a mano: 9 disciplinas activas (3 esports, 3 deportes físicos y 3 juegos de mesa; 2 de equipos y 1 individual por tipo, cada una con exactamente 2 formatos), 45 equipos, 129 participantes, 97 encuentros, 111 filas de posiciones, 151 notificaciones, 84 guardados, 14 solicitudes de equipo, 29 comentarios y 68 actividades. Después de `010`, los 16 equipos de Fútbol 5 tienen capitán y plantilla mínima (172 membresías y 45 capitanías en total), de modo que cumplen la regla de inscripción de al menos 2 miembros activos. Incluye una liga de 16 equipos de fútbol con escudo propio (`1203`), una liga completa de 8 equipos (`1212`), una eliminación directa de equipos (`1213`), un suizo individual (`1214`), una liga individual de 10 (`1215`), una eliminación individual (`1216`), un torneo abierto con inscripciones confirmadas, pendientes, rechazadas y canceladas (`1217`) y torneos para Truco, Catan, Tenis y EA Sports FC 26 (`1218`–`1225`). Cada jugador tiene perfil, equipos, guardados y notificaciones; cada organizador tiene agenda y solicitudes en su panel. Los 29 comentarios se publican en la ficha pública de cada torneo y cualquier usuario con sesión iniciada puede sumar uno nuevo.
 
 > **Consistencia con el CRUD:** todas las combinaciones juego/modalidad/formato de la semilla existen en el catálogo que administra el CRUD de juegos y pasan los triggers de `007`. Los cupos respetan los mínimos del formulario (liga 3, suizo 4, eliminación 2) y los torneos finalizados tienen podio y calendario completo.
 
@@ -164,15 +156,15 @@ El registro exige marcar una casilla con enlaces a `index.php?c=inicio&a=termino
 
 ### Cuentas de demostración
 
-Todos los usuarios sembrados comparten la misma contraseña de demostración: **`Ascend2026!`**.
+Todos los usuarios sembrados comparten la misma contraseña de demostración: **`Admin123!`**.
 
 | Rol | Emails | Contraseña |
 | --- | --- | --- |
-| Administrador | `admin@ascend.com` | `Ascend2026!` |
-| Organizador principal | `organizador@ascend.com` | `Ascend2026!` |
-| Jugador principal | `jugador@ascend.com` | `Ascend2026!` |
-| Organizadores sembrados | `lucia.fernandez@ascend.test` … `federico.nunez@ascend.test` | `Ascend2026!` |
-| Jugadores sembrados (42 cuentas) | `mateo.rodriguez@ascend.test` … `mariana.zeballos@ascend.test` | `Ascend2026!` |
+| Administrador | `admin@ascend.com` | `Admin123!` |
+| Organizador principal | `organizador@ascend.com` | `Admin123!` |
+| Jugador principal | `jugador@ascend.com` | `Admin123!` |
+| Organizadores sembrados | `lucia.fernandez@ascend.test` … `federico.nunez@ascend.test` | `Admin123!` |
+| Jugadores sembrados (42 cuentas) | `mateo.rodriguez@ascend.test` … `mariana.zeballos@ascend.test` | `Admin123!` |
 
 El listado completo, con nombre y rol de cada cuenta, está en `Documentos_Juan/Usuarios_Sembrados.md`. Es una contraseña de demostración: cambiala antes de cualquier despliegue real. Los correos usan el dominio reservado `.test` y no envían mensajes reales.
 

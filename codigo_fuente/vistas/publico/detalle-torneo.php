@@ -347,48 +347,71 @@
                </section>
                   <?php endif; ?>
 
-                  <section class="td-comentarios">
-                     <h2>Comentarios</h2>
+                  <section class="td-comentarios" id="comentarios">
+                     <h2>Comentarios <span class="contador-comentarios">(<?php echo (int) ($totalComentarios ?? 0); ?>)</span></h2>
 
+                     <?php
+                     $comentariosVisibles = $comentarios ?? [];
+                     $paginaComentarios = $paginaComentarios ?? 1;
+                     ?>
+                     <?php if (!$comentariosVisibles): ?>
+                     <p class="sin-comentarios">Todavía no hay comentarios. Sé el primero en dejar tu opinión sobre este torneo.</p>
+                     <?php else: ?>
                      <ul class="lista-comentarios">
+                        <?php foreach ($comentariosVisibles as $comentario): ?>
+                        <?php
+                        $autorComentario = trim((string) ($comentario['nombre_usuario'] ?? ''));
+                        if ($autorComentario === '') {
+                           $autorComentario = trim((string) ($comentario['nombre_autor'] ?? '')) ?: 'Usuario';
+                        }
+                        $fotoAutor = trim((string) ($comentario['foto_perfil_url'] ?? ''));
+                        $fotoAutorUrl = preg_match('#^https?://#i', $fotoAutor)
+                           ? $fotoAutor
+                           : URL_BASE . ltrim($fotoAutor !== '' ? $fotoAutor : 'img/avatars/a1.png', '/');
+                        $fechaComentario = strtotime((string) ($comentario['fecha_hora'] ?? ''));
+                        ?>
                         <li>
                            <article class="caja-comentario">
-                              <div class="comentario-avatar"></div>
+                              <div class="comentario-avatar">
+                                 <img src="<?php echo htmlspecialchars($fotoAutorUrl, ENT_QUOTES, 'UTF-8'); ?>"
+                                      alt="Foto de <?php echo htmlspecialchars($autorComentario, ENT_QUOTES, 'UTF-8'); ?>"
+                                      loading="lazy">
+                              </div>
                               <div>
-                                 <h3>Usuario <span>29/09/2026</span></h3>
-                                 <p>Comentario hecho por el usuario sobre el torneo.</p>
-                                 <button>Responder</button>
+                                 <h3><?php echo htmlspecialchars($autorComentario, ENT_QUOTES, 'UTF-8'); ?>
+                                    <span><?php echo htmlspecialchars($fechaComentario ? date('d/m/Y H:i', $fechaComentario) : '', ENT_QUOTES, 'UTF-8'); ?></span></h3>
+                                 <p><?php echo nl2br(htmlspecialchars((string) $comentario['comentario'], ENT_QUOTES, 'UTF-8')); ?></p>
                               </div>
                            </article>
                         </li>
-
-                        <li>
-                           <article class="caja-comentario">
-                              <div class="comentario-avatar"></div>
-                              <div>
-                                 <h3>Usuario <span>29/09/2026</span></h3>
-                                 <p>Consulta sobre horarios, equipos o inscripción.</p>
-                                 <button>Responder</button>
-                              </div>
-                           </article>
-                        </li>
+                        <?php endforeach; ?>
                      </ul>
+                     <?php endif; ?>
 
-                     <a class="load-more" href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Cargar más</a>
+                     <?php if (!empty($hayMasComentarios)): ?>
+                     <a class="load-more" href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $torneo['id']; ?>&pagina=<?php echo (int) $paginaComentarios + 1; ?>#comentarios">Cargar más comentarios</a>
+                     <?php endif; ?>
                   </section>
 
-                  <section class="td-formulario-comentarios">
+                  <section class="td-formulario-comentarios" id="dejar-comentario">
                      <h2>Dejar un comentario</h2>
 
-                     <div class="formulario-fila">
-                        <input type="text" placeholder="Nombre">
-                        <input type="email" placeholder="Email">
-                     </div>
+                     <?php if (!empty($_SESSION['admin_antes_suplantar'])): ?>
+                     <p class="sin-comentarios">Estás usando "Ver como". Volvé a tu sesión de administrador para comentar.</p>
+                     <?php elseif (!empty($_SESSION['usuario_id'])): ?>
+                     <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=torneo&a=comentar" class="formulario-comentario">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="torneo_id" value="<?php echo (int) $torneo['id']; ?>">
 
-                     <textarea placeholder="Escribe tu comentario aquí..."></textarea>
+                        <p class="comentario-como">Vas a comentar como <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario', ENT_QUOTES, 'UTF-8'); ?></strong>.</p>
 
-                     <button
-                        onclick="alert('Tu comentario ha sido enviado para revisión (Simulación)')">Comentar</button>
+                        <textarea name="comentario" maxlength="800" minlength="5" required placeholder="Escribe tu comentario aquí..."></textarea>
+
+                        <button type="submit">Comentar</button>
+                     </form>
+                     <?php else: ?>
+                     <p class="sin-comentarios">Para comentar necesitás <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=mostrarLogin">iniciar sesión</a>.</p>
+                     <?php endif; ?>
                   </section>
 
                </div>

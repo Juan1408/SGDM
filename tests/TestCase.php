@@ -16,6 +16,7 @@ abstract class TestCase extends BaseTestCase {
 
         //Vaciamos las tablas clave para tener un entorno limpio en cada test
         $this->bd->query("SET FOREIGN_KEY_CHECKS = 0;");
+        $this->bd->query("TRUNCATE TABLE torneo_comentarios");
         $this->bd->query("TRUNCATE TABLE torneos");
         $this->bd->query("TRUNCATE TABLE juegos");
         // Limpiar las tablas puente: al truncar juegos con las FK desactivadas

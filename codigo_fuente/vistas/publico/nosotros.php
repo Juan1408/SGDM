@@ -244,8 +244,8 @@
                   <ul class="regla-lista">
                      <li>Los comentarios y opiniones publicados en la plataforma deben
                         mantener un trato respetuoso hacia otros usuarios.</li>
-                     <li>Los comentarios en un torneo quedan sujetos a moderación antes de
-                        mostrarse públicamente.</li>
+                     <li>Los comentarios en un torneo se publican de inmediato y pueden ser
+                        moderados u ocultados si incumplen estas reglas.</li>
                      <li>Cualquier usuario puede dejar una opinión y calificación sobre un
                         Organizador tras participar en uno de sus torneos.</li>
                   </ul>

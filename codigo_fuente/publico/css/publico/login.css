@@ -155,6 +155,17 @@ body {
    padding-right: 45px;
 }
 
+/* Oculta el ícono nativo del navegador (Edge/Windows renderiza un ojo negro
+   mediante ::-ms-reveal) para evitar que se duplique junto al botón blanco. */
+.password-group input::-ms-reveal,
+.password-group input::-ms-clear,
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+   display: none;
+   width: 0;
+   height: 0;
+}
+
 .password-group button {
    position: absolute;
    right: 15px;
@@ -163,7 +174,7 @@ body {
    background: none;
    border: none;
    padding: 0;
-   color: #9a9ab5;
+   color: #ffffff;
    cursor: pointer;
    font-size: inherit;
 }

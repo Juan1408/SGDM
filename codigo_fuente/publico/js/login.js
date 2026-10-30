@@ -32,11 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
    botonesMostrarContrasena.forEach(boton => {
       boton.addEventListener('click', function () {
-         const campoContrasena = this.closest('.password-group').querySelector('input');
+         const grupo = this.closest('.password-group');
+         const campoContrasena = grupo ? grupo.querySelector('input') : null;
          
          if (campoContrasena) {
             const visible = campoContrasena.type === 'text';
             campoContrasena.type = visible ? 'password' : 'text';
+            this.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
+            this.setAttribute('aria-pressed', visible ? 'false' : 'true');
             
             const icono = this.querySelector('i');
             if (icono) {

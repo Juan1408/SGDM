@@ -83,7 +83,7 @@ $requisitosContrasena = \App\Modelos\PoliticaContrasena::describirRequisitos($po
                    minlength="<?php echo $longitudMinima; ?>" placeholder=" ">
             <label for="registro-password">Contraseña (Mínimo <?php echo $longitudMinima; ?> caracteres)</label>
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
-              <i class="fa-regular fa-eye-slash"></i>
+              <i class="fa-regular fa-eye-slash" aria-hidden="true"></i>
             </button>
           </div>
 
@@ -98,7 +98,7 @@ $requisitosContrasena = \App\Modelos\PoliticaContrasena::describirRequisitos($po
                    minlength="<?php echo $longitudMinima; ?>" placeholder=" ">
             <label for="registro-password-confirmar">Confirmar contraseña</label>
             <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
-              <i class="fa-regular fa-eye-slash"></i>
+              <i class="fa-regular fa-eye-slash" aria-hidden="true"></i>
             </button>
           </div>
 

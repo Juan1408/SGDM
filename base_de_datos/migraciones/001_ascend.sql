@@ -96,6 +96,10 @@ DROP TABLE IF EXISTS tokens_recuperacion;
 
 DROP TABLE IF EXISTS tokens_verificacion_email;
 
+DROP TABLE IF EXISTS aceptaciones_legales;
+
+DROP TABLE IF EXISTS intentos_login;
+
 DROP TABLE IF EXISTS errores_sistema;
 
 DROP TABLE IF EXISTS usuarios;

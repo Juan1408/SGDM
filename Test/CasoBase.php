@@ -28,6 +28,7 @@ abstract class CasoBase extends BaseTestCase {
             'torneo_posiciones',
             'torneo_suizo_parejas',
             'torneo_config',
+            'torneo_comentarios',
             'participantes_torneo',
             'torneos',
             // Equipos

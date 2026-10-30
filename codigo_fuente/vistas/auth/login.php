@@ -64,10 +64,10 @@
           <label for="login-email">Correo electrónico</label>
         </div>
         <div class="input-group password-group">
-          <input name="contrasena" type="password" id="login-password" required>
+          <input name="contrasena" type="password" id="login-password" required placeholder=" ">
           <label for="login-password">Contraseña</label>
           <button type="button" class="btn-mostrar-contrasena" aria-label="Mostrar contraseña">
-            <i class="fa-regular fa-eye-slash"></i>
+            <i class="fa-regular fa-eye-slash" aria-hidden="true"></i>
           </button>
         </div>
         <div class="forgot-password">

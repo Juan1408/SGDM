@@ -137,6 +137,76 @@ class Torneo {
         return $torneo ?: null;
     }
     
+    // ============================================================================
+    // COMENTARIOS PUBLICOS DEL TORNEO
+    // ============================================================================
+
+    /**
+     * Listado paginado de comentarios aprobados, del mas reciente al mas viejo.
+     * Se une con usuarios para mostrar el nombre y la foto vigentes del autor;
+     * si la cuenta se elimino (usuario_id NULL) se conserva el nombre original.
+     */
+    public function obtenerComentariosPublicos(int $torneoId, int $limite = 10, int $desplazamiento = 0): array {
+        $sql = "SELECT c.id, c.torneo_id, c.usuario_id, c.nombre_autor, c.comentario, c.fecha_hora,
+                       u.nombre_completo AS nombre_usuario, u.foto_perfil_url
+                FROM torneo_comentarios c
+                LEFT JOIN usuarios u ON u.id = c.usuario_id
+                WHERE c.torneo_id = :torneo_id AND c.aprobado = 1
+                ORDER BY c.fecha_hora DESC, c.id DESC
+                LIMIT :limite OFFSET :desplazamiento";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':torneo_id', $torneoId, PDO::PARAM_INT);
+        $stmt->bindValue(':limite', max(1, $limite), PDO::PARAM_INT);
+        $stmt->bindValue(':desplazamiento', max(0, $desplazamiento), PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Cantidad de comentarios visibles, para decidir si queda paginacion pendiente
+    public function contarComentariosPublicos(int $torneoId): int {
+        $stmt = $this->bd->prepare(
+            "SELECT COUNT(*) FROM torneo_comentarios WHERE torneo_id = :torneo_id AND aprobado = 1"
+        );
+        $stmt->execute([':torneo_id' => $torneoId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    //Guarda un comentario. El autor se toma de la sesion; aprobado define si se publica.
+    public function crearComentario(int $torneoId, ?int $usuarioId, string $nombreAutor, string $emailAutor, string $comentario, bool $aprobado = true): bool {
+        try {
+            $sql = "INSERT INTO torneo_comentarios
+                        (torneo_id, usuario_id, nombre_autor, email_autor, comentario, aprobado)
+                    VALUES (:torneo_id, :usuario_id, :nombre_autor, :email_autor, :comentario, :aprobado)";
+            $stmt = $this->bd->prepare($sql);
+            return $stmt->execute([
+                ':torneo_id' => $torneoId,
+                ':usuario_id' => $usuarioId,
+                ':nombre_autor' => $nombreAutor,
+                ':email_autor' => $emailAutor,
+                ':comentario' => $comentario,
+                ':aprobado' => $aprobado ? 1 : 0,
+            ]);
+        } catch (\Throwable $th) {
+            error_log("Error al guardar un comentario del torneo {$torneoId}: " . $th->getMessage());
+            return false;
+        }
+    }
+
+    //Cuenta los comentarios que el usuario dejo en el torneo dentro de la ventana indicada
+    public function contarComentariosRecientes(int $usuarioId, int $torneoId, int $segundos = 30): int {
+        $desde = date('Y-m-d H:i:s', time() - max(0, $segundos));
+        $stmt = $this->bd->prepare(
+            "SELECT COUNT(*) FROM torneo_comentarios
+             WHERE usuario_id = :usuario_id AND torneo_id = :torneo_id AND fecha_hora >= :desde"
+        );
+        $stmt->execute([
+            ':usuario_id' => $usuarioId,
+            ':torneo_id' => $torneoId,
+            ':desde' => $desde,
+        ]);
+        return (int) $stmt->fetchColumn();
+    }
+
     //Agenda publica del torneo: actividades del cronograma + partidos con fecha programada
     public function obtenerAgendaPublica(int $torneoId): array {
         $sql = "SELECT fecha, hora, tipo, titulo, descripcion, estado, res_local, res_visitante FROM (

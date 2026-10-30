@@ -76,8 +76,87 @@ class TorneoControlador {
         $posiciones = in_array($torneo['formato'], ['liga', 'suizo'], true)
             ? $this->modeloTorneo->obtenerPosicionesPublicas($torneoId)
             : [];
-        
+
+        //Comentarios: el listado es acumulativo (pagina 2 muestra los 20 primeros)
+        $paginaComentarios = max(1, (int) ($_GET['pagina'] ?? 1));
+        $comentariosPorPagina = 10;
+        $totalComentarios = $this->modeloTorneo->contarComentariosPublicos($torneoId);
+        $comentarios = $this->modeloTorneo->obtenerComentariosPublicos(
+            $torneoId,
+            $comentariosPorPagina * $paginaComentarios
+        );
+        $hayMasComentarios = $totalComentarios > count($comentarios);
+
         require_once __DIR__ . '/../vistas/publico/detalle-torneo.php';
+    }
+
+    //Accion para publicar un comentario en un torneo. Exige sesion iniciada.
+    public function comentar(){
+        $torneoId = (int) ($_POST['torneo_id'] ?? 0);
+        $destino = $torneoId > 0
+            ? URL_BASE . 'index.php?c=torneo&a=detalle&id=' . $torneoId . '#comentarios'
+            : URL_BASE . 'index.php?c=torneo&a=catalogoPublico';
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        if (!Sesion::estaLogueado()) {
+            $_SESSION['mensaje_error'] = 'Necesitás iniciar sesión para comentar.';
+            header('Location: ' . URL_BASE . 'index.php?c=auth&a=mostrarLogin');
+            exit;
+        }
+
+        //En "Ver como" la sesion es la del usuario suplantado: no se publica en su nombre
+        if (!empty($_SESSION['admin_antes_suplantar'])) {
+            $_SESSION['mensaje_error'] = 'No podés comentar mientras usás "Ver como".';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $torneo = $torneoId > 0 ? $this->modeloTorneo->obtenerTorneoPublico($torneoId) : null;
+        if ($torneo === null) {
+            $_SESSION['mensaje_error'] = 'El torneo ya no está disponible para comentarios.';
+            header('Location: ' . URL_BASE . 'index.php?c=torneo&a=catalogoPublico');
+            exit;
+        }
+
+        $texto = trim((string) ($_POST['comentario'] ?? ''));
+        $largo = function_exists('mb_strlen') ? mb_strlen($texto, 'UTF-8') : strlen($texto);
+
+        if ($largo < 5) {
+            $_SESSION['mensaje_error'] = 'Escribí un comentario de al menos 5 caracteres.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        if ($largo > 800) {
+            $_SESSION['mensaje_error'] = 'El comentario no puede superar los 800 caracteres.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        $usuarioId = (int) $_SESSION['usuario_id'];
+        if ($this->modeloTorneo->contarComentariosRecientes($usuarioId, $torneoId, 30) > 0) {
+            $_SESSION['mensaje_error'] = 'Esperá unos segundos antes de volver a comentar en este torneo.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        $nombre = trim((string) ($_SESSION['usuario_nombre'] ?? ''));
+        $email = trim((string) ($_SESSION['email'] ?? ''));
+
+        if ($this->modeloTorneo->crearComentario($torneoId, $usuarioId, $nombre !== '' ? $nombre : 'Usuario', $email, $texto, true)) {
+            $_SESSION['mensaje_exito'] = 'Tu comentario se publicó.';
+        } else {
+            $_SESSION['mensaje_error'] = 'No se pudo publicar el comentario. Intentá nuevamente.';
+        }
+
+        header('Location: ' . $destino);
+        exit;
     }
 
     //Accion para que un Jugador (o uno de sus equipos, si es capitan) se inscriba

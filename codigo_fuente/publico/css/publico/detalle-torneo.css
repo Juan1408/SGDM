@@ -464,6 +464,42 @@ TABS RESPONSIVE (min-width: 700px)
    border-bottom: 1px solid var(--color-secundario);
 }
 
+.comentario-avatar {
+   flex: 0 0 44px;
+   width: 44px;
+   height: 44px;
+   border-radius: 50%;
+   overflow: hidden;
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(var(--color-azul-rgb), 0.35);
+}
+
+.comentario-avatar img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.sin-comentarios {
+   color: var(--texto-secundario);
+   padding: 8px 0;
+}
+
+.sin-comentarios a {
+   color: var(--color-primario);
+   font-weight: 700;
+}
+
+.comentario-como {
+   color: var(--texto-secundario);
+   margin-bottom: 12px;
+}
+
+.comentario-como strong {
+   color: var(--texto-principal);
+}
+
 .caja-comentario h3 span {
    display: block;
    font-size: 12px;
