@@ -1,0 +1,1060 @@
+/* ==========================================================================
+   ESTILOS GENERALES Y CONTENEDOR
+   Mobile first: la base es el menú hamburguesa /
+   panel lateral. Desde 881px se muestra el menú
+   horizontal completo (igual que antes).
+   ========================================================================== */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.navbar {
+   width: 100%;
+   height: 80px;
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 999;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   background: color-mix(in srgb, var(--fondo-principal) 85%, transparent);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.06);
+   backdrop-filter: blur(14px);
+}
+
+.logo-navbar {
+   height: 50px;
+   width: auto;
+   object-fit: contain;
+}
+
+.navbar-contenedor {
+   width: 100%;
+   max-width: 1600px;
+   min-width: 0;
+   padding: 0 1.25rem;
+
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+/* --- LOGO --- */
+.logo-contenedor {
+   display: flex;
+   align-items: center;
+   gap: 9px;
+   min-width: 0;
+   color: var(--texto-principal);
+   flex-shrink: 0;
+}
+
+.logo-contenedor i {
+   color: var(--color-secundario-texto);
+   filter: drop-shadow(0 0 8px rgba(0, 255, 238, 0.6));
+}
+
+.logo-contenedor h1 {
+   font-size: 18px;
+   font-weight: 800;
+   letter-spacing: .5px;
+}
+
+/* --- BOTÓN HAMBURGUESA (visible por defecto en mobile) --- */
+.navbar-toggle {
+   display: block;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 5px;
+   z-index: 1010;
+   flex-shrink: 0;
+}
+
+.bar {
+   display: block;
+   width: 25px;
+   height: 3px;
+   margin: 5px auto;
+   background-color: #fff;
+   transition: all 0.3s ease-in-out;
+   border-radius: 2px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
+}
+
+/* Transformación de Hamburguesa a "X" */
+.navbar-toggle.active .bar:nth-child(2) {
+   opacity: 0;
+}
+
+.navbar-toggle.active .bar:nth-child(1) {
+   transform: translateY(8px) rotate(45deg);
+   background-color: #00FFEE;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+.navbar-toggle.active .bar:nth-child(3) {
+   transform: translateY(-8px) rotate(-45deg);
+   background-color: #00FFEE;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+/* --- MENÚ MÓVIL (pantalla completa) ---
+   Se anima con opacidad en vez de deslizar. El overlay oscuro ya no hace falta:
+   el menú ocupa todo y no hay nada que oscurecer. */
+.navbar-menu {
+   position: fixed;
+   top: 0;
+   left: 0;
+
+   width: 100%;
+   height: 100vh;
+   height: 100dvh;
+
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 0;
+
+   padding: 100px 1.75rem 40px;
+   background:
+      radial-gradient(circle at 90% 0%, rgba(var(--color-violeta-rgb), 0.35), transparent 55%),
+      var(--fondo-principal);
+   overflow-y: auto;
+
+   list-style: none;
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(-14px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+   z-index: 1005;
+}
+
+.navbar-menu.active {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
+}
+
+.navbar-menu li {
+   width: 100%;
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.08);
+}
+
+.navbar-menu li a,
+.boton-desplegable {
+   display: block;
+   width: 100%;
+   text-align: left;
+
+   text-decoration: none;
+   color: var(--texto-principal);
+   font-size: 22px;
+   font-weight: 600;
+   padding: 16px 0;
+   transition: color 0.25s ease;
+}
+
+.navbar-menu .auth-links a {
+   width: auto;
+}
+
+.navbar-menu li a:hover {
+   color: var(--color-violeta);
+}
+
+/* --- desplegable (TORNEOS) en mobile: acordeón dentro del panel --- */
+.desplegable {
+   position: relative;
+   width: 100%;
+}
+
+.boton-desplegable {
+   background: transparent;
+   border: none;
+   font-family: inherit;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   gap: 6px;
+}
+
+.boton-desplegable:hover {
+   color: var(--color-violeta);
+}
+
+.contenido-desplegable {
+   position: static;
+   width: 100%;
+   transform: none;
+
+   display: none;
+   margin-top: 5px;
+   padding: 6px;
+
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: none;
+   border-left: 2px solid var(--color-violeta);
+   border-radius: 0;
+   box-shadow: none;
+}
+
+.contenido-desplegable::before {
+   content: "";
+   position: absolute;
+   top: -14px;
+   left: 0;
+   width: 100%;
+   height: 14px;
+}
+
+.contenido-desplegable a {
+   display: block;
+   padding: 10px 12px;
+   color: var(--texto-principal);
+   text-decoration: none;
+   border-radius: 10px;
+   font-size: 17px;
+   text-align: left;
+}
+
+.contenido-desplegable a:hover {
+   background: rgba(var(--color-violeta-rgb), 0.18);
+   color: var(--color-violeta);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.desplegable.open .contenido-desplegable {
+   display: block;
+}
+
+.desplegable.open .boton-desplegable i {
+   transform: rotate(180deg);
+}
+
+/* --- BOTONES AUTH (dentro del panel en mobile) --- */
+.auth-links {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-wrap: wrap;
+   gap: 15px;
+   margin-top: 15px;
+   padding-top: 15px;
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.1);
+}
+
+.boton-login {
+   font-size: 14px;
+   font-weight: 500;
+   color: var(--color-texto);
+   text-decoration: none;
+   padding: 8px 16px;
+   border-radius: 6px;
+   transition: all 0.3s ease;
+   border: 1px solid transparent;
+}
+.boton-login:hover {
+   color: var(--color-secundario-texto);
+   background: rgba(0, 255, 238, 0.05);
+   border-color: rgba(0, 255, 238, 0.2);
+}
+
+.boton-registro {
+   font-size: 14px;
+   font-weight: 600;
+   border: 1px solid rgba(245, 17, 203, 0.4);
+   background: rgba(245, 17, 203, 0.05);
+   border-radius: 6px;
+   padding: 8px 16px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
+}
+
+.boton-registro:hover {
+   background: #F511CB;
+   box-shadow: 0 0 15px rgba(245, 17, 203, 0.5);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+
+/* ==========================================================================
+   ESCRITORIO (min-width: 881px)
+   Menú horizontal completo, sin panel lateral.
+   ========================================================================== */
+
+@media (min-width: 881px) {
+
+   .navbar-contenedor {
+      padding: 0 2rem;
+   }
+
+   .navbar-toggle {
+      display: none;
+   }
+
+   .navbar-menu {
+      position: static;
+      width: auto;
+      height: auto;
+      max-width: none;
+
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+
+      padding: 0;
+      background: transparent;
+      backdrop-filter: none;
+      border-left: none;
+      box-shadow: none;
+      overflow: visible;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: none;
+   }
+
+   .navbar-menu li {
+      width: auto;
+      border-bottom: none;
+   }
+
+   .navbar-menu li a,
+   .boton-desplegable {
+      display: flex;
+      align-items: center;
+      width: auto;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 6px 12px;
+   }
+
+   .contenido-desplegable {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      display: none;
+      width: auto;
+      min-width: 220px;
+      margin-top: 0;
+      padding: 12px;
+
+      background: var(--fondo-superficie);
+      border: 1px solid rgba(245, 17, 203, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(245, 17, 203, 0.25);
+   }
+
+   .desplegable:hover .contenido-desplegable,
+   .desplegable.open .contenido-desplegable {
+      display: block;
+   }
+
+      .auth-links {
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 15px;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+   }
+}
+
+
+
+/* ===== Utilidad genérica ===== */
+.oculto {
+   display: none !important;
+}
+
+/* ===== NAVBAR: variante jugador logueado ===== */
+.auth-links--jugador {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+}
+
+.notificaciones-jugador {
+   position: relative;
+}
+
+.boton-campana {
+   position: relative;
+   background: transparent;
+   border: none;
+   color: var(--texto-principal);
+   font-size: 1.1rem;
+   cursor: pointer;
+   padding: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.badge-notificaciones {
+   position: absolute;
+   top: 2px;
+   right: 2px;
+   background: var(--color-primario, #F511CB);
+   color: #fff;
+   font-size: 10px;
+   font-weight: 700;
+   min-width: 16px;
+   height: 16px;
+   border-radius: 999px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 0 3px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+.panel-notificaciones {
+   display: none;
+   position: absolute;
+   top: calc(100% + 12px);
+   right: 0;
+   width: 260px;
+   background: var(--fondo-tarjeta);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
+   border-radius: 14px;
+   padding: 16px;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+   z-index: 1000;
+}
+/******/
+.notificaciones-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding-bottom: 10px;
+   margin-bottom: 8px;
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.1);
+}
+
+.notificaciones-header h4 {
+   font-size: 0.85rem;
+   font-weight: 700;
+   margin: 0;
+}
+
+.notificaciones-header button {
+   border: none;
+   background: transparent;
+   color: var(--color-secundario-texto);
+   font-size: 0.7rem;
+   font-family: inherit;
+   cursor: pointer;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.notificaciones-header button:hover {
+   text-decoration: underline;
+}
+
+.notificaciones-lista {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+   max-height: 320px;
+   overflow-y: auto;
+}
+
+.notificacion-item {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   padding: 10px 8px;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: 0.15s ease;
+}
+
+.notificacion-item:hover {
+   background: rgba(var(--contraste-rgb), 0.05);
+}
+
+.notificacion-item.no-leida {
+   background: rgba(var(--color-secundario-rgb), 0.06);
+}
+
+.notificacion-icono {
+   width: 34px;
+   height: 34px;
+   flex-shrink: 0;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 13px;
+   background: rgba(var(--color-primario-rgb), 0.15);
+   color: var(--color-primario);
+}
+
+.notificacion-item[data-tipo="torneo"] .notificacion-icono {
+   background: rgba(var(--color-secundario-rgb), 0.15);
+   color: var(--color-secundario-texto);
+}
+
+.notificacion-item[data-tipo="resultado"] .notificacion-icono {
+   background: rgba(255, 208, 0, 0.15);
+   color: #ffd000;
+}
+
+.notificacion-contenido {
+   flex: 1;
+   min-width: 0;
+}
+
+.notificacion-titulo {
+   font-size: 0.8rem;
+   font-weight: 700;
+   display: block;
+   margin-bottom: 2px;
+}
+
+.notificacion-mensaje {
+   font-size: 0.75rem;
+   color: var(--texto-secundario);
+   line-height: 1.4;
+}
+
+.notificacion-punto {
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   background: var(--color-secundario);
+   flex-shrink: 0;
+   margin-top: 6px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+/*******/
+
+.panel-notificaciones.open {
+   display: block;
+}
+
+.notificaciones-vacio {
+   color: var(--texto-secundario);
+   font-size: 13px;
+   text-align: center;
+   margin: 0;
+}
+
+.perfil-jugador-menu {
+   position: relative;
+}
+
+.boton-mi-perfil {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   background: rgba(var(--contraste-rgb), 0.06);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
+   color: var(--texto-principal);
+   padding: 8px 14px;
+   border-radius: 999px;
+   cursor: pointer;
+   font-family: inherit;
+   font-size: 14px;
+}
+
+/* Foto del usuario en el boton "Mi perfil" del navbar de escritorio */
+.boton-mi-perfil .foto-boton-perfil {
+   width: 26px;
+   height: 26px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+   flex-shrink: 0;
+}
+
+.boton-mi-perfil i:last-child {
+   font-size: 10px;
+   transition: transform 0.25s ease;
+}
+
+.boton-mi-perfil[aria-expanded="true"] i:last-child {
+   transform: rotate(180deg);
+}
+
+.dropdown-mi-perfil {
+   display: none;
+   position: absolute;
+   top: calc(100% + 12px);
+   right: 0;
+   min-width: 200px;
+   background: var(--fondo-tarjeta);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
+   border-radius: 14px;
+   padding: 8px;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+   z-index: 1000;
+}
+
+.dropdown-mi-perfil.open {
+   display: block;
+}
+
+.dropdown-mi-perfil a,
+.dropdown-mi-perfil button {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   width: 100%;
+   background: transparent;
+   border: none;
+   color: var(--texto-principal);
+   text-decoration: none;
+   font-family: inherit;
+   font-size: 14px;
+   padding: 10px 12px;
+   border-radius: 8px;
+   cursor: pointer;
+   text-align: left;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.dropdown-mi-perfil a:hover,
+.dropdown-mi-perfil button:hover {
+   background: rgba(var(--contraste-rgb), 0.08);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
+}
+
+.dropdown-mi-perfil button {
+   color: #ff6b6b;
+}
+
+/* ===== Sidebar flotante (jugador logueado) ===== */
+
+.sidebar-jugador-flotante {
+   position: fixed;
+   left: 0;
+   top: 80px;       /* debajo del navbar fijo */
+   bottom: 0;
+   width: 88px;
+   padding: 24px 0;
+   z-index: 900;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+
+   /* si el riel queda corto (footer a la vista), los iconos se deslizan adentro */
+   overflow-y: auto;
+   overflow-x: hidden;
+   scrollbar-width: none;
+
+   background: color-mix(in srgb, var(--fondo-superficie) 92%, transparent);
+   border-right: 1px solid rgba(var(--contraste-rgb), 0.08);
+   backdrop-filter: blur(10px);
+}
+
+.sidebar-jugador-flotante::-webkit-scrollbar {
+   width: 0;
+}
+
+.sidebar-jugador-flotante nav {
+   flex-shrink: 0;
+}
+
+
+/* Lista principal */
+
+.sidebar-flotante-lista {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+
+
+/* Cada elemento */
+
+.sidebar-flotante-lista li {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+
+/* Botones/enlaces */
+
+.sidebar-flotante-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 4px;
+
+   width: 56px;
+   padding: 10px 4px;
+
+   border-radius: 14px;
+
+   color: var(--texto-secundario);
+   text-decoration: none;
+
+   font-size: 10px;
+   text-align: center;
+
+   transition: 0.2s ease;
+}
+
+
+.sidebar-flotante-item i {
+   font-size: 18px;
+}
+
+
+.sidebar-flotante-item:hover {
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-principal);
+}
+
+.sidebar-flotante-item.activo,
+.sidebar-flotante-submenu a.activo {
+   background: rgba(0, 255, 238, 0.12);
+   color: var(--color-secundario-texto);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.sidebar-flotante-desplegable.cerrado .sidebar-flotante-submenu {
+   display: none;
+}
+
+.sidebar-flotante-desplegable.cerrado .sidebar-flotante-toggle i {
+   transform: rotate(180deg);
+}
+
+/* ===== EQUIPOS (link + botón toggle separados,       ===== */
+/* ===== un <a> no puede ir anidado dentro de <button>) ===== */
+
+.sidebar-flotante-desplegable {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.sidebar-flotante-toggle {
+   width: 28px;
+   height: 18px;
+   margin-top: -4px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   border: none;
+   background: transparent;
+   color: #8a8a9e;
+   font-size: 10px;
+   cursor: pointer;
+
+   transition: 0.2s ease;
+}
+
+.sidebar-flotante-toggle:hover {
+   color: var(--texto-principal);
+}
+
+
+/* Submenú */
+
+.sidebar-flotante-submenu {
+   list-style: none;
+   margin: 4px 0 0;
+   padding: 0;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+
+.sidebar-flotante-submenu li {
+   list-style: none;
+}
+
+
+.sidebar-flotante-submenu a {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   width: 56px;
+   padding: 7px 3px;
+
+   color: var(--texto-secundario);
+   text-decoration: none;
+
+   font-size: 9px;
+   text-align: center;
+
+   border-radius: 10px;
+}
+
+
+.sidebar-flotante-submenu a i {
+   font-size: 13px;
+}
+
+
+.sidebar-flotante-submenu a:hover {
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--color-secundario-texto);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+
+/* En mobile se mantiene oculto,
+   igual que antes */
+
+@media (max-width: 880px) {
+
+   .sidebar-jugador-flotante {
+      display: none;
+   }
+
+}
+/* ==========================================================================
+   PANEL DE PERFIL MÓVIL (jugador y organizador)
+   Pantalla completa, mismo estilo que el menú del navbar. En escritorio
+   se oculta desde el propio componente del navbar.
+   ========================================================================== */
+.panel-mi-perfil-mobile {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100vh;
+   height: 100dvh;
+
+   display: flex;
+   flex-direction: column;
+   gap: 0;
+
+   padding: 90px 1.75rem 40px;
+   background:
+      radial-gradient(circle at 10% 0%, rgba(var(--color-violeta-rgb), 0.35), transparent 55%),
+      var(--fondo-principal);
+   overflow-y: auto;
+
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(-14px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+   z-index: 1005;
+}
+
+.panel-mi-perfil-mobile.active {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
+}
+
+/* Botón de cerrar: dos barras en X, igual que el hamburguesa abierto */
+.panel-mi-perfil-mobile .panel-cerrar {
+   position: absolute;
+   top: 28px;
+   right: 1.25rem;
+   width: 40px;
+   height: 40px;
+   padding: 0;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+}
+
+.panel-cerrar .bar {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   margin: 0;
+   background-color: #00FFEE;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+.panel-cerrar .bar:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+.panel-cerrar .bar:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.panel-mi-perfil-mobile .encabezado-perfil {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding-bottom: 20px;
+   margin-bottom: 8px;
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.12);
+   color: var(--texto-principal);
+   font-size: 20px;
+}
+
+.panel-mi-perfil-mobile .encabezado-perfil i {
+   font-size: 64px;
+   color: var(--color-secundario-texto);
+}
+
+.panel-mi-perfil-mobile .encabezado-foto {
+   width: 64px;
+   height: 64px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+   flex-shrink: 0;
+}
+
+.panel-mi-perfil-mobile .etiqueta-seccion {
+   font-size: 12px;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: #8a8aa3;
+   margin: 22px 0 6px;
+}
+
+.panel-mi-perfil-mobile a,
+.panel-mi-perfil-mobile button.cerrar-sesion {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   width: 100%;
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-principal);
+   text-decoration: none;
+   font-family: inherit;
+   font-size: 20px;
+   font-weight: 600;
+   padding: 14px 0;
+   cursor: pointer;
+   text-align: left;
+   transition: color 0.25s ease;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.panel-mi-perfil-mobile a:hover {
+   color: var(--color-violeta);
+}
+
+.panel-mi-perfil-mobile button.cerrar-sesion {
+   color: #ff6b6b;
+   margin-top: 14px;
+   border-bottom: none;
+}
+
+.panel-mi-perfil-mobile i {
+   width: 24px;
+   text-align: center;
+}
+
+/* Foto del usuario en el botón de avatar del navbar móvil */
+.avatar-mobile-toggle img {
+   width: 38px;
+   height: 38px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+}
+
+/* ===== Botón "Volver arriba" ===== */
+
+#boton-volver-arriba {
+   position: fixed;
+   right: 20px;
+   bottom: 20px;
+   z-index: 950;
+
+   width: 48px;
+   height: 48px;
+   border: none;
+   border-radius: 50%;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   background: var(--color-primario);
+   color: snow;
+   font-size: 18px;
+   cursor: pointer;
+
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(10px);
+   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+#boton-volver-arriba.visible {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0);
+}
+
+#boton-volver-arriba:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 10px 26px rgba(var(--color-primario-rgb), 0.5);
+}
+
+
+/* ===== Mensajes de confirmacion / error: centrados en pantalla ===== */
+
+.mensaje-exito,
+.mensaje-error {
+   position: fixed;
+   top: 96px;
+   left: 50%;
+   transform: translateX(-50%);
+   z-index: 1200;
+
+   width: max-content;
+   max-width: min(92vw, 520px);
+   padding: 14px 22px;
+   border-radius: 14px;
+
+   text-align: center;
+   font-size: 0.95rem;
+   font-weight: 600;
+   line-height: 1.4;
+   cursor: pointer;
+
+   color: #ffffff;
+   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+   animation: mensaje-entrar 0.35s ease-out;
+   transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.mensaje-exito {
+   background: #0f5f45;
+   border: 1px solid #34d399;
+}
+
+.mensaje-error {
+   background: #7f1d1d;
+   border: 1px solid #f87171;
+}
+
+.mensaje-saliendo {
+   opacity: 0;
+   transform: translateX(-50%) translateY(-12px);
+}
+
+@keyframes mensaje-entrar {
+   from { opacity: 0; transform: translateX(-50%) translateY(-16px); }
+   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

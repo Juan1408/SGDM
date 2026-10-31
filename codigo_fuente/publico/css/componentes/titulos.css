@@ -1,0 +1,37 @@
+/* =========================================================
+   TÍTULO CON FONDO DEGRADADO
+   Usado en jugador (perfil, equipos, guardados), perfil
+   público del organizador y detalle de torneo.
+   Mobile first: crece a 650px y a 900px.
+========================================================= */
+
+.seccion-gradiente-titulo {
+   box-sizing: border-box;
+   width: 92%;
+   max-width: 900px; /* mismo ancho que el contenido de las páginas de perfil */
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 24px;
+   padding: 10px 20px;
+   font-size: 1rem;
+   font-weight: 700;
+   color: #fff;
+   text-align: center;
+   background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
+   overflow-wrap: break-word;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+@media (min-width: 650px) {
+   .seccion-gradiente-titulo {
+      font-size: 1.7rem;
+      padding: 10px 40px;
+   }
+}
+
+@media (min-width: 900px) {
+   .seccion-gradiente-titulo {
+      font-size: 2rem;
+      padding: 10px 60px;
+   }
+}

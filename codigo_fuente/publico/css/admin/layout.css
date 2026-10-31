@@ -1,0 +1,401 @@
+﻿/* =========================================
+   PERFIL Y MENÃš DESPLEGABLE (DROPDOWN)
+   ========================================= */
+.perfil-admin {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-fondo-principal);
+  border: 1px solid var(--color-borde);
+  padding: 8px 15px;
+  border-radius: var(--radio-borde);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-texto-principal);
+  transition: all 0.2s ease;
+}
+
+.dropdown-btn:hover {
+  background-color: var(--color-borde);
+}
+
+.avatar-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.dropdown-content {
+  display: none; /* Oculto por defecto */
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  background-color: var(--color-fondo-panel);
+  min-width: 200px;
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.dropdown-content.mostrar {
+  display: block;
+}
+
+.dropdown-content a { color: var(--color-texto-principal); padding: 12px 16px; text-decoration: none; display: block; transition: background-color 0.2s; }
+
+.dropdown-content a:hover { background-color: var(--color-hover-fila); }
+.dropdown-content a.enlace-destacado { color: var(--color-primario); font-weight: bold; border-top: 1px solid var(--color-borde); background-color: var(--color-fondo-principal); }
+.dropdown-content a.enlace-destacado:hover { background-color: var(--color-hover-fila); }
+.dropdown-content a.enlace-salir { color: var(--color-peligro); border-top: 1px solid var(--color-borde); }
+
+.dropdown-content a.enlace-salir:hover {
+  background-color: var(--bg-peligro-translucido);
+}
+
+/* =========================================
+   BARRA SUPERIOR (HEADER)
+   ========================================= */
+.cabecera-principal {
+  display: flex;
+  /* MOBILE DEFAULT: Centrado y minimalista */
+  justify-content: center; 
+  align-items: center;
+  padding: 10px;
+  background-color: var(--color-fondo-panel);
+  box-shadow: var(--sombra-suave);
+  z-index: 10;
+}
+
+.contenedor-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 8px;
+}
+
+.enlace-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  margin-right: 30px; 
+}
+
+.contenedor-logo img {
+  height: 30px;
+  width: auto;
+  transform: scale(1.8);
+  transform-origin: left center;
+  mix-blend-mode: multiply;
+}
+
+.logo-navbar {
+   height: 40px;
+   width: auto;
+   object-fit: contain;
+}
+
+/* BARRA MÃ“VIL (VISIBLE POR DEFECTO EN MOBILE FIRST) */
+.barra-movil {
+  display: block;
+  background-color: #ecf0f1;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  text-align: right;
+}
+
+.boton-menu-movil {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-primario);
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.boton-menu-movil:hover {
+  background-color: #bdc3c7;
+}
+
+.boton-salir {
+  background-color: var(--color-peligro);
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.boton-salir:hover {
+  background-color: #c0392b;
+}
+
+/* =========================================
+   ESTRUCTURA CENTRAL (MENÃš + CONTENIDO)
+   ========================================= */
+.cuerpo-admin {
+  display: flex;
+  flex: 1;
+  /* MOBILE DEFAULT: En columna (apilado) */
+  flex-direction: column;
+}
+
+.menu-lateral {
+  /* MOBILE DEFAULT: Oculto, ocupa 100% de ancho */
+  width: 100%;
+  display: none;
+  padding-top: 0;
+  background-color: #212529; /* Gris muy oscuro, casi negro, elegante para el menÃº */
+  color: #f8f9fa;
+  transition: transform 0.3s ease;
+}
+
+.menu-lateral.activo {
+  display: block;
+}
+
+.menu-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-enlace {
+  display: block;
+  color: #adb5bd;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.menu-enlace:hover {
+  background-color: #343a40;
+  color: #fff;
+  border-left: 3px solid var(--color-primario);
+}
+
+.menu-sublista {
+  list-style: none;
+  padding-left: 30px;
+  margin: 0;
+  font-size: 0.85rem;
+  background-color: #1a1d20; /* Ligeramente mÃ¡s oscuro que el fondo del sidebar para profundidad */
+}
+
+.area-contenido {
+  flex: 1;
+  /* MOBILE DEFAULT: Menos padding, esconder scroll X */
+  padding: 15px;
+  overflow-x: hidden;
+}
+
+/* =========================================
+   CABECERA DINÃMICA (MOBILE DEFAULTS)
+   ========================================= */
+.en-interna .titulo-cabecera,
+.en-interna .perfil-admin {
+  display: none;
+}
+
+.en-interna .contenedor-logo {
+  background-color: transparent;
+  padding: 0;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.en-inicio .cabecera-principal {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+}
+
+.en-inicio .contenedor-logo {
+  justify-content: center;
+}
+
+.en-inicio .perfil-admin {
+  display: block;
+  width: 100%;
+}
+
+.en-inicio .dropdown-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.perfil-movil-dashboard {
+  display: block;
+}
+
+/* =========================================
+   FOOTER (PIE DE PÃGINA)
+   ========================================= */
+.pie-pagina {
+  background-color: var(--color-fondo-panel);
+  color: var(--color-texto-secundario);
+  border-top: 1px solid var(--color-borde);
+  padding: 20px;
+  margin-top: auto;
+}
+
+/* MOBILE DEFAULTS para footer */
+.pie-contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.pie-texto p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.pie-enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pie-enlaces a {
+  color: #bdc3c7;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.pie-enlaces a:hover {
+  color: #3498db;
+}
+
+/* =========================================
+   DISEÃ‘O RESPONSIVO (ESCRITORIO - TABLET)
+   ========================================= */
+
+@media (min-width: 768px) {
+  
+  /* 1. Ocultar la barra del menÃº hamburguesa */
+  .barra-movil {
+    display: none;
+  }
+
+  /* 2. Cabecera: expandir logo e info a los lados */
+  .cabecera-principal {
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+
+  /* 3. Estructura central en filas (lado a lado) */
+  .cuerpo-admin {
+    flex-direction: row;
+  }
+
+  /* 4. Mostrar menÃº lateral fijo de 250px */
+  .menu-lateral {
+    display: block;
+    width: 250px;
+    padding-top: 20px;
+  }
+
+  /* 5. Restaurar Ã¡rea de contenido */
+  .area-contenido {
+    padding: 20px 30px;
+    overflow-x: visible;
+  }
+
+  /* Restaurar elementos ocultos dinÃ¡micos */
+  .en-interna .titulo-cabecera,
+  .en-interna .perfil-admin {
+    display: block; /* o flex/inline-block segÃºn corresponda */
+  }
+
+  .en-interna .contenedor-logo {
+    background-color: var(--color-fondo-principal);
+    padding: 5px 15px 5px 5px;
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+
+  .en-inicio .cabecera-principal {
+    flex-direction: row;
+    align-items: center;
+    gap: 0; /* reset gap */
+  }
+
+  .en-inicio .contenedor-logo {
+    justify-content: flex-start;
+  }
+
+  .en-inicio .perfil-admin {
+    width: auto;
+  }
+
+  .en-inicio .dropdown-btn {
+    width: auto;
+  }
+
+  .perfil-movil-dashboard {
+    display: none;
+  }
+
+  /* 6. Layouts de componentes mejorados para espacio amplio */
+  .contenedor-tarjetas {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .encabezado-seccion {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+  }
+
+  .pie-contenedor {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .pie-enlaces {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+
+/* Enlace para cerrar sesión en el menú lateral */
+.menu-enlace-salir { color: var(--color-peligro) !important; font-weight: bold; }
+.menu-enlace-salir:hover { color: var(--color-peligro-hover) !important; background-color: rgba(224, 93, 93, 0.1); }
+
+/* Responsive Perfil */
+@media (max-width: 768px) { .nombre-admin-pc { display: none !important; } .nombre-admin-movil { display: inline !important; } .etiqueta-rol { display: none; } }
+@media (min-width: 769px) { .nombre-admin-movil { display: none !important; } .etiqueta-rol { font-size: 0.8rem; color: var(--color-texto-secundario); font-weight: normal; margin-left: 5px; } }
+

@@ -1,0 +1,68 @@
+<?php
+/**
+ * ============================================================================
+ * ARCHIVO DE CONSTANTES GLOBALES: constantes.php
+ * ============================================================================
+ * Propósito: Define rutas del servidor, URLs base y constantes del sistema.
+ * Ubicación: codigo_fuente/configuracion/constantes.php
+ * ============================================================================
+ */
+
+// Nombre oficial de la aplicación
+if (!defined('APP_NOMBRE')) {
+    define('APP_NOMBRE', 'SGDM - ASCEND');
+}
+
+// URL Base del proyecto (Ajustar según la ruta local en XAMPP/WAMP o Docker)
+if (!defined('URL_BASE')) {
+    $envUrl = trim((string)getenv('APP_URL'));
+    if (!empty($envUrl)) {
+        $urlBase = $envUrl;
+    } else {
+        // Detección automática basada en la ruta real del front controller.
+        // Funciona igual si el docroot es /SGDM/codigo_fuente/publico (XAMPP)
+        // o si es la raíz del contenedor (Docker con DocumentRoot /publico).
+        $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/index.php');
+        $directorio = rtrim(str_replace('\\', '/', dirname($script)), '/');
+        $urlBase = $scheme . $host . ($directorio === '' ? '/' : $directorio . '/');
+    }
+    define('URL_BASE', rtrim($urlBase, '/') . '/');
+}
+
+// Rutas absolutas en el sistema de archivos del servidor
+if (!defined('RUTA_RAIZ')) {
+    define('RUTA_RAIZ', dirname(__DIR__) . '/');
+}
+if (!defined('RUTA_MODELOS')) {
+    define('RUTA_MODELOS', RUTA_RAIZ . 'modelos/');
+}
+if (!defined('RUTA_CONTROLADORES')) {
+    define('RUTA_CONTROLADORES', RUTA_RAIZ . 'controladores/');
+}
+if (!defined('RUTA_VISTAS')) {
+    define('RUTA_VISTAS', RUTA_RAIZ . 'vistas/');
+}
+if (!defined('RUTA_AYUDANTES')) {
+    define('RUTA_AYUDANTES', RUTA_RAIZ . 'ayudantes/');
+}
+if (!defined('RUTA_PUBLICO')) {
+    define('RUTA_PUBLICO', RUTA_RAIZ . 'publico/');
+}
+if (!defined('RUTA_SUBIDAS')) {
+    define('RUTA_SUBIDAS', RUTA_PUBLICO . 'img/subidas/');
+}
+
+// Zona horaria estándar para registros y auditoría
+date_default_timezone_set('America/Montevideo');
+
+// Versiones vigentes de los documentos legales.
+// Se usan en las vistas públicas y en el alta de cuenta para que el texto
+// mostrado y la constancia guardada no puedan desincronizarse.
+if (!defined('VERSION_TERMINOS')) {
+    define('VERSION_TERMINOS', '1.0');
+}
+if (!defined('VERSION_PRIVACIDAD')) {
+    define('VERSION_PRIVACIDAD', '1.0');
+}

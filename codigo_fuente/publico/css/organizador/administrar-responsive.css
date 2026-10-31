@@ -1,0 +1,204 @@
+/*
+=====================================================
+   ADMINISTRAR TORNEO - RESPONSIVE (mobile first)
+   Todos los @media de administrar-torneo.css y
+   administrar-secciones.css centralizados acá.
+
+   Mobile first: administrar-torneo.css y
+   administrar-secciones.css ya definen el layout
+   pensado para celular (columna, ancho completo).
+   Acá solo se agregan los ajustes para pantallas
+   más grandes (min-width).
+=====================================================
+*/
+
+/* -----------------------------------------------
+   De administrar-torneo.css (header, menú, información)
+------------------------------------------------ */
+
+/*
+=====================================================
+   TABLET (min-width: 600px)
+=====================================================
+*/
+
+@media (min-width: 700px) {
+
+   .torneo-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+   }
+
+   .torneo-menu {
+      flex-direction: row;
+      flex-wrap: wrap;
+   }
+
+   .torneo-menu-boton,
+   .torneo-menu-grupo > .torneo-menu-boton {
+      width: auto;
+      min-height: auto;
+   }
+
+   .torneo-menu-grupo {
+      width: auto;
+   }
+
+   .torneo-menu-submenu {
+      left: 0;
+      right: auto;
+      min-width: 220px;
+   }
+
+   .information-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+=====================================================
+*/
+
+@media (min-width: 900px) {
+
+   .information-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+/* -----------------------------------------------
+   De administrar-secciones.css (fixture, participantes,
+   resultados, posiciones, cronograma, solicitudes)
+------------------------------------------------ */
+
+/*
+=====================================================
+   MOBILE FIRST - overrides agregados sin tocar
+   ninguna regla de arriba. En mobile, los encabezados
+   con degradé pasan a columna; desde 700px vuelven a
+   ser la fila original (como estaba).
+=====================================================
+*/
+
+.fixture-summary-panel,
+.participantes-encabezado,
+.resultados-encabezado,
+.posiciones-encabezado,
+.cronograma-encabezado,
+.solicitudes-encabezado {
+   flex-direction: column;
+   align-items: flex-start;
+}
+
+.fixture-summary-boxes {
+   width: 100%;
+}
+
+.participantes-resumen {
+   align-self: flex-start;
+}
+
+/* Protección para que un título largo no rompa el ancho
+   de la tarjeta en mobile (no cambia el diseño, solo
+   evita que el texto se desborde) */
+
+.fixture-card-title,
+.participante-card-header,
+.resultado-card__encabezado,
+.cronograma-evento__encabezado {
+   min-width: 0;
+}
+
+.fixture-card-title > *:first-child,
+.participante-card-header > *:first-child,
+.resultado-card__encabezado > *:first-child,
+.cronograma-evento__encabezado > *:first-child {
+   min-width: 0;
+}
+
+.fixture-card-title h3,
+.participante-card h3,
+.resultado-card__encabezado h3,
+.cronograma-evento__encabezado h3 {
+   overflow-wrap: break-word;
+}
+
+.participante-status {
+   flex-shrink: 0;
+}
+
+/* El formulario de resultado (2 inputs + vs + botón)
+   se apila en mobile para que no quede microscópico */
+
+.resultado-form {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+.resultado-vs {
+   justify-self: center;
+   padding-bottom: 0;
+}
+
+.resultado-guardar {
+   grid-column: 1 / -1;
+}
+
+/*
+=====================================================
+   TABLET / ESCRITORIO (min-width: 700px)
+   Acá se restaura el diseño original tal como lo
+   pasaste (fila, no columna).
+=====================================================
+*/
+
+@media (min-width: 700px) {
+
+   .fixture-summary-panel,
+   .participantes-encabezado,
+   .resultados-encabezado,
+   .posiciones-encabezado,
+   .cronograma-encabezado,
+   .solicitudes-encabezado {
+      flex-direction: row;
+      align-items: center;
+   }
+
+   .fixture-summary-boxes {
+      width: auto;
+   }
+
+   .resultado-form {
+      grid-template-columns:
+         minmax(0, 1fr)
+         auto
+         minmax(0, 1fr)
+         auto;
+      align-items: end;
+   }
+
+   .resultado-vs {
+      justify-self: auto;
+      padding-bottom: 12px;
+   }
+
+   .resultado-guardar {
+      grid-column: auto;
+   }
+
+   .edit-form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .form-actions {
+      flex-direction: row;
+      justify-content: flex-end;
+   }
+
+   .button-secondary,
+   .button-primary {
+      width: auto;
+   }
+}

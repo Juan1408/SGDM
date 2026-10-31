@@ -1,0 +1,75 @@
+<?php
+/**
+ * ============================================================================
+ * PLANTILLA MODULAR: menu_lateral.php
+ * ============================================================================
+ * Propósito: Renderiza la barra lateral con los enlaces dinámicos del Admin.
+ * Ubicación: codigo_fuente/vistas/admin/plantilla/menu_lateral.php
+ * ============================================================================
+ */
+?>
+<aside class="menu-lateral">
+    <nav>
+        <ul class="menu-lista">
+            <li><a href="<?php echo URL_BASE; ?>index.php?c=admin&a=dashboard" class="menu-enlace">Inicio</a></li>
+
+            <!-- 1. GESTIÓN HUMANA -->
+            <li><a href="#" class="menu-enlace">Gestión de Usuarios</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=index" class="menu-enlace">Usuarios Administrativos</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=organizador&a=index" class="menu-enlace">Organizadores Registrados</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=jugador&a=index" class="menu-enlace">Jugadores Registrados</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#" class="menu-enlace">Equipos y Solicitudes</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=index" class="menu-enlace">Directorio de Equipos</a></li>
+                </ul>
+            </li>
+
+            <!-- 2. GESTIÓN DE COMPETENCIAS (Rol Omnipotente) -->
+            <li><a href="#" class="menu-enlace">Juegos y Disciplinas</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=juego&a=index" class="menu-enlace">Ver Catálogo</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#" class="menu-enlace">Administrar Torneos</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=index" class="menu-enlace">Ver y Configurar</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=torneoHistorial&a=index" class="menu-enlace">Historial de Torneos</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#" class="menu-enlace">Resultados Globales</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=resultadoGlobal&a=index" class="menu-enlace">Ver Todos</a></li>
+                </ul>
+            </li>
+
+            <!-- 3. SOPORTE Y AUDITORÍA -->
+            <li><a href="#" class="menu-enlace">Soporte y Auditoría</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=errorTracking&a=dashboard" class="menu-enlace">Monitoreo de Errores</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=auditoria&a=index" class="menu-enlace">Logs de Auditoría</a></li>
+                </ul>
+            </li>
+
+            <!-- 4. CONFIGURACIÓN DEL SISTEMA -->
+            <li><a href="#" class="menu-enlace">Configuración del Sistema</a>
+                <ul class="menu-sublista">
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=formato&a=index" class="menu-enlace">Gestión de Módulos</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=politicaContrasena&a=index" class="menu-enlace">Políticas de Contraseña</a></li>
+                    <li><a href="<?php echo URL_BASE; ?>index.php?c=alerta&a=index" class="menu-enlace">Enviar Alertas Globales</a></li>
+                </ul>
+            </li>
+
+        </ul>
+        <div style="margin-top: 2rem; padding: 0 1rem;">
+            <a href="<?php echo URL_BASE; ?>index.php?c=auth&a=logout" class="menu-enlace enlace-salir">
+                Salir / Cerrar Sesión
+            </a>
+        </div>
+    </nav>
+</aside>

@@ -1,0 +1,216 @@
+﻿/*
+=====================================================
+   LAYOUT COMPARTIDO - ROL ORGANIZADOR
+   =====================================================
+   Este es el ÚNICO archivo que define estructura
+   (navbar, sidebar, wrapper de contenido, header
+   genérico, panel genérico). Ningún CSS de página
+   debe volver a declarar width/margin/padding sobre
+   estos selectores: .dashboard-organizador,
+   .dashboard-sidebar, .navbar-organizador,
+   .dashboard-header, .dashboard-panel.
+
+   Mobile first: todo lo que sigue es la base para
+   celular. Los @media (min-width: ...) van agregando
+   el layout de tablet/escritorio.
+=====================================================
+*/
+
+html {
+   background: var(--fondo-dashboard);
+   overflow-x: hidden;
+}
+
+:root {
+   --alto-navbar: 80px;
+}
+
+body {
+   margin: 0;
+   font-family: 'Poppins', sans-serif;
+   background: var(--fondo-principal);
+   color: var(--texto-principal);
+
+   min-height: 100vh;
+   min-height: 100dvh;
+}
+
+
+/*
+=====================================================
+   CONTENIDO PRINCIPAL
+=====================================================
+*/
+
+.dashboard-organizador {
+   margin-left: 0;
+   margin-top: var(--alto-navbar);
+   padding: 1.25rem 1rem 2.5rem;
+   min-height: calc(100vh - var(--alto-navbar));
+   min-height: calc(100dvh - var(--alto-navbar));
+}
+
+.dashboard-header {
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   margin-bottom: 1.5rem;
+   min-width: 0;
+}
+
+.dashboard-header > div {
+   min-width: 0;
+}
+
+.dashboard-tag {
+   color: var(--color-secundario-texto);
+   font-weight: 700;
+   letter-spacing: 2px;
+}
+
+.dashboard-header h1,
+.dashboard-header h2 {
+   font-size: clamp(1.5rem, 6vw, 2.1rem);
+   line-height: 1.2;
+   margin-top: .4rem;
+   overflow-wrap: break-word;
+   word-break: break-word;
+}
+
+.header-derecho {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) 44px;
+   gap: .75rem;
+}
+
+.buscador {
+   display: flex;
+   align-items: center;
+   gap: .6rem;
+   min-width: 0;
+   padding: .7rem 1rem;
+   background: var(--fondo-tarjeta);
+   border-radius: 14px;
+}
+
+.buscador input {
+   flex: 1;
+   min-width: 0;
+   background: none;
+   border: none;
+   color: var(--texto-principal);
+   outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.dashboard-icon {
+   width: 44px;
+   height: 44px;
+   flex-shrink: 0;
+   border: none;
+   border-radius: 50%;
+   background: var(--fondo-tarjeta);
+   color: var(--color-secundario-texto);
+}
+
+.boton-crear-torneo {
+   grid-column: 1 / -1;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+
+   padding: .8rem 1.4rem;
+   border: none;
+   border-radius: var(--radio-md);
+
+   background: linear-gradient(90deg, var(--color-secundario), #097AEC);
+   color: #07101c;
+   font-weight: 700;
+   text-decoration: none;
+   white-space: nowrap;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+/*
+=====================================================
+   PANEL GENÉRICO (se reusa en varias páginas)
+=====================================================
+*/
+
+.dashboard-panel {
+   padding: 1.1rem;
+   background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
+   border-radius: var(--radio-lg);
+   border: 1px solid var(--borde-suave);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+.panel-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: .75rem;
+   margin-bottom: 1.25rem;
+}
+
+.panel-header h2,
+.panel-header h3 {
+   font-size: 1.1rem;
+}
+
+.panel-header a {
+   color: var(--color-secundario-texto);
+   text-decoration: none;
+   font-size: .9rem;
+   white-space: nowrap;
+}
+
+
+/*
+=====================================================
+   TABLET (min-width: 600px)
+=====================================================
+*/
+
+@media (min-width: 600px) {
+
+   .dashboard-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+   }
+
+   .header-derecho {
+      width: auto;
+      display: flex;
+      align-items: center;
+   }
+
+   .buscador {
+      width: auto;
+   }
+}
+
+
+/*
+=====================================================
+   ESCRITORIO (min-width: 900px)
+=====================================================
+*/
+
+@media (min-width: 900px) {
+
+  .dashboard-organizador {
+   width: 92%;
+   max-width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: var(--alto-navbar);
+   padding: 1.25rem 0 2.5rem;
+   min-height: calc(100vh - var(--alto-navbar));
+   min-height: calc(100dvh - var(--alto-navbar));
+}
+
+
+}
+
