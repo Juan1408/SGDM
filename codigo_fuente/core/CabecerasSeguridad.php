@@ -36,7 +36,8 @@ class CabecerasSeguridad {
                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " .
                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " .
                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; " .
-               "img-src 'self' data: https:;" .
+               "img-src 'self' data: https:; " .
+               "frame-src 'self' https://www.google.com https://maps.google.com; " .
                "object-src 'none'; base-uri 'self'; frame-ancestors 'self';";
 
         header("Content-Security-Policy: " . $csp);

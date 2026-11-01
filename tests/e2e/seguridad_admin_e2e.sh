@@ -8,7 +8,9 @@
 #   - Baja lógica y auditoría de bloquear/activar/dar de baja.
 #   - Suplantación: bloqueo de auto-suplantación y de otros admins,
 #     restauración por POST con CSRF y Referer no confiable.
-#   - Cambio de rol con sincronización de perfil y confirmación de admin.
+#   - Cuentas administrativas inmutables: un admin no puede editar, degradar,
+#     bloquear ni dar de baja a otro; solo se asignan roles 2 y 3.
+#   - Cambio de rol con sincronización de perfil.
 #
 # Uso (XAMPP, Git Bash):
 #   BASE_URL=http://127.0.0.1:8099 \
@@ -240,7 +242,12 @@ done
 
 EDIT_ADMIN_PAGINA=$(curl -fsS -b "$COOKIE_ADMIN" "$BASE_URL/index.php?c=usuario&a=editarUsuario&id=${PLAYER_ID}&origen=jugadores")
 assert_contains "$EDIT_ADMIN_PAGINA" 'readonly disabled' "El admin puede editar el email."
-assert_contains "$EDIT_ADMIN_PAGINA" 'name="confirmar_admin"' "Falta la confirmación para promover a admin."
+ROLES_SELECT=$(printf '%s' "$EDIT_ADMIN_PAGINA" | sed -n '/<select name="rol_id"/,/<\/select>/p')
+[[ "$ROLES_SELECT" == *"value='2'"* ]] || fail "El selector no ofrece Organizador."
+[[ "$ROLES_SELECT" == *"value='3'"* ]] || fail "El selector no ofrece Jugador."
+[[ "$ROLES_SELECT" != *"value='1'"* ]] || fail "El selector no debe ofrecer Administrador."
+[[ "$ROLES_SELECT" != *"value='4'"* ]] || fail "El selector no debe ofrecer Usuario Publico."
+[[ "$EDIT_ADMIN_PAGINA" != *'name="confirmar_admin"'* ]] || fail "La casilla de confirmación ya no debe existir."
 ADMIN_TOKEN=$(printf '%s' "$EDIT_ADMIN_PAGINA" | csrf_from)
 
 curl -sS -b "$COOKIE_ADMIN" -o /dev/null -D "$TMP/update_headers.txt" \
@@ -353,37 +360,95 @@ curl -sS -b "$COOKIE_ADMIN" -o /dev/null -D "$TMP/imp_admin_headers.txt" \
 STATUS=$(curl -sS -b "$COOKIE_ADMIN" -o /dev/null -w '%{http_code}' "$BASE_URL/index.php?c=admin&a=dashboard")
 assert_status "$STATUS" "200" "La sesión cambió al intentar suplantar a otro admin."
 
-echo "== 5. Cambio de rol y sincronización =="
-# Promoción a admin sin confirmación: rechazada
-curl -sS -b "$COOKIE_ADMIN" -o /dev/null -D "$TMP/rol_headers.txt" \
-    --data-urlencode "csrf_token=$ADMIN_TOKEN" \
-    --data-urlencode "id=$PLAYER_ID" \
-    --data-urlencode "origen=jugadores" \
-    --data-urlencode "nombre_completo=E2E Jugador Admin" \
-    --data-urlencode "rol_id=1" \
-    "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
-[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "3" ]] || fail "Se promovió a admin sin confirmación."
+echo "== 5. Cuentas administrativas inmutables =="
+# El admin promovido (admin2) intenta degradar y bloquear al admin original.
+STATUS=$(login "$TMP/admin2.cookies" "$ADMIN2_EMAIL" "$TMP/login_admin2.html")
+assert_status "$STATUS" "302" "El segundo administrador no pudo iniciar sesión."
+assert_contains "$(location_from "$TMP/login_headers.txt")" "c=admin" "El segundo administrador no llegó a su panel."
 
-# Con confirmación: aceptada
-curl -sS -b "$COOKIE_ADMIN" -o /dev/null -D "$TMP/rol2_headers.txt" \
-    --data-urlencode "csrf_token=$ADMIN_TOKEN" \
-    --data-urlencode "id=$PLAYER_ID" \
-    --data-urlencode "origen=jugadores" \
-    --data-urlencode "nombre_completo=E2E Jugador Admin" \
-    --data-urlencode "rol_id=1" \
-    --data-urlencode "confirmar_admin=1" \
-    "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
-[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "1" ]] || fail "No se promovió a admin con confirmación."
+EDIT_ADMIN2=$(curl -fsS -b "$TMP/admin2.cookies" "$BASE_URL/index.php?c=usuario&a=editarUsuario&id=${PLAYER_ID}&origen=jugadores")
+ADMIN2_TOKEN=$(printf '%s' "$EDIT_ADMIN2" | csrf_from)
+[[ -n "$ADMIN2_TOKEN" ]] || fail "No se pudo extraer el CSRF del segundo administrador."
 
-# Volver a jugador
+# La ficha del admin original no se abre para edición.
+STATUS=$(curl -sS -b "$TMP/admin2.cookies" -o /dev/null -w '%{http_code}' \
+    "$BASE_URL/index.php?c=usuario&a=editarUsuario&id=${ADMIN_ID}&origen=usuarios")
+assert_status "$STATUS" "302" "El formulario de edición de otro admin no debe abrirse."
+
+# Intento de degradar al admin original: rechazado.
+curl -sS -b "$TMP/admin2.cookies" -o /dev/null -D "$TMP/admin_edit_headers.txt" \
+    --data-urlencode "csrf_token=$ADMIN2_TOKEN" \
+    --data-urlencode "id=$ADMIN_ID" \
+    --data-urlencode "origen=usuarios" \
+    --data-urlencode "nombre_completo=Admin Secuestrado" \
+    --data-urlencode "rol_id=2" \
+    "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
+assert_contains "$(location_from "$TMP/admin_edit_headers.txt")" "c=usuario&a=index" \
+    "El intento de degradar a otro admin no volvió al listado."
+[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${ADMIN_ID}")" == "1" ]] \
+    || fail "Se degradó al administrador original."
+[[ "$(sql_val "SELECT nombre_completo FROM usuarios WHERE id=${ADMIN_ID}")" == "E2E Admin Uno" ]] \
+    || fail "Se modificó el nombre del administrador original."
+
+# Intento de bloquear al admin original: rechazado.
+curl -sS -b "$TMP/admin2.cookies" -o /dev/null \
+    --data-urlencode "csrf_token=$ADMIN2_TOKEN" \
+    --data-urlencode "id=$ADMIN_ID" \
+    "$BASE_URL/index.php?c=usuario&a=cambiarEstadoUsuario"
+[[ "$(sql_val "SELECT esta_activo FROM usuarios WHERE id=${ADMIN_ID}")" == "1" ]] \
+    || fail "Se bloqueó al administrador original."
+
+# Intento de dar de baja al admin original: rechazado.
+curl -sS -b "$TMP/admin2.cookies" -o /dev/null \
+    --data-urlencode "csrf_token=$ADMIN2_TOKEN" \
+    --data-urlencode "id=$ADMIN_ID" \
+    "$BASE_URL/index.php?c=usuario&a=eliminarUsuario"
+[[ "$(sql_val "SELECT esta_activo FROM usuarios WHERE id=${ADMIN_ID}")" == "1" ]] \
+    || fail "Se dio de baja al administrador original."
+
+# La ficha y el listado marcan la cuenta como protegida y no ofrecen acciones.
+FICHA_ADMIN1=$(curl -fsS -b "$TMP/admin2.cookies" \
+    "$BASE_URL/index.php?c=usuario&a=ver&id=${ADMIN_ID}&origen=usuarios")
+[[ "$FICHA_ADMIN1" != *"Editar nombre o rol"* ]] || fail "La ficha de otro admin ofrece edición."
+assert_contains "$FICHA_ADMIN1" "Cuenta administrativa protegida" \
+    "La ficha de otro admin no está marcada como protegida."
+
+LISTADO_ADMIN2=$(curl -fsS -b "$TMP/admin2.cookies" "$BASE_URL/index.php?c=usuario&a=index")
+FILA_ADMIN1=$(printf '%s' "$LISTADO_ADMIN2" | awk -v id="$ADMIN_ID" 'BEGIN{RS="</tr>"} $0 ~ ">"id"<" {print; exit}')
+[[ -n "$FILA_ADMIN1" ]] || fail "No se encontró la fila del administrador original."
+[[ "$FILA_ADMIN1" != *"cambiarEstadoUsuario"* ]] || fail "El listado ofrece bloquear a otro admin."
+assert_contains "$FILA_ADMIN1" "Cuenta protegida" "La fila del admin original no está protegida."
+
+echo "== 6. Cambio de rol y sincronización =="
+# Promover a administrador ya no es una transición disponible, ni con la
+# antigua confirmación: el backend ignora el campo.
+for CONFIRMAR in "0" "1"; do
+    ARGS=(
+        --data-urlencode "csrf_token=$ADMIN_TOKEN"
+        --data-urlencode "id=$PLAYER_ID"
+        --data-urlencode "origen=jugadores"
+        --data-urlencode "nombre_completo=E2E Jugador Admin"
+        --data-urlencode "rol_id=1"
+    )
+    if [[ "$CONFIRMAR" == "1" ]]; then
+        ARGS+=(--data-urlencode "confirmar_admin=1")
+    fi
+    curl -sS -b "$COOKIE_ADMIN" -o /dev/null "${ARGS[@]}" \
+        "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
+    [[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "3" ]] \
+        || fail "Se promovió a admin (confirmar_admin=$CONFIRMAR)."
+done
+
+# El rol público no es asignable.
 curl -sS -b "$COOKIE_ADMIN" -o /dev/null \
     --data-urlencode "csrf_token=$ADMIN_TOKEN" \
     --data-urlencode "id=$PLAYER_ID" \
     --data-urlencode "origen=jugadores" \
     --data-urlencode "nombre_completo=E2E Jugador Admin" \
-    --data-urlencode "rol_id=3" \
+    --data-urlencode "rol_id=4" \
     "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
-[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "3" ]] || fail "No se pudo volver a jugador."
+[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "3" ]] \
+    || fail "Se asignó el rol público."
 
 # Promover a organizador: debe crear el perfil del rol destino
 curl -sS -b "$COOKIE_ADMIN" -o /dev/null \
@@ -405,8 +470,9 @@ curl -sS -b "$COOKIE_ADMIN" -o /dev/null \
     --data-urlencode "nombre_completo=E2E Jugador Admin" \
     --data-urlencode "rol_id=3" \
     "$BASE_URL/index.php?c=usuario&a=actualizarUsuario"
+[[ "$(sql_val "SELECT rol_id FROM usuarios WHERE id=${PLAYER_ID}")" == "3" ]] || fail "No se pudo volver a jugador."
 
-echo "== 6. Regresión final de páginas admin =="
+echo "== 7. Regresión final de páginas admin =="
 for RUTA in "c=usuario&a=index" "c=jugador&a=index" "c=organizador&a=index" "c=juego&a=index" "c=auditoria&a=index" "c=usuario&a=ver&id=${PLAYER_ID}"; do
     STATUS=$(curl -sS -b "$COOKIE_ADMIN" -o "$TMP/final.html" -w '%{http_code}' "$BASE_URL/index.php?$RUTA")
     assert_status "$STATUS" "200" "Regresión: '$RUTA' no respondió 200."

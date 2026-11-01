@@ -161,7 +161,11 @@ try {
 
                <div class="perfil-jugador-menu">
                   <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">
-                     <i class="fa-solid fa-circle-user"></i>
+                     <?php if ($urlFotoNav !== ''): ?>
+                        <img class="foto-boton-perfil" src="<?php echo htmlspecialchars($urlFotoNav); ?>" alt="Mi perfil">
+                     <?php else: ?>
+                        <i class="fa-solid fa-circle-user"></i>
+                     <?php endif; ?>
                      Organizador
                      <i class="fa-solid fa-chevron-down"></i>
                   </button>

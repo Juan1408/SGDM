@@ -14,6 +14,9 @@ class UsuarioControlador {
     /** Origenes permitidos para volver tras editar o cancelar. */
     private const ORIGENES_VALIDOS = ['usuarios', 'jugadores', 'organizadores', 'ficha'];
 
+    /** Roles que el panel puede asignar: Organizador (2) y Jugador (3). */
+    private const ROLES_ASIGNABLES = [2, 3];
+
     private Usuario $modeloUsuario;
 
     public function __construct(){
@@ -81,6 +84,27 @@ class UsuarioControlador {
             return URL_BASE . 'index.php?c=admin&a=dashboard';
         }
         return URL_BASE . 'index.php';
+    }
+
+    /**
+     * Las cuentas administrativas se aprovisionan fuera del panel: no se
+     * editan, bloquean ni dan de baja desde la aplicación.
+     */
+    private function esCuentaAdministrativa(array $usuario): bool {
+        return (int) ($usuario['rol_id'] ?? 0) === 1;
+    }
+
+    /** Solo Organizador y Jugador son roles asignables desde el panel. */
+    private function esRolAsignable(int $rolId): bool {
+        return in_array($rolId, self::ROLES_ASIGNABLES, true);
+    }
+
+    /** Catálogo filtrado que se ofrece en el formulario de edición. */
+    private function obtenerRolesAsignables(): array {
+        return array_values(array_filter(
+            $this->modeloUsuario->obtenerTodosLosRoles(),
+            fn (array $rol): bool => $this->esRolAsignable((int) $rol['id'])
+        ));
     }
 
     //Metodo para mostrar el menu
@@ -170,6 +194,14 @@ class UsuarioControlador {
             exit();
         }
 
+        //Las cuentas administrativas son inmutables desde el panel.
+        if ($this->esCuentaAdministrativa($usuario)) {
+            $_SESSION['mensaje'] = "Las cuentas administrativas no se pueden bloquear ni reactivar desde el panel.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: " . $this->urlListadoPorRol((int) $usuario['rol_id']));
+            exit();
+        }
+
         $estabaActivo = (int) $usuario['esta_activo'] === 1;
         $resultado = $this->modeloUsuario->cambiarEstadoUsuario($usuarioId);
 
@@ -217,9 +249,17 @@ class UsuarioControlador {
             exit();
         }
 
+        //Las cuentas administrativas se consultan, pero no se editan desde acá.
+        if ($this->esCuentaAdministrativa($usuario)) {
+            $_SESSION['mensaje'] = "Las cuentas administrativas se gestionan fuera del panel y no se pueden editar.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: " . $this->urlRetorno($origen, $usuarioId, 1));
+            exit();
+        }
+
         $datos = [
             'usuario' => $usuario,
-            'roles' => $this->modeloUsuario->obtenerTodosLosRoles(), //Obtenemos los roles del sistema
+            'roles' => $this->obtenerRolesAsignables(), //Solo Organizador y Jugador
             'es_admin' => (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1), //Verificamos si el usuario logueado es admin
             'origen' => $origen,
             'volver_url' => $this->urlRetorno($origen, $usuarioId, (int) $usuario['rol_id']),
@@ -400,6 +440,14 @@ class UsuarioControlador {
             exit();
         }
 
+        //Las cuentas administrativas son inmutables desde el panel.
+        if ($this->esCuentaAdministrativa($usuarioActual)) {
+            $_SESSION['mensaje'] = "Las cuentas administrativas no se modifican desde el panel.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: " . $this->urlRetorno($origen, $usuarioId, $rolActual));
+            exit();
+        }
+
         // El email no se recibe del formulario: la verificación de correo es
         // competencia del usuario y un cambio administrativo la invalidaría.
         $datosActualizar = [
@@ -430,18 +478,11 @@ class UsuarioControlador {
         }
 
         $rolesSistema = $this->modeloUsuario->obtenerTodosLosRoles();
-        $rolesValidos = array_map(static fn ($rol) => (int) $rol['id'], $rolesSistema);
-        if (!in_array($datosActualizar['rol_id'], $rolesValidos, true)) {
-            $_SESSION['mensaje'] = "El rol seleccionado no es válido.";
-            $_SESSION['mensaje_tipo'] = "error";
-            header("Location: " . $this->urlEditar($usuarioId, $origen));
-            exit();
-        }
 
-        //Promover a Administrador es una acción sensible: exige confirmación explícita.
-        if ($datosActualizar['rol_id'] === 1 && $rolActual !== 1
-            && ($_POST['confirmar_admin'] ?? '') !== '1') {
-            $_SESSION['mensaje'] = "Para promover a un usuario a Administrador, confirmá explícitamente la acción.";
+        //Solo Organizador y Jugador se asignan desde el panel. El rol 1 se
+        //aprovisiona fuera de la aplicación y el rol 4 no tiene panel propio.
+        if (!$this->esRolAsignable($datosActualizar['rol_id'])) {
+            $_SESSION['mensaje'] = "Solo se puede asignar el rol Organizador o Jugador.";
             $_SESSION['mensaje_tipo'] = "error";
             header("Location: " . $this->urlEditar($usuarioId, $origen));
             exit();
@@ -517,6 +558,14 @@ class UsuarioControlador {
         //El administrador no puede darse de baja a sí mismo.
         if ($usuarioId === (int) $_SESSION['usuario_id']) {
             $_SESSION['mensaje'] = "No podés dar de baja tu propia cuenta.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: " . $this->urlListadoPorRol((int) $usuario['rol_id']));
+            exit();
+        }
+
+        //Las cuentas administrativas son inmutables desde el panel.
+        if ($this->esCuentaAdministrativa($usuario)) {
+            $_SESSION['mensaje'] = "Las cuentas administrativas no se pueden dar de baja desde el panel.";
             $_SESSION['mensaje_tipo'] = "error";
             header("Location: " . $this->urlListadoPorRol((int) $usuario['rol_id']));
             exit();

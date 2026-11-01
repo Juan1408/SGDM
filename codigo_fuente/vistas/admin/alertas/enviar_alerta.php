@@ -55,6 +55,91 @@
             
         </form>
     </div>
+
+    <?php
+    $notificacionesAdmin = $notificacionesAdmin ?? [];
+    $newsletterTotal = (int) ($newsletterTotal ?? 0);
+    $newsletterUltimos = $newsletterUltimos ?? [];
+    $noLeidasAdmin = 0;
+    foreach ($notificacionesAdmin as $notificacionAdmin) {
+        if ((int) ($notificacionAdmin['leido'] ?? 0) === 0) {
+            $noLeidasAdmin++;
+        }
+    }
+    ?>
+
+    <!-- BANDEJA DEL ADMINISTRADOR: mensajes de contacto recibidos -->
+    <div class="tarjeta-formulario" style="background-color: var(--color-fondo-panel); border: 1px solid var(--color-borde); border-radius: var(--radio-borde); padding: 2rem; box-shadow: var(--sombra-suave); max-width: 1000px; margin-top: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <div>
+                <h2 style="margin: 0; font-size: 1.2rem; color: var(--color-texto-principal);">Notificaciones recibidas</h2>
+                <p style="margin: 0.35rem 0 0; color: var(--color-texto-secundario); font-size: 0.9rem;">
+                    Los mensajes enviados desde el formulario de contacto llegan a esta bandeja.
+                </p>
+            </div>
+            <?php if ($noLeidasAdmin > 0): ?>
+                <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=notificacion&a=marcarTodas">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                    <button type="submit" style="background: none; border: 1px solid var(--color-borde); color: var(--color-texto-principal); padding: 0.5rem 0.9rem; border-radius: var(--radio-borde); cursor: pointer;">
+                        Marcar todo leído (<?php echo (int) $noLeidasAdmin; ?>)
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
+
+        <?php if (empty($notificacionesAdmin)): ?>
+            <p style="margin: 0; color: var(--color-texto-secundario);">Todavía no recibiste mensajes.</p>
+        <?php else: ?>
+            <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem;">
+                <?php foreach ($notificacionesAdmin as $notificacionAdmin): ?>
+                    <?php
+                    $esNoLeida = (int) ($notificacionAdmin['leido'] ?? 0) === 0;
+                    $fechaNotificacion = !empty($notificacionAdmin['creado_en'])
+                        ? date('d/m/Y H:i', strtotime($notificacionAdmin['creado_en']))
+                        : '';
+                    ?>
+                    <li style="border: 1px solid var(--color-borde); border-left: 3px solid <?php echo $esNoLeida ? 'var(--color-primario)' : 'transparent'; ?>; border-radius: 4px; padding: 0.9rem 1rem; background-color: var(--color-fondo-principal);">
+                        <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                            <strong style="color: var(--color-texto-principal);"><?php echo htmlspecialchars((string) $notificacionAdmin['titulo']); ?></strong>
+                            <small style="color: var(--color-texto-secundario);"><?php echo htmlspecialchars($fechaNotificacion); ?></small>
+                        </div>
+                        <p style="margin: 0.5rem 0 0; color: var(--color-texto-secundario); white-space: pre-line;"><?php echo htmlspecialchars((string) $notificacionAdmin['mensaje']); ?></p>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+
+    <!-- RESUMEN DEL BOLETIN -->
+    <div class="tarjeta-formulario" style="background-color: var(--color-fondo-panel); border: 1px solid var(--color-borde); border-radius: var(--radio-borde); padding: 2rem; box-shadow: var(--sombra-suave); max-width: 1000px; margin-top: 2rem;">
+        <h2 style="margin: 0 0 0.35rem; font-size: 1.2rem; color: var(--color-texto-principal);">Boletín de noticias</h2>
+        <p style="margin: 0 0 1rem; color: var(--color-texto-secundario); font-size: 0.9rem;">
+            <?php echo (int) $newsletterTotal; ?> correo<?php echo $newsletterTotal === 1 ? '' : 's'; ?> activo<?php echo $newsletterTotal === 1 ? '' : 's'; ?> en la lista.
+        </p>
+
+        <?php if (!empty($newsletterUltimos)): ?>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="text-align: left; color: var(--color-texto-secundario);">
+                            <th style="padding: 0.5rem; border-bottom: 1px solid var(--color-borde);">Correo</th>
+                            <th style="padding: 0.5rem; border-bottom: 1px solid var(--color-borde);">Suscripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($newsletterUltimos as $suscriptor): ?>
+                            <tr>
+                                <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-borde); color: var(--color-texto-principal);"><?php echo htmlspecialchars((string) $suscriptor['email']); ?></td>
+                                <td style="padding: 0.5rem; border-bottom: 1px solid var(--color-borde); color: var(--color-texto-secundario);">
+                                    <?php echo !empty($suscriptor['fecha_suscripcion']) ? htmlspecialchars(date('d/m/Y', strtotime($suscriptor['fecha_suscripcion']))) : ''; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <script>

@@ -48,6 +48,60 @@
    color: #ff9b9b;
 }
 
+.aviso-union.exito {
+   background: rgba(48, 245, 210, 0.12);
+   border: 1px solid rgba(48, 245, 210, 0.4);
+   color: #6ff5dd;
+}
+
+.solicitudes-subtitulo {
+   font-size: 1.15rem;
+   margin-bottom: 6px;
+}
+
+.solicitudes-ayuda {
+   font-size: 0.85rem;
+   color: var(--texto-secundario);
+   margin-bottom: 18px;
+}
+
+.solicitud-enlace-equipo {
+   color: inherit;
+   text-decoration: none;
+}
+
+.solicitud-enlace-equipo:hover {
+   color: var(--color-secundario);
+}
+
+.solicitud-estado {
+   display: inline-block;
+   padding: 5px 12px;
+   border-radius: 999px;
+   font-size: 0.75rem;
+   font-weight: 700;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+   border: 1px solid rgba(255, 255, 255, 0.2);
+   color: var(--texto-secundario);
+}
+
+.solicitud-estado--pendiente {
+   border-color: rgba(255, 193, 7, 0.45);
+   color: #ffd166;
+}
+
+.solicitud-estado--aprobado {
+   border-color: rgba(48, 245, 210, 0.45);
+   color: #6ff5dd;
+}
+
+.solicitud-estado--rechazado,
+.solicitud-estado--cancelado {
+   border-color: rgba(255, 80, 80, 0.4);
+   color: #ff9b9b;
+}
+
 .fila-jugador-invitado-por {
    display: block;
    font-size: 0.7rem;

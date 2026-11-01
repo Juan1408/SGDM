@@ -255,8 +255,31 @@ if ($esJugador) {
     public function solicitudes(){
         $usuarioId = $_SESSION['usuario_id'];
         $invitaciones = $this->modeloEquipo->obtenerInvitacionesRecibidas($usuarioId);
+        $solicitudesEnviadas = $this->modeloEquipo->obtenerSolicitudesEnviadas($usuarioId);
 
         require_once __DIR__ . '/../vistas/jugador/solicitudes.php';
+    }
+
+    //Accion para cancelar una solicitud propia que sigue pendiente
+    public function cancelarSolicitud(){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
+            header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes");
+            exit;
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $usuarioId = (int) $_SESSION['usuario_id'];
+        $solicitudId = (int) ($_POST['solicitud_id'] ?? 0);
+
+        if ($solicitudId > 0) {
+            $resultado = $this->modeloEquipo->cancelarSolicitud($solicitudId, $usuarioId);
+            header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes&solicitudCancelada=" . (!empty($resultado['exito']) ? '1' : '0'));
+            exit;
+        }
+
+        header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes");
+        exit;
     }
 
     //Accion para aceptar o rechazar una invitacion recibida

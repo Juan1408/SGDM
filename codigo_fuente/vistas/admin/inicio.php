@@ -48,7 +48,7 @@
                         <td><?php echo htmlspecialchars($torneo['nombre']); ?></td>
                         <td><?php echo htmlspecialchars($torneo['estado']); ?></td>
                         <td><?php echo htmlspecialchars($torneo['fecha_inicio'] ?? '—'); ?></td>
-                        <td><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=index" class="boton-accion">Ver Directorio</a></td>
+                        <td><a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=ver&id=<?php echo (int) $torneo['id']; ?>&origen=dashboard" class="boton-accion">Ver detalles</a></td>
                     </tr>
                     <?php endforeach; ?>
 
@@ -79,7 +79,7 @@
                         <td><?php echo htmlspecialchars($equipo['nombre_equipo']); ?></td>
                         <td><?php echo htmlspecialchars($equipo['creado_por']); ?></td>
                         <td><?php echo (int)$equipo['total_miembros']; ?></td>
-                        <td><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=index" class="boton-accion">Ver Directorio</a></td>
+                        <td><a href="<?php echo URL_BASE; ?>index.php?c=equipoAdmin&a=ver&id=<?php echo (int) $equipo['id']; ?>" class="boton-accion">Ver ficha</a></td>
                     </tr>
                     <?php endforeach; ?>
 

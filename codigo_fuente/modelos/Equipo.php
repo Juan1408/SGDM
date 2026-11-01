@@ -285,6 +285,42 @@ class Equipo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Metodo para traer las solicitudes que el propio jugador envio para unirse a un equipo
+    public function obtenerSolicitudesEnviadas(int $usuarioId): array {
+        $sql = "SELECT s.id, s.estado, s.fecha_solicitud, s.fecha_respuesta,
+                    e.id AS equipo_id, e.nombre_equipo, e.escudo_url
+                FROM solicitudes_equipo s
+                INNER JOIN equipos e ON e.id = s.equipo_id
+                WHERE s.usuario_id = :usuarioId
+                AND s.iniciado_por = s.usuario_id
+                ORDER BY s.fecha_solicitud DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':usuarioId' => $usuarioId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Metodo para que un jugador cancele una solicitud propia que sigue pendiente
+    public function cancelarSolicitud(int $solicitudId, int $usuarioId): array {
+        $sql = "UPDATE solicitudes_equipo
+                SET estado = 'cancelado', fecha_respuesta = NOW(), respondido_por = :usuarioId
+                WHERE id = :id
+                  AND usuario_id = :usuarioId2
+                  AND iniciado_por = :usuarioId3
+                  AND estado = 'pendiente'";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([
+            ':usuarioId' => $usuarioId,
+            ':id' => $solicitudId,
+            ':usuarioId2' => $usuarioId,
+            ':usuarioId3' => $usuarioId,
+        ]);
+
+        if ($stmt->rowCount() === 0) {
+            return ['exito' => false, 'error' => 'La solicitud no existe, no es tuya o ya fue respondida.'];
+        }
+        return ['exito' => true];
+    }
+
     //Metodo para aceptar o rechazar una invitacion recibida
     //Si se acepta, ademas de cambiar el estado, se suma al jugador como miembro real del equipo
     public function responderInvitacion(int $solicitudId, int $usuarioId, bool $aceptar): array {

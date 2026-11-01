@@ -50,9 +50,9 @@
                                     <?php endif; ?>
                                 </td>
                                 <td style="padding: 1rem; text-align: center;">
-                                    <button class="btn" style="padding: 0.5rem 1rem; background-color: var(--color-fondo-principal); color: var(--color-texto-principal); border: 1px solid var(--color-borde); border-radius: 6px; cursor: pointer;" onclick="alert('Funcionalidad en desarrollo para ver podio del torneo #<?php echo $torneo['id']; ?>')">
+                                    <a class="btn" style="display: inline-block; padding: 0.5rem 1rem; background-color: var(--color-fondo-principal); color: var(--color-texto-principal); border: 1px solid var(--color-borde); border-radius: 6px; text-decoration: none;" href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=ver&id=<?php echo (int) $torneo['id']; ?>&origen=historial#podio" title="Ver el podio y los detalles del torneo">
                                         <i class="fa-solid fa-trophy"></i> Ver Podio
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

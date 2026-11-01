@@ -16,6 +16,22 @@ if ($esOrganizadorNavbar) {
    $urlVerPerfilNavbar = URL_BASE . 'index.php?c=panelJugador&a=perfil';
    $urlEditarPerfilNavbar = URL_BASE . 'index.php?c=panelJugador&a=editarPerfil';
 }
+
+//Foto del usuario logueado para el boton de perfil (si no tiene, se usa el icono)
+$urlFotoNav = '';
+if ($haySesionNavbar) {
+   try {
+      require_once __DIR__ . '/../../modelos/Conexion.php';
+      $stmtFotoNav = \App\Modelos\Conexion::getInstance()->getBD()->prepare('SELECT foto_perfil_url FROM usuarios WHERE id = :id LIMIT 1');
+      $stmtFotoNav->execute([':id' => $idNavbar]);
+      $fotoNav = trim((string) $stmtFotoNav->fetchColumn());
+      if ($fotoNav !== '') {
+         $urlFotoNav = preg_match('#^https?://#i', $fotoNav) ? $fotoNav : URL_BASE . ltrim($fotoNav, '/');
+      }
+   } catch (\Throwable $e) {
+      $urlFotoNav = '';
+   }
+}
 ?>
 <!-------------------------------------->
 <!-- NAVBAR PÚBLICO -------------------->
@@ -101,7 +117,11 @@ if ($esOrganizadorNavbar) {
 
    <div class="perfil-jugador-menu">
       <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">
-         <i class="fa-solid fa-circle-user"></i>
+         <?php if ($urlFotoNav !== ''): ?>
+            <img class="foto-boton-perfil" src="<?php echo htmlspecialchars($urlFotoNav); ?>" alt="Mi perfil">
+         <?php else: ?>
+            <i class="fa-solid fa-circle-user"></i>
+         <?php endif; ?>
          <?php echo $esOrganizadorNavbar ? 'Organizador' : 'Jugador'; ?>
          <i class="fa-solid fa-chevron-down"></i>
       </button>

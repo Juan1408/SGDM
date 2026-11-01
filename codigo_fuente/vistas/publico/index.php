@@ -6,6 +6,7 @@ if (!defined('URL_BASE')) {
 <?php
 $torneosDestacados = $torneosDestacados ?? [];
 $proximosEnfrentamientos = $proximosEnfrentamientos ?? [];
+$ultimosComentarios = $ultimosComentarios ?? [];
 $estadisticas = $estadisticas ?? [];
 $topJugadores = $topJugadores ?? [];
 
@@ -377,36 +378,79 @@ $canalPartido = static function (array $p): array {
                Seguí noticias de torneos, anuncios importantes, resultados destacados
                y actividades de la comunidad ASCEND.
             </p>
-            <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion">Ver comunidad</a>
+            <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=rankings">Ver rankings</a>
          </div>
+
+         <?php
+         //Las tres tarjetas salen de datos reales: torneo destacado, ultimo comentario y proximo partido
+         $urlCatalogo = URL_BASE . 'index.php?c=torneo&a=catalogoPublico';
+         $novedadTorneo = $torneosDestacados[0] ?? null;
+         $novedadComentario = $ultimosComentarios[0] ?? null;
+         $novedadPartido = $proximosEnfrentamientos[0] ?? null;
+         ?>
 
          <ul class="noticias-grid">
 
             <li>
-               <article class="noticias-tarjeta noticias-nuevas">
-                  <img src="<?php echo URL_BASE; ?>img/04.jpg" alt="Noticia">
-                  <div>
+               <?php if ($novedadTorneo): ?>
+                  <a class="noticias-tarjeta noticias-nuevas" href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $novedadTorneo['id']; ?>">
+                     <img src="<?php echo htmlspecialchars($urlImagen($novedadTorneo['banner_url'] ?? '', 'img/torneos/card1.jpg')); ?>" alt="<?php echo htmlspecialchars($novedadTorneo['nombre']); ?>">
+                     <div>
+                        <span>Noticias</span>
+                        <h3><?php echo htmlspecialchars($novedadTorneo['nombre']); ?></h3>
+                        <p>
+                           <?php echo htmlspecialchars(($etiquetasEstado[$novedadTorneo['estado']] ?? 'Torneo') . ' · ' . $novedadTorneo['nombre_juego']); ?>.
+                           Comienza: <?php echo htmlspecialchars($fechaCorta($novedadTorneo['fecha_inicio'])); ?>
+                        </p>
+                     </div>
+                  </a>
+               <?php else: ?>
+                  <a class="noticias-tarjeta" href="<?php echo $urlCatalogo; ?>">
                      <span>Noticias</span>
-                     <h3>Nuevo torneo de Valorant disponible</h3>
-                     <p>Inscripciones abiertas para equipos de LATAM.</p>
-                  </div>
-               </article>
+                     <h3>Pronto habrá nuevos torneos</h3>
+                     <p>Mirá el catálogo completo de torneos de ASCEND.</p>
+                  </a>
+               <?php endif; ?>
             </li>
 
             <li>
-               <article class="noticias-tarjeta">
-                  <span>Comunidad</span>
-                  <h3>Top jugadores de la semana</h3>
-                  <p>Conocé los perfiles más destacados.</p>
-               </article>
+               <?php if ($novedadComentario): ?>
+                  <?php
+                  $textoComentario = trim((string) $novedadComentario['comentario']);
+                  if (function_exists('mb_strimwidth')) {
+                     $textoComentario = mb_strimwidth($textoComentario, 0, 110, '…', 'UTF-8');
+                  } elseif (strlen($textoComentario) > 110) {
+                     $textoComentario = substr($textoComentario, 0, 107) . '...';
+                  }
+                  ?>
+                  <a class="noticias-tarjeta" href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $novedadComentario['torneo_id']; ?>#comentarios">
+                     <span>Comunidad</span>
+                     <h3><?php echo htmlspecialchars($novedadComentario['autor']); ?> comentó en <?php echo htmlspecialchars($novedadComentario['torneo_nombre']); ?></h3>
+                     <p>“<?php echo htmlspecialchars($textoComentario); ?>”</p>
+                  </a>
+               <?php else: ?>
+                  <a class="noticias-tarjeta" href="<?php echo $urlCatalogo; ?>">
+                     <span>Comunidad</span>
+                     <h3>Sé el primero en opinar</h3>
+                     <p>Entrá a un torneo y dejá tu comentario.</p>
+                  </a>
+               <?php endif; ?>
             </li>
 
             <li>
-               <article class="noticias-tarjeta">
-                  <span>Eventos</span>
-                  <h3>Calendario de partidas actualizado</h3>
-                  <p>Nuevas fechas agregadas al sistema.</p>
-               </article>
+               <?php if ($novedadPartido): ?>
+                  <a class="noticias-tarjeta" href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $novedadPartido['torneo_id']; ?>">
+                     <span>Eventos</span>
+                     <h3><?php echo htmlspecialchars($novedadPartido['local_nombre'] . ' vs ' . $novedadPartido['visitante_nombre']); ?></h3>
+                     <p>Próximo partido: <?php echo htmlspecialchars($fechaCorta($novedadPartido['fecha_hora_programada']) . ' · ' . date('H:i', strtotime($novedadPartido['fecha_hora_programada']))); ?></p>
+                  </a>
+               <?php else: ?>
+                  <a class="noticias-tarjeta" href="<?php echo $urlCatalogo; ?>">
+                     <span>Eventos</span>
+                     <h3>Calendario de partidas</h3>
+                     <p>Todavía no hay partidos programados.</p>
+                  </a>
+               <?php endif; ?>
             </li>
 
          </ul>
@@ -472,13 +516,20 @@ $canalPartido = static function (array $p): array {
       <!-- NEWSLETTER ------------------------->
       <!-------------------------------------->
 
-      <section class="newsletter-seccion reveal">
+      <section class="newsletter-seccion reveal" id="newsletter">
          <div class="newsletter-caja">
             <h2>Boletín de Noticias ASCEND</h2>
-            <form class="newsletter-formulario" onsubmit="event.preventDefault();">
-               <input type="email" placeholder="Introduce tu correo electrónico" required>
+            <form class="newsletter-formulario" method="POST" action="<?php echo URL_BASE; ?>index.php?c=inicio&a=suscribirNewsletter">
+               <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+               <input type="email" name="email" placeholder="Introduce tu correo electrónico" maxlength="255" required>
                <button type="submit">Suscribirse</button>
             </form>
+            <?php if (!empty($_SESSION['newsletter_exito'])): ?>
+               <p class="newsletter-mensaje newsletter-mensaje--exito" role="status"><?php echo htmlspecialchars($_SESSION['newsletter_exito']); unset($_SESSION['newsletter_exito']); ?></p>
+            <?php endif; ?>
+            <?php if (!empty($_SESSION['newsletter_error'])): ?>
+               <p class="newsletter-mensaje newsletter-mensaje--error" role="alert"><?php echo htmlspecialchars($_SESSION['newsletter_error']); unset($_SESSION['newsletter_error']); ?></p>
+            <?php endif; ?>
          </div>
       </section>
 

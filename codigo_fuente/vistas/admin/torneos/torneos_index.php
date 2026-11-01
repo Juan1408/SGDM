@@ -101,6 +101,10 @@
                         
                         <td><?php echo $torneo['fecha_inicio'] ? date('d/m/Y', strtotime($torneo['fecha_inicio'])) : 'Sin definir'; ?></td>
                         <td class="acciones-tabla">
+                            <a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=ver&id=<?php echo (int) $torneo['id']; ?>" class="btn-icono" title="Ver detalles">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+
                             <a href="<?php echo URL_BASE; ?>index.php?c=torneoAdmin&a=editar&id=<?php echo $torneo['id']; ?>" class="btn-icono" title="Editar">
                                 <i class="fa-solid fa-pen"></i>
                             </a>

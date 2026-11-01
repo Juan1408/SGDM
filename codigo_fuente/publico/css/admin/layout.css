@@ -318,15 +318,21 @@
     flex-direction: row;
   }
 
-  /* 4. Mostrar menÃº lateral fijo de 250px */
+  /* 4. Mostrar menÃº lateral fijo de 250px.
+     flex-shrink: 0 impide que las tablas anchas del contenido
+     compriman el menú y desborden la página. */
   .menu-lateral {
     display: block;
+    flex: 0 0 250px;
     width: 250px;
     padding-top: 20px;
   }
 
-  /* 5. Restaurar Ã¡rea de contenido */
+  /* 5. Restaurar Ã¡rea de contenido.
+     min-width: 0 permite que el área ceda ancho y que las tablas
+     usen su propio scroll horizontal sin empujar al menú. */
   .area-contenido {
+    min-width: 0;
     padding: 20px 30px;
     overflow-x: visible;
   }

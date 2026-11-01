@@ -596,6 +596,15 @@
    transition: transform 0.25s ease;
 }
 
+.boton-mi-perfil .foto-boton-perfil {
+   width: 26px;
+   height: 26px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 2px solid var(--color-violeta);
+   flex-shrink: 0;
+}
+
 .boton-mi-perfil[aria-expanded="true"] i:last-child {
    transform: rotate(180deg);
 }

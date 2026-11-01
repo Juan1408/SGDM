@@ -31,9 +31,29 @@ class PanelOrganizadorControlador {
             'nombre' => $_SESSION['usuario_nombre'] ?? 'Organizador',
             'estadisticas' => $this->modeloTorneo->obtenerEstadisticasOrganizador($organizadorId),
             'torneos' => $this->modeloTorneo->obtenerTorneosPorOrganizador($organizadorId),
+            'encuentros' => $this->proximosEncuentros($organizadorId, 3),
         ];
 
         require_once __DIR__ . '/../vistas/organizador/dashboard.php';
+    }
+
+    //Proximos partidos programados (desde hoy y sin resultado cargado) de los torneos del organizador
+    private function proximosEncuentros(int $organizadorId, int $limite): array {
+        $hoy = date('Y-m-d');
+        $proximos = [];
+        foreach ($this->modeloTorneo->obtenerPartidosCalendarioOrganizador($organizadorId) as $partido) {
+            if (empty($partido['fecha']) || $partido['fecha'] < $hoy) {
+                continue;
+            }
+            if ($partido['resultado_local'] !== null || $partido['resultado_visitante'] !== null) {
+                continue;
+            }
+            $proximos[] = $partido;
+            if (count($proximos) >= max(1, $limite)) {
+                break;
+            }
+        }
+        return $proximos;
     }
 
     public function crear() {

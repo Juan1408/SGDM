@@ -151,16 +151,6 @@ if ($rolSesion === 3) {
       </header>
 
       <!-- ============================== -->
-      <!-- SEGUIR (todavia sin funcion)   -->
-      <!-- ============================== -->
-      <section class="equipo-card equipo-capitanes">
-         <div class="capitanes-fila capitanes-fila--solo-boton">
-            <p class="perfil-organizador-cta-texto">¿Te interesa competir en los torneos de este organizador?</p>
-            <button type="button" class="boton-solicitar-unirse">Seguir</button>
-         </div>
-      </section>
-
-      <!-- ============================== -->
       <!-- TORNEOS QUE ORGANIZA           -->
       <!-- ============================== -->
       <section class="team-members" id="torneos-organiza">

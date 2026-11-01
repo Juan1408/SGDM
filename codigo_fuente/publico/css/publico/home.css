@@ -741,6 +741,12 @@ body {
    box-shadow: 0 0 34px rgba(var(--color-secundario-rgb), 0.28);
 }
 
+a.noticias-tarjeta {
+   display: block;
+   text-decoration: none;
+   color: inherit;
+}
+
 .noticias-nuevas {
    grid-row: auto;
    padding: 0;
@@ -1412,4 +1418,17 @@ margin-top: 10px;
   display: block;
   color: inherit;
   text-decoration: none;
+}
+.newsletter-mensaje {
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 1.5;
+}
+
+.newsletter-mensaje--exito {
+   color: var(--texto-ok, #4ade80);
+}
+
+.newsletter-mensaje--error {
+   color: var(--texto-error, #f87171);
 }

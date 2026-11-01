@@ -51,6 +51,43 @@ class TorneoAdminControlador {
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }
 
+    /**
+     * Ficha administrativa del torneo (solo lectura): configuración
+     * cargada por el organizador, participantes, posiciones, podio,
+     * fixture y cronograma.
+     */
+    public function ver() {
+        $torneoId = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : 0;
+        $origen = in_array($_GET['origen'] ?? '', ['historial', 'dashboard'], true)
+            ? $_GET['origen']
+            : '';
+
+        $torneo = $torneoId > 0 ? $this->modeloTorneo->obtenerDetalleAdmin($torneoId) : null;
+
+        if (!$torneo) {
+            $_SESSION['mensaje'] = "El torneo solicitado no existe o fue eliminado.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: " . URL_BASE . "index.php?c=torneoAdmin&a=index");
+            exit;
+        }
+
+        $datos = [
+            'torneo' => $torneo,
+            'participantes' => $this->modeloTorneo->obtenerParticipantesAdmin($torneoId),
+            'posiciones' => $this->modeloTorneo->obtenerPosicionesAdmin($torneoId),
+            'fixture' => $this->modeloTorneo->obtenerFixturePublico($torneoId),
+            'podio' => $this->modeloTorneo->obtenerPodio($torneoId),
+            'actividades' => $this->modeloTorneo->obtenerActividadesAdmin($torneoId),
+            'origen' => $origen,
+        ];
+
+        $vistaInyectada = 'torneos/torneo_detalle.php';
+        $tituloPantalla = 'Ficha del torneo';
+        $estilosExtra = ['css/admin/ficha.css', 'css/admin/ficha-torneo.css'];
+
+        require_once __DIR__ . '/../vistas/admin/dashboard.php';
+    }
+
     public function editar() {
         $id = $_GET['id'] ?? null;
         if (!$id) {

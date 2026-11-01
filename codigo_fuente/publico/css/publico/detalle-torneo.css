@@ -2272,3 +2272,16 @@ TABS RESPONSIVE (min-width: 700px)
    background: var(--color-primario);
    border-color: var(--color-primario);
 }
+.newsletter-mensaje {
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 1.5;
+}
+
+.newsletter-mensaje--exito {
+   color: var(--texto-ok, #4ade80);
+}
+
+.newsletter-mensaje--error {
+   color: var(--texto-error, #f87171);
+}

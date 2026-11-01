@@ -1,0 +1,164 @@
+/* =========================================
+   FICHA ADMINISTRATIVA DEL TORNEO
+   Se carga solo en torneo_detalle.php, después de ficha.css.
+   ========================================= */
+
+.ficha-torneo-banner {
+  margin-bottom: 20px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  background-color: var(--color-fondo-panel);
+}
+
+.ficha-torneo-banner img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+}
+
+.ficha-enlace {
+  color: var(--color-primario);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.ficha-enlace:hover {
+  text-decoration: underline;
+}
+
+.ficha-subtitulo {
+  margin: 16px 0 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-texto-secundario);
+}
+
+.ficha-subtitulo:first-of-type {
+  margin-top: 0;
+}
+
+.ficha-texto {
+  margin: 0 0 12px;
+  color: var(--color-texto-principal);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 90ch;
+}
+
+.ficha-avatar-escudo {
+  border-radius: var(--radio-borde);
+  object-fit: contain;
+  background-color: var(--color-fondo-principal);
+  padding: 2px;
+}
+
+/* Resumen: cinco tarjetas en escritorio */
+.ficha-resumen-torneo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ficha-tarjeta-numero small {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+}
+
+/* ------------------------------------------------------------------
+   Podio
+   ------------------------------------------------------------------ */
+.ficha-podio {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.ficha-podio-puesto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  text-align: center;
+  border: 1px solid var(--color-borde);
+  border-top-width: 4px;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-principal);
+}
+
+.ficha-podio-puesto i {
+  font-size: 1.3rem;
+}
+
+.ficha-podio-puesto strong {
+  font-size: 1rem;
+  color: var(--color-texto-principal);
+  overflow-wrap: anywhere;
+}
+
+.ficha-podio-posicion {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ficha-podio-etiqueta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-texto-secundario);
+}
+
+.podio-oro {
+  border-top-color: #d4a017;
+  background-color: rgba(212, 160, 23, 0.08);
+}
+
+.podio-oro i,
+.podio-oro .ficha-podio-posicion {
+  color: #d4a017;
+}
+
+.podio-plata {
+  border-top-color: #8d99a6;
+  background-color: rgba(141, 153, 166, 0.08);
+}
+
+.podio-plata i,
+.podio-plata .ficha-podio-posicion {
+  color: #8d99a6;
+}
+
+.podio-bronce {
+  border-top-color: #b5723b;
+  background-color: rgba(181, 114, 59, 0.08);
+}
+
+.podio-bronce i,
+.podio-bronce .ficha-podio-posicion {
+  color: #b5723b;
+}
+
+/* ------------------------------------------------------------------
+   Adaptación a pantallas medianas y grandes
+   ------------------------------------------------------------------ */
+@media (min-width: 640px) {
+  .ficha-resumen-torneo {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ficha-podio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .ficha-resumen-torneo {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

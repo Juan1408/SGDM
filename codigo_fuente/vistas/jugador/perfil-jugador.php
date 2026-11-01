@@ -285,24 +285,6 @@ if (!$esPublico || $rolSesion === 3) {
 
       <?php if (!$esPublico): ?>
       <!-- ============================== -->
-      <!-- TROFEOS (todavia de ejemplo)    -->
-      <!-- ============================== -->
-      <section class="tarjeta-equipo equipo-trofeos">
-
-         <h2>Trofeos</h2>
-
-         <ul class="trofeos-fila">
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-trofeo"></i></article></li>
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-medal"></i></article></li>
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-crown"></i></article></li>
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-trofeo"></i></article></li>
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-medal"></i></article></li>
-            <li><article class="tarjeta-trofeo"><i class="fa-solid fa-crown"></i></article></li>
-         </ul>
-
-      </section>
-
-      <!-- ============================== -->
       <!-- LOGROS (todavia de ejemplo -- se conecta en la Fase de Logros) -->
       <!-- ============================== -->
       <section class="tarjeta-equipo equipo-logros" id="historial">

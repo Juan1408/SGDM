@@ -214,3 +214,34 @@
       height: 420px;
    }
 }
+
+/* Campo trampa anti-bots: fuera de pantalla (no display:none, algunos bots lo ignoran) */
+.contacto-trampa {
+   position: absolute !important;
+   left: -9999px !important;
+   width: 1px !important;
+   height: 1px !important;
+   opacity: 0 !important;
+   pointer-events: none !important;
+}
+
+.contacto-mensaje {
+   margin: 0;
+   padding: 12px 16px;
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 1.5;
+   border: 1px solid transparent;
+}
+
+.contacto-mensaje--exito {
+   color: var(--texto-ok, #4ade80);
+   border-color: var(--texto-ok, #4ade80);
+   background: rgba(74, 222, 128, 0.1);
+}
+
+.contacto-mensaje--error {
+   color: var(--texto-error, #f87171);
+   border-color: var(--texto-error, #f87171);
+   background: rgba(248, 113, 113, 0.1);
+}

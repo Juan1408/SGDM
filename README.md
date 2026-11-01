@@ -134,7 +134,8 @@ El panel de administración incorpora dos fichas administrativas, una acción de
 - **Edición de usuario:** se abre desde la ficha (`Editar nombre o rol`) y permite cambiar únicamente nombre y rol. El email es de solo lectura porque cambiarlo invalidaría la verificación del usuario; el backend ignora cualquier email enviado en el POST. Cada cambio se audita con `ADMIN_ACTUALIZA_USUARIO`.
 - **Retorno:** guardar o cancelar vuelve al listado de origen (`usuarios`, `jugadores`, `organizadores`) o a la ficha desde la que se editó. Un `origen` no reconocido usa el listado del rol del usuario, no una URL externa.
 - **Baja de cuentas:** la acción de eliminar de los listados es una **baja lógica** (`esta_activo = 0`). No borra perfiles, membresías, capitanías ni historial; la cuenta deja de poder iniciar sesión y sus sesiones activas se cierran en la siguiente petición. Se audita con `ADMIN_BAJA_USUARIO`.
-- **Cambio de rol:** al guardar se crea, dentro de la misma transacción, el perfil especializado que falte para el rol destino (jugador u organizador) y se conservan los perfiles existentes. El formulario muestra cuántos torneos, equipos y capitanías dependen del usuario. Promover a **Administrador** exige marcar una confirmación explícita; el backend rechaza la promoción sin ella.
+- **Cambio de rol:** al guardar se crea, dentro de la misma transacción, el perfil especializado que falte para el rol destino (jugador u organizador) y se conservan los perfiles existentes. El formulario muestra cuántos torneos, equipos y capitanías dependen del usuario. Solo se pueden asignar los roles **Organizador** y **Jugador**; el backend rechaza cualquier otro valor.
+- **Cuentas administrativas inmutables:** desde el panel no se promueve a nadie a Administrador ni se modifica, bloquea o da de baja a una cuenta con rol 1. Esas cuentas son de solo lectura y se aprovisionan fuera de la aplicación (semilla, base de datos o procedimiento operativo).
 - **Bloqueo y activación:** se auditan con `ADMIN_CAMBIA_ESTADO_USUARIO`; el administrador no puede bloquear su propia cuenta.
 - **Ver como (suplantación):** solo sobre jugadores y organizadores, nunca sobre otro administrador ni sobre la propia cuenta. El inicio y el fin se auditan (`ADMIN_SUPLANTA_INICIO` / `ADMIN_SUPLANTA_FIN`); la restauración es POST con CSRF y regenera el identificador de sesión. Mientras dura la suplantación la sesión es de solo lectura: se bloquean los POST.
 - Los listados de usuarios, jugadores, organizadores y equipos enlazan a estas fichas. El botón de edición redundante de los listados se retiró: la edición se inicia desde la ficha.
@@ -210,7 +211,7 @@ PHP_BIN=/c/xampp/php/php.exe \
 bash tests/e2e/seguridad_admin_e2e.sh
 ```
 
-Cubre verificación de correo, email del jugador en solo lectura, baja lógica y auditoría, bloqueo/activación, suplantación (auto-suplantación, otro admin, restauración por POST con CSRF y Referer no confiable), confirmación de promoción a administrador y regresión de las páginas del panel. Crea sus propios usuarios con un prefijo único y los elimina al terminar.
+Cubre verificación de correo, email del jugador en solo lectura, baja lógica y auditoría, bloqueo/activación, suplantación (auto-suplantación, otro admin, restauración por POST con CSRF y Referer no confiable), inmutabilidad de las cuentas administrativas (otro admin no puede editarlas, degradarlas, bloquearlas ni darlas de baja), rechazo de los roles 1 y 4, transiciones 2 ↔ 3 y regresión de las páginas del panel. Crea sus propios usuarios con un prefijo único y los elimina al terminar.
 
 Para ejecutarlo contra el **stack Docker** sin ensuciar la base demo, levantá un contenedor efímero con la misma imagen apuntando a `ascend_test`:
 

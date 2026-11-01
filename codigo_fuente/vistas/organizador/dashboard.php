@@ -33,6 +33,8 @@
    <?php
    $estadisticas = $datos['estadisticas'] ?? ['activos' => 0, 'solicitudes' => 0, 'finalizados' => 0];
    $torneos = $datos['torneos'] ?? [];
+   $encuentros = $datos['encuentros'] ?? [];
+   $mesesCortos = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
    $estadoTorneo = [
       'borrador' => ['texto' => 'Borrador', 'clase' => 'chip-neutro'],
       'inscripciones_abiertas' => ['texto' => 'Inscripciones abiertas', 'clase' => 'chip-alerta'],
@@ -154,30 +156,38 @@
 
             <ul class="lista-encuentros">
 
-               <li class="tarjeta-lista tarjeta-lista-encuentro">
+               <?php if ($encuentros === []): ?>
+                  <li class="tarjeta-lista">
+                     <p>No tenés encuentros programados por el momento.</p>
+                     <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&a=calendario" class="boton boton-gestion">Ver calendario</a>
+                  </li>
+               <?php else: ?>
+                  <?php foreach ($encuentros as $encuentro): ?>
+                     <?php $marcaFecha = strtotime($encuentro['fecha']); ?>
+                     <li class="tarjeta-lista tarjeta-lista-encuentro" title="<?php echo htmlspecialchars($encuentro['torneo_nombre'], ENT_QUOTES, 'UTF-8'); ?>">
 
-                  <time class="fecha-encuentro" datetime="2026-07-12">
-                     <strong>12</strong>
-                     <span>JUL</span>
-                  </time>
+                        <time class="fecha-encuentro" datetime="<?php echo htmlspecialchars($encuentro['fecha'], ENT_QUOTES, 'UTF-8'); ?>">
+                           <strong><?php echo date('d', $marcaFecha); ?></strong>
+                           <span><?php echo $mesesCortos[(int) date('n', $marcaFecha) - 1]; ?></span>
+                        </time>
 
-                  <div class="equipo-encuentro">
-                     <div class="equipos">
-                        <img src="<?php echo URL_BASE; ?>img/logos/artigas.png" alt="Artigas">
-                        <span>Artigas</span>
-                     </div>
+                        <div class="equipo-encuentro">
+                           <div class="equipos">
+                              <span><?php echo htmlspecialchars($encuentro['local_nombre'] ?? 'Por definir', ENT_QUOTES, 'UTF-8'); ?></span>
+                           </div>
 
-                     <strong class="equipos-vs">VS</strong>
+                           <strong class="equipos-vs">VS</strong>
 
-                     <div class="equipos">
-                        <img src="<?php echo URL_BASE; ?>img/logos/flores.png" alt="Flores">
-                        <span>Flores</span>
-                     </div>
-                  </div>
+                           <div class="equipos">
+                              <span><?php echo htmlspecialchars($encuentro['visitante_nombre'] ?? 'Por definir', ENT_QUOTES, 'UTF-8'); ?></span>
+                           </div>
+                        </div>
 
-                  <span class="chip chip-alerta">Pendiente</span>
+                        <span class="chip chip-alerta"><?php echo !empty($encuentro['hora']) ? htmlspecialchars(substr($encuentro['hora'], 0, 5), ENT_QUOTES, 'UTF-8') . ' hs' : 'Programado'; ?></span>
 
-               </li>
+                     </li>
+                  <?php endforeach; ?>
+               <?php endif; ?>
 
             </ul>
 

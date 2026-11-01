@@ -122,10 +122,27 @@
             </div>
          </div>
 
-         <form class="contacto-formulario">
-            <input type="text" placeholder="Tu nombre *" required>
-            <input type="email" placeholder="Tu email *" required>
-            <textarea placeholder="Escribí tu mensaje"></textarea>
+         <?php
+         //Valores previos (si hubo error) o datos de la sesion si la persona ya inicio sesion
+         $viejo = $_SESSION['contacto_viejo'] ?? [];
+         unset($_SESSION['contacto_viejo']);
+         $valorNombre = $viejo['nombre'] ?? (string) ($_SESSION['usuario_nombre'] ?? '');
+         $valorEmail = $viejo['email'] ?? (string) ($_SESSION['email'] ?? '');
+         $valorMensaje = $viejo['mensaje'] ?? '';
+         ?>
+         <form class="contacto-formulario" id="formulario-contacto" method="POST" action="<?php echo URL_BASE; ?>index.php?c=inicio&a=enviarContacto">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+            <!-- Campo trampa para bots: oculto para las personas -->
+            <input type="text" name="sitio_web" class="contacto-trampa" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <?php if (!empty($_SESSION['contacto_exito'])): ?>
+               <p class="contacto-mensaje contacto-mensaje--exito" role="status"><?php echo htmlspecialchars($_SESSION['contacto_exito']); unset($_SESSION['contacto_exito']); ?></p>
+            <?php endif; ?>
+            <?php if (!empty($_SESSION['contacto_error'])): ?>
+               <p class="contacto-mensaje contacto-mensaje--error" role="alert"><?php echo htmlspecialchars($_SESSION['contacto_error']); unset($_SESSION['contacto_error']); ?></p>
+            <?php endif; ?>
+            <input type="text" name="nombre" placeholder="Tu nombre *" maxlength="100" required value="<?php echo htmlspecialchars($valorNombre, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="email" name="email" placeholder="Tu email *" maxlength="255" required value="<?php echo htmlspecialchars($valorEmail, ENT_QUOTES, 'UTF-8'); ?>">
+            <textarea name="mensaje" placeholder="Escribí tu mensaje *" minlength="10" maxlength="2000" required><?php echo htmlspecialchars($valorMensaje, ENT_QUOTES, 'UTF-8'); ?></textarea>
             <button type="submit">Enviar mensaje</button>
          </form>
       </section>

@@ -2,13 +2,16 @@
 
 /**
  * Vista: solicitudes.php
- * Requiere que $invitaciones venga cargado por EquipoControlador::solicitudes()
+ * Requiere que $invitaciones y $solicitudesEnviadas vengan cargadas por EquipoControlador::solicitudes()
  * Usa las clases reales de solicitudes.css (fila-jugador, boton-aceptar-solicitud, etc.),
  * las mismas que ya usaba solicitudes.js en la maquetación original.
  *
  * Tambien aloja el ingreso por codigo de invitacion: EquipoControlador::unirsePorCodigo()
  * redirige aca con ?unionError=<motivo> cuando el intento no prospera.
  */
+
+$invitaciones = $invitaciones ?? [];
+$solicitudesEnviadas = $solicitudesEnviadas ?? [];
 
 //Motivos que puede devolver el controlador; nunca se imprime texto arbitrario de la URL
 $mensajesUnion = [
@@ -51,8 +54,16 @@ $mensajeUnion = $mensajesUnion[$unionError] ?? '';
 
       <div class="crear-equipo-header">
          <h1>Solicitudes</h1>
-         <p>Invitaciones de otros equipos para que te sumes. Aceptá o rechazá cada una.</p>
+         <p>Invitaciones que recibiste de otros equipos y las solicitudes que enviaste para unirte a uno.</p>
       </div>
+
+      <?php if (isset($_GET['solicitudCancelada'])): ?>
+         <?php if ($_GET['solicitudCancelada'] === '1'): ?>
+            <p class="aviso-union exito" role="status">La solicitud se canceló correctamente.</p>
+         <?php else: ?>
+            <p class="aviso-union error" role="alert">No se pudo cancelar: la solicitud ya no está pendiente o no te pertenece.</p>
+         <?php endif; ?>
+      <?php endif; ?>
 
       <div class="crear-equipo-formulario">
 
@@ -95,10 +106,13 @@ $mensajeUnion = $mensajesUnion[$unionError] ?? '';
 
          <section class="tarjeta-equipo solicitudes-contenedor">
 
+            <h2 class="solicitudes-subtitulo">Invitaciones recibidas</h2>
+            <p class="solicitudes-ayuda">Equipos que te invitaron a sumarte. Aceptá o rechazá cada una.</p>
+
             <?php if (empty($invitaciones)): ?>
 
                <p class="lista-vacia">
-                  No tenés solicitudes pendientes por el momento.
+                  No tenés invitaciones pendientes por el momento.
                </p>
 
             <?php else: ?>
@@ -132,6 +146,70 @@ $mensajeUnion = $mensajesUnion[$unionError] ?? '';
                               <input type="hidden" name="respuesta" value="rechazar">
                               <button type="submit" class="boton-rechazar-solicitud">Rechazar</button>
                            </form>
+                        </div>
+                     </li>
+                  <?php endforeach; ?>
+               </ul>
+
+            <?php endif; ?>
+
+         </section>
+
+         <!-- SOLICITUDES QUE ENVIO EL JUGADOR -->
+         <section class="tarjeta-equipo solicitudes-contenedor">
+
+            <h2 class="solicitudes-subtitulo">Mis solicitudes enviadas</h2>
+            <p class="solicitudes-ayuda">Equipos a los que pediste unirte. Mientras esté pendiente, podés cancelarla.</p>
+
+            <?php if (empty($solicitudesEnviadas)): ?>
+
+               <p class="lista-vacia">
+                  Todavía no enviaste solicitudes para unirte a un equipo.
+               </p>
+
+            <?php else: ?>
+
+               <?php
+               $etiquetasEstadoSolicitud = [
+                  'pendiente' => 'Pendiente',
+                  'aprobado'  => 'Aceptada',
+                  'rechazado' => 'Rechazada',
+                  'cancelado' => 'Cancelada',
+               ];
+               ?>
+
+               <ul class="lista-jugadores" id="lista-solicitudes-enviadas">
+                  <?php foreach ($solicitudesEnviadas as $enviada): ?>
+                     <?php $estado = (string) $enviada['estado']; ?>
+                     <li class="fila-jugador">
+                        <img class="fila-jugador-avatar"
+                           src="<?php echo htmlspecialchars($enviada['escudo_url'] ?: URL_BASE . 'img/logos/canelones.png'); ?>"
+                           alt="<?php echo htmlspecialchars($enviada['nombre_equipo']); ?>">
+
+                        <div class="fila-jugador-info">
+                           <a class="fila-jugador-nombre solicitud-enlace-equipo"
+                              href="<?php echo URL_BASE; ?>index.php?c=equipo&a=verPerfil&id=<?php echo (int) $enviada['equipo_id']; ?>">
+                              <?php echo htmlspecialchars($enviada['nombre_equipo']); ?>
+                           </a>
+                           <span class="fila-jugador-invitado-por">
+                              Enviada el <?php echo htmlspecialchars(date('d/m/Y', strtotime($enviada['fecha_solicitud']))); ?>
+                           </span>
+                        </div>
+
+                        <div class="fila-jugador-acciones">
+                           <span class="solicitud-estado solicitud-estado--<?php echo htmlspecialchars($estado); ?>">
+                              <?php echo htmlspecialchars($etiquetasEstadoSolicitud[$estado] ?? ucfirst($estado)); ?>
+                           </span>
+
+                           <?php if ($estado === 'pendiente'): ?>
+                              <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=equipo&a=cancelarSolicitud">
+                                 <input type="hidden"
+                                    name="csrf_token"
+                                    value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                                 <input type="hidden" name="solicitud_id" value="<?php echo (int) $enviada['id']; ?>">
+                                 <button type="submit" class="boton-rechazar-solicitud">Cancelar solicitud</button>
+                              </form>
+                           <?php endif; ?>
                         </div>
                      </li>
                   <?php endforeach; ?>

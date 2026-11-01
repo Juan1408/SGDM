@@ -396,6 +396,24 @@ class Torneo {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Ultimos comentarios aprobados de torneos publicados, para la seccion Comunidad de la home
+    public function obtenerUltimosComentariosComunidad(int $limite = 3): array {
+        $sql = "SELECT c.id, c.torneo_id, c.comentario, c.fecha_hora,
+                       COALESCE(NULLIF(u.nombre_completo, ''), c.nombre_autor) AS autor,
+                       u.foto_perfil_url AS foto,
+                       t.nombre AS torneo_nombre
+                FROM torneo_comentarios c
+                INNER JOIN torneos t ON t.id = c.torneo_id
+                LEFT JOIN usuarios u ON u.id = c.usuario_id
+                WHERE c.aprobado = 1 AND t.estado NOT IN ('borrador', 'cancelado')
+                ORDER BY c.fecha_hora DESC, c.id DESC
+                LIMIT :limite";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindValue(':limite', max(1, $limite), PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     //Numeros del banner de estadisticas
     public function obtenerEstadisticasPublicas(): array {
         $sql = "SELECT
@@ -2165,6 +2183,116 @@ class Torneo {
 
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($parametros);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // ============================================================================
+    // FICHA ADMINISTRATIVA DEL TORNEO (solo lectura)
+    // ============================================================================
+
+    /**
+     * Datos completos del torneo para la ficha del administrador.
+     * A diferencia de obtenerTorneoPublico, incluye cualquier estado
+     * (borrador, cancelado) porque el admin debe poder auditarlos.
+     */
+    public function obtenerDetalleAdmin(int $torneoId): ?array {
+        $sql = "SELECT t.*,
+                       j.nombre AS nombre_juego, j.categoria AS categoria_juego,
+                       m.nombre AS nombre_modalidad, m.descripcion AS descripcion_modalidad,
+                       sp.nombre AS nombre_sistema_puntuacion,
+                       u.nombre_completo AS organizador_nombre,
+                       u.email AS organizador_email,
+                       u.foto_perfil_url AS organizador_foto
+                FROM torneos t
+                INNER JOIN juegos j ON j.id = t.juego_id
+                LEFT JOIN modalidades m ON m.id = t.modalidad_id
+                LEFT JOIN sistemas_puntuacion sp ON sp.id = t.sistema_puntuacion_id
+                INNER JOIN usuarios u ON u.id = t.organizador_id
+                WHERE t.id = :id
+                LIMIT 1";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':id' => $torneoId]);
+        $torneo = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $torneo ?: null;
+    }
+
+    /**
+     * Participantes del torneo en cualquier estado, con sus datos de
+     * clasificación si ya jugaron. Permite al admin ver inscriptos
+     * confirmados y solicitudes pendientes/rechazadas.
+     */
+    public function obtenerParticipantesAdmin(int $torneoId): array {
+        $sql = "SELECT p.id, p.tipo, p.referencia_id, p.nombre, p.estado,
+                       p.fecha_inscripcion, p.fecha_confirmacion,
+                       CASE WHEN p.tipo = 'equipo' THEN e.escudo_url ELSE u.foto_perfil_url END AS imagen,
+                       e.nombre_equipo AS equipo_nombre,
+                       CASE WHEN p.tipo = 'equipo'
+                            THEN (SELECT COUNT(*) FROM equipo_miembros m
+                                  WHERE m.equipo_id = p.referencia_id AND m.es_activo = 1)
+                            ELSE NULL END AS total_miembros,
+                       COALESCE(pos.partidos_jugados, 0) AS partidos_jugados,
+                       COALESCE(pos.partidos_ganados, 0) AS partidos_ganados,
+                       COALESCE(pos.partidos_empatados, 0) AS partidos_empatados,
+                       COALESCE(pos.partidos_perdidos, 0) AS partidos_perdidos,
+                       COALESCE(pos.puntos, 0) AS puntos
+                FROM participantes_torneo p
+                LEFT JOIN equipos e ON p.tipo = 'equipo' AND e.id = p.referencia_id
+                LEFT JOIN usuarios u ON p.tipo = 'usuario' AND u.id = p.referencia_id
+                LEFT JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                WHERE p.torneo_id = :torneo_id
+                ORDER BY CASE p.estado
+                            WHEN 'confirmado' THEN 0
+                            WHEN 'pendiente' THEN 1
+                            WHEN 'rechazado' THEN 2
+                            ELSE 3
+                         END,
+                         COALESCE(pos.puntos, 0) DESC,
+                         p.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Tabla de posiciones con el detalle completo (a favor, en contra y
+     * diferencia). La posición se calcula en PHP respetando el mismo
+     * criterio de desempate usado en el resto del sistema.
+     */
+    public function obtenerPosicionesAdmin(int $torneoId): array {
+        $sql = "SELECT p.nombre,
+                       COALESCE(pos.partidos_jugados, 0) AS partidos_jugados,
+                       COALESCE(pos.partidos_ganados, 0) AS partidos_ganados,
+                       COALESCE(pos.partidos_empatados, 0) AS partidos_empatados,
+                       COALESCE(pos.partidos_perdidos, 0) AS partidos_perdidos,
+                       COALESCE(pos.puntos_favor, 0) AS puntos_favor,
+                       COALESCE(pos.puntos_contra, 0) AS puntos_contra,
+                       COALESCE(pos.diferencia_goles, 0) AS diferencia_goles,
+                       COALESCE(pos.puntos, 0) AS puntos
+                FROM participantes_torneo p
+                LEFT JOIN torneo_posiciones pos ON pos.participante_id = p.id AND pos.torneo_id = p.torneo_id
+                WHERE p.torneo_id = :torneo_id AND p.estado = 'confirmado'
+                ORDER BY COALESCE(pos.puntos, 0) DESC, COALESCE(pos.diferencia_goles, 0) DESC,
+                         COALESCE(pos.puntos_favor, 0) DESC, p.nombre ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
+        $posiciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($posiciones as $indice => &$posicion) {
+            $posicion['posicion'] = $indice + 1;
+        }
+        unset($posicion);
+
+        return $posiciones;
+    }
+
+    //Actividades del cronograma cargadas por el organizador
+    public function obtenerActividadesAdmin(int $torneoId): array {
+        $sql = "SELECT id, titulo, descripcion, tipo, fecha, hora
+                FROM torneo_actividades
+                WHERE torneo_id = :torneo_id
+                ORDER BY fecha ASC, hora IS NULL, hora ASC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':torneo_id' => $torneoId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

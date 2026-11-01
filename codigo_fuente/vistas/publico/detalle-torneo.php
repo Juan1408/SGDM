@@ -968,13 +968,21 @@
             </div>
             <?php endif; ?>
 
-            <div class="newsletter-seccion">
+            <div class="newsletter-seccion" id="newsletter">
                <div class="newsletter-caja">
                   <h2>Boletín de Noticias ASCEND</h2>
-                  <form class="newsletter-formulario" onsubmit="event.preventDefault();">
-                     <input type="email" placeholder="Introduce tu correo electrónico" required>
+                  <form class="newsletter-formulario" method="POST" action="<?php echo URL_BASE; ?>index.php?c=inicio&a=suscribirNewsletter">
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+                     <input type="hidden" name="volver" value="index.php?c=torneo&a=detalle&id=<?php echo (int) $torneo['id']; ?>#newsletter">
+                     <input type="email" name="email" placeholder="Introduce tu correo electrónico" maxlength="255" required>
                      <button type="submit">SUSCRIBIRSE</button>
                   </form>
+                  <?php if (!empty($_SESSION['newsletter_exito'])): ?>
+                     <p class="newsletter-mensaje newsletter-mensaje--exito" role="status"><?php echo htmlspecialchars($_SESSION['newsletter_exito']); unset($_SESSION['newsletter_exito']); ?></p>
+                  <?php endif; ?>
+                  <?php if (!empty($_SESSION['newsletter_error'])): ?>
+                     <p class="newsletter-mensaje newsletter-mensaje--error" role="alert"><?php echo htmlspecialchars($_SESSION['newsletter_error']); unset($_SESSION['newsletter_error']); ?></p>
+                  <?php endif; ?>
                </div>
             </div>
 

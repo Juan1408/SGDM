@@ -20,7 +20,128 @@ class InicioControlador {
         $proximosEnfrentamientos = $modeloTorneo->obtenerProximosEnfrentamientos(4);
         $estadisticas = $modeloTorneo->obtenerEstadisticasPublicas();
         $topJugadores = $modeloTorneo->obtenerTopJugadores(4);
+        $ultimosComentarios = $modeloTorneo->obtenerUltimosComentariosComunidad(1);
         require_once __DIR__ . '/../vistas/publico/index.php';
+    }
+
+    //Suscripcion al boletin de la home y del detalle de torneo (POST con CSRF)
+    public function suscribirNewsletter(){
+        $destino = URL_BASE . 'index.php?c=inicio&a=index#newsletter';
+
+        //Pagina a la que se vuelve: solo se aceptan rutas internas "index.php?..."
+        $volver = trim((string) ($_POST['volver'] ?? ''));
+        if (preg_match('/^index\.php\?[A-Za-z0-9_=&%.\-]+(#[A-Za-z0-9_\-]+)?$/', $volver)) {
+            $destino = URL_BASE . $volver;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
+
+        $email = strtolower(trim((string) ($_POST['email'] ?? '')));
+
+        if ($email === '' || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['newsletter_error'] = 'Ingresá un correo electrónico válido.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        try {
+            require_once __DIR__ . '/../modelos/Newsletter.php';
+            $resultado = (new \App\Modelos\Newsletter())->suscribir($email);
+        } catch (\Throwable $th) {
+            error_log('Error al suscribir al newsletter: ' . $th->getMessage());
+            $_SESSION['newsletter_error'] = 'No pudimos registrar tu suscripción. Probá de nuevo en unos minutos.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        $_SESSION['newsletter_exito'] = $resultado === 'ya_suscripto'
+            ? 'Ese correo ya estaba suscripto al boletín. ¡Gracias por seguir con nosotros!'
+            : '¡Listo! Te suscribiste al boletín de ASCEND.';
+        header('Location: ' . $destino);
+        exit;
+    }
+
+    //Envio del formulario de contacto (POST + CSRF). El mensaje llega a los administradores como notificacion.
+    public function enviarContacto(){
+        $destino = URL_BASE . 'index.php?c=inicio&a=contacto#formulario-contacto';
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        \App\Ayudantes\Sesion::requerirTokensCSRF();
+
+        //Campo trampa para bots: una persona no lo ve y lo deja vacio
+        if (trim((string) ($_POST['sitio_web'] ?? '')) !== '') {
+            $_SESSION['contacto_exito'] = '¡Gracias! Recibimos tu mensaje.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        $nombre = trim((string) ($_POST['nombre'] ?? ''));
+        $email = strtolower(trim((string) ($_POST['email'] ?? '')));
+        $mensaje = trim((string) ($_POST['mensaje'] ?? ''));
+        $largo = static function (string $t): int {
+            return function_exists('mb_strlen') ? mb_strlen($t, 'UTF-8') : strlen($t);
+        };
+
+        //Se conserva lo escrito para no volver a tipearlo si hay un error
+        $_SESSION['contacto_viejo'] = ['nombre' => $nombre, 'email' => $email, 'mensaje' => $mensaje];
+
+        $error = null;
+        if ($largo($nombre) < 2 || $largo($nombre) > 100) {
+            $error = 'Escribí tu nombre (entre 2 y 100 caracteres).';
+        } elseif ($email === '' || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Ingresá un correo electrónico válido.';
+        } elseif ($largo($mensaje) < 10) {
+            $error = 'El mensaje tiene que tener al menos 10 caracteres.';
+        } elseif ($largo($mensaje) > 2000) {
+            $error = 'El mensaje no puede superar los 2000 caracteres.';
+        } elseif (isset($_SESSION['contacto_ultimo_envio']) && (time() - (int) $_SESSION['contacto_ultimo_envio']) < 30) {
+            $error = 'Esperá unos segundos antes de enviar otro mensaje.';
+        }
+
+        if ($error !== null) {
+            $_SESSION['contacto_error'] = $error;
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        //Freno contra spam por sesion: maximo 5 mensajes por hora
+        $ahora = time();
+        $envios = array_values(array_filter(
+            (array) ($_SESSION['contacto_envios'] ?? []),
+            static function ($marca) use ($ahora) { return ($ahora - (int) $marca) < 3600; }
+        ));
+        if (count($envios) >= 5) {
+            $_SESSION['contacto_error'] = 'Enviaste muchos mensajes seguidos. Probá de nuevo más tarde.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        try {
+            require_once __DIR__ . '/../modelos/MensajeContacto.php';
+            (new \App\Modelos\MensajeContacto())->enviarAAdministradores($nombre, $email, $mensaje);
+        } catch (\Throwable $th) {
+            error_log('Error al guardar un mensaje de contacto: ' . $th->getMessage());
+            $_SESSION['contacto_error'] = 'No pudimos enviar tu mensaje. Probá de nuevo en unos minutos.';
+            header('Location: ' . $destino);
+            exit;
+        }
+
+        unset($_SESSION['contacto_viejo'], $_SESSION['contacto_error']);
+        $_SESSION['contacto_ultimo_envio'] = time();
+        $envios[] = $ahora;
+        $_SESSION['contacto_envios'] = $envios;
+        $_SESSION['contacto_exito'] = '¡Gracias! Recibimos tu mensaje y te vamos a responder por correo.';
+        header('Location: ' . $destino);
+        exit;
     }
 
     //Pantalla generica para secciones que todavia no estan programadas

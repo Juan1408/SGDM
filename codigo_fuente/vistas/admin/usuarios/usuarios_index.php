@@ -6,6 +6,10 @@
 <section class="modulo-admin">
     <h2 class="titulo-pantalla">Administradores del sistema</h2>
 
+    <p class="texto-ayuda">
+        Las cuentas administrativas son de solo lectura desde el panel. El alta, la baja y el cambio de rol se gestionan fuera de la aplicación.
+    </p>
+
     <section>
         <table class="tabla-estandar">
             <thead>
@@ -36,7 +40,11 @@
 
                         <td>
                             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=ver&id=<?php echo (int) $usuario['id']; ?>&origen=usuarios" class="boton-accion">Ver ficha</a>
-                            <?php if ((int) $usuario['id'] !== (int) ($_SESSION['usuario_id'] ?? 0)): ?>
+                            <?php if ((int) $usuario['id'] === (int) ($_SESSION['usuario_id'] ?? 0)): ?>
+                                <span class="texto-ayuda">Tu propia cuenta</span>
+                            <?php elseif ((int) $usuario['rol_id'] === 1): ?>
+                                <span class="texto-ayuda">Cuenta protegida</span>
+                            <?php else: ?>
                                 <form method="POST" action="<?php echo URL_BASE; ?>index.php?c=usuario&a=cambiarEstadoUsuario" style="display:inline-block;">
                                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="id" value="<?php echo (int) $usuario['id']; ?>">
@@ -44,8 +52,6 @@
                                         <?php echo $usuario['esta_activo'] ? 'Bloquear' : 'Activar'; ?>
                                     </button>
                                 </form>
-                            <?php else: ?>
-                                <span class="texto-ayuda">Tu propia cuenta</span>
                             <?php endif; ?>
                         </td>
                     </tr>

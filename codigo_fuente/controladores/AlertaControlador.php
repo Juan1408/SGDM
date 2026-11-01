@@ -12,10 +12,14 @@ namespace App\Controladores;
 
 use App\Modelos\Alerta;
 use App\Modelos\ErrorSistema;
+use App\Modelos\Notificacion;
+use App\Modelos\Newsletter;
 use App\Ayudantes\Sesion;
 
 require_once __DIR__ . '/../modelos/Alerta.php';
 require_once __DIR__ . '/../modelos/ErrorSistema.php'; // Para registrar errores si ocurren
+require_once __DIR__ . '/../modelos/Notificacion.php';
+require_once __DIR__ . '/../modelos/Newsletter.php';
 require_once __DIR__ . '/../ayudantes/Sesion.php';
 
 class AlertaControlador {
@@ -32,6 +36,22 @@ class AlertaControlador {
      * Muestra la vista con el formulario para enviar una alerta global
      */
     public function index() {
+        $adminId = (int) ($_SESSION['usuario_id'] ?? 0);
+
+        //Bandeja del administrador (los mensajes del formulario de contacto llegan aca)
+        //y resumen del boletin. Si la base falla, la pagina sigue mostrando el formulario.
+        $notificacionesAdmin = [];
+        $newsletterTotal = 0;
+        $newsletterUltimos = [];
+        try {
+            $notificacionesAdmin = (new Notificacion())->obtenerRecientes($adminId, 10);
+            $modeloNewsletter = new Newsletter();
+            $newsletterTotal = $modeloNewsletter->contarActivos();
+            $newsletterUltimos = $modeloNewsletter->listarActivos(10);
+        } catch (\Throwable $th) {
+            error_log('Error al cargar la bandeja del administrador: ' . $th->getMessage());
+        }
+
         $vistaInyectada = 'alertas/enviar_alerta.php';
         require_once __DIR__ . '/../vistas/admin/dashboard.php';
     }

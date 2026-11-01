@@ -90,11 +90,15 @@ $etiquetaTorneo = [
         <a href="<?php echo $volverUrl; ?>" class="boton-secundario">
             <i class="fa-solid fa-arrow-left"></i> Volver al listado
         </a>
-        <?php if (!$esMiCuenta): ?>
+        <?php if (!$esMiCuenta && $rolId !== 1): ?>
             <a href="<?php echo URL_BASE; ?>index.php?c=usuario&a=editarUsuario&id=<?php echo (int) $usuario['id']; ?>&origen=ficha"
                class="boton-accion">
                 <i class="fa-solid fa-user-edit"></i> Editar nombre o rol
             </a>
+        <?php elseif (!$esMiCuenta && $rolId === 1): ?>
+            <span class="ficha-aviso ficha-aviso-neutro">
+                <i class="fa-solid fa-user-shield"></i> Cuenta administrativa protegida
+            </span>
         <?php endif; ?>
     </div>
     <?php if ($esMiCuenta): ?>

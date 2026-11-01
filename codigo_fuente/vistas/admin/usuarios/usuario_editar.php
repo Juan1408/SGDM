@@ -58,6 +58,10 @@ $totalImpacto = array_sum($impacto);
         </select>
         <span class="error-mensaje" id="rol-error"></span>
 
+        <p class="texto-ayuda">
+            Solo se puede asignar Organizador o Jugador. Las cuentas administrativas se gestionan fuera de este panel.
+        </p>
+
         <?php if ($totalImpacto > 0): ?>
             <p class="texto-ayuda">
                 Este usuario tiene <?php echo (int) $impacto['torneos']; ?> torneos organizados,
@@ -66,16 +70,6 @@ $totalImpacto = array_sum($impacto);
                 Cambiar el rol no transfiere esas responsabilidades: revisalas antes de guardar.
             </p>
         <?php endif; ?>
-    </div>
-
-    <div class="grupo-formulario">
-        <label style="display:flex; gap:8px; align-items:flex-start;">
-            <input type="checkbox" name="confirmar_admin" id="confirmar_admin" value="1">
-            <span>
-                Confirmo que quiero otorgar el rol <strong>Administrador</strong>.
-                Es obligatorio solo cuando el rol seleccionado es Administrador.
-            </span>
-        </label>
     </div>
 
     <div class="acciones-formulario">
