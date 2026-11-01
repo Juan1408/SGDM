@@ -18,7 +18,7 @@
 | 4 | Demo | 4:30 – 6:00 | M2 | Ver el sistema funcionando |
 | 5 | Alcance | 6:00 – 7:30 | M1 | Qué está y qué no, sin ambigüedad |
 | 6 | Arquitectura | 7:30 – 9:00 | M2 | MVC, capas y Docker |
-| 7 | Base de datos | 9:00 – 11:00 | M3 | 41 tablas, 7 migraciones, seed real |
+| 7 | Base de datos | 9:00 – 11:00 | M3 | 42 tablas, 3 migraciones, seed real |
 | 8 | Seguridad | 11:00 – 13:00 | M4 | RBAC, CSRF, bcrypt, cabeceras |
 | 9 | Toolkit de operación | 13:00 – 15:00 | M4 | La entrega de Sistemas Operativos |
 | 10 | Cinco materias | 15:00 – 16:30 | M1 | Integración, no cinco proyectos pegados |
@@ -43,10 +43,10 @@ Si alguien se traba, el siguiente retoma con “y eso conecta con…”. Nadie c
 
 1. Stack levantado y verificado:
    `docker compose -f docker/docker-compose.yml ps` → `sgdm_web`, `sgdm_db` healthy.
-2. Base con los números de la demo: **41 tablas, 52 usuarios, 20 torneos** (el seed base trae 51 y 18; hay dos torneos de prueba agregados).
+2. Base con los números de la demo: **42 tablas, 51 usuarios, 26 torneos, 45 equipos y 97 encuentros** en el seed; la corrida E2E agrega 2 usuarios, 1 equipo y 1 inscripción, así que en vivo se ven **53 usuarios, 46 equipos y 130 participantes**.
 3. Tres pestañas listas: catálogo público, sesión de jugador, sesión de organizador. **No dejar contraseñas visibles.**
 4. Torneo **1217** abierto en el detalle y ranking listo para mostrar.
-5. Video de 90 segundos descargado en local y capturas en una carpeta. No depender de la red.
+5. Capturas del recorrido E2E en `presentacionWeb/capturas` (01 a 35) y, si se usa, la presentación web abierta en local. No depender de la red.
 6. Diapositivas en modo presentador, timer visible y este guion impreso.
 7. Cerrar notificaciones del sistema y sesiones personales del navegador.
 8. Acordar una señal discreta para avisar “quedan 2 minutos”.
@@ -109,7 +109,7 @@ La demo va a mostrar ese recorrido en 90 segundos.”
 
 **Qué decir:**
 
-“Son tres pantallas, 90 segundos. **Primero, público:** abrimos el torneo 1217, que tiene inscripciones confirmadas, pendientes, rechazadas y canceladas, y mostramos el ranking. Quiero que vean datos reales, no maquetas: la base trae 18 torneos y 87 encuentros. **Segundo, jugador:** equipo, solicitud e inscripción. Cada rol ve solo su superficie. **Tercero, organizador:** publicamos un resultado y vemos cómo se mueve la posición en el ranking público.
+“Son tres pantallas, 90 segundos. **Primero, público:** abrimos el torneo 1217, que tiene inscripciones confirmadas, pendientes, rechazadas y canceladas, y mostramos el ranking. Quiero que vean datos reales, no maquetas: la base trae 26 torneos y 97 encuentros. **Segundo, jugador:** equipo, solicitud e inscripción. Cada rol ve solo su superficie. **Tercero, organizador:** publicamos un resultado y vemos cómo se mueve la posición en el ranking público.
 
 Eso cierra el ciclo del dato: del formulario al ranking, sin planillas intermedias. Si la red falla, tenemos un video de 90 segundos y capturas; la historia no se cae. Y por seguridad, nunca mostramos credenciales en pantalla.”
 
@@ -129,9 +129,9 @@ Eso cierra el ciclo del dato: del formulario al ranking, sin planillas intermedi
 
 **Qué decir:**
 
-“Este es el alcance, y lo decimos completo. **Público:** catálogo, detalle, rankings, perfiles y filtros. **Jugador:** equipos, solicitudes, inscripciones, guardados, historial, notificaciones y perfil editable. **Organización y admin:** torneos, formatos, fixtures, resultados, posiciones, usuarios, juegos, modalidades, auditoría y errores.
+“Este es el alcance, y lo decimos completo. **Público:** catálogo, detalle, rankings, perfiles, filtros y una página de formatos explicada. **Jugador:** equipos, ingreso por código de invitación, solicitudes, inscripciones, guardados, historial, notificaciones, comentarios y perfil editable. **Organización y admin:** torneos, formatos, fixtures, resultados, posiciones, usuarios, juegos, modalidades, ficha administrativa de torneo, auditoría por día y errores del sistema.
 
-Lo que **no** está: recuperación de contraseña, bye en el sistema suizo y email real. No es un olvido; está declarado en el README y en la matriz de requisitos. Preferimos que lo sepan por nosotros y no que lo descubran en la pregunta.
+Lo que **no** está: recuperación automática de contraseña, bye en el sistema suizo y envío real de correo. La verificación de email existe, pero el enlace se muestra en pantalla; el login sí exige la cuenta verificada. No es un olvido: está declarado en el README y en la matriz de requisitos. Preferimos que lo sepan por nosotros y no que lo descubran en la pregunta.
 
 Un alcance chico y sostenido vale más que una lista larga de promesas.”
 
@@ -159,15 +159,15 @@ Un solo punto de entrada y ningún controlador hablando SQL directamente. Eso es
 
 **Qué decir:**
 
-“La base es el contrato del sistema. **41 tablas** y **siete migraciones** versionadas: esquema, catálogos, seed, autenticación, correcciones, ampliación del seed y restricciones de disciplinas. Cada migración tiene un orden y un propósito; no se importa un archivo suelto y se espera que salga bien.
+“La base es el contrato del sistema. **42 tablas** y **tres migraciones** versionadas: `001` esquema, `002` catálogos base y `003` seed relacional de QA. Las migraciones 004 a 011 existieron durante el desarrollo; al cerrar la versión final se consolidaron en esas tres, y la historia queda en Git. Preferimos que el jurado pueda reconstruir la base con tres archivos y no con once.
 
-El seed no es decorativo. Cubre liga, eliminación directa y suizo, en individual y por equipos, con **18 torneos, 23 equipos, 81 participantes y 87 encuentros** (en la base actual hay 20 torneos: dos se crearon en pruebas). Eso permite que la demo y las pruebas tengan casos reales: inscripciones en cuatro estados, posiciones, historial y podios.
+El seed no es decorativo. Cubre liga, eliminación directa y suizo, en individual y por equipos, con **51 usuarios, 26 torneos, 45 equipos, 129 participantes y 97 encuentros**. La corrida E2E que filmamos suma 2 usuarios, 1 equipo y 1 inscripción, por eso en vivo se ven 53 y 46. Eso permite que la demo y las pruebas tengan casos reales: inscripciones en cuatro estados, posiciones, historial y podios.
 
 Y todo se reconstruye desde un volumen vacío con un comando. La frase: la calidad de los datos define la calidad de la demo. Si la base tuviera tres filas, la demo no podría contar nada.”
 
-**Apoyo visual:** recorrer las barras de izquierda a derecha; detenerse en 87 encuentros.
+**Apoyo visual:** recorrer las barras de izquierda a derecha; detenerse en 97 encuentros.
 
-**Pregunta probable:** “¿Por qué 41 tablas?” → “Porque el dominio incluye usuarios, roles, torneos, formatos, equipos, participantes, encuentros, posiciones, historial, notificaciones, auditoría y errores. Preferimos normalizar y poder explicar cada tabla antes que meter todo en cinco tablas difíciles de auditar.”
+**Pregunta probable:** “¿Por qué 42 tablas?” → “Porque el dominio incluye usuarios, roles, torneos, formatos, equipos, participantes, encuentros, posiciones, historial, notificaciones, auditoría y errores. Preferimos normalizar y poder explicar cada tabla antes que meter todo en cinco tablas difíciles de auditar.”
 
 **Transición:** “Con los datos y el flujo claros, pasamos a cómo se protege.”
 
@@ -177,7 +177,7 @@ Y todo se reconstruye desde un volumen vacío con un comando. La frase: la calid
 
 **Qué decir:**
 
-“Seguridad en cuatro capas. **Acceso:** guards en cada controlador; el jugador no entra al panel del organizador y el organizador no administra torneos ajenos. Lo probamos: intentar administrar el torneo 1200 con otra cuenta devuelve redirección, no un 200. **Formularios:** token CSRF de sesión en cada formulario, validación en POST y regeneración de sesión al autenticar. **Credenciales:** bcrypt, política de contraseña y bloqueo temporal por IP en la tabla de intentos. **Transporte:** CSP, X-Frame-Options, nosniff, Referrer-Policy y Permissions-Policy.
+“Seguridad en cuatro capas. **Acceso:** guards en cada controlador; el jugador no entra al panel del organizador y el organizador no administra torneos ajenos. Lo probamos: intentar administrar el torneo 1200 con otra cuenta devuelve redirección, no un 200. Además, el login exige email verificado y la política de roles protege al administrador: la cuenta de rol 1 no se crea ni se edita desde el panel, y solo se puede alternar entre organizador y jugador. **Formularios:** token CSRF de sesión en cada formulario, validación en POST y regeneración de sesión al autenticar. **Credenciales:** bcrypt, política de contraseña y bloqueo temporal por IP en la tabla de intentos. **Transporte:** CSP, X-Frame-Options, nosniff, Referrer-Policy y Permissions-Policy. La función “ver como” queda auditada al entrar y al salir, es de solo lectura y no permite suplantar a otro administrador.
 
 Ahora el límite, y lo decimos fuerte: esto no es seguridad de producción. Las credenciales de demo son públicas. Para producción faltan HTTPS, rotación y hardening del servidor. Una defensa honesta también enumera lo que falta.”
 
@@ -207,7 +207,7 @@ Validamos sintaxis **32 de 32** y ayuda **24 de 24**. La ejecución real de los 
 
 **Qué decir:**
 
-“**Ingeniería de software:** requisitos, arquitectura MVC, auditoría técnica y checklist de entrega. **Full stack:** PHP, routing, sesiones, vistas por rol y formularios validados; las rutas de los tres roles respondieron 200 en el dry run. **Bases de datos:** 41 tablas, siete migraciones, seed, respaldo y replicación. **Ciberseguridad:** RBAC, CSRF, bcrypt, cabeceras y menor privilegio. **Sistemas operativos:** LAMP/Docker, systemd, logs, respaldos, replicación y procesos.
+“**Ingeniería de software:** requisitos, arquitectura MVC, auditoría técnica y checklist de entrega. **Full stack:** PHP, routing, sesiones, vistas por rol y formularios validados; las rutas de los tres roles respondieron 200 en el dry run. **Bases de datos:** 42 tablas, tres migraciones, seed, respaldo y replicación. **Ciberseguridad:** RBAC, CSRF, bcrypt, cabeceras y menor privilegio. **Sistemas operativos:** LAMP/Docker, systemd, logs, respaldos, replicación y procesos.
 
 No son cinco proyectos pegados: es el mismo flujo mirado desde cinco materias. La misma base que usa la demo es la que se respalda y se replica; el mismo servidor que corre Apache es el que se audita y se monitorea.”
 
@@ -219,7 +219,7 @@ No son cinco proyectos pegados: es el mismo flujo mirado desde cinco materias. L
 
 **Qué decir:**
 
-“**32 de 32** scripts con sintaxis válida. **24 de 24** con ayuda operativa. **16 de 16** rutas públicas y **18 de 18** rutas de administración con HTTP 200. Verificamos el stack desde un volumen vacío, la base con 41 tablas (51 usuarios y 18 torneos en la verificación del 21/10; hoy 52 y 20), los tres paneles en navegador y la suite local.
+“**32 de 32** scripts con sintaxis válida. **24 de 24** con ayuda operativa. **50 rutas** con HTTP 200 en el dry run. Verificamos el stack desde un volumen vacío, la base con **42 tablas** y el seed de **51 usuarios, 26 torneos, 45 equipos y 97 encuentros**, los tres paneles en navegador, **155 casos automatizados en tres suites** y un recorrido E2E completo con **35 capturas** del público al administrador.
 
 Lo que **no** verificamos todavía: los instaladores y operaciones del toolkit en una VM Linux, la restauración real de un respaldo y la replicación maestro-esclavo real. No convertimos análisis estático en prueba funcional. El informe de aceptación del toolkit queda **bloqueado** hasta contar con esa VM.
 
@@ -292,7 +292,7 @@ Cualquier respuesta concreta sirve si termina en aprendizaje: por ejemplo, haber
 
 - **M1** controla el tiempo y da la palabra.
 - **M2** no toca el teclado hasta que la demo esté en pantalla completa.
-- **M3** tiene a mano las cifras: 41 tablas, 52 usuarios, 20 torneos, 87 encuentros.
+- **M3** tiene a mano las cifras: 42 tablas, seed de 51 usuarios, 26 torneos, 45 equipos y 97 encuentros; en vivo 53 usuarios y 46 equipos por la corrida E2E.
 - **M4** tiene a mano los límites: VM Linux, restauración y replicación reales pendientes.
 - Si el jurado interrumpe, se responde corto y se retoma desde la diapositiva actual, no desde el principio.
 

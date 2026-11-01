@@ -24,28 +24,28 @@ Estos son los números que se pueden decir sin riesgo. Todos salen de una consul
 
 | Dato | Valor | Cómo se comprueba |
 |---|---|---|
-| Tablas | **41** | `information_schema.tables` |
-| Migraciones | **7** (`001` a `007`) | `base_de_datos/migraciones/` |
-| Claves foráneas | **57** | `information_schema.referential_constraints` |
-| Políticas de FK | 36 `CASCADE`, 14 `SET NULL`, 7 `RESTRICT` | misma consulta, agrupada por `DELETE_RULE` |
+| Tablas | **42** | `information_schema.tables` |
+| Migraciones | **3** (`001` esquema, `002` catálogos y cuentas, `003` semilla QA + triggers) | `base_de_datos/migraciones/` |
+| Claves foráneas | **58** | `information_schema.referential_constraints` |
+| Políticas de FK | 37 `CASCADE`, 14 `SET NULL`, 7 `RESTRICT` | misma consulta, agrupada por `DELETE_RULE` |
 | Restricciones `CHECK` | **11** | `table_constraints` |
-| Índices secundarios | **70** (79 entradas de columna) | `information_schema.statistics` |
-| Triggers | **2** (validan disciplina/modalidad/formato en `torneos`) | `information_schema.triggers` |
+| Índices secundarios | **67** nombres (82 entradas de columna) | `information_schema.statistics` |
+| Triggers | **2** (validan disciplina/modalidad/formato en `torneos`, definidos en `003`) | `information_schema.triggers` |
 | Motor | **InnoDB** | `information_schema.tables` |
-| PHP / MySQL | **8.2.29** (imagen `php:8.2.29-apache`) / **8.0.46** | `docker/Dockerfile`, `docker/docker-compose.yml` |
-| Rutas verificadas por HTTP | **50** con 200 (16 públicas, 18 admin, 8 organizador, 8 jugador) | `informes_auditoria/VERIFICACION_FINAL_DRY_RUN.md` |
-| Consultas preparadas | **238** llamadas a `prepare()` en modelos | conteo sobre `codigo_fuente/modelos` |
-| Escapes de salida | **371** `htmlspecialchars` en vistas | conteo sobre `codigo_fuente/vistas` |
-| Guardas de rol | **37** llamadas a `Sesion::validar*` / `requerirLogin` | conteo en controladores |
-| Guardas CSRF | **42** llamadas a `requerirTokensCSRF` / `validarTokenCSRF` | conteo en controladores |
-| Formularios con token | **65** campos `csrf_token` | conteo en vistas |
-| Bloqueos pesimistas | **10** `SELECT ... FOR UPDATE` | conteo en modelos |
-| Pruebas automatizadas | **7 tests, 25 assertions, OK** (PHPUnit 9.6.36 / PHP 8.0.30) | informe de dry run, sección 5 |
-| Datos de demostración | 52 usuarios, 20 torneos, 5 juegos, 23 equipos, 81 participantes, 87 encuentros | consulta en vivo (el seed base crea 51 usuarios y 18 torneos; hay dos torneos de prueba agregados después) |
+| PHP / MySQL | **8.2.29** en Docker / **8.0.30** en XAMPP; MySQL **8.0.46** | `docker/Dockerfile`, `docker/docker-compose.yml` |
+| Rutas verificadas por HTTP | **50** con 200 en el dry run de octubre (16 públicas, 18 admin, 8 organizador, 8 jugador) | `informes_auditoria/VERIFICACION_FINAL_DRY_RUN.md` |
+| Consultas preparadas | **295** llamadas a `prepare()` en modelos | conteo sobre `codigo_fuente/modelos` |
+| Escapes de salida | **522** `htmlspecialchars` en vistas | conteo sobre `codigo_fuente/vistas` |
+| Guardas de rol | **39** llamadas a `Sesion::validar*` / `requerirLogin` | conteo en controladores |
+| Guardas CSRF | **51** llamadas a `requerirTokensCSRF` / `validarTokenCSRF` | conteo en controladores |
+| Formularios con token | **75** campos `csrf_token` | conteo en vistas |
+| Bloqueos pesimistas | **12** `SELECT ... FOR UPDATE` | conteo en modelos |
+| Pruebas automatizadas | **132 / 619** (`tests/`) + **20 / 129** (`Test/`) + **3 / 3** (`TestM/`), 01/11/2026 | corridas reales con PHPUnit 9.6.36 / PHP 8.0.30 |
+| Datos de demostración | Semilla: 51 usuarios, 26 torneos, 45 equipos. El recorrido E2E agrega 2 usuarios y 1 equipo | `003_ascend_seed_relacional_qa.sql` + consulta en vivo |
 
 Si algún número no coincide en el momento de la defensa, gana la consulta en vivo, no este archivo.
 
-**Nota de consistencia documental:** el `README.md` todavía lista las migraciones `001`–`006`; la `007_restricciones_disciplinas.sql` se agregó el 24/10 y sus dos triggers están aplicados en la base actual. Si el profesor abre el README y ve seis, la respuesta es esta: “son siete archivos; el README quedó desactualizado y la 007 es la que valida disciplina, modalidad y formato”.
+**Nota de consistencia documental:** la versión final consolidó las migraciones históricas en **tres archivos**. Si una guía vieja nombra `005_correcciones_esquema.sql`, `007_restricciones_disciplinas.sql` o `011_aceptaciones_legales.sql`, su contenido ya está dentro de `001`/`003`; no hay que buscar esos archivos en el repositorio.
 
 ---
 
@@ -81,7 +81,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Ejemplo concreto.** Un formulario de inscripción hace `POST index.php?c=torneo&a=inscribirse` con `csrf_token`; el controlador verifica sesión, token, cupo y duplicados; el modelo inserta en `participantes_torneo`; el servidor responde con una redirección y un mensaje flash. La búsqueda hace `GET index.php?c=equipo&a=buscarJugadoresAjax&id=...&buscar=...` y recibe un array JSON.
 
-**Evidencia.** `codigo_fuente/controladores/EquipoControlador.php:384-399` (respuesta JSON), `index.php:38-67` (rutas), 65 campos `csrf_token` en vistas.
+**Evidencia.** `codigo_fuente/controladores/EquipoControlador.php:384-399` (respuesta JSON), `index.php:38-67` (rutas), 75 campos `csrf_token` en vistas.
 
 **Límite.** No hay contrato formal de API ni OpenAPI. Si un tercero tuviera que consumir el sistema, habría que separar endpoints y versionarlos.
 
@@ -93,7 +93,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Qué se rompería primero.** Con varias instancias web, un usuario podría autenticarse en una y perder la sesión en la siguiente. La solución es mover sesiones a un almacén compartido (Redis o tabla de sesiones) o usar sesiones pegajosas. Después, el cuello pasa a MySQL: ahí entran réplica de lectura para catálogo y rankings, índices y caché de consultas pesadas.
 
-**Evidencia.** `docker/docker-compose.yml` (servicios y healthchecks), `codigo_fuente/ayudantes/Sesion.php:24-35` (sesión nativa en archivos), `administracion_sistemas/` (replicación), 70 índices secundarios en la base.
+**Evidencia.** `docker/docker-compose.yml` (servicios y healthchecks), `codigo_fuente/ayudantes/Sesion.php:24-35` (sesión nativa en archivos), `administracion_sistemas/` (replicación), 67 índices secundarios en la base.
 
 **Límite.** No hicimos prueba de carga. No puedo afirmar “soporta N usuarios”; puedo explicar qué componente falla primero y cómo se mitiga.
 
@@ -151,11 +151,11 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### II.4. ¿Cómo validas los datos entrantes antes de procesarlos o guardarlos?
 
-**Decí esto.** “En cuatro capas. Primero, HTML5 en el navegador: `required`, `type=email`, longitudes. Eso es experiencia de usuario, nunca una garantía. Segundo, el controlador: verifica método HTTP, token CSRF, campos obligatorios, formato de email con `filter_var`, listas blancas con `in_array` y casts explícitos a entero o flotante. Tercero, el modelo: vuelve a comprobar reglas de negocio —por ejemplo, que el torneo esté en el estado correcto o que el cupo no esté lleno—. Cuarto, la base: 57 claves foráneas, 11 `CHECK`, claves únicas y `NOT NULL` como última red.”
+**Decí esto.** “En cuatro capas. Primero, HTML5 en el navegador: `required`, `type=email`, longitudes. Eso es experiencia de usuario, nunca una garantía. Segundo, el controlador: verifica método HTTP, token CSRF, campos obligatorios, formato de email con `filter_var`, listas blancas con `in_array` y casts explícitos a entero o flotante. Tercero, el modelo: vuelve a comprobar reglas de negocio —por ejemplo, que el torneo esté en el estado correcto o que el cupo no esté lleno—. Cuarto, la base: 58 claves foráneas, 11 `CHECK`, claves únicas y `NOT NULL` como última red.”
 
 **Ejemplo.** Un `id` que llega por GET se castea a entero; un estado que llega por POST se compara contra una lista; un `ORDER BY` no se concatena: se elige con un `switch` entre valores permitidos.
 
-**Evidencia.** 76 atributos `required`, 21 usos de `in_array` y 16 casts directos sobre `$_GET`/`$_POST` relevados en controladores, 9 `filter_var`, `codigo_fuente/modelos/Torneo.php` (filtros con parámetros enlazados y `switch` de orden), `base_de_datos/migraciones/001_ascend.sql`.
+**Evidencia.** 78 atributos `required`, 21 usos de `in_array` y 16 casts directos sobre `$_GET`/`$_POST` relevados en controladores, 9 `filter_var`, `codigo_fuente/modelos/Torneo.php` (filtros con parámetros enlazados y `switch` de orden), `base_de_datos/migraciones/001_ascend.sql`.
 
 **Límite.** No hay un validador central. `codigo_fuente/ayudantes/Validador.php` está vacío: cada controlador repite sus comprobaciones. Funciona, pero es deuda técnica y admite inconsistencias entre formularios.
 
@@ -163,7 +163,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### II.5. ¿Cómo implementaste la paginación y filtrado en endpoints que devuelven listas grandes?
 
-**Decí esto.** “Paginación no hay. No existe `OFFSET` en el código; lo verifiqué. Los listados están acotados por el dominio —5 juegos, 20 torneos, 23 equipos— y las consultas que podrían crecer llevan `LIMIT`: la búsqueda de jugadores devuelve 20, el ranking global 10. El filtrado sí está resuelto en servidor: el catálogo filtra por juego, estado y orden, con parámetros enlazados y una lista blanca para el orden.”
+**Decí esto.** “Paginación no hay. No existe `OFFSET` en el código; lo verifiqué. Los listados están acotados por el dominio —5 juegos, 26 torneos, 45 equipos— y las consultas que podrían crecer llevan `LIMIT`: la búsqueda de jugadores devuelve 20, el ranking global 10. El filtrado sí está resuelto en servidor: el catálogo filtra por juego, estado y orden, con parámetros enlazados y una lista blanca para el orden.”
 
 **Por qué lo digo sin rodeos.** Si el profesor pregunta por paginación, la respuesta honesta es que no está implementada. El sistema asume catálogos chicos y una demo académica. Inventar un “sí, paginamos” se cae en la primera repregunta.
 
@@ -171,7 +171,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Evidencia.** Búsqueda con `LIMIT 20` en `codigo_fuente/modelos/Equipo.php:352`; ranking con `LIMIT 10` en `ResultadoGlobal.php:44`; `switch` de orden en `Torneo.php` (`obtenerDirectorioAdmin`); cero ocurrencias de `OFFSET` en todo el proyecto.
 
-**Límite.** Es una deuda declarada, no un olvido. Con 41 tablas y este volumen no afecta la demo; con miles de filas habría que resolverlo antes de producción.
+**Límite.** Es una deuda declarada, no un olvido. Con 42 tablas y este volumen no afecta la demo; con miles de filas habría que resolverlo antes de producción.
 
 ---
 
@@ -193,7 +193,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Qué buscaría.** Consultas sin índice en columnas de filtro, `N+1` —muchas consultas chicas en un bucle—, tablas sin `WHERE`, locks esperando por una transacción larga, o una subida de archivo pesada.
 
-**Evidencia.** `errores_sistema` y el panel `errorTracking`; 70 índices secundarios; transacciones con `FOR UPDATE` que pueden generar esperas; logs de Apache en `docker/apache-vhost.conf`.
+**Evidencia.** `errores_sistema` y el panel `errorTracking`; 67 índices secundarios; transacciones con `FOR UPDATE` que pueden generar esperas; logs de Apache en `docker/apache-vhost.conf`.
 
 **Límite.** No hay APM, profiler ni *slow query log* activado. El diagnóstico es manual. Para producción lo primero sería habilitar el slow log y agregar métricas por ruta.
 
@@ -217,7 +217,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### III.2. ¿Cómo gestionas las claves primarias y foráneas para mantener la integridad referencial?
 
-**Decí esto.** “Cada tabla tiene una clave primaria sustituta: `id INT AUTO_INCREMENT`. Los datos naturales que deben ser únicos —el email, por ejemplo— llevan restricción `UNIQUE` aparte. Hay 57 claves foráneas declaradas, y las políticas no son todas iguales: 36 `ON DELETE CASCADE` para dependencias que no tienen sentido sin el padre, como torneo→encuentros; 14 `ON DELETE SET NULL` para registros históricos que deben sobrevivir, como una auditoría cuyo usuario se elimina; y 7 `RESTRICT` para catálogos críticos, como un rol con usuarios asignados. Las tablas puente usan clave primaria compuesta.”
+**Decí esto.** “Cada tabla tiene una clave primaria sustituta: `id INT AUTO_INCREMENT`. Los datos naturales que deben ser únicos —el email, por ejemplo— llevan restricción `UNIQUE` aparte. Hay 58 claves foráneas declaradas, y las políticas no son todas iguales: 37 `ON DELETE CASCADE` para dependencias que no tienen sentido sin el padre, como torneo→encuentros; 14 `ON DELETE SET NULL` para registros históricos que deben sobrevivir, como una auditoría cuyo usuario se elimina; y 7 `RESTRICT` para catálogos críticos, como un rol con usuarios asignados. Las tablas puente usan clave primaria compuesta.”
 
 **Por qué en la base y no solo en el código.** Porque la integridad tiene que valer también para una carga manual, un script o un error de programación. La base es la última frontera.
 
@@ -233,7 +233,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Qué no cubrimos.** En ediciones administrativas simples —cambiar el nombre de un torneo— no hay control de concurrencia optimista con número de versión. Si dos administradores guardan a la vez, gana el último que escribe y el primero no se entera. Para el alcance actual es aceptable, pero es una diferencia entre “consistente” y “sin pérdidas silenciosas”.
 
-**Evidencia.** 10 `SELECT ... FOR UPDATE` (`Equipo.php:295`, `:503`, `:586`; `Torneo.php:1082-1088`, `:1319`, `:1380`, `:1996`), transacciones con `beginTransaction`/`commit`/`rollBack` en cinco modelos, claves únicas que impiden duplicados.
+**Evidencia.** 12 `SELECT ... FOR UPDATE` (`Equipo.php:295`, `:503`, `:586`; `Torneo.php:1082-1088`, `:1319`, `:1380`, `:1996`), transacciones con `beginTransaction`/`commit`/`rollBack` en cinco modelos, claves únicas que impiden duplicados.
 
 **Límite.** No hay bloqueo optimista ni aislamiento `SERIALIZABLE`. Tampoco pruebas de concurrencia automatizadas; la garantía se apoya en InnoDB y en el orden de las operaciones.
 
@@ -241,13 +241,13 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### III.4. ¿Cómo implementaste el borrado: físico o lógico?
 
-**Decí esto.** “Depende de la entidad, y la regla es simple: si el dato tiene historia o se referencia desde otro lado, se desactiva; si es una entidad transaccional que se quiere eliminar por completo, se borra físicamente con cascada controlada. Los usuarios se borran físicamente y sus perfiles, sesiones y tokens caen por cascada. Los torneos se borran físicamente en una transacción que elimina primero encuentros, posiciones, actividades y participantes. En cambio, equipos, juegos, formatos y la cuenta de usuario tienen banderas de activo: `equipos.activo`, `juegos.activo`, `usuarios.esta_activo`, y las consultas filtran por ellas.”
+**Decí esto.** “Depende de la entidad, y la regla es simple: si el dato tiene historia o se referencia desde otro lado, se desactiva; si es una entidad transaccional que se quiere eliminar por completo, se borra físicamente con cascada controlada. **Los usuarios usan baja lógica**: `eliminarUsuario` hace `UPDATE usuarios SET esta_activo = 0`, el login exige cuenta activa y se conserva el historial deportivo y la auditoría. Los torneos se borran físicamente en una transacción que elimina primero encuentros, posiciones, actividades y participantes. Equipos, juegos y formatos también tienen banderas de activo.”
 
 **Por qué.** Un torneo cancelado no debería desaparecer del historial; un juego retirado no debería romper torneos viejos. El borrado lógico preserva la trazabilidad. El borrado físico se reserva para datos que no deben quedar.
 
-**Evidencia.** `codigo_fuente/modelos/Usuario.php:259` (`DELETE FROM usuarios`), `Torneo.php:2010-2030` (cascada manual), `Equipo.php:604` (baja de capitán), banderas `activo`/`esta_activo` en `equipos`, `juegos`, `formatos_torneo`, `usuarios`, `newsletter_subscriptores`.
+**Evidencia.** `codigo_fuente/modelos/Usuario.php:328-342` (baja lógica con `UPDATE esta_activo = 0`), `Torneo.php:2010-2030` (cascada manual), `Equipo.php:604` (baja de capitán), banderas `activo`/`esta_activo` en `equipos`, `juegos`, `formatos_torneo`, `usuarios`, `newsletter_subscriptores`.
 
-**Límite.** El borrado sigue siendo físico e irreversible, y la confirmación es un `confirm()` del navegador, que no es un control de servidor. La vía de invocación ya está cerrada: `torneoAdmin/eliminar` rechaza cualquier método distinto de POST y exige token CSRF (`TorneoAdminControlador.php:113-120`); lo mismo hace `juego/cambiarEstado` (`JuegoControlador.php:87-94`).
+**Límite.** La baja de usuario es lógica, pero el borrado de un torneo sigue siendo físico e irreversible, y la confirmación es un `confirm()` del navegador, que no es un control de servidor. La vía de invocación ya está cerrada: `torneoAdmin/eliminar` rechaza cualquier método distinto de POST y exige token CSRF (`TorneoAdminControlador.php:113-120`); lo mismo hace `juego/cambiarEstado` (`JuegoControlador.php:87-94`).
 
 ---
 
@@ -257,7 +257,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Qué evitaría.** Particionar por una clave que no se usa en los `WHERE` obliga a escanear todas las particiones. Y agregar índices sin medir empeora las escrituras.
 
-**Evidencia.** 70 índices secundarios; consultas de catálogo y ranking ya acotadas con `LIMIT`; replicación maestro-esclavo documentada en `administracion_sistemas/`; ausencia de particionamiento en el esquema.
+**Evidencia.** 67 índices secundarios; consultas de catálogo y ranking ya acotadas con `LIMIT`; replicación maestro-esclavo documentada en `administracion_sistemas/`; ausencia de particionamiento en el esquema.
 
 **Límite.** Nada de esto está implementado ni probado a esa escala. Es un plan técnico, no una medición.
 
@@ -271,7 +271,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **El costo.** Todo el DOM se maneja a mano y no hay componentes con estado propio; la consistencia depende de convenciones y de las variables CSS.
 
-**Evidencia.** 47 archivos CSS y 120 media queries en `codigo_fuente/publico/css`; `variables.css` con tokens de color, radios y espaciado; JS modular en `publico/js`; vistas PHP.
+**Evidencia.** 48 archivos CSS y 134 media queries en `codigo_fuente/publico/css`; `variables.css` con tokens de color, radios y espaciado; JS modular en `publico/js`; vistas PHP.
 
 **Límite.** No hay guía de estilo formal ni sistema de componentes documentado. La coherencia visual se sostiene con tokens y revisión, no con una librería.
 
@@ -279,7 +279,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### IV.2. ¿Cómo garantizas que la interfaz sea responsive?
 
-**Decí esto.** “Con enfoque mobile-first: los estilos base son para pantalla chica y los `@media` agregan complejidad con `min-width`. Hay 120 media queries distribuidas en 47 archivos, con cortes en 600, 700, 900 y 1100 píxeles. Las grillas y los paneles usan flex y grid, y el layout administrativo tiene su propia hoja con cortes en 768. Las 34 páginas completas declaran `meta viewport`; las demás son fragmentos que se incluyen dentro de un layout que ya lo declara.”
+**Decí esto.** “Con enfoque mobile-first: los estilos base son para pantalla chica y los `@media` agregan complejidad con `min-width`. Hay 134 media queries distribuidas en 48 archivos, con cortes en 600, 700, 900 y 1100 píxeles. Las grillas y los paneles usan flex y grid, y el layout administrativo tiene su propia hoja con cortes en 768. Las páginas completas declaran `meta viewport` en su layout; las secciones que se inyectan no lo repiten porque heredan el del contenedor.”
 
 **Por qué el detalle de los fragmentos.** Si alguien cuenta 61 archivos de vista y solo 34 con viewport, la explicación es esa: 18 son secciones del panel admin que se inyectan en `dashboard.php`, y el resto son navbar, footer y menú lateral. No son páginas independientes.
 
@@ -315,11 +315,11 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### IV.5. ¿Cómo previenes que un usuario navegue a rutas protegidas sin iniciar sesión?
 
-**Decí esto.** “La protección está en el servidor, no en esconder el botón. Cada acción sensible empieza con una guarda: `requerirLogin` para sesión, `validarAdmin`, `validarOrganizador`, `validarJugador` para rol. Si no corresponde, redirige al login o devuelve acceso denegado. Además, el front controller solo despacha acciones de la lista blanca y el docroot no expone modelos ni vistas. Escribir la URL a mano no alcanza: el controlador vuelve a verificar. Hay 37 llamadas a guardas en los controladores.”
+**Decí esto.** “La protección está en el servidor, no en esconder el botón. Cada acción sensible empieza con una guarda: `requerirLogin` para sesión, `validarAdmin`, `validarOrganizador`, `validarJugador` para rol. Si no corresponde, redirige al login o devuelve acceso denegado. Además, el front controller solo despacha acciones de la lista blanca y el docroot no expone modelos ni vistas. Escribir la URL a mano no alcanza: el controlador vuelve a verificar. Hay 39 llamadas a guardas en los controladores.”
 
 **Ejemplo verificable.** Un organizador autenticado que intenta administrar el torneo ajeno `1200` recibe 302, no 200; el dueño sí entra. Está en el dry run.
 
-**Evidencia.** `codigo_fuente/ayudantes/Sesion.php:137-205` (guardas), 37 llamadas en controladores, `index.php:38-67`, informe de verificación sección 4.3.
+**Evidencia.** `codigo_fuente/ayudantes/Sesion.php:137-205` (guardas), 39 llamadas en controladores, `index.php:38-67`, informe de verificación sección 4.3.
 
 **Límite.** La guarda es manual por acción. Si se agrega una acción nueva y se olvida la línea, queda expuesta; un middleware por grupo de rutas sería más seguro.
 
@@ -327,11 +327,11 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### IV.6. ¿Cómo gestionas los formularios y la validación de datos en tiempo real en el cliente?
 
-**Decí esto.** “Cada formulario incluye un token CSRF oculto y se envía por POST. En el cliente usamos validación nativa de HTML5: `required`, `type=email`, longitudes mínimas; hay 76 atributos `required` en las vistas. Eso da feedback inmediato del navegador, pero no es la validación real. El servidor vuelve a validar todo, y si algo falla, re-renderiza el formulario con el mensaje y conserva lo que el usuario había escrito —hay un mecanismo de `formulario_previo` en sesión—. No hay validación en tiempo real campo por campo con JavaScript, salvo mostrar u ocultar la contraseña.”
+**Decí esto.** “Cada formulario incluye un token CSRF oculto y se envía por POST. En el cliente usamos validación nativa de HTML5: `required`, `type=email`, longitudes mínimas; hay 78 atributos `required` en las vistas. Eso da feedback inmediato del navegador, pero no es la validación real. El servidor vuelve a validar todo, y si algo falla, re-renderiza el formulario con el mensaje y conserva lo que el usuario había escrito —hay un mecanismo de `formulario_previo` en sesión—. No hay validación en tiempo real campo por campo con JavaScript, salvo mostrar u ocultar la contraseña.”
 
 **Por qué.** La validación del cliente es UX; la del servidor es seguridad. Duplicar reglas en JS y PHP sin una fuente común genera divergencias.
 
-**Evidencia.** 65 campos `csrf_token`, 76 `required`, `AuthControlador::procesarRegistro` (validación y política de contraseña), `PanelOrganizadorControlador::crear` (`formulario_previo`), `login.js` (solo alternar visibilidad).
+**Evidencia.** 75 campos `csrf_token`, 78 `required`, `AuthControlador::procesarRegistro` (validación y política de contraseña), `PanelOrganizadorControlador::crear` (`formulario_previo`), `login.js` (solo alternar visibilidad).
 
 **Límite.** No hay medidor de fortaleza ni validación en vivo de la política de contraseñas; el usuario se entera al enviar. Es una mejora pendiente, no una funcionalidad existente.
 
@@ -343,7 +343,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **El costo.** Cada componente nuevo se escribe a mano y la consistencia depende de disciplina. Un design system formal habría ayudado cuando el equipo creció.
 
-**Evidencia.** `codigo_fuente/publico/css/variables.css` (tokens), 47 hojas CSS, `docker` CSP que permite solo `cdnjs` y `fonts.googleapis.com`.
+**Evidencia.** `codigo_fuente/publico/css/variables.css` (tokens), 48 hojas CSS, `docker` CSP que permite solo `cdnjs` y `fonts.googleapis.com`.
 
 **Límite.** No hay catálogo de componentes ni documentación visual. Y la CSP permite estilos inline, así que parte del diseño vive en atributos `style` dentro de las vistas.
 
@@ -371,7 +371,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Evidencia.** `codigo_fuente/controladores/AuthControlador.php:47-96` (flujo), `Sesion.php:40-64` (regeneración y datos), `SeguridadAuth` (bloqueo por IP, 5 fallos en 5 minutos), `Auditoria::registrar('LOGIN_EXITOSO')`.
 
-**Límite.** No hay segundo factor, ni login social, ni exigencia de email verificado: el campo `email_verificado` existe y hay endpoint de verificación, pero el login no lo exige y no se envía correo real.
+**Límite.** No hay segundo factor ni login social. El correo verificado **sí se exige** para iniciar sesión, pero el envío es simulado: el enlace de verificación se muestra en pantalla y se registra en un log local, no se manda por SMTP real.
 
 ---
 
@@ -389,11 +389,11 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### V.3. ¿Qué es un ataque XSS y cómo lo previene tu aplicación?
 
-**Decí esto.** “XSS es inyectar código —normalmente JavaScript— en una página que otros usuarios van a ver. Puede ser almacenado, si el dato queda en la base, o reflejado, si viaja en la URL. Nuestra defensa principal es escapar la salida: cada dato que viene de la base o del usuario se imprime con `htmlspecialchars` y `ENT_QUOTES`, así un `<script>` se muestra como texto y no se ejecuta. Hay 371 escapes en las vistas y no encontramos ningún `echo` directo de `$_GET` o `$_POST`. En la búsqueda AJAX, el JS escapa antes de armar el HTML. Como refuerzo, la cookie de sesión es `HttpOnly` —JavaScript no la lee— y hay una CSP que restringe orígenes de scripts.”
+**Decí esto.** “XSS es inyectar código —normalmente JavaScript— en una página que otros usuarios van a ver. Puede ser almacenado, si el dato queda en la base, o reflejado, si viaja en la URL. Nuestra defensa principal es escapar la salida: cada dato que viene de la base o del usuario se imprime con `htmlspecialchars` y `ENT_QUOTES`, así un `<script>` se muestra como texto y no se ejecuta. Hay 522 escapes en las vistas y no encontramos ningún `echo` directo de `$_GET` o `$_POST`. En la búsqueda AJAX, el JS escapa antes de armar el HTML. Como refuerzo, la cookie de sesión es `HttpOnly` —JavaScript no la lee— y hay una CSP que restringe orígenes de scripts.”
 
 **Por qué escapar y no “limpiar”.** Filtrar etiquetas rompe datos legítimos; escapar en el contexto correcto es la defensa recomendada.
 
-**Evidencia.** 371 `htmlspecialchars` en vistas, `buscar-jugadores-vivo.js:18-22` (función `escaparHtml`), `Sesion.php:26-35` (`httponly`), `CabecerasSeguridad.php:35-42` (CSP).
+**Evidencia.** 522 `htmlspecialchars` en vistas, `buscar-jugadores-vivo.js:18-22` (función `escaparHtml`), `Sesion.php:26-35` (`httponly`), `CabecerasSeguridad.php:35-42` (CSP).
 
 **Límite.** La CSP incluye `'unsafe-inline'` para scripts y estilos, lo que debilita la defensa; no hay un helper único de escape —se repite en cada vista— y no se hizo un análisis de taint completo. Es mitigación razonable, no garantía absoluta.
 
@@ -401,11 +401,11 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### V.4. ¿Qué es la inyección SQL y cómo la evitaste?
 
-**Decí esto.** “Es lograr que un dato del usuario se interprete como parte de la consulta SQL, por ejemplo cerrando una comilla y agregando `OR 1=1`. La evitamos con consultas preparadas de PDO en todas las operaciones con datos: hay 238 llamadas a `prepare()` en los modelos y los valores van enlazados, nunca concatenados. Además desactivamos la emulación de prepares (`ATTR_EMULATE_PREPARES = false`), así el parseo ocurre en MySQL y no en PHP. Los identificadores que no se pueden parametrizar —el orden de una lista— se eligen con un `switch` de valores permitidos; los límites se castean a entero; y los nombres de tabla que se interpolan salen de un array fijo, no de la request.”
+**Decí esto.** “Es lograr que un dato del usuario se interprete como parte de la consulta SQL, por ejemplo cerrando una comilla y agregando `OR 1=1`. La evitamos con consultas preparadas de PDO en todas las operaciones con datos: hay 295 llamadas a `prepare()` en los modelos y los valores van enlazados, nunca concatenados. Además desactivamos la emulación de prepares (`ATTR_EMULATE_PREPARES = false`), así el parseo ocurre en MySQL y no en PHP. Los identificadores que no se pueden parametrizar —el orden de una lista— se eligen con un `switch` de valores permitidos; los límites se castean a entero; y los nombres de tabla que se interpolan salen de un array fijo, no de la request.”
 
 **Ejemplo.** La búsqueda de jugadores arma `LIKE :busquedaNombre` y pasa `'%texto%'` como parámetro. El comodín viaja como dato, no como SQL.
 
-**Evidencia.** `Conexion.php:30-32` (excepciones y emulación off), 238 `prepare()`, `Equipo.php:340-360` (LIKE enlazado), `Torneo.php:2010-2030` (tablas desde array fijo), `ResultadoGlobal.php:73` (`LIMIT` casteado).
+**Evidencia.** `Conexion.php:30-32` (excepciones y emulación off), 295 `prepare()`, `Equipo.php:340-360` (LIKE enlazado), `Torneo.php:2010-2030` (tablas desde array fijo), `ResultadoGlobal.php:73` (`LIMIT` casteado).
 
 **Límite.** Quedan dos `query()` estáticos sin datos de usuario (`modalidades` y `sistemas_puntuacion`). No son un riesgo, pero conviene unificarlos por consistencia.
 
@@ -413,9 +413,9 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### V.5. ¿Cómo gestionas los roles y permisos de usuario?
 
-**Decí esto.** “Hay tres roles: 1 administrador, 2 organizador y 3 jugador. El rol se guarda en la sesión y cada acción sensible lo verifica en el servidor con una guarda: `validarAdmin`, `validarOrganizador` o `validarJugador`. Además del rol, hay control de propiedad: un organizador solo administra torneos cuyo `organizador_id` coincide con su usuario; si intenta otro, recibe una redirección. El administrador tiene un modo ‘ver como’ para suplantar a un usuario, que es de solo lectura: bloquea todos los POST salvo restaurar la sesión.”
+**Decí esto.** “Hay cuatro roles: 1 administrador, 2 organizador, 3 jugador y 4 usuario público reservado. El rol se guarda en la sesión y cada acción sensible lo verifica en el servidor con una guarda: `validarAdmin`, `validarOrganizador` o `validarJugador`. **El rol 1 es inmutable y se aprovisiona fuera del panel**; desde la administración solo se asignan 2 y 3, el backend rechaza 1 y 4, y las cuentas administrativas no se editan ni se dan de baja desde la interfaz. Además del rol, hay control de propiedad: un organizador solo administra torneos cuyo `organizador_id` coincide con su usuario. El modo ‘ver como’ es de solo lectura, no permite suplantar administradores y registra inicio y fin en auditoría.”
 
-**Matiz importante.** La base tiene tablas `permisos` y `rol_permisos` con 8 filas cada una, pero el código no las consulta en runtime: la autorización es por `rol_id` hardcodeado en las guardas. Es un RBAC simple y funcional, no un motor de permisos dinámico.
+**Matiz importante.** La base tiene tablas `permisos` y `rol_permisos`, pero el código no las consulta en runtime: la autorización es por `rol_id` en las guardas. Es un RBAC simple y funcional, no un motor de permisos dinámico.
 
 **Evidencia.** `Sesion.php:152-205` (guardas), 37 llamadas, `index.php:73-82` (bloqueo de escritura en suplantación), `informe` sección 4.5 (POST bloqueado y 0 filas insertadas), tablas `permisos`/`rol_permisos`.
 
@@ -467,7 +467,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 **Qué significa “sin interrumpir”.** En este stack, el reinicio del contenedor web dura segundos y hay dos réplicas potenciales, pero no hay balanceador ni despliegue azul-verde. La continuidad total no está garantizada.
 
-**Evidencia.** `README.md` (arranque y comandos), migraciones versionadas `001`–`007`, healthcheck en `docker-compose.yml`, suite PHPUnit y dry run documentado.
+**Evidencia.** `README.md` (arranque y comandos), migraciones versionadas `001`–`003`, healthcheck en `docker-compose.yml`, suite PHPUnit y dry run documentado.
 
 **Límite.** No hay CI/CD ni rollback automático. El procedimiento es manual y depende de que alguien ejecute los pasos en orden. Para producción faltaría pipeline, entorno de staging y despliegue progresivo.
 
@@ -489,7 +489,7 @@ Si algún número no coincide en el momento de la defensa, gana la consulta en v
 
 ### VII.2. ¿Qué requerimientos funcionales y no funcionales definieron y cuáles cumplieron al 100%?
 
-**Decí esto.** “Definimos un baseline de 74 requisitos funcionales, agrupados en nueve módulos, y 29 no funcionales. Los funcionales van desde autenticación y equipos hasta torneos en liga, eliminación directa y suizo, resultados, consulta pública y administración. Los no funcionales cubren responsive, integridad, validación, manejo de errores, hashing, autorización, portabilidad con Docker, MVC, respaldos y privacidad.”
+**Decí esto.** “Definimos un baseline de 75 requisitos funcionales, agrupados en nueve módulos, y 29 no funcionales. Los funcionales van desde autenticación y equipos hasta torneos en liga, eliminación directa y suizo, resultados, consulta pública y administración. Los no funcionales cubren responsive, integridad, validación, manejo de errores, hashing, autorización, portabilidad con Docker, MVC, respaldos y privacidad.”
 
 **Qué está cubierto y qué no.** “Cumplidos y verificados: autenticación y roles, equipos y solicitudes, los tres formatos de torneo, carga de resultados y posiciones, catálogo público y rankings, panel de administración, controles de seguridad, Docker y migraciones. No están al 100%: recuperación de contraseña, envío real de email y verificación obligatoria, bye en el sistema suizo, auditoría de todas las acciones y permisos dinámicos. El objetivo SMART decía 100%; la entrega cubre el alcance implementable y declara esas exclusiones en el README.”
 
@@ -554,13 +554,13 @@ HTTPS, secretos fuera del compose, `display_errors` apagado, CSP sin `unsafe-inl
 | 1 | Sin paginación por offset | Listados grandes no escalan | Deuda declarada |
 | 2 | Sin API REST ni OpenAPI | No hay cliente externo formal | Fuera de alcance |
 | 3 | Validación centralizada inexistente (`Validador.php` vacío) | Reglas repetidas y posibles divergencias | Deuda técnica |
-| 4 | Sin recuperación de contraseña ni email real | El usuario no puede autogestionar el acceso | Fuera de alcance |
-| 5 | Login no exige email verificado | Cualquiera con email válido entra | Brecha conocida |
+| 4 | Sin recuperación automática de contraseña | El usuario no puede autogestionar el acceso; el administrador la restablece | Fuera de alcance |
+| 5 | Verificación de correo simulada (sin SMTP real) | El enlace se muestra en pantalla; el login sí exige `email_verificado = 1` | Fuera de alcance |
 | 6 | `permisos`/`rol_permisos` sin uso en runtime | RBAC por rol fijo, no dinámico | Deuda de diseño |
-| 7 | Suplantación sin auditoría ni restricción de rol destino | No queda traza de “ver como” | Brecha conocida |
-| 8 | Borrado físico irreversible; la confirmación es solo `confirm()` del navegador | Un POST con token válido borra sin segundo resguardo | Deuda menor (las dos acciones que iban por GET ya exigen POST + CSRF desde el 24/10) |
+| 7 | La suplantación no pide motivo escrito ni doble confirmación | Queda traza `ADMIN_SUPLANTA_INICIO`/`FIN` y bloquea cuentas admin, pero sin justificación | Deuda menor |
+| 8 | Borrado lógico en usuarios, equipos e integrantes; torneos y otras entidades usan borrado físico con `CASCADE` | Eliminar un torneo arrastra inscripciones y partidos | Deuda menor (POST + CSRF + `confirm()`, sin segundo resguardo) |
 | 9 | CSP con `unsafe-inline`; sin HTTPS; credenciales demo públicas | Mitigación parcial de XSS y transporte sin cifrar | Entorno académico |
-| 10 | Sin CI/CD, sin E2E; 7 tests / 25 assertions | Cobertura automatizada baja | Deuda declarada |
+| 10 | Sin CI/CD: los E2E son scripts de shell manuales | Los 155 casos no corren en cada cambio | Deuda declarada |
 | 11 | Sin APM ni slow query log; sesión en archivos | Diagnóstico manual y escalado con fricción | Deuda operativa |
 | 12 | Archivos JS/HTML placeholder vacíos | No aportan funcionalidad | Limpieza pendiente |
 | 13 | Sin `php.ini` endurecido | `display_errors` no fijado en producción | Deuda de despliegue |
@@ -577,19 +577,22 @@ docker compose -f docker/docker-compose.yml ps
 curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" \
   "http://localhost:8080/index.php?c=torneo&a=catalogoPublico"
 
-# Conteos de la base
-docker compose -f docker/docker-compose.yml exec -T db mysql -uroot -proot123 -N -e \
-  "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='ascend';
-   SELECT COUNT(*) FROM information_schema.referential_constraints WHERE constraint_schema='ascend';"
+# Conteos de la base (la clave se lee del entorno del contenedor y no se imprime)
+docker compose -f docker/docker-compose.yml exec -T db sh -c \
+  'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot -D ascend -N -e \
+   "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();
+    SELECT COUNT(*) FROM information_schema.referential_constraints WHERE constraint_schema=DATABASE();"'
 
 # Políticas de borrado
-docker compose -f docker/docker-compose.yml exec -T db mysql -uroot -proot123 -N -e \
-  "SELECT DELETE_RULE, COUNT(*) FROM information_schema.referential_constraints
-   WHERE constraint_schema='ascend' GROUP BY DELETE_RULE;"
+docker compose -f docker/docker-compose.yml exec -T db sh -c \
+  'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot -D ascend -N -e \
+   "SELECT DELETE_RULE, COUNT(*) FROM information_schema.referential_constraints
+    WHERE constraint_schema=DATABASE() GROUP BY DELETE_RULE;"'
 
 # Consulta y plan
-docker compose -f docker/docker-compose.yml exec -T db mysql -uroot -proot123 -e \
-  "EXPLAIN SELECT * FROM ascend.torneos WHERE estado='inscripciones_abiertas';"
+docker compose -f docker/docker-compose.yml exec -T db sh -c \
+  'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot -D ascend -e \
+   "EXPLAIN SELECT * FROM torneos WHERE estado=\"inscripciones_abiertas\";"'
 
 # Evidencia estática
 grep -ro "htmlspecialchars" codigo_fuente/vistas | wc -l
@@ -610,9 +613,9 @@ git log --oneline -15
 | “Tiene paginación.” | “No hay paginación; los listados están acotados por dominio y con `LIMIT`.” |
 | “Es 100% seguro.” | “Tiene controles para un MVP: CSRF, escape, bcrypt, guardas y cabeceras; no es producción.” |
 | “Usamos RBAC completo.” | “Autorización por rol con guardas; las tablas de permisos existen pero no se consultan.” |
-| “Escapamos todo.” | “371 escapes en vistas y ningún `echo` directo de `$_GET`/`$_POST`; falta un helper único.” |
+| “Escapamos todo.” | “522 escapes en vistas y ningún `echo` directo de `$_GET`/`$_POST`; falta un helper único.” |
 | “La sesión escala.” | “La app escala; la sesión en archivos es el primer obstáculo.” |
-| “Probamos todo.” | “50 rutas con 200, 7 tests y un dry run; la concurrencia y la carga no están medidas.” |
+| “Probamos todo.” | “50 rutas con 200, 155 casos en tres suites y un dry run; la concurrencia y la carga no están medidas.” |
 | “Tiene recuperación de contraseña.” | “Está declarada como no disponible en esta versión.” |
 | “Eso no lo vimos.” | “No lo medimos; está declarado como límite.” |
 

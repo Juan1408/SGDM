@@ -330,33 +330,37 @@
 
             <li>
                <article class="tarjeta-equipo">
-                  <img src="<?php echo URL_BASE; ?>img/avatars/a1.png" alt="">
-                  <h3>Nombre Apellido</h3>
-                  <p>Frontend</p>
+                  <img src="<?php echo URL_BASE; ?>img/equipo/valentina-passeli.jpg" alt="Foto de Valentina Passeli"
+                       onerror="this.onerror=null;this.src='<?php echo URL_BASE; ?>img/equipo/sin-foto.svg';">
+                  <h3>Valentina Passeli</h3>
+                  <p>DISEÑO Y UI/UX</p>
                </article>
             </li>
 
             <li>
                <article class="tarjeta-equipo">
-                  <img src="<?php echo URL_BASE; ?>img/avatars/a2.png" alt="">
-                  <h3>Nombre Apellido</h3>
-                  <p>Backend</p>
+                  <img src="<?php echo URL_BASE; ?>img/equipo/michael-barnetto.jpg" alt="Foto de Michael Barnetto"
+                       onerror="this.onerror=null;this.src='<?php echo URL_BASE; ?>img/equipo/sin-foto.svg';">
+                  <h3>Michael Barnetto</h3>
+                  <p>ANALISTA EN SISTEMAS</p>
                </article>
             </li>
 
             <li>
                <article class="tarjeta-equipo">
-                  <img src="<?php echo URL_BASE; ?>img/avatars/a3.png" alt="">
-                  <h3>Nombre Apellido</h3>
-                  <p>Base de Datos</p>
+                  <img src="<?php echo URL_BASE; ?>img/equipo/mauricio-pedrozo.jpg" alt="Foto de Mauricio Pedrozo"
+                       onerror="this.onerror=null;this.src='<?php echo URL_BASE; ?>img/equipo/sin-foto.svg';">
+                  <h3>Mauricio Pedrozo</h3>
+                  <p>INGENIERO DE SOFTWARE</p>
                </article>
             </li>
 
             <li>
                <article class="tarjeta-equipo">
-                  <img src="<?php echo URL_BASE; ?>img/avatars/a1.png" alt="">
-                  <h3>Nombre Apellido</h3>
-                  <p>Diseño</p>
+                  <img src="<?php echo URL_BASE; ?>img/equipo/juan-fernandez.jpg" alt="Foto de Juan Fernandez"
+                       onerror="this.onerror=null;this.src='<?php echo URL_BASE; ?>img/equipo/sin-foto.svg';">
+                  <h3>Juan Fernandez</h3>
+                  <p>PROGRAMADOR</p>
                </article>
             </li>
 

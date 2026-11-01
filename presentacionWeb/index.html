@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="ASCEND · Recorrido E2E de la plataforma: del visitante público al panel de administración. Presentación de Charrúa Code.">
+  <title>ASCEND · Recorrido E2E · Charrúa Code</title>
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/presentacion.css">
+</head>
+<body data-scene="startup">
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.6v12.8L19 12z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><path d="M12 18.2v.1M9.2 9a3 3 0 1 1 4.4 2.7c-.9.5-1.6 1.1-1.6 2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M14.5 5 8 12l6.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9.5 5 16 12l-6.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  </svg>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient-orb ambient-orb--one"></span>
+    <span class="ambient-orb ambient-orb--two"></span>
+    <span class="ambient-grid"></span>
+  </div>
+
+  <header class="topbar" id="topbar" hidden>
+    <div class="brand-dock" aria-label="Charrúa Code">
+      <div class="dock-coin">
+        <div class="dock-coin-inner">
+          <img src="assets/charruacode-mark.png" alt="">
+        </div>
+      </div>
+      <div class="dock-text">
+        <span class="dock-name">Charrúa Code</span>
+        <span class="dock-sub">presenta</span>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <span class="chapter-label" id="chapterLabel">ASCEND</span>
+      <div class="progress" role="progressbar" aria-label="Avance de la presentación" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span class="progress-fill" id="progressFill"></span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="ascend-mini"><img src="assets/ascend-logo.png" alt="ASCEND"></div>
+      <span class="slide-counter" id="slideCounter">01 / 35</span>
+      <div class="topbar-tools">
+        <button class="icon-btn" id="btnPlay" type="button" aria-label="Activar modo video" title="Modo video (P)">
+          <svg class="icon"><use href="#i-play"></use></svg>
+        </button>
+        <button class="icon-btn" id="btnFull" type="button" aria-label="Pantalla completa" title="Pantalla completa (F)">
+          <svg class="icon"><use href="#i-expand"></use></svg>
+        </button>
+        <button class="icon-btn" id="btnHelp" type="button" aria-label="Atajos de teclado" title="Atajos (?)">
+          <svg class="icon"><use href="#i-help"></use></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. Apertura Charrúa Code -->
+  <section class="scene scene-startup" id="sceneStartup" aria-label="Apertura de Charrúa Code">
+    <div class="startup-inner">
+      <p class="overline reveal-1">Una presentación de</p>
+
+      <div class="coin-stage reveal-2">
+        <div class="coin-orbit coin-orbit--one" aria-hidden="true"></div>
+        <div class="coin-orbit coin-orbit--two" aria-hidden="true"></div>
+        <div class="coin-wrap">
+          <div class="coin" role="img" aria-label="Marca oficial de Charrúa Code">
+            <div class="coin-face coin-face--front"><img src="assets/charruacode-mark.png" alt=""></div>
+            <div class="coin-face coin-face--back">
+              <img class="coin-glyph" src="assets/charruacode-glyph.png" alt="">
+            </div>
+          </div>
+        </div>
+        <span class="coin-shadow" aria-hidden="true"></span>
+      </div>
+
+      <h1 class="brand-title reveal-3"><span>Charrúa</span> <span class="grad-text">Code</span></h1>
+      <p class="brand-sub reveal-4">Desarrollo · Innovación · Soluciones</p>
+
+      <div class="startup-meta reveal-5">
+        <span>Montevideo · Uruguay</span>
+        <span class="dot-sep"></span>
+        <span>Proyecto ASCEND · 2026</span>
+      </div>
+
+      <div class="scene-actions reveal-6">
+        <button class="btn btn-primary" id="btnStart" type="button">Comenzar</button>
+        <button class="btn btn-ghost" id="btnSkipIntro" type="button">Saltar apertura</button>
+      </div>
+    </div>
+
+    <div class="startup-strip" aria-hidden="true">
+      <span>35 capturas reales</span>
+      <span>4 perfiles</span>
+      <span>1 recorrido</span>
+      <span>Full Stack · 2026</span>
+    </div>
+  </section>
+
+  <!-- 2. Revelación ASCEND -->
+  <section class="scene scene-ascend" id="sceneAscend" aria-label="Presentación de ASCEND" hidden>
+    <div class="ascend-aurora" aria-hidden="true"></div>
+
+    <div class="ascend-inner">
+      <p class="overline reveal-1">Ahora sí</p>
+
+      <div class="ascend-stage reveal-2">
+        <div class="ascend-halo" aria-hidden="true"></div>
+        <div class="ascend-coin" role="img" aria-label="Emblema de ASCEND: la A del logotipo y la copa">
+          <div class="ascend-face ascend-face--front">
+            <img class="ascend-a" src="assets/ascend-a.png" alt="">
+          </div>
+          <div class="ascend-face ascend-face--back">
+            <img class="ascend-cup" src="assets/ascend-mark.png" alt="">
+          </div>
+        </div>
+      </div>
+
+      <h1 class="ascend-title reveal-3">ASCEND</h1>
+      <p class="ascend-sub reveal-4">Gestor multideportivo. Del catálogo público al panel de administración.</p>
+
+      <ul class="stats reveal-5">
+        <li><strong>42</strong><span>tablas</span></li>
+        <li><strong>3</strong><span>roles activos</span></li>
+        <li><strong>155</strong><span>casos de prueba</span></li>
+        <li><strong>35</strong><span>capturas E2E</span></li>
+      </ul>
+
+      <div class="scene-actions reveal-6">
+        <button class="btn btn-primary" id="btnBeginDeck" type="button">Comenzar el recorrido</button>
+        <button class="btn btn-ghost" id="btnVideoDeck" type="button">Reproducir como video</button>
+      </div>
+
+      <p class="ascend-foot reveal-6">Una plataforma, cuatro perfiles y un mismo hilo: la trazabilidad.</p>
+    </div>
+  </section>
+
+  <!-- 3. Recorrido por capturas -->
+  <main class="deck" id="deck" hidden>
+    <aside class="rail" aria-label="Capítulos del recorrido">
+      <div class="rail-head">
+        <span class="rail-kicker">Recorrido E2E</span>
+        <h2 class="rail-title">Del visitante al admin</h2>
+      </div>
+      <nav class="chapter-nav" id="chapterNav"></nav>
+      <div class="rail-foot">
+        <span class="rail-foot-num">35</span>
+        <span>capturas tomadas en el navegador<br>el 01/11/2026</span>
+      </div>
+    </aside>
+
+    <section class="stage" id="stage" aria-live="polite">
+      <article class="slide-copy" id="slideCopy">
+        <p class="eyebrow">
+          <span class="eyebrow-chapter" id="slideChapter">Capítulo 1</span>
+          <span class="eyebrow-sep"></span>
+          <span id="slideStep">Paso 01 / 35</span>
+        </p>
+        <h1 id="slideTitle">La puerta de entrada</h1>
+        <p class="slide-lead" id="slideLead"></p>
+        <ul class="slide-points" id="slidePoints"></ul>
+        <div class="fact">
+          <span class="fact-label" id="factLabel"></span>
+          <strong class="fact-value" id="factValue"></strong>
+        </div>
+      </article>
+
+      <figure class="browser" id="browser">
+        <div class="browser-bar">
+          <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="browser-url" id="slideRoute">index.php</span>
+          <button class="browser-open" id="btnZoom" type="button" title="Ver la captura completa">
+            <svg class="icon"><use href="#i-expand"></use></svg>
+            <span>Ampliar</span>
+          </button>
+        </div>
+        <div class="shot-viewport" id="shotViewport">
+          <img id="slideImage" src="" alt="">
+        </div>
+        <figcaption class="browser-foot">
+          <span id="slideCaption"></span>
+          <button class="pan-btn" id="btnPausePan" type="button" hidden>Pausar recorrido</button>
+        </figcaption>
+      </figure>
+
+      <div class="finale" id="finale" hidden>
+        <p class="overline">Fin del recorrido</p>
+        <h2 class="finale-title">Del visitante<br><span class="grad-text">al administrador.</span></h2>
+        <p class="finale-lead">Un torneo se gana en la cancha. Un sistema se sostiene en la operación, la trazabilidad y los límites declarados.</p>
+        <div class="finale-grid">
+          <div><strong>35</strong><span>capturas reales</span></div>
+          <div><strong>4</strong><span>perfiles recorridos</span></div>
+          <div><strong>42</strong><span>tablas en la base</span></div>
+          <div><strong>155</strong><span>casos de prueba</span></div>
+        </div>
+        <div class="scene-actions">
+          <button class="btn btn-primary" id="btnRestart" type="button">Volver al inicio</button>
+          <button class="btn btn-ghost" id="btnLastShot" type="button">Ver la última captura</button>
+        </div>
+        <p class="finale-credit">Charrúa Code · ASCEND · Defensa Full Stack 2026</p>
+      </div>
+    </section>
+
+    <div class="deck-controls" aria-label="Controles de la presentación">
+      <button class="round-btn" id="btnPrev" type="button" aria-label="Anterior" title="Anterior (←)">
+        <svg class="icon"><use href="#i-left"></use></svg>
+      </button>
+      <button class="round-btn round-btn--primary" id="btnNext" type="button" aria-label="Siguiente" title="Siguiente (→)">
+        <svg class="icon"><use href="#i-right"></use></svg>
+      </button>
+    </div>
+
+    <div class="kbd-hint" aria-hidden="true"><kbd>clic</kbd> avanza <span>·</span> <kbd>borde izquierdo</kbd> vuelve <span>·</span> <kbd>P</kbd> video</div>
+  </main>
+
+  <!-- Visor de captura completa -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Captura ampliada" hidden>
+    <div class="lightbox-bar">
+      <span class="lightbox-title" id="lightboxCaption"></span>
+      <div class="lightbox-tools">
+        <button class="icon-btn" id="lightboxZoomOut" type="button" aria-label="Alejar"><svg class="icon"><use href="#i-minus"></use></svg></button>
+        <button class="icon-btn" id="lightboxZoomIn" type="button" aria-label="Acercar"><svg class="icon"><use href="#i-plus"></use></svg></button>
+        <a class="icon-btn" id="lightboxDownload" href="#" download aria-label="Descargar captura"><svg class="icon"><use href="#i-download"></use></svg></a>
+        <button class="icon-btn" id="lightboxClose" type="button" aria-label="Cerrar"><svg class="icon"><use href="#i-close"></use></svg></button>
+      </div>
+    </div>
+    <div class="lightbox-scroll" id="lightboxScroll">
+      <img id="lightboxImg" src="" alt="">
+    </div>
+  </div>
+
+  <!-- Ayuda de teclado -->
+  <div class="help-overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+    <div class="help-card">
+      <div class="help-head">
+        <h2 id="helpTitle">Atajos</h2>
+        <button class="icon-btn" id="btnCloseHelp" type="button" aria-label="Cerrar ayuda"><svg class="icon"><use href="#i-close"></use></svg></button>
+      </div>
+      <dl class="help-list">
+        <div><dt><kbd>clic</kbd> / <kbd>clic derecho</kbd></dt><dd>Avanza / retrocede; el borde izquierdo también vuelve</dd></div>
+        <div><dt><kbd>←</kbd> <kbd>→</kbd> <kbd>Espacio</kbd></dt><dd>Anterior / siguiente</dd></div>
+        <div><dt><kbd>1</kbd>–<kbd>5</kbd></dt><dd>Saltar al capítulo</dd></div>
+        <div><dt><kbd>P</kbd></dt><dd>Modo video automático</dd></div>
+        <div><dt><kbd>G</kbd></dt><dd>Pausar o reanudar el desplazamiento de la captura</dd></div>
+        <div><dt><kbd>F</kbd></dt><dd>Pantalla completa</dd></div>
+        <div><dt><kbd>Enter</kbd></dt><dd>Ampliar la captura</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Cerrar visor o ayuda</dd></div>
+      </dl>
+      <p class="help-note">Las capturas largas se desplazan solas para mostrar la página completa. <kbd>G</kbd> pausa ese movimiento.</p>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="noscript">Esta presentación necesita JavaScript para recorrer las capturas. Los archivos están en <code>presentacionWeb/capturas/</code>.</div>
+  </noscript>
+
+  <script src="js/datos.js"></script>
+  <script src="js/presentacion.js"></script>
+</body>
+</html>

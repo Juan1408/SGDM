@@ -55,7 +55,7 @@ No necesitás hablar en las 12 diapositivas. El panel de administración **no ti
 
 ### Diapositiva 3 — Tres roles (≈15 s, opcional)
 
-> “El admin no ve torneos: ve el sistema. Trece secciones, desde usuarios y catálogo hasta auditoría y monitoreo de errores. Dos reglas que lo definen: no puede bloquearse a sí mismo, y ‘ver como’ entra a otra sesión en modo solo lectura.”
+> “El admin no ve torneos: ve el sistema. Trece secciones, desde usuarios y catálogo hasta auditoría y monitoreo de errores. Tres reglas que lo definen: no puede bloquearse a sí mismo, las cuentas de administrador general son inmutables y se aprovisionan fuera del panel, y ‘ver como’ entra a otra sesión en modo solo lectura y queda auditado.”
 
 ### Diapositiva 6 — Arquitectura (≈30 s)
 
@@ -63,7 +63,7 @@ No necesitás hablar en las 12 diapositivas. El panel de administración **no ti
 
 ### Diapositiva 8 — Seguridad (≈60 s)
 
-> “La seguridad está en capas. Autenticación con bcrypt y límite de intentos por IP: cinco fallos bloquean la IP cinco minutos. Autorización por rol en el servidor, no en el menú. CSRF con un token de sesión incrustado en cada formulario, validado en el POST; la política es que toda acción que cambie estado sea POST. Sesión con cookie HttpOnly y SameSite Lax, regeneración de ID al autenticar y expiración por inactividad a los treinta minutos. Y cabeceras: CSP, X-Frame-Options, nosniff, Referrer-Policy y Permissions-Policy. Un formulario sin token válido recibe 419.”
+> “La seguridad está en capas. Autenticación con bcrypt, límite de intentos por IP y exigencia de email verificado: cinco fallos bloquean la IP cinco minutos. Autorización por rol en el servidor, no en el menú; el rol 1 es inmutable y solo se alterna entre organizador y jugador. CSRF con un token de sesión incrustado en cada formulario, validado en el POST; la política es que toda acción que cambie estado sea POST. Sesión con cookie HttpOnly y SameSite Lax, regeneración de ID al autenticar y expiración por inactividad a los treinta minutos. ‘Ver como’ es solo lectura y queda auditado. Y cabeceras: CSP, X-Frame-Options, nosniff, Referrer-Policy y Permissions-Policy. Un formulario sin token válido recibe 419.”
 
 ### Diapositiva 9 — Toolkit y operación (≈40 s)
 
@@ -143,9 +143,9 @@ Porque el usuario tiene historial que no debe perderse: inscripciones, equipos, 
 
 ### A7. ¿Se pueden crear administradores desde el panel?
 
-**No.** El panel lista usuarios administrativos, permite editar datos y cambiar el rol, pero no tiene formulario de alta de administrador. Es una funcionalidad planificada y no implementada. La respuesta correcta es reconocerlo, no defenderlo: “el alta de administradores quedó fuera del alcance de esta entrega; el cambio de rol sí está implementado”.
+**No.** El panel lista usuarios, permite editar datos y cambiar el rol **solo entre organizador y jugador**. La cuenta de rol 1 (administrador general) es inmutable: no se crea, no se edita y no se bloquea desde el panel; se aprovisiona fuera, por seed o script. El rol 4 (usuario público) está reservado y el backend rechaza asignarlo. La respuesta correcta es reconocer el límite y explicar la política: “el alta de administradores queda fuera del panel a propósito, para que ninguna cuenta pueda elevar sus privilegios desde la interfaz”.
 
-**Evidencia:** `UsuarioControlador::actualizarUsuario()` actualiza nombre, email y `rol_id`; no existe acción de creación. La matriz de roles del proyecto lo listaba como ADM-01; la implementación no lo cubre.
+**Evidencia:** `UsuarioControlador::actualizarUsuario()` valida la matriz de roles; `Rol` y los seeds definen el rol 1 fuera del panel. La matriz original listaba ADM-01 como alta de administradores; la implementación lo cubre con aprovisionamiento externo, no con un formulario.
 
 ### A8. ¿Cómo se monitorean los errores?
 
@@ -193,11 +193,11 @@ No hay bloqueo optimista ni control de versión: gana el último que guarda. Es 
 
 ### A15. ¿Cómo se prueba que el panel funciona?
 
-Con la verificación de rutas: 18 de 18 rutas administrativas respondieron 200, incluida la edición de juego con persistencia de categoría. Además hay pruebas unitarias del panel: bloquear usuario, gestionar catálogo, gestionar errores, actualizar políticas, dashboard de torneos activos y alerta global.
+Con la verificación de rutas: 50 rutas con HTTP 200 en el dry run, incluida la edición de juego con persistencia de categoría. Además hay pruebas automatizadas del panel: bloquear usuario, gestionar catálogo, gestionar errores, actualizar políticas, dashboard de torneos activos y alerta global.
 
 **Evidencia:** `VERIFICACION_FINAL_DRY_RUN.md` §4.2; `tests/unitarias/AdminTest.php`.
 
-**Límite:** 7 pruebas en total en el proyecto. No hay pruebas end-to-end ni integración continua.
+**Límite:** hay 155 casos automatizados en tres suites (132/619 en `tests`, 20/129 en `Test` y 3/3 en `TestM`), más scripts E2E de shell. No hay integración continua.
 
 ---
 
@@ -317,13 +317,13 @@ Cada controlador valida tipos y pertenencia antes de llamar al modelo. Por ejemp
 
 ## 7. Banco de preguntas — Base de datos
 
-### C1. ¿Por qué 41 tablas?
+### C1. ¿Por qué 42 tablas?
 
-Porque el modelo separa identidad, perfiles por rol, catálogos, operación de torneos, resultados y observabilidad. Las 41 tablas incluyen: usuarios y tres tablas de perfil (herencia por tabla de clase), juegos y sus tablas puente de modalidades y formatos, torneos y sus encuentros/posiciones/inscripciones, equipos y miembros, guardados, notificaciones, logs, errores, intentos de login y políticas.
+Porque el modelo separa identidad, perfiles por rol, catálogos, operación de torneos, resultados y observabilidad. Las 42 tablas incluyen: usuarios y tres tablas de perfil (herencia por tabla de clase), juegos y sus tablas puente de modalidades y formatos, torneos y sus encuentros/posiciones/inscripciones, equipos y miembros, guardados, notificaciones, logs, errores, intentos de login y políticas.
 
-**Evidencia:** `001_ascend.sql` (44 sentencias `CREATE TABLE`, 41 tablas únicas); `README.md`.
+**Evidencia:** `information_schema.tables` devuelve 42 tablas en `ascend`; `001_ascend.sql` contiene 47 sentencias `CREATE TABLE`, cinco de ellas repiten tablas recreadas durante la consolidación. El conteo válido es el de la base, no el de las sentencias.
 
-**Cómo contarlo:** no enumeres 41 tablas. Agrupá en cinco bloques: identidad, catálogo, operación, resultados, observabilidad.
+**Cómo contarlo:** no enumeres 42 tablas. Agrupá en cinco bloques: identidad, catálogo, operación, resultados, observabilidad.
 
 ### C2. ¿El modelo está en tercera forma normal?
 
@@ -347,25 +347,25 @@ Con claves únicas y validaciones en el modelo. Por ejemplo, la inscripción de 
 
 ### C5. ¿Cuántas claves foráneas y restricciones CHECK hay?
 
-64 declaraciones de clave foránea y 11 `CHECK` en `001_ascend.sql`. Los `CHECK` restringen estados, tipos y valores de `guardados`; las FK evitan huérfanos.
+58 restricciones de clave foránea efectivas en la base y 11 `CHECK`. En el archivo `001_ascend.sql` hay 65 declaraciones de FK porque cinco tablas se recrean y repiten sus claves; el número que vale es el de `information_schema.referential_constraints`. Los `CHECK` restringen estados, tipos y valores de `guardados`; las FK evitan huérfanos: 37 son `CASCADE`, 14 `SET NULL` y 7 `RESTRICT`.
 
-**Evidencia:** conteo sobre `001_ascend.sql`.
+**Evidencia:** conteo sobre `information_schema` en la base `ascend` y sobre `001_ascend.sql`.
 
-**Precisión:** son declaraciones, no necesariamente 64 relaciones distintas; algunas tablas declaran más de una FK. Decir “64 declaraciones” es exacto.
+**Precisión:** si preguntan, decir “58 restricciones únicas” es exacto; decir “65” es contar declaraciones del archivo, no relaciones de la base.
 
-### C6. ¿Por qué siete migraciones y no una?
+### C6. ¿Por qué tres migraciones y no once?
 
-Porque la base evolucionó: `001` es el esquema, `002` los datos base, `003` la semilla relacional de QA, `004` las tablas de autenticación, `005` correcciones idempotentes, `006` una ampliación idempotente de la semilla y `007` restricciones de disciplinas con dos triggers que validan modalidad y formato al crear o editar un torneo. Separarlas permite aplicar solo lo que falta en una base existente.
+Porque al cerrar la versión final consolidamos el historial. `001` es el esquema, `002` los catálogos base y `003` el seed relacional de QA, que además absorbe las tablas de autenticación, las correcciones idempotentes, la ampliación de la semilla y las restricciones de disciplinas con dos triggers. Las migraciones `004` a `011` existieron durante el desarrollo y quedaron en la historia de Git. Separarlas en su momento permitió aplicar solo lo que faltaba; consolidarlas ahora permite reconstruir la base con tres archivos y sin ambigüedad.
 
-**Límite:** `003` no es idempotente y está pensada para base limpia. Sobre una base existente se aplica `005`, y `006` si ya tenía `003`. Está documentado en el README y en la verificación.
+**Límite:** `003` no es idempotente y está pensada para base limpia. Está documentado en el README y en la verificación.
 
 **Trampa:** “¿Y si aplico `001` sobre la base en uso?” No: contiene `DROP TABLE` y borra datos. Es la advertencia explícita del README.
 
-### C7. ¿Por qué los datos de demo son 52 usuarios y 20 torneos?
+### C7. ¿Por qué los datos de demo son 51 usuarios y 26 torneos?
 
-La semilla base crea 51 usuarios y 18 torneos; en la base actual hay 52 y 20 porque se agregaron dos torneos de prueba. La semilla está pensada para probar todos los formatos sin crear nada a mano: 23 equipos, 81 participantes, 87 encuentros y 76 filas de posiciones, con una liga de 8 equipos (1212), eliminación directa de equipos (1213), suizo individual (1214), liga individual de 10 (1215), eliminación individual (1216) y un torneo abierto con inscripciones en todos los estados (1217).
+El seed crea 51 usuarios, 26 torneos, 45 equipos, 129 participantes, 97 encuentros y 123 filas de posiciones. La corrida E2E que usamos para las capturas agrega 2 usuarios, 1 equipo y 1 inscripción, por eso la base viva muestra 53 usuarios, 46 equipos y 130 participantes. La semilla está pensada para probar todos los formatos sin crear nada a mano, con una liga de 8 equipos (1212), eliminación directa de equipos (1213), suizo individual (1214), liga individual de 10 (1215), eliminación individual (1216) y un torneo abierto con inscripciones en todos los estados (1217).
 
-**Evidencia:** `README.md`; `006_seed_qa_ampliado.sql`.
+**Evidencia:** `README.md`; `003_ascend_seed_relacional_qa.sql`; conteos en vivo del 01/11/2026.
 
 ### C8. ¿Por qué no usaron un ORM?
 
@@ -411,7 +411,7 @@ No. Todo el cálculo vive en PHP. Es una decisión de mantenibilidad: la lógica
 
 Porque Docker da un entorno reproducible: la misma versión de PHP, Apache y MySQL en cualquier máquina, sin depender de lo que esté instalado. XAMPP fue el entorno de desarrollo inicial; el problema fue justamente la diferencia de esquema entre entornos, que se documentó y se resolvió.
 
-**Evidencia:** decisión #47 de `Documentacion_BackEnd.md` (XAMPP 39 tablas vs Docker 26 en un momento dado; desincronización de esquema).
+**Evidencia:** decisión #47 de `Documentacion_BackEnd.md`, que registra la desincronización de esquema detectada al comparar XAMPP y Docker al inicio del proyecto y cómo se resolvió con migraciones versionadas.
 
 ### D2. ¿Qué servicios levanta el stack?
 
@@ -644,14 +644,14 @@ Usala para responder “¿por qué así y no de otra forma?”. Una fila por res
 Decilas así. No las maquilles.
 
 1. **Alta de administradores:** “El panel permite listar, editar y cambiar el rol, pero no crear administradores. Es una funcionalidad planificada que quedó fuera del alcance.”
-2. **Auditoría:** “Registramos login, logout, política de contraseña y cambios de torneo. Bloqueo, borrado y cambio de rol de usuarios no se auditan; la tabla `auditoria_cambios` está en el esquema pero sin uso.”
+2. **Auditoría:** “Registramos login, logout, cambios de contraseña, creación y actualización de torneos, la eliminación de torneos, y las acciones administrativas sobre usuarios: consulta, edición, bloqueo o desbloqueo, baja lógica y cambio de rol. También el inicio y el fin de la suplantación. No se audita cada lectura pública ni el borrado de equipos.”
 3. **Política de contraseña:** “Se aplica en el registro. La expiración y el historial están configurados pero no se aplican, porque no hay flujo de cambio de contraseña.”
 4. **CSRF:** “La política es POST + token para las acciones de negocio. Borrar torneo y cambiar estado de juego, que iban por GET, hoy rechazan el GET y exigen token. Quedan dos GET que escriben, ambos con justificación: el logout, que solo cierra la sesión, y la verificación de email, con token de un solo uso y vencimiento.”
-5. **Borrado de torneos:** “Es físico e irreversible, con auditoría. La confirmación actual es del navegador, no del servidor; el histórico se conserva en la sección Historial.”
+5. **Borrado de torneos:** “Es físico e irreversible y queda registrado como `ELIMINACION_TORNEO`. La confirmación actual es del navegador, no del servidor; el histórico se conserva en la sección Historial.”
 6. **Recuperación de contraseña:** “No está implementada; el login lo informa explícitamente.”
-7. **Email:** “No hay envío real de correo; las alertas son notificaciones internas.”
+7. **Email:** “No hay envío real de correo: el enlace de verificación se muestra en pantalla, con token de un solo uso. El login sí exige la cuenta verificada.”
 8. **Sistema suizo:** “Admite cantidades pares de 4 a 64 participantes; no implementa bye.”
-9. **Pruebas:** “Siete pruebas unitarias y verificación de rutas. No hay pruebas end-to-end ni integración continua.”
+9. **Pruebas:** “155 casos automatizados en tres suites, scripts E2E de shell y verificación de rutas. No hay integración continua.”
 10. **Toolkit de sistemas:** “Validado sintácticamente (`bash -n`, `--help`), no ejecutado en un servidor real. Respaldos, restauración y replicación no se probaron funcionalmente.”
 11. **Grafana:** “Está como servicio, sin datasource ni dashboards.”
 12. **Producción:** “Es una demo académica. Faltan HTTPS, gestión de secretos, usuario no root en la imagen y monitoreo real.”
@@ -722,11 +722,13 @@ Respondé por área, sin jerarquías: “El módulo de administración, segurida
 
 ```bash
 docker compose -f docker/docker-compose.yml ps
-docker compose -f docker/docker-compose.yml exec db mysql -u root -proot123 -N -B ascend \
-  -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='ascend'; SELECT COUNT(*) FROM usuarios; SELECT COUNT(*) FROM torneos;"
+docker compose -f docker/docker-compose.yml exec -T db sh -c \
+  'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot -D ascend -N -B -e \
+   "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();
+    SELECT COUNT(*) FROM usuarios; SELECT COUNT(*) FROM torneos;"'
 ```
 
-Debe devolver 41, 51, 18.
+Debe devolver **42 tablas, 53 usuarios y 26 torneos** en la base de la demo; en un seed limpio son 51 usuarios y 45 equipos antes de la corrida E2E.
 
 ---
 
@@ -760,7 +762,7 @@ Debe devolver 41, 51, 18.
 - `Documentos_Juan/task_administrador.md` — alcance del módulo administrativo.
 - `codigo_fuente/publico/index.php`, `ayudantes/Sesion.php`, `ayudantes/Auditorias.php`, `core/CabecerasSeguridad.php`, `core/ManejadorErrores.php`.
 - `codigo_fuente/controladores/` — `AdminControlador`, `UsuarioControlador`, `TorneoAdminControlador`, `JuegoControlador`, `FormatoControlador`, `AlertaControlador`, `AuditoriaControlador`.
-- `base_de_datos/migraciones/001_ascend.sql` a `006_seed_qa_ampliado.sql`.
+- `base_de_datos/migraciones/001_ascend.sql` a `003_ascend_seed_relacional_qa.sql`.
 - `docker/docker-compose.yml`, `docker/Dockerfile`, `docker/apache-vhost.conf`.
 - `administracion_sistemas/README.md` y `administracion_sistemas/documentacion/01`–`05`.
 - `COMANDOS_DOCKER.md` — operación, desbloqueo de IP, diagnóstico.
