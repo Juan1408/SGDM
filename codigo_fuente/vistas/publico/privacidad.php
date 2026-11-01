@@ -226,7 +226,7 @@
                </p>
                <ul>
                   <li><strong>Cookie de sesión (PHPSESSID):</strong> identifica tu sesión en el servidor. Es HttpOnly, SameSite=Lax y se marca Secure cuando el sitio se sirve por HTTPS. La sesión expira por inactividad a los 30 minutos.</li>
-                  <li><strong>Almacenamiento local del navegador:</strong> guardamos preferencias de interfaz, como el tema claro u oscuro del panel administrativo, las notificaciones ya leídas, la posición de la portada de un perfil y borradores locales del panel de organizador. Estos datos quedan en tu dispositivo y no se envían automáticamente al servidor. Podés borrarlos desde la configuración de tu navegador.</li>
+                  <li><strong>Almacenamiento local del navegador:</strong> guardamos preferencias de interfaz, como el tema claro u oscuro del panel administrativo, la posición de la portada de un perfil y borradores locales del panel de organizador. Estos datos quedan en tu dispositivo y no se envían automáticamente al servidor. Podés borrarlos desde la configuración de tu navegador.</li>
                </ul>
                <p>
                   El sitio carga tipografías desde Google Fonts y una librería de íconos desde

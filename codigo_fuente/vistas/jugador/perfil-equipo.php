@@ -13,8 +13,44 @@ $nombreEquipo = $equipo['nombre_equipo'];
 $descripcion = $equipo['descripcion'] ?: 'Este equipo todavía no cargó una descripción.';
 $ubicacion = $equipo['ubicacion'] ?: 'Sin especificar';
 $anioFundacion = $equipo['anio_fundacion'] ?: 'Sin especificar';
-$escudoUrl = $equipo['escudo_url'] ?: URL_BASE . 'img/logos/canelones.png';
-$bannerUrl = $equipo['banner_url'] ?: URL_BASE . 'img/live.jpg';
+
+//Las rutas de imagen se guardan relativas a publico/ (ej: img/equipos/subidos/ab12.png)
+$urlImagenEquipo = static function (?string $ruta, string $porDefecto): string {
+    $ruta = trim((string) $ruta);
+    if ($ruta === '') {
+        return URL_BASE . $porDefecto;
+    }
+    return preg_match('#^(https?:)?//#i', $ruta) ? $ruta : URL_BASE . ltrim($ruta, '/');
+};
+
+$escudoUrl = $urlImagenEquipo($equipo['escudo_url'] ?? '', 'img/logos/canelones.png');
+$bannerUrl = $urlImagenEquipo($equipo['banner_url'] ?? '', 'img/live.jpg');
+
+//Mismas etiquetas que usa el catalogo publico de torneos
+$etiquetasFormatoTorneo = [
+   'liga' => 'Liga',
+   'suizo' => 'Sistema suizo',
+   'eliminacion_directa' => 'Eliminación directa',
+];
+$etiquetasEstadoTorneoEquipo = [
+   'borrador' => 'Borrador',
+   'inscripciones_abiertas' => 'Inscripciones abiertas',
+   'en_curso' => 'En curso',
+   'finalizado' => 'Finalizado',
+   'cancelado' => 'Cancelado',
+];
+$etiquetasInscripcionEquipo = [
+   'pendiente' => 'Inscripción pendiente',
+   'confirmado' => 'Inscripción confirmada',
+   'rechazado' => 'Inscripción rechazada',
+   'cancelado' => 'Participación cancelada',
+];
+
+//Formato compacto para puntos y diferencias (2, 2.5, -1...)
+$numeroMarcador = static fn ($valor): string => rtrim(rtrim(number_format((float) $valor, 2, '.', ''), '0'), '.');
+
+$torneosEquipo = $torneosEquipo ?? [];
+$posicionesEquipo = $posicionesEquipo ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -52,6 +88,22 @@ if ($rolId === 3) {
 
       <?php if (isset($_GET['solicitudEnviada'])): ?>
          <div class="mensaje-exito">Tu solicitud fue enviada. El capitán la va a revisar.</div>
+      <?php endif; ?>
+
+      <?php if (isset($_GET['creado'])): ?>
+         <div class="aviso-equipo-union" role="status">
+            Equipo creado correctamente. Compartí el código de invitación desde "Gestionar equipo" para sumar jugadores.
+         </div>
+      <?php endif; ?>
+
+      <?php if (($_GET['union'] ?? '') === 'ok'): ?>
+         <div class="aviso-equipo-union" role="status">
+            Ingresaste al equipo con el código de invitación. Ya figurás entre sus miembros.
+         </div>
+      <?php elseif (($_GET['union'] ?? '') === 'ya'): ?>
+         <div class="aviso-equipo-union" role="status">
+            Ya pertenecías a este equipo, así que no hubo cambios.
+         </div>
       <?php endif; ?>
 
       <!-- ============================== -->
@@ -98,14 +150,12 @@ if ($rolId === 3) {
             </div>
          </div>
 
-         <!-- Las pestañas Torneos/Ranking/Juegos todavia no tienen contenido real -->
-         <!-- (dependen de las fases de Torneos, que no arrancaron). Se muestran -->
-         <!-- solo como referencia visual, sin logica de cambio de pestaña por ahora. -->
-         <nav class="equipo-tabs" aria-label="Secciones del equipo">
+         <!-- Pestañas del perfil: Miembros, Torneos y Ranking (datos reales de la BD) -->
+         <nav class="equipo-tabs" aria-label="Secciones del equipo" role="tablist">
             <ul class="equipo-tabs-lista">
-               <li><button type="button" class="equipo-tab active" data-tab="miembros">Miembros</button></li>
-               <li><button type="button" class="equipo-tab" data-tab="torneos" disabled>Torneos</button></li>
-               <li><button type="button" class="equipo-tab" data-tab="ranking" disabled>Ranking</button></li>
+               <li><button type="button" id="tab-miembros" class="equipo-tab active" data-tab="miembros" role="tab" aria-selected="true" aria-controls="miembros">Miembros</button></li>
+               <li><button type="button" id="tab-torneos" class="equipo-tab" data-tab="torneos" role="tab" aria-selected="false" aria-controls="panel-torneos">Torneos</button></li>
+               <li><button type="button" id="tab-ranking" class="equipo-tab" data-tab="ranking" role="tab" aria-selected="false" aria-controls="panel-ranking">Ranking</button></li>
             </ul>
          </nav>
 
@@ -172,7 +222,7 @@ if ($rolId === 3) {
       <!-- ============================== -->
       <!-- MIEMBROS DEL EQUIPO            -->
       <!-- ============================== -->
-      <section class="equipo-miembros" id="miembros">
+      <section class="equipo-miembros" id="miembros" data-panel="miembros" role="tabpanel" aria-labelledby="tab-miembros">
 
          <h2 class="seccion-gradiente-titulo">Miembros del equipo</h2>
 
@@ -210,6 +260,100 @@ if ($rolId === 3) {
       </section>
 
       <!-- ============================== -->
+      <!-- PESTAÑA TORNEOS (datos reales) -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-panel" id="panel-torneos" data-panel="torneos" role="tabpanel" aria-labelledby="tab-torneos" hidden>
+
+         <h2>Torneos del equipo</h2>
+
+         <?php if (empty($torneosEquipo)): ?>
+            <p class="equipo-panel-vacio">Este equipo todavía no participó de torneos.</p>
+         <?php else: ?>
+            <ul class="equipo-torneos-lista">
+               <?php foreach ($torneosEquipo as $torneoEquipo): ?>
+                  <?php
+                  $formatoEtiqueta = $etiquetasFormatoTorneo[$torneoEquipo['formato']] ?? ucfirst((string) $torneoEquipo['formato']);
+                  $estadoEtiqueta = $etiquetasEstadoTorneoEquipo[$torneoEquipo['torneo_estado']] ?? (string) $torneoEquipo['torneo_estado'];
+                  $inscripcionEtiqueta = $etiquetasInscripcionEquipo[$torneoEquipo['estado_inscripcion']] ?? (string) $torneoEquipo['estado_inscripcion'];
+                  $fechaInicio = !empty($torneoEquipo['fecha_inicio']) ? date('d/m/Y', strtotime($torneoEquipo['fecha_inicio'])) : null;
+                  $fechaFin = !empty($torneoEquipo['fecha_fin']) ? date('d/m/Y', strtotime($torneoEquipo['fecha_fin'])) : null;
+                  if ($fechaInicio && $fechaFin) {
+                     $rangoFechas = $fechaInicio . ' – ' . $fechaFin;
+                  } elseif ($fechaInicio) {
+                     $rangoFechas = 'Desde ' . $fechaInicio;
+                  } else {
+                     $rangoFechas = 'Fechas a confirmar';
+                  }
+                  ?>
+                  <li class="equipo-torneo-card">
+                     <div class="equipo-torneo-info">
+                        <h3><?php echo htmlspecialchars($torneoEquipo['torneo_nombre']); ?></h3>
+                        <p class="equipo-torneo-meta">
+                           <span><?php echo htmlspecialchars($formatoEtiqueta); ?></span>
+                           <span><?php echo htmlspecialchars($rangoFechas); ?></span>
+                        </p>
+                     </div>
+                     <div class="equipo-torneo-acciones">
+                        <span class="equipo-torneo-estado"><?php echo htmlspecialchars($estadoEtiqueta); ?></span>
+                        <span class="equipo-torneo-inscripcion"><?php echo htmlspecialchars($inscripcionEtiqueta); ?></span>
+                        <a class="equipo-torneo-enlace" href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $torneoEquipo['torneo_id']; ?>">Ver torneo</a>
+                     </div>
+                  </li>
+               <?php endforeach; ?>
+            </ul>
+         <?php endif; ?>
+
+      </section>
+
+      <!-- ============================== -->
+      <!-- PESTAÑA RANKING (datos reales) -->
+      <!-- ============================== -->
+      <section class="tarjeta-equipo equipo-panel" id="panel-ranking" data-panel="ranking" role="tabpanel" aria-labelledby="tab-ranking" hidden>
+
+         <h2>Ranking del equipo</h2>
+
+         <?php if (empty($posicionesEquipo)): ?>
+            <p class="equipo-panel-vacio">Todavía no hay posiciones registradas para este equipo.</p>
+         <?php else: ?>
+            <div class="equipo-ranking-scroll">
+               <table class="equipo-ranking-tabla">
+                  <thead>
+                     <tr>
+                        <th>Torneo</th>
+                        <th>Pos</th>
+                        <th>PJ</th>
+                        <th>G</th>
+                        <th>E</th>
+                        <th>P</th>
+                        <th>Pts</th>
+                        <th>Dif</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <?php foreach ($posicionesEquipo as $posicionEquipo): ?>
+                        <?php
+                        $diferencia = (float) $posicionEquipo['diferencia_goles'];
+                        $diferenciaTexto = ($diferencia > 0 ? '+' : '') . $numeroMarcador($diferencia);
+                        ?>
+                        <tr>
+                           <td><?php echo htmlspecialchars($posicionEquipo['torneo_nombre']); ?></td>
+                           <td class="equipo-ranking-posicion"><?php echo (int) $posicionEquipo['posicion']; ?>°</td>
+                           <td><?php echo (int) $posicionEquipo['partidos_jugados']; ?></td>
+                           <td><?php echo (int) $posicionEquipo['partidos_ganados']; ?></td>
+                           <td><?php echo (int) $posicionEquipo['partidos_empatados']; ?></td>
+                           <td><?php echo (int) $posicionEquipo['partidos_perdidos']; ?></td>
+                           <td class="equipo-ranking-puntos"><?php echo $numeroMarcador($posicionEquipo['puntos']); ?></td>
+                           <td><?php echo $diferenciaTexto; ?></td>
+                        </tr>
+                     <?php endforeach; ?>
+                  </tbody>
+               </table>
+            </div>
+         <?php endif; ?>
+
+      </section>
+
+      <!-- ============================== -->
       <!-- NOVEDADES (todavia de ejemplo -- no existe tabla de noticias) -->
       <!-- ============================== -->
       <section class="tarjeta-equipo equipo-noticias">
@@ -235,6 +379,7 @@ if ($rolId === 3) {
    <!-- FOOTER ---------------------------->
    <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
+   <script src="<?php echo URL_BASE; ?>js/perfil-equipo-tabs.js"></script>
 
 </body>
 

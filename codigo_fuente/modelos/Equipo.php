@@ -11,6 +11,10 @@ use PDO;
 require_once __DIR__ . '/Conexion.php';
 
 class Equipo {
+    //Limite de codigos invalidos por jugador antes de bloquear temporalmente el ingreso
+    private const MAX_INTENTOS_CODIGO = 5;
+    private const VENTANA_INTENTOS_CODIGO_MIN = 10;
+
     private $bd;
 
     private function __construct(){
@@ -73,7 +77,7 @@ class Equipo {
 
     //Metodo para crear un equipo completo: el equipo + el creador como miembro + el creador como capitan principal
     //Usamos una transaccion porque son 3 inserciones relacionadas: si una falla, no queremos que las otras queden a medias
-    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?int $juegoId = null): array {
+    public function crearEquipoCompleto(string $nombreEquipo, int $usuarioId, ?string $descripcion = null, ?string $ubicacion = null, ?int $anioFundacion = null, ?int $juegoId = null, ?string $escudoUrl = null, ?string $bannerUrl = null): array {
         $transaccionPropia = false;
         try {
             if (!$this->bd->inTransaction()) {
@@ -83,8 +87,8 @@ class Equipo {
 
             $codigoInvitacion = $this->generarCodigoInvitacion();
 
-            //1. Creamos el equipo (escudo y banner quedan null por ahora, se suben en un paso aparte)
-            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, null, null, $codigoInvitacion, $juegoId);
+            //1. Creamos el equipo (escudo y banner opcionales: se suben junto con el formulario)
+            $equipoId = $this->crearEquipo($nombreEquipo, $usuarioId, $descripcion, $ubicacion, $anioFundacion, $escudoUrl, $bannerUrl, $codigoInvitacion, $juegoId);
             //2. El creador queda como miembro del equipo
             $this->agregarMiembro((int) $equipoId, $usuarioId);
 
@@ -623,6 +627,154 @@ class Equipo {
     }
 
     // ============================================================================
+    // INGRESO A UN EQUIPO MEDIANTE EL CODIGO DE INVITACION
+    // ============================================================================
+
+    /**
+     * Incorpora a un jugador al equipo dueño del codigo de invitacion.
+     *
+     * El codigo es un secreto compartido por los referentes del equipo: quien lo
+     * conoce puede ingresar sin pasar por la bandeja de solicitudes. Se valida el
+     * formato, el rol del usuario, el estado del equipo y el bloqueo por intentos
+     * fallidos. Si el jugador tenia una solicitud o invitacion pendiente, se cierra
+     * como aprobada para no dejar una fila huerfana en la bandeja del capitan.
+     *
+     * @return array{exito:bool,error?:string,equipo_id?:int,nombre_equipo?:string,ya_era_miembro?:bool}
+     */
+    public function unirsePorCodigo(string $codigo, int $usuarioId): array {
+        //Normalizacion: el codigo se guarda en mayusculas y sin espacios externos
+        $codigo = strtoupper(trim($codigo));
+
+        //Formato esperado: 8 caracteres hexadecimales generados por crearEquipoCompleto
+        if (!preg_match('/^[A-F0-9]{8}$/', $codigo)) {
+            return ['exito' => false, 'error' => 'codigo_invalido'];
+        }
+
+        if ($this->estaBloqueadoPorIntentosDeCodigo($usuarioId)) {
+            return ['exito' => false, 'error' => 'demasiados_intentos'];
+        }
+
+        //Defensa en profundidad: solo un jugador activo puede integrarse a un equipo
+        $stmtUsuario = $this->bd->prepare(
+            "SELECT rol_id, esta_activo FROM usuarios WHERE id = :id LIMIT 1"
+        );
+        $stmtUsuario->execute([':id' => $usuarioId]);
+        $usuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
+
+        if (!$usuario || (int) $usuario['rol_id'] !== 3 || (int) $usuario['esta_activo'] !== 1) {
+            $this->registrarIntentoDeCodigo($usuarioId, 'UNION_CODIGO_FALLIDA', 'La cuenta no puede ingresar a un equipo.');
+            return ['exito' => false, 'error' => 'no_jugador'];
+        }
+
+        //Buscamos el equipo por su codigo; solo equipos activos
+        $stmtEquipo = $this->bd->prepare(
+            "SELECT id, nombre_equipo FROM equipos WHERE codigo_invitacion = :codigo AND activo = 1 LIMIT 1"
+        );
+        $stmtEquipo->execute([':codigo' => $codigo]);
+        $equipo = $stmtEquipo->fetch(PDO::FETCH_ASSOC);
+
+        if (!$equipo) {
+            //Mensaje generico: no distinguimos entre codigo inexistente y equipo dado de baja
+            $this->registrarIntentoDeCodigo($usuarioId, 'UNION_CODIGO_FALLIDA', 'Codigo de invitacion invalido.');
+            return ['exito' => false, 'error' => 'codigo_invalido'];
+        }
+
+        $equipoId = (int) $equipo['id'];
+
+        //Si ya pertenece al equipo no se duplica la fila ni se altera la plantilla
+        if ($this->esMiembro($equipoId, $usuarioId)) {
+            return [
+                'exito' => true,
+                'equipo_id' => $equipoId,
+                'nombre_equipo' => $equipo['nombre_equipo'],
+                'ya_era_miembro' => true,
+            ];
+        }
+
+        $transaccionPropia = false;
+        try {
+            if (!$this->bd->inTransaction()) {
+                $this->bd->beginTransaction();
+                $transaccionPropia = true;
+            }
+
+            //Alta (o reactivacion) del jugador como miembro activo
+            $this->agregarMiembro($equipoId, $usuarioId);
+
+            //Si habia una solicitud o invitacion pendiente, queda resuelta por este ingreso
+            $stmtSolicitud = $this->bd->prepare(
+                "UPDATE solicitudes_equipo
+                 SET estado = 'aprobado', fecha_respuesta = NOW(), respondido_por = :respondidoPor
+                 WHERE equipo_id = :equipoId AND usuario_id = :usuarioId AND estado = 'pendiente'"
+            );
+            $stmtSolicitud->execute([
+                ':respondidoPor' => $usuarioId,
+                ':equipoId' => $equipoId,
+                ':usuarioId' => $usuarioId,
+            ]);
+
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->commit();
+            }
+        } catch (\Exception $e) {
+            if ($transaccionPropia && $this->bd->inTransaction()) {
+                $this->bd->rollBack();
+            }
+            error_log('Error al unir por codigo al usuario ' . $usuarioId . ': ' . $e->getMessage());
+            $this->registrarIntentoDeCodigo($usuarioId, 'UNION_CODIGO_FALLIDA', 'Error interno al ingresar al equipo.');
+            return ['exito' => false, 'error' => 'error'];
+        }
+
+        $this->registrarIntentoDeCodigo(
+            $usuarioId,
+            'UNION_CODIGO_EXITOSA',
+            'Ingreso al equipo "' . $equipo['nombre_equipo'] . '" (ID ' . $equipoId . ') con codigo de invitacion.'
+        );
+
+        return [
+            'exito' => true,
+            'equipo_id' => $equipoId,
+            'nombre_equipo' => $equipo['nombre_equipo'],
+            'ya_era_miembro' => false,
+        ];
+    }
+
+    /**
+     * Cuenta los intentos fallidos recientes del jugador y bloquea el ingreso
+     * cuando supera el maximo. Se apoya en logs_actividad, que ya existe en el
+     * esquema: no requiere columnas ni tablas nuevas.
+     */
+    private function estaBloqueadoPorIntentosDeCodigo(int $usuarioId): bool {
+        $sql = "SELECT COUNT(*) FROM logs_actividad
+                WHERE usuario_id = :usuarioId
+                  AND accion = 'UNION_CODIGO_FALLIDA'
+                  AND fecha_hora >= (NOW() - INTERVAL " . (int) self::VENTANA_INTENTOS_CODIGO_MIN . " MINUTE)";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':usuarioId' => $usuarioId]);
+        return ((int) $stmt->fetchColumn()) >= self::MAX_INTENTOS_CODIGO;
+    }
+
+    //Registra en la auditoria el resultado de un intento de ingreso por codigo.
+    //No guardamos el codigo ingresado: es un secreto del equipo.
+    private function registrarIntentoDeCodigo(int $usuarioId, string $accion, string $descripcion): void {
+        try {
+            $sql = "INSERT INTO logs_actividad (usuario_id, accion, descripcion, ip_origen, user_agent)
+                    VALUES (:usuarioId, :accion, :descripcion, :ip, :userAgent)";
+            $stmt = $this->bd->prepare($sql);
+            $stmt->execute([
+                ':usuarioId' => $usuarioId,
+                ':accion' => $accion,
+                ':descripcion' => $descripcion,
+                ':ip' => $_SERVER['REMOTE_ADDR'] ?? null,
+                ':userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
+            ]);
+        } catch (\Exception $e) {
+            //La auditoria no debe impedir la operacion principal
+            error_log('No se pudo registrar el intento de codigo: ' . $e->getMessage());
+        }
+    }
+
+    // ============================================================================
     // METODOS DEL ADMINISTRADOR GENERAL
     // ============================================================================
 
@@ -662,6 +814,74 @@ class Equipo {
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($parametros);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Torneos en los que participa el equipo (cualquier estado de inscripcion), para la pestana "Torneos"
+    public function obtenerTorneosDelEquipo(int $equipoId): array {
+        $sql = "SELECT pt.id AS participacion_id, pt.nombre AS nombre_participacion,
+                       pt.estado AS estado_inscripcion, pt.fecha_inscripcion,
+                       t.id AS torneo_id, t.nombre AS torneo_nombre, t.formato,
+                       t.estado AS torneo_estado, t.fecha_inicio, t.fecha_fin, t.banner_url
+                FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                WHERE pt.tipo = 'equipo' AND pt.referencia_id = :equipoId
+                ORDER BY t.fecha_inicio IS NULL, t.fecha_inicio DESC, t.id DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipoId' => $equipoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Posicion del equipo en cada torneo con tabla de posiciones, usando el mismo orden
+    // que Torneo::obtenerPosicionesPublicas(): puntos, diferencia, favor y nombre.
+    public function obtenerPosicionesDelEquipo(int $equipoId): array {
+        $sql = "SELECT pt.id AS participacion_id, pt.nombre AS nombre_participacion,
+                       t.id AS torneo_id, t.nombre AS torneo_nombre, t.formato,
+                       t.estado AS torneo_estado,
+                       COALESCE(pos.puntos, 0) AS puntos,
+                       COALESCE(pos.partidos_jugados, 0) AS partidos_jugados,
+                       COALESCE(pos.partidos_ganados, 0) AS partidos_ganados,
+                       COALESCE(pos.partidos_empatados, 0) AS partidos_empatados,
+                       COALESCE(pos.partidos_perdidos, 0) AS partidos_perdidos,
+                       COALESCE(pos.puntos_favor, 0) AS puntos_favor,
+                       COALESCE(pos.puntos_contra, 0) AS puntos_contra,
+                       COALESCE(pos.diferencia_goles, 0) AS diferencia_goles,
+                       (
+                           SELECT COUNT(*) + 1
+                           FROM participantes_torneo rival
+                           LEFT JOIN torneo_posiciones rpos
+                               ON rpos.torneo_id = rival.torneo_id AND rpos.participante_id = rival.id
+                           WHERE rival.torneo_id = pt.torneo_id
+                             AND rival.estado = 'confirmado'
+                             AND (
+                                 COALESCE(rpos.puntos, 0) > COALESCE(pos.puntos, 0)
+                                 OR (COALESCE(rpos.puntos, 0) = COALESCE(pos.puntos, 0)
+                                     AND COALESCE(rpos.diferencia_goles, 0) > COALESCE(pos.diferencia_goles, 0))
+                                 OR (COALESCE(rpos.puntos, 0) = COALESCE(pos.puntos, 0)
+                                     AND COALESCE(rpos.diferencia_goles, 0) = COALESCE(pos.diferencia_goles, 0)
+                                     AND COALESCE(rpos.puntos_favor, 0) > COALESCE(pos.puntos_favor, 0))
+                                 OR (COALESCE(rpos.puntos, 0) = COALESCE(pos.puntos, 0)
+                                     AND COALESCE(rpos.diferencia_goles, 0) = COALESCE(pos.diferencia_goles, 0)
+                                     AND COALESCE(rpos.puntos_favor, 0) = COALESCE(pos.puntos_favor, 0)
+                                     AND rival.nombre < pt.nombre)
+                             )
+                       ) AS posicion
+                FROM participantes_torneo pt
+                INNER JOIN torneos t ON t.id = pt.torneo_id
+                INNER JOIN torneo_posiciones pos
+                    ON pos.torneo_id = pt.torneo_id AND pos.participante_id = pt.id
+                WHERE pt.tipo = 'equipo' AND pt.referencia_id = :equipoId
+                  AND pt.estado = 'confirmado'
+                ORDER BY t.fecha_inicio IS NULL, t.fecha_inicio DESC, t.id DESC";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute([':equipoId' => $equipoId]);
+
+        $filas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($filas as &$fila) {
+            $fila['posicion'] = (int) ($fila['posicion'] ?? 0);
+        }
+        unset($fila);
+
+        return $filas;
     }
 
     // Calcula estadísticas reales del equipo en torneos: partidas jugadas, victorias, empates y torneos ganados

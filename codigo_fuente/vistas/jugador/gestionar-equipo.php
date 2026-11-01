@@ -28,6 +28,8 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- Token que usa buscar-jugadores-vivo.js para firmar las invitaciones que arma en el navegador -->
+   <meta name="csrf-token" content="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
    <title>ASCEND - Gestionar <?php echo htmlspecialchars($nombreEquipo); ?></title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">

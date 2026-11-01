@@ -5,7 +5,21 @@
  * Requiere que $invitaciones venga cargado por EquipoControlador::solicitudes()
  * Usa las clases reales de solicitudes.css (fila-jugador, boton-aceptar-solicitud, etc.),
  * las mismas que ya usaba solicitudes.js en la maquetación original.
+ *
+ * Tambien aloja el ingreso por codigo de invitacion: EquipoControlador::unirsePorCodigo()
+ * redirige aca con ?unionError=<motivo> cuando el intento no prospera.
  */
+
+//Motivos que puede devolver el controlador; nunca se imprime texto arbitrario de la URL
+$mensajesUnion = [
+   'codigo_invalido' => 'El código no es válido o el equipo ya no está disponible.',
+   'demasiados_intentos' => 'Hubo demasiados intentos fallidos. Esperá unos minutos antes de volver a intentarlo.',
+   'no_jugador' => 'Solo las cuentas de jugador pueden ingresar a un equipo con un código.',
+   'error' => 'No pudimos completar el ingreso. Intentá de nuevo en unos instantes.',
+];
+
+$unionError = $_GET['unionError'] ?? '';
+$mensajeUnion = $mensajesUnion[$unionError] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -41,6 +55,43 @@
       </div>
 
       <div class="crear-equipo-formulario">
+
+         <section class="tarjeta-equipo ingreso-codigo-tarjeta">
+            <h2>Ingresar con un código</h2>
+            <p class="ingreso-codigo-ayuda">
+               Si el líder de un equipo te compartió su código de invitación de 8 caracteres,
+               ingresalo acá y vas a quedar como miembro de ese equipo al instante.
+            </p>
+
+            <?php if ($mensajeUnion !== ''): ?>
+               <p class="aviso-union error" role="alert"><?php echo htmlspecialchars($mensajeUnion, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
+
+            <form method="POST"
+               action="<?php echo URL_BASE; ?>index.php?c=equipo&a=unirsePorCodigo"
+               class="form-ingreso-codigo">
+               <input type="hidden"
+                  name="csrf_token"
+                  value="<?php echo htmlspecialchars(\App\Ayudantes\Sesion::generarTokenCSRF(), ENT_QUOTES, 'UTF-8'); ?>">
+
+               <div class="campo-grupo">
+                  <label for="codigo-invitacion">Código de invitación</label>
+                  <input type="text"
+                     id="codigo-invitacion"
+                     name="codigo"
+                     maxlength="8"
+                     minlength="8"
+                     pattern="[A-Fa-f0-9]{8}"
+                     placeholder="Ej.: A1B2C3D4"
+                     autocomplete="off"
+                     autocapitalize="characters"
+                     spellcheck="false"
+                     required>
+               </div>
+
+               <button type="submit" class="boton-registro">Ingresar al equipo</button>
+            </form>
+         </section>
 
          <section class="tarjeta-equipo solicitudes-contenedor">
 

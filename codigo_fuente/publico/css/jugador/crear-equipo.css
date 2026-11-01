@@ -156,6 +156,18 @@
    border-color: #30f5d2;
 }
 
+.error-imagen {
+   color: #ff8080;
+   font-size: 0.78rem;
+   text-align: center;
+}
+
+.ayuda-imagenes {
+   font-size: 0.75rem;
+   color: #8a8a8a;
+   text-align: center;
+}
+
 /* --- Campos del formulario --- */
 
 .campo-fila {

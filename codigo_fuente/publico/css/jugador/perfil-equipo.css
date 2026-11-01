@@ -22,6 +22,7 @@
 
 /* Ancho compartido por TODO el contenido — el banner del
    header usa este mismo ancho, no va de punta a punta. */
+.aviso-equipo-union,
 .tarjeta-equipo,
 .equipo-hero-banner,
 .equipo-identidad,
@@ -42,6 +43,18 @@
    padding: 24px 20px;
    background: #101010;
    border-radius: 20px;
+}
+
+/* Aviso posterior al ingreso con codigo de invitacion */
+.aviso-equipo-union {
+   margin: 24px auto 0;
+   padding: 14px 18px;
+   background: rgba(48, 245, 210, 0.1);
+   border: 1px solid rgba(48, 245, 210, 0.45);
+   border-radius: 12px;
+   color: #9ff5e6;
+   font-size: 0.9rem;
+   line-height: 1.4;
 }
 
 .tarjeta-equipo h2 {
@@ -718,4 +731,152 @@
 .boton-guardar-equipo.guardado {
    background: var(--color-primario);
    border-color: var(--color-primario);
+}
+
+/* =========================================================
+   PESTAÑAS: PANELES DE TORNEOS Y RANKING
+========================================================= */
+
+/* Los paneles ocultos deben ganarle a cualquier display propio */
+.equipo-pagina [data-panel][hidden] {
+   display: none;
+}
+
+.equipo-panel-vacio {
+   text-align: center;
+   color: #c9c9d6;
+   font-size: 0.9rem;
+   line-height: 1.5;
+   padding: 8px 0 4px;
+}
+
+.equipo-torneos-lista {
+   list-style: none;
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   margin: 0;
+   padding: 0;
+}
+
+.equipo-torneo-card {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   padding: 16px;
+   background: rgba(255, 255, 255, 0.04);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   border-radius: 12px;
+}
+
+.equipo-torneo-info h3 {
+   font-size: 1rem;
+   font-weight: 700;
+   margin-bottom: 6px;
+}
+
+.equipo-torneo-meta {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 6px 14px;
+   font-size: 0.78rem;
+   color: #c9c9d6;
+}
+
+.equipo-torneo-acciones {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 8px 10px;
+}
+
+.equipo-torneo-estado,
+.equipo-torneo-inscripcion {
+   font-size: 0.72rem;
+   font-weight: 700;
+   padding: 5px 10px;
+   border-radius: 999px;
+   white-space: nowrap;
+}
+
+.equipo-torneo-estado {
+   background: rgba(48, 245, 210, 0.14);
+   color: #9ff5e6;
+}
+
+.equipo-torneo-inscripcion {
+   background: rgba(82, 34, 142, 0.35);
+   color: #dcd0f5;
+}
+
+.equipo-torneo-enlace {
+   margin-left: auto;
+   font-size: 0.78rem;
+   font-weight: 700;
+   color: #30f5d2;
+   text-decoration: none;
+}
+
+.equipo-torneo-enlace:hover {
+   text-decoration: underline;
+}
+
+.equipo-ranking-scroll {
+   max-width: 100%;
+   overflow-x: auto;
+}
+
+.equipo-ranking-tabla {
+   width: 100%;
+   min-width: 520px;
+   border-collapse: collapse;
+   font-size: 0.8rem;
+}
+
+.equipo-ranking-tabla th,
+.equipo-ranking-tabla td {
+   padding: 10px 8px;
+   text-align: center;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+   white-space: nowrap;
+}
+
+.equipo-ranking-tabla th {
+   font-size: 0.72rem;
+   color: #b9b4c9;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+}
+
+.equipo-ranking-tabla th:first-child,
+.equipo-ranking-tabla td:first-child {
+   text-align: left;
+   white-space: normal;
+}
+
+.equipo-ranking-tabla tbody tr:last-child td {
+   border-bottom: none;
+}
+
+.equipo-ranking-posicion {
+   color: #00f0ff;
+   font-weight: 700;
+}
+
+.equipo-ranking-puntos {
+   color: #b03eff;
+   font-weight: 700;
+}
+
+@media (min-width: 700px) {
+
+   .equipo-torneo-card {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .equipo-torneo-acciones {
+      flex-shrink: 0;
+   }
 }

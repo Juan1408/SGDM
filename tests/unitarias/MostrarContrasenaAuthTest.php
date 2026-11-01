@@ -73,3 +73,4 @@ class MostrarContrasenaAuthTest extends TestCase {
         $this->assertStringNotContainsString('insertAdjacentHTML', $js, 'login.js no debe duplicar HTML dentro del botón.');
     }
 }
+

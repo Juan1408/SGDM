@@ -56,10 +56,6 @@ if ($esOrganizadorNavbar) {
                   Todos los Torneos
                </a>
 
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle">
-                  Detalle Torneos
-               </a>
-
                <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=juegos">
                   Juegos
                </a>
@@ -101,33 +97,7 @@ if ($esOrganizadorNavbar) {
 
          <li class="auth-links auth-links--jugador" id="auth-links-jugador">
 
-   <div class="notificaciones-jugador">
-      <button type="button" class="boton-campana" id="campana-toggle" aria-label="Notificaciones" aria-expanded="false">
-         <i class="fa-solid fa-bell"></i>
-         <?php if ($esJugadorNavbar): ?>
-            <span class="badge-notificaciones">3</span>
-         <?php else: ?>
-            <span class="badge-notificaciones oculto">0</span>
-         <?php endif; ?>
-      </button>
-      <div class="panel-notificaciones" id="panel-notificaciones">
-   <div class="notificaciones-header">
-      <h4>Notificaciones</h4>
-      <?php if ($esJugadorNavbar): ?>
-         <button type="button" id="btn-marcar-todo-leido">Marcar todo leído</button>
-      <?php endif; ?>
-   </div>
-   <?php if ($esJugadorNavbar): ?>
-      <div class="notificaciones-lista" id="notificaciones-lista">
-         <!-- Se llena por JS -->
-      </div>
-   <?php else: ?>
-      <div class="notificaciones-lista">
-         <p class="notificaciones-vacio">No tenés notificaciones nuevas.</p>
-      </div>
-   <?php endif; ?>
-</div>
-   </div>
+   <?php include __DIR__ . '/panel-notificaciones.php'; ?>
 
    <div class="perfil-jugador-menu">
       <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">

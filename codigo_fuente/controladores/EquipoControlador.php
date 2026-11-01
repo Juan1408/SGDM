@@ -2,9 +2,11 @@
 namespace App\Controladores;
 
 use App\Ayudantes\Sesion;
+use App\Ayudantes\SubidaImagen;
 use App\Modelos\Equipo;
 use App\Modelos\Guardado;
 require_once __DIR__ . '/../ayudantes/Sesion.php';
+require_once __DIR__ . '/../ayudantes/SubidaImagen.php';
 require_once __DIR__ . '/../modelos/Equipo.php';
 require_once __DIR__ . '/../modelos/Juego.php';
 require_once __DIR__ . '/../modelos/Guardado.php';
@@ -81,15 +83,58 @@ class EquipoControlador {
             return;
         }
 
-        $resultado = $this->modeloEquipo->crearEquipoCompleto($nombreEquipo, $usuarioId, $descripcion ?: null, $ubicacion ?: null, $anioFundacion !== '' ? (int) $anioFundacion : null, $juegoId);
+        //Escudo y banner son opcionales. Si el jugador eligio un archivo, se valida y guarda
+        //antes de crear el equipo: si la imagen no es valida no se crea nada a medias.
+        $archivosGuardados = [];
+        $escudoUrl = null;
+        $bannerUrl = null;
+
+        $imagenes = ['escudo' => 'El escudo', 'banner' => 'El banner'];
+        foreach ($imagenes as $campo => $nombreVisible) {
+            $archivo = (isset($_FILES[$campo]) && is_array($_FILES[$campo])) ? $_FILES[$campo] : null;
+            if (!SubidaImagen::fueEnviado($archivo)) {
+                continue;
+            }
+
+            $ruta = SubidaImagen::guardar($archivo, 'equipos/subidos');
+            if ($ruta === null) {
+                $this->borrarArchivosSubidos($archivosGuardados);
+                $error = $nombreVisible . " debe ser una imagen JPG, PNG o WebP de hasta 2 MB.";
+                require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
+                return;
+            }
+
+            $archivosGuardados[$campo] = $ruta;
+            if ($campo === 'escudo') {
+                $escudoUrl = $ruta;
+            } else {
+                $bannerUrl = $ruta;
+            }
+        }
+
+        $resultado = $this->modeloEquipo->crearEquipoCompleto($nombreEquipo, $usuarioId, $descripcion ?: null, $ubicacion ?: null, $anioFundacion !== '' ? (int) $anioFundacion : null, $juegoId, $escudoUrl, $bannerUrl);
         if (!$resultado['exito']) {
+            //Si la base fallo despues de guardar archivos, no dejamos imagenes huerfanas
+            $this->borrarArchivosSubidos($archivosGuardados);
             $error = "No se pudo crear el equipo. Intenta de nuevo.";
             require_once __DIR__ . '/../vistas/jugador/crear-equipo.php';
             return;
         }
 
-        header("Location: " . URL_BASE . "index.php?c=equipo&a=crear&exito=1");
+        //Redirigimos al perfil para que el jugador vea el equipo y las imagenes ya persistidas
+        header("Location: " . URL_BASE . "index.php?c=equipo&a=verPerfil&id=" . (int) $resultado['equipoId'] . "&creado=1");
         exit;
+    }
+
+    //Borra archivos recien subidos si la creacion del equipo no se completa.
+    //Las rutas son relativas a publico/ (las devuelve SubidaImagen).
+    private function borrarArchivosSubidos(array $rutas): void {
+        foreach ($rutas as $ruta) {
+            $absoluta = __DIR__ . '/../publico/' . ltrim((string) $ruta, '/');
+            if (is_file($absoluta)) {
+                @unlink($absoluta);
+            }
+        }
     }
 
         //Accion para ver el perfil publico de un equipo (propio o ajeno)
@@ -138,6 +183,10 @@ if ($esJugador) {
         // Estadísticas reales del equipo en torneos
         $estadisticas = $this->modeloEquipo->obtenerEstadisticasTorneos($equipoId);
 
+        // Datos de las pestañas Torneos y Ranking del perfil
+        $torneosEquipo = $this->modeloEquipo->obtenerTorneosDelEquipo($equipoId);
+        $posicionesEquipo = $this->modeloEquipo->obtenerPosicionesDelEquipo($equipoId);
+
         require_once __DIR__ . '/../vistas/jugador/perfil-equipo.php';
     }
 
@@ -168,6 +217,37 @@ if ($esJugador) {
         $this->modeloEquipo->crearSolicitud($equipoId, $usuarioId, $usuarioId);
 
         header("Location: " . URL_BASE . "index.php?c=equipo&a=verPerfil&id=" . $equipoId . "&solicitudEnviada=1");
+        exit;
+    }
+
+    //Accion para que un jugador ingrese a un equipo con el codigo de invitacion
+    public function unirsePorCodigo(){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
+            header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes");
+            exit;
+        }
+
+        Sesion::requerirTokensCSRF();
+
+        $usuarioId = $_SESSION['usuario_id'];
+        //Solo aceptamos texto: un POST manipulado podria enviar un arreglo y romper trim()
+        $codigoIngresado = $_POST['codigo'] ?? '';
+        $codigo = is_string($codigoIngresado) ? trim($codigoIngresado) : '';
+
+        $resultado = $this->modeloEquipo->unirsePorCodigo($codigo, $usuarioId);
+
+        if (!empty($resultado['exito'])) {
+            //Ingreso correcto: lo llevamos al perfil del equipo donde ya figura como miembro
+            $parametro = !empty($resultado['ya_era_miembro']) ? 'ya' : 'ok';
+            header("Location: " . URL_BASE . "index.php?c=equipo&a=verPerfil&id=" . (int) $resultado['equipo_id'] . "&union=" . $parametro);
+            exit;
+        }
+
+        //Solo propagamos motivos conocidos para no reflejar texto arbitrario en la vista
+        $motivosValidos = ['codigo_invalido', 'demasiados_intentos', 'no_jugador'];
+        $motivo = in_array($resultado['error'] ?? '', $motivosValidos, true) ? $resultado['error'] : 'error';
+
+        header("Location: " . URL_BASE . "index.php?c=equipo&a=solicitudes&unionError=" . urlencode($motivo));
         exit;
     }
 

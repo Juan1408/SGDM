@@ -15,6 +15,39 @@
    margin-top: 24px;
 }
 
+/* --- Ingreso con codigo de invitacion --- */
+
+.ingreso-codigo-ayuda {
+   font-size: 0.85rem;
+   color: var(--texto-secundario);
+   margin: 8px 0 18px;
+   line-height: 1.5;
+}
+
+.form-ingreso-codigo .boton-registro {
+   width: 100%;
+   margin-top: 8px;
+}
+
+.form-ingreso-codigo input[name="codigo"] {
+   font-family: monospace;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+}
+
+.aviso-union {
+   padding: 10px 14px;
+   border-radius: 8px;
+   font-size: 0.85rem;
+   margin-bottom: 14px;
+}
+
+.aviso-union.error {
+   background: rgba(255, 80, 80, 0.12);
+   border: 1px solid rgba(255, 80, 80, 0.4);
+   color: #ff9b9b;
+}
+
 .fila-jugador-invitado-por {
    display: block;
    font-size: 0.7rem;

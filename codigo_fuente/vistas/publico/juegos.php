@@ -151,12 +151,6 @@
 
          </ul>
 
-         <div class="ver-mas-boton">
-            <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=enConstruccion" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
-      transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-      hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Ver más fechas</a>
-         </div>
-
          <p class="juegos-sin-resultados oculto" id="juegos-sin-resultados">
             No se encontraron juegos con esos filtros.
          </p>

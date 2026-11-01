@@ -98,7 +98,6 @@ try {
             </button>
             <div class="contenido-desplegable">
                <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Todos los Torneos</a>
-               <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">Detalle Torneos</a>
                <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=juegos">Juegos</a>
             </div>
          </li>
@@ -110,20 +109,7 @@ try {
          <!-- Se oculta en mobile (lo reemplaza el avatar + panel de abajo) -->
          <li class="li-perfil-jugador">
             <div class="auth-links-jugador-fila">
-               <div class="notificaciones-jugador">
-                  <button type="button" class="boton-campana" id="campana-toggle" aria-label="Notificaciones" aria-expanded="false">
-                     <i class="fa-solid fa-bell"></i>
-                     <span class="badge-notificaciones oculto" id="badge-notificaciones">0</span>
-                  </button>
-                  <div class="panel-notificaciones" id="panel-notificaciones">
-                     <div class="notificaciones-header">
-                        <h4>Notificaciones</h4>
-                     </div>
-                     <div class="notificaciones-lista">
-                        <p class="notificaciones-vacio">No tenés notificaciones nuevas.</p>
-                     </div>
-                  </div>
-               </div>
+               <?php include __DIR__ . '/panel-notificaciones.php'; ?>
 
                <div class="perfil-jugador-menu">
                   <button type="button" class="boton-mi-perfil" id="mi-perfil-toggle" aria-expanded="false">

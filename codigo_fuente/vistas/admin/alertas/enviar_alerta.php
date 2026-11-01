@@ -20,7 +20,7 @@
                 <div class="grupo-input" style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label for="audiencia" style="font-weight: 500; color: var(--color-texto-secundario);">Público Objetivo (Audiencia)</label>
                     <select name="audiencia" id="audiencia" style="padding: 0.6rem; border: 1px solid var(--color-borde); border-radius: 4px; background-color: var(--color-fondo-principal); color: var(--color-texto-principal); font-size: 0.95rem;">
-                        <option value="todos">Todos los Usuarios Activos</option>
+                        <option value="todos">Todos los Jugadores y Organizadores</option>
                         <option value="jugador">Solo Jugadores Registrados</option>
                         <option value="organizador">Solo Organizadores (Creadores de Torneos)</option>
                     </select>

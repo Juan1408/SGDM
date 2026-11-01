@@ -11,12 +11,22 @@
    text-align: center;
 }
 
+.mis-equipos-acciones {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+
 .mis-equipos-header .boton-registro {
    display: inline-flex;
    align-items: center;
    justify-content: center;
    gap: 8px;
    text-decoration: none;
+}
+
+.mis-equipos-header .boton-secundario {
+   gap: 8px;
 }
 
 .mis-equipos-grid {
@@ -127,11 +137,24 @@
       text-align: left;
    }
 
+   .mis-equipos-acciones {
+      flex-direction: row;
+      align-items: center;
+      flex-shrink: 0;
+   }
+
    .mis-equipos-header .boton-registro {
       width: auto;
       flex-shrink: 0;
       padding-left: 24px;
       padding-right: 24px;
+   }
+
+   .mis-equipos-header .boton-secundario {
+      width: auto;
+      flex-shrink: 0;
+      padding-left: 20px;
+      padding-right: 20px;
    }
 
    .mis-equipos-grid {

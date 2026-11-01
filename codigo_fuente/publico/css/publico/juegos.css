@@ -242,12 +242,6 @@
    font-size: 11px;
 }
 
-.ver-mas-boton {
-   margin-top: 32px;
-   display: flex;
-   justify-content: center;
-}
-
 /* Colores por juego (los primeros 6 ya existían en rankings.css,
    estos 4 son nuevos para completar el catálogo) */
 .tarjeta-juego.lol     { --background: linear-gradient(to right, #C89B3C, #785A28); }

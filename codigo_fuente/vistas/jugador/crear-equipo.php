@@ -54,7 +54,8 @@
          </div>
 
           <form class="crear-equipo-formulario" id="form-crear-equipo"
-             action="<?php echo URL_BASE; ?>index.php?c=equipo&a=procesarCreacion" method="POST">
+             action="<?php echo URL_BASE; ?>index.php?c=equipo&a=procesarCreacion" method="POST"
+             enctype="multipart/form-data">
 
              <input type="hidden"
                 name="csrf_token"
@@ -68,7 +69,9 @@
                   <label for="input-banner-crear" class="boton-subir-imagen">
                      <i class="fa-solid fa-image"></i> Subir banner
                   </label>
-                  <input type="file" id="input-banner-crear" accept="image/*" hidden disabled>
+                  <input type="file" id="input-banner-crear" name="banner"
+                     accept="image/jpeg,image/png,image/webp" hidden>
+                  <small class="error-imagen oculto" id="error-banner-crear" role="alert"></small>
                </div>
 
                <div class="campo-imagen campo-escudo">
@@ -78,10 +81,12 @@
                   <label for="input-escudo-crear" class="boton-subir-imagen">
                      <i class="fa-solid fa-camera"></i> Subir escudo
                   </label>
-                  <input type="file" id="input-escudo-crear" accept="image/*" hidden disabled>
+                  <input type="file" id="input-escudo-crear" name="escudo"
+                     accept="image/jpeg,image/png,image/webp" hidden>
+                  <small class="error-imagen oculto" id="error-escudo-crear" role="alert"></small>
                </div>
-               <!-- Los inputs de archivo quedan deshabilitados (disabled) hasta que se programe -->
-               <!-- la subida real al servidor. Por ahora crear un equipo no depende de esto. -->
+               <p class="ayuda-imagenes">Formatos admitidos: JPG, PNG o WebP. Tamaño máximo: 2 MB.</p>
+               <!-- Las imagenes son opcionales: si no se elige ninguna, el equipo se crea sin escudo/banner. -->
             </div>
 
             <div class="tarjeta-equipo">
@@ -136,9 +141,7 @@
    <!-- FOOTER ---------------------------->
    <?php include __DIR__ . '/../componentes/footer.php'; ?>
 
-   <!-- crear-equipo.js NO se carga: este formulario no necesita JS -->
-   <!-- (required + POST nativo alcanzan; se vuelve a agregar cuando -->
-   <!-- se programe la subida real de imagenes y el estado "Gestionar" del paso 3.6) -->
+   <script src="<?php echo URL_BASE; ?>js/crear-equipo.js"></script>
 
 </body>
 </html>

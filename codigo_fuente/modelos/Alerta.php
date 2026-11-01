@@ -35,13 +35,15 @@ class Alerta {
     public function enviarAlertaGlobal($titulo, $mensaje, $tipo, $audiencia) {
         try {
             // 1. Obtener los IDs de los usuarios objetivo usando los nombres correctos de columna
-            $sqlUsuarios = "SELECT id FROM usuarios WHERE esta_activo = 1";
+            // "todos" significa jugadores y organizadores: el administrador no tiene campana.
+            $sqlUsuarios = "SELECT id FROM usuarios WHERE esta_activo = 1
+                            AND rol_id IN (2, 3)";
             $params = [];
             
             if ($audiencia === 'jugador') {
-                $sqlUsuarios .= " AND rol_id = 3"; // Jugador
+                $sqlUsuarios = "SELECT id FROM usuarios WHERE esta_activo = 1 AND rol_id = 3"; // Jugador
             } elseif ($audiencia === 'organizador') {
-                $sqlUsuarios .= " AND rol_id = 2"; // Organizador
+                $sqlUsuarios = "SELECT id FROM usuarios WHERE esta_activo = 1 AND rol_id = 2"; // Organizador
             }
 
             $stmt = $this->db->prepare($sqlUsuarios);

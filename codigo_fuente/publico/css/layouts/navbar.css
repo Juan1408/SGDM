@@ -545,6 +545,34 @@
    margin: 0;
 }
 
+.notificaciones-marcar-todas {
+   margin: 0;
+}
+
+.notificacion-fecha {
+   display: block;
+   font-size: 0.65rem;
+   color: #8a8a9a;
+   margin-top: 4px;
+}
+
+.notificacion-marcar {
+   flex-shrink: 0;
+}
+
+.notificacion-marcar button {
+   background: transparent;
+   border: none;
+   color: #8a8a9a;
+   cursor: pointer;
+   padding: 2px 4px;
+   font-size: 0.72rem;
+}
+
+.notificacion-marcar button:hover {
+   color: #30f5d2;
+}
+
 .perfil-jugador-menu {
    position: relative;
 }

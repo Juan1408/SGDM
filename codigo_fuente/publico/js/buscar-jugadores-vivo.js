@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
    const equipoId = inputBuscar.dataset.equipoId;
    const baseUrl = window.URL_BASE_JS || "/";
 
+   //El formulario de invitacion se arma en el navegador, asi que necesita el mismo
+   //token CSRF que los formularios del servidor o invitarJugador responde 419.
+   const etiquetaCsrf = document.querySelector('meta[name="csrf-token"]');
+   const csrfToken = etiquetaCsrf ? etiquetaCsrf.getAttribute("content") : "";
+
    let temporizador = null;
 
    //Evita inyectar HTML crudo de la base de datos (mismo cuidado que htmlspecialchars en PHP)
@@ -42,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   ${apodo}
                </div>
                <form method="POST" action="${baseUrl}index.php?c=equipo&a=invitarJugador">
+                  <input type="hidden" name="csrf_token" value="${escaparHtml(csrfToken)}">
                   <input type="hidden" name="equipo_id" value="${equipoId}">
                   <input type="hidden" name="jugador_id" value="${jugador.id}">
                   <button type="submit" class="boton-invitar">Invitar</button>

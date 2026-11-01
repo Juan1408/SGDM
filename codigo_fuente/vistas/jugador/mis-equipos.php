@@ -42,9 +42,15 @@
             <p>Los equipos de los que formás parte. Los que creaste vos los podés editar; a los demás solo entrás a mirar su perfil.</p>
          </div>
 
-         <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear" class="boton-registro">
-            <i class="fa-solid fa-plus"></i> Crear equipo nuevo
-         </a>
+         <div class="mis-equipos-acciones">
+            <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes" class="boton-secundario">
+               <i class="fa-solid fa-key"></i> Ingresar con un código
+            </a>
+
+            <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear" class="boton-registro">
+               <i class="fa-solid fa-plus"></i> Crear equipo nuevo
+            </a>
+         </div>
       </div>
 
       <?php if (empty($equipos)): ?>
@@ -52,7 +58,8 @@
          <p class="mis-equipos-vacio">
             Todavía no formás parte de ningún equipo.
             <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=crear">Creá el tuyo</a>
-            o pedile a un líder que te invite.
+            o <a href="<?php echo URL_BASE; ?>index.php?c=equipo&a=solicitudes">ingresá el código</a>
+            que te compartió el líder de un equipo.
          </p>
 
       <?php else: ?>
