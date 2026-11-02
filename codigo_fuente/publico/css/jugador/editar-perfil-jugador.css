@@ -17,17 +17,12 @@
 .editar-perfil-encabezado h1 { font-size: 1.8rem; font-weight: 800; }
 
 .editar-perfil-volver {
-   color: #00FFEE;
+   color: var(--color-secundario-texto);
    text-decoration: none;
    font-size: 0.9rem;
 }
 .editar-perfil-volver:hover { text-decoration: underline; }
 
-.editar-perfil-pagina .mensaje-error {
-   width: 92%;
-   max-width: 900px;
-   margin: 16px auto 0;
-}
 
 /* Imagenes: banner arriba, foto de perfil abajo a la izquierda */
 .editar-imagenes { display: flex; flex-direction: column; gap: 16px; }
@@ -56,13 +51,13 @@
    gap: 8px;
    padding: 8px 16px;
    border-radius: 999px;
-   background: rgba(255, 255, 255, 0.1);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.1);
+   color: var(--texto-principal);
    font-size: 0.85rem;
    cursor: pointer;
    transition: background 0.2s;
 }
-.editar-boton-imagen:hover { background: rgba(255, 255, 255, 0.2); }
+.editar-boton-imagen:hover { background: rgba(var(--contraste-rgb), 0.2); }
 
 .editar-banner .editar-boton-imagen {
    position: absolute;
@@ -93,12 +88,13 @@
 .editar-campo textarea {
    width: 100%;
    padding: 10px 14px;
-   border: 1px solid rgba(255, 255, 255, 0.18);
+   border: 1px solid rgba(var(--contraste-rgb), 0.18);
    border-radius: 10px;
-   background: #1a1a1a;
-   color: #fff;
+   background: var(--fondo-tarjeta);
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 0.95rem;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 .editar-campo textarea { resize: vertical; }
 .editar-campo input:focus,

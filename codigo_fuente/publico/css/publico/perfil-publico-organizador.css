@@ -13,8 +13,8 @@
 }
 
 .equipo-pagina {
-   background: #030205;
-   color: #fff;
+   background: var(--fondo-principal);
+   color: var(--texto-principal);
    font-family: 'Poppins', sans-serif;
    padding-top: 80px; /* alto del navbar fijo */
    padding-bottom: 40px;
@@ -28,8 +28,7 @@
 .equipo-identidad,
 .equipo-stats,
 .torneos-organiza-grid,
-.mis-equipos-grid,
-.section-title-gradient {
+.mis-equipos-grid {
    width: 92%;
    max-width: 900px;
    margin-left: auto;
@@ -39,7 +38,7 @@
 .equipo-card {
    margin-top: 24px;
    padding: 24px 20px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 20px;
 }
 
@@ -91,6 +90,7 @@
    background-clip: content-box, border-box;
    position: relative;
    z-index: 2;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .equipo-logo img {
@@ -108,7 +108,7 @@
 
 .equipo-descripcion {
    font-size: 0.9rem;
-   color: #d8d8e0;
+   color: var(--texto-suave);
    line-height: 1.6;
    margin-bottom: 18px;
 }
@@ -120,7 +120,7 @@
    gap: 10px;
    margin-bottom: 22px;
    padding-bottom: 18px;
-   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.1);
 }
 
 .equipo-dato {
@@ -128,11 +128,11 @@
    align-items: center;
    gap: 8px;
    font-size: 0.85rem;
-   color: #eee;
+   color: var(--texto-suave);
 }
 
 .equipo-dato i {
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .equipo-stats {
@@ -152,6 +152,7 @@
    padding: 14px 10px;
    border-radius: 12px;
    background: linear-gradient(180deg, #52228e, #170928);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .stat-card strong {
@@ -161,7 +162,7 @@
 
 .stat-card span {
    font-size: 0.85rem;
-   color: #e4e0f0;
+   color: var(--texto-suave);
 }
 
 @media (min-width: 900px) {
@@ -248,6 +249,7 @@
    font-weight: 800;
    letter-spacing: 0.5px;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 @media (min-width: 700px) {
@@ -272,34 +274,6 @@
    margin-top: 40px;
 }
 
-.section-title-gradient {
-   width: fit-content;
-   max-width: 92%;
-   margin-left: auto;
-   margin-right: auto;
-   margin-bottom: 24px;
-   padding: 10px 24px;
-   font-size: 1.3rem;
-   font-weight: 700;
-   color: #fff;
-   text-align: center;
-   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
-   overflow-wrap: break-word;
-}
-
-@media (min-width: 650px) {
-   .section-title-gradient {
-      font-size: 1.7rem;
-      padding: 10px 40px;
-   }
-}
-
-@media (min-width: 900px) {
-   .section-title-gradient {
-      font-size: 2rem;
-      padding: 10px 60px;
-   }
-}
 
 /* =========================================================
    EQUIPOS QUE GESTIONA — reutiliza el mismo código de
@@ -322,7 +296,7 @@
    gap: 14px;
    text-align: center;
    padding: 20px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 16px;
 }
 
@@ -351,16 +325,17 @@
 .mi-equipo-badge.badge-lider {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .mi-equipo-badge.badge-capitan {
    background: rgba(48, 245, 210, 0.15);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .mi-equipo-badge.badge-miembro {
-   background: rgba(255, 255, 255, 0.08);
-   color: #c7c7d8;
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-suave);
 }
 
 .boton-secundario {
@@ -368,9 +343,9 @@
    align-items: center;
    justify-content: center;
    width: 100%;
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
    border: 1px solid rgba(48, 245, 210, 0.35);
-   color: #fff;
+   color: var(--texto-principal);
    padding: 10px 18px;
    border-radius: 999px;
    font-size: 0.8rem;
@@ -453,7 +428,7 @@
 
 .testimonio-item p {
    font-size: 0.9rem;
-   color: #d8d8e0;
+   color: var(--texto-suave);
    line-height: 1.7;
    max-width: 560px;
 }
@@ -468,7 +443,7 @@
    padding: 6px 16px;
    border-radius: 999px;
    background: rgba(var(--color-secundario-rgb), 0.12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.75rem;
    font-weight: 700;
    letter-spacing: 0.04em;
@@ -476,7 +451,7 @@
 
 .perfil-organizador-cta-texto {
    font-size: 0.9rem;
-   color: #d8d8e0;
+   color: var(--texto-suave);
 }
 
 /* --- Torneos que organiza --- */
@@ -492,10 +467,10 @@
    display: block;
    text-decoration: none;
    color: inherit;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 16px;
    overflow: hidden;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    transition: 0.25s ease;
 }
 
@@ -572,12 +547,13 @@
    resize: vertical;
    padding: 12px 14px;
    border-radius: 10px;
-   border: 1px solid rgba(255, 255, 255, 0.1);
-   background: rgba(255, 255, 255, 0.04);
-   color: #fff;
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
+   background: rgba(var(--contraste-rgb), 0.04);
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 0.85rem;
    margin-bottom: 14px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .testimonio-item--form button {
@@ -591,6 +567,7 @@
    font-size: 0.85rem;
    font-weight: 700;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 @media (min-width: 650px) {

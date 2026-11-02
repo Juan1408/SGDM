@@ -21,7 +21,7 @@
 
 .favoritos-header p {
    font-size: 0.9rem;
-   color: #c9c9d6;
+   color: var(--texto-suave);
    line-height: 1.6;
 }
 
@@ -72,5 +72,5 @@
 
 .boton-quitar-favorito:hover {
    background: rgba(255, 80, 100, 0.25);
-   color: #fff;
+   color: var(--texto-principal);
 }

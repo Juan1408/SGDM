@@ -1,4 +1,4 @@
-﻿/*
+/*
 =====================================================
    CREAR TORNEO - solo contenido específico de esta
    página. El layout (sidebar/navbar/wrapper) vive en
@@ -32,7 +32,7 @@
 }
 
 .crear-torneo-etiqueta {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
    letter-spacing: 1.5px;
    font-size: .75rem;
@@ -60,7 +60,7 @@
 }
 
 .crear-torneo-volver:hover {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 /* ============================
@@ -84,7 +84,7 @@
 }
 
 .crear-torneo-notificacion.success {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    background: rgba(0, 255, 238, .1);
    border: 1px solid rgba(0, 255, 238, .3);
 }
@@ -138,12 +138,12 @@
 .crear-torneo-campo input[type="date"],
 .crear-torneo-campo input[type="time"],
 .crear-torneo-campo select {
-   color-scheme: dark;
+   color-scheme: inherit;
 }
 
 .crear-torneo-campo select option {
-   background-color: #1e1e1e;
-   color: #ffffff;
+   background-color: var(--fondo-tarjeta);
+   color: var(--texto-principal);
 }
 
 .crear-torneo-campo input,
@@ -154,11 +154,12 @@
    padding: .7rem .85rem;
    border-radius: 10px;
    border: 1px solid var(--borde-suave);
-   background: rgba(255, 255, 255, .04);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.04);
+   color: var(--texto-principal);
    font: inherit;
    font-size: .9rem;
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .crear-torneo-campo input:focus,
@@ -258,7 +259,7 @@
 
 .banner-upload:hover {
    border-color: var(--color-secundario);
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 /* ============================
@@ -285,7 +286,7 @@
 }
 
 .crear-evento-header span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .7rem;
    font-weight: 700;
    letter-spacing: 1px;
@@ -331,7 +332,7 @@
 }
 
 .crear-evento-boton:hover {
-   color: #fff;
+   color: var(--texto-principal);
    border-color: var(--color-secundario);
 }
 
@@ -345,7 +346,7 @@
 }
 
 .crear-fechas-titulo i {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .crear-fechas-lista {
@@ -364,8 +365,8 @@
    min-width: 0;
 
    padding: .75rem;
-   background: rgba(255, 255, 255, .03);
-   border: 1px solid rgba(255, 255, 255, .06);
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: 1px solid rgba(var(--contraste-rgb), 0.06);
    border-radius: var(--radio-md);
 }
 
@@ -386,7 +387,7 @@
 }
 
 .crear-evento-item small {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .7rem;
    text-transform: capitalize;
 }
@@ -432,6 +433,7 @@
    font-weight: 800;
    cursor: pointer;
    transition: var(--transicion);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .crear-torneo-submit:hover {

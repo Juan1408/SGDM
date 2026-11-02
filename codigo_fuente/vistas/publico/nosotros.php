@@ -9,7 +9,10 @@
    <title>ASCEND - Nosotros</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -52,7 +55,7 @@
          <div class="hero-overlay"></div>
 
          <div class="hero-contenido">
-            <p class="hero-subtitulo">Sistema de Gestión de Deportes y eSports</p>
+            <p class="hero-subtitulo efecto-glitch">Sistema de Gestión de Deportes y eSports</p>
             <h1>Organiza y <br>Gestiona Torneos<br></h1>
             <p class="hero-descripcion">
                Administra competiciones, rankings, participantes y resultados
@@ -71,109 +74,61 @@
       </section>
 
       <!-------------------------------------->
-      <!-- QUIÉNES SOMOS --------------------->
+      <!-- QUIÉNES SOMOS + MISIÓN Y VISIÓN ---->
       <!-------------------------------------->
 
-      <section class="nosotros-intro reveal">
-         <p class="nosotros-etiqueta"># SOBRE NOSOTROS</p>
-         <h1>Quiénes Somos</h1>
-         <p>
-            ASCEND es una plataforma de gestión de torneos pensada para acompañar el crecimiento
-            de jugadores, equipos, organizaciones y comunidades. Nace con el objetivo de unificar
-            en un solo lugar la organización de competencias de deportes tradicionales, eSports,
-            juegos de mesa y otras actividades competitivas — con herramientas claras para
-            inscripciones, calendarios, resultados y rankings.
-         </p>
-      </section>
+      <section class="nosotros-tarjeta-seccion reveal">
 
-      <!-------------------------------------->
-      <!-- MISIÓN Y VISIÓN ------------------->
-      <!-------------------------------------->
+         <article class="tarjeta-nosotros" id="tarjeta-nosotros">
 
-      <section class="mision-vision reveal">
+            <div class="tarjeta-nosotros-contenido">
 
-         <article class="mv-card">
-            <i class="fa-solid fa-bullseye"></i>
-            <h2>Misión</h2>
-            <p>
-               Facilitar la organización y gestión de torneos deportivos y de eSports,
-               conectando organizadores, jugadores y equipos en una misma plataforma, con
-               herramientas simples para administrar inscripciones, calendarios, resultados
-               y rankings de forma clara y accesible.
-            </p>
+               <p class="nosotros-etiqueta"># SOBRE NOSOTROS</p>
+               <h1>Quiénes Somos</h1>
+
+               <p class="tarjeta-nosotros-texto">
+                  ASCEND es una plataforma de gestión de torneos pensada para acompañar el crecimiento
+                  de jugadores, equipos, organizaciones y comunidades. Nace con el objetivo de unificar
+                  en un solo lugar la organización de competencias de deportes tradicionales, eSports,
+                  juegos de mesa y otras actividades competitivas — con herramientas claras para
+                  inscripciones, calendarios, resultados y rankings.
+               </p>
+
+               <button type="button" class="boton boton--ver-mas" id="nosotros-ver-mas"
+                  aria-expanded="false" aria-controls="nosotros-mision-vision">Ver más</button>
+
+               <!-- Misión y Visión: se despliega con el botón -->
+               <div class="nosotros-desplegable" id="nosotros-mision-vision">
+                  <div class="nosotros-desplegable-interior">
+
+                     <div class="nosotros-mv">
+                        <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                        <h2>Misión</h2>
+                        <p>
+                           Facilitar la organización y gestión de torneos deportivos y de eSports,
+                           conectando organizadores, jugadores y equipos en una misma plataforma, con
+                           herramientas simples para administrar inscripciones, calendarios, resultados
+                           y rankings de forma clara y accesible.
+                        </p>
+                     </div>
+
+                     <div class="nosotros-mv">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                        <h2>Visión</h2>
+                        <p>
+                           Ser la plataforma de referencia para la gestión de competencias — tanto
+                           tradicionales como electrónicas — acompañando el crecimiento de clubes,
+                           instituciones educativas y comunidades, y proyectando una imagen tecnológica,
+                           profesional y en constante evolución.
+                        </p>
+                     </div>
+
+                  </div>
+               </div>
+
+            </div>
+
          </article>
-
-         <article class="mv-card">
-            <i class="fa-solid fa-eye"></i>
-            <h2>Visión</h2>
-            <p>
-               Ser la plataforma de referencia para la gestión de competencias — tanto
-               tradicionales como electrónicas — acompañando el crecimiento de clubes,
-               instituciones educativas y comunidades, y proyectando una imagen tecnológica,
-               profesional y en constante evolución.
-            </p>
-         </article>
-
-      </section>
-
-      <!-------------------------------------->
-      <!-- VALORES --------------------------->
-      <!-------------------------------------->
-
-      <section class="valores reveal">
-
-         <div class="seccion-titulo-centrado">
-            <p># NUESTROS VALORES</p>
-            <h2>Lo que nos define</h2>
-         </div>
-
-         <ul class="valores-grid">
-
-            <li>
-               <article class="valor-tarjeta">
-                  <div class="valor-icono cyan">
-                     <i class="fa-solid fa-arrow-trend-up"></i>
-                  </div>
-                  <h3>Crecimiento</h3>
-                  <p>Acompañamos a jugadores, equipos y organizadores en cada paso hacia
-                     sus objetivos, sin importar el nivel de partida.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="valor-tarjeta">
-                  <div class="valor-icono pink">
-                     <i class="fa-solid fa-people-group"></i>
-                  </div>
-                  <h3>Comunidad</h3>
-                  <p>Creemos en construir espacios donde jugadores y organizadores se
-                     conecten, compitan y crezcan juntos.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="valor-tarjeta">
-                  <div class="valor-icono cyan">
-                     <i class="fa-solid fa-lightbulb"></i>
-                  </div>
-                  <h3>Innovación</h3>
-                  <p>Buscamos mejorar continuamente la forma en que se organizan y viven
-                     las competencias, con herramientas modernas y prácticas.</p>
-               </article>
-            </li>
-
-            <li>
-               <article class="valor-tarjeta">
-                  <div class="valor-icono pink">
-                     <i class="fa-solid fa-door-open"></i>
-                  </div>
-                  <h3>Accesibilidad</h3>
-                  <p>Diseñamos una plataforma pensada para cualquier tipo de comunidad,
-                     desde un club barrial hasta una federación.</p>
-               </article>
-            </li>
-
-         </ul>
 
       </section>
 
@@ -208,7 +163,7 @@
 
             <li>
                <article class="regla-categoria">
-                  <i class="fa-solid fa-trofeo"></i>
+                  <i class="fa-solid fa-trophy"></i>
                   <h3>Torneos</h3>
                   <ul class="regla-lista">
                      <li>Un torneo solo puede ser creado, editado y administrado por el
@@ -246,8 +201,6 @@
                         mantener un trato respetuoso hacia otros usuarios.</li>
                      <li>Los comentarios en un torneo se publican de inmediato y pueden ser
                         moderados u ocultados si incumplen estas reglas.</li>
-                     <li>Cualquier usuario puede dejar una opinión y calificación sobre un
-                        Organizador tras participar en uno de sus torneos.</li>
                   </ul>
                </article>
             </li>
@@ -375,8 +328,22 @@
 
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
+   <script>
+      (function () {
+         var boton = document.getElementById("nosotros-ver-mas");
+         var tarjeta = document.getElementById("tarjeta-nosotros");
+         if (!boton || !tarjeta) return;
+
+         boton.addEventListener("click", function () {
+            var abierta = tarjeta.classList.toggle("abierta");
+            boton.setAttribute("aria-expanded", abierta ? "true" : "false");
+            boton.textContent = abierta ? "Ver menos" : "Ver más";
+         });
+      })();
+   </script>
 
 </body>
 

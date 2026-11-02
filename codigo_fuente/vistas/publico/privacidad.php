@@ -8,6 +8,7 @@
    <title>ASCEND - Política de Privacidad</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -85,7 +86,7 @@
                </p>
                <p>
                   <strong>Contacto para privacidad:</strong>
-                  <a href="mailto:arena.core@torneos.com?subject=Datos%20personales">arena.core@torneos.com</a>
+                  <a href="mailto:charrua.code@ascend.com?subject=Datos%20personales">charrua.code@ascend.com</a>
                   (indicá «Datos personales» en el asunto).
                </p>
                <p>
@@ -292,7 +293,7 @@
                <p>
                   Ningún sistema es completamente seguro. Si detectás un incidente o un acceso
                   indebido, escribinos de inmediato a
-                  <a href="mailto:arena.core@torneos.com?subject=Incidente%20de%20seguridad">arena.core@torneos.com</a>.
+                  <a href="mailto:charrua.code@ascend.com?subject=Incidente%20de%20seguridad">charrua.code@ascend.com</a>.
                   En una puesta en producción, el sitio debe servirse mediante HTTPS.
                </p>
             </section>
@@ -310,7 +311,7 @@
                </ul>
                <p>
                   Para ejercerlos, escribí a
-                  <a href="mailto:arena.core@torneos.com?subject=Datos%20personales">arena.core@torneos.com</a>
+                  <a href="mailto:charrua.code@ascend.com?subject=Datos%20personales">charrua.code@ascend.com</a>
                   con el asunto «Datos personales», indicando tu nombre, el correo asociado a la
                   cuenta y el derecho que querés ejercer. Podemos pedirte información adicional
                   para verificar tu identidad y evitar que terceros accedan a tus datos.
@@ -337,7 +338,7 @@
                   No solicitamos deliberadamente datos de menores de 13 años. Si detectamos una
                   cuenta de un menor de esa edad, la suspenderemos y eliminaremos los datos que
                   correspondan. Las personas responsables legales pueden escribir a
-                  <a href="mailto:arena.core@torneos.com?subject=Datos%20de%20un%20menor">arena.core@torneos.com</a>
+                  <a href="mailto:charrua.code@ascend.com?subject=Datos%20de%20un%20menor">charrua.code@ascend.com</a>
                   para consultar, rectificar o solicitar la baja.
                </p>
             </section>
@@ -366,7 +367,7 @@
                </p>
                <p>
                   Por consultas sobre privacidad:
-                  <a href="mailto:arena.core@torneos.com?subject=Datos%20personales">arena.core@torneos.com</a>.
+                  <a href="mailto:charrua.code@ascend.com?subject=Datos%20personales">charrua.code@ascend.com</a>.
                   También podés consultar los
                   <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=terminos">Términos y Condiciones</a>.
                </p>

@@ -33,6 +33,7 @@ $mensajeUnion = $mensajesUnion[$unionError] ?? '';
    <title>ASCEND - Solicitudes</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">

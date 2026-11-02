@@ -31,7 +31,7 @@
 }
 
 .resultados-etiqueta {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
    letter-spacing: 1.5px;
    font-size: .8rem;
@@ -126,8 +126,9 @@
    padding: .7rem .9rem;
    border-radius: var(--radio-md);
    border: 1px solid var(--borde-suave);
-   background: rgba(255, 255, 255, .04);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.04);
+   color: var(--texto-principal);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .resultados-input-icono {
@@ -162,7 +163,7 @@
 }
 
 .resultados-limpiar:hover {
-   color: #fff;
+   color: var(--texto-principal);
    border-color: var(--color-secundario);
 }
 
@@ -187,7 +188,7 @@
 }
 
 .resultados-contenido-header span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .75rem;
    font-weight: 700;
    letter-spacing: 1px;
@@ -216,8 +217,8 @@
 
    padding: 1rem;
    border-radius: var(--radio-md);
-   background: rgba(255, 255, 255, .03);
-   border: 1px solid rgba(255, 255, 255, .07);
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: 1px solid rgba(var(--contraste-rgb), 0.07);
 }
 
 .resultado-etiquetas {
@@ -229,7 +230,7 @@
 
 .resultado-torneo {
    font-weight: 700;
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 .resultado-fecha {
@@ -260,7 +261,7 @@
 }
 
 .resultado-equipo--ganador strong {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .resultado-equipo--derecha {
@@ -293,7 +294,7 @@
    display: inline-flex;
    align-items: center;
    gap: .4rem;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-decoration: none;
    font-size: .82rem;
    font-weight: 700;
@@ -307,12 +308,12 @@
 
 .resultados-vacio i {
    font-size: 2.2rem;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    margin-bottom: 1rem;
 }
 
 .resultados-vacio h2 {
-   color: #fff;
+   color: var(--texto-principal);
    font-size: 1.2rem;
    margin-bottom: .5rem;
 }

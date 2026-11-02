@@ -4,11 +4,11 @@
       radial-gradient(circle at top left, rgba(var(--color-primario-rgb), 0.18), transparent 28%),
       radial-gradient(circle at bottom right, rgba(0, 255, 220, 0.13), transparent 30%),
       var(--fondo-principal);
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 .seccion-torneos {
-   width: 100vw;
+   width: 100%;
    position: relative;
    margin-top: 4%;
    margin-bottom: 0;
@@ -22,7 +22,7 @@
 }
 
 .subtitulo-pagina {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-transform: uppercase;
    font-weight: 700;
    letter-spacing: 2px;
@@ -36,7 +36,7 @@
 }
 
 .header-pagina p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
    line-height: 1.7;
 }
 
@@ -67,9 +67,7 @@
    y los selects en más columnas. */
 
 .panel-filtros {
-   width: 100vw;
-   margin-left: calc(50% - 50vw);
-   margin-right: calc(50% - 50vw);
+   width: 100%;
    padding: 24px 6%;
    display: flex;
    flex-direction: column;
@@ -107,39 +105,29 @@
    background: transparent;
    color: #111;
    font-family: inherit;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .buscador input::placeholder {
    color: #555;
 }
 
+/* Una sola fila deslizable (igual que las pestañas de detalle-torneo) */
 .chips-contenedor {
    display: flex;
-   flex-wrap: wrap;
+   flex-wrap: nowrap;
    gap: 6px;
    align-items: center;
    list-style: none;
    margin: 0;
-   padding: 0;
+   padding: 0 0 4px;
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+   min-width: 0;
 }
 
-.chip {
-   border: none;
-   background: transparent;
-   color: #2102d1;
-   font-size: 14px;
-   white-space: nowrap;
-   padding: 10px 12px;
-   border-radius: 8px;
-   cursor: pointer;
-   transition: 0.3s ease;
-}
-
-.chip.active,
-.chip:hover {
-   background: linear-gradient(90deg, var(--color-violeta));
-   color: #fefdff;
-   box-shadow: none;
+.chips-contenedor li {
+   flex-shrink: 0;
 }
 
 .seleccionar-filtros {
@@ -158,6 +146,7 @@
    padding: 0 14px;
    outline: none;
    font-family: inherit;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 /* GRID DE TORNEOS - mobile first: 1 columna,
@@ -175,7 +164,7 @@
 .torneo-tarjeta {
    height: auto;
    min-width: 0;
-   background: rgba(18, 18, 42, 0.86);
+   background: color-mix(in srgb, var(--fondo-superficie) 86%, transparent);
    border-radius: 24px;
    overflow: hidden;
    backdrop-filter: none;
@@ -212,20 +201,20 @@
    flex-direction: column;
    gap: 8px;
    font-size: 12px;
-   color: #cfd0e6;
+   color: var(--texto-suave);
    margin-bottom: 16px;
 }
 
 .tarjeta-meta i,
 .tarjeta-tipo i {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    margin-right: 5px;
 }
 
 .tarjeta-tipo {
    display: flex;
    align-items: center;
-   color: #dcdcf0;
+   color: var(--texto-suave);
    font-size: 14px;
    margin-bottom: 16px;
 }
@@ -237,7 +226,7 @@
    align-items: center;
    gap: 8px;
    padding-top: 14px;
-   border-top: 1px solid rgba(255,255,255,0.1);
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.1);
    font-size: 13px;
 }
 
@@ -246,7 +235,7 @@
 }
 
 .pie-tarjeta a {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-decoration: none;
    font-weight: 700;
 }
@@ -316,11 +305,6 @@
       width: auto;
       min-width: 260px;
       height: 52px;
-   }
-
-   .chip {
-      font-size: 16px;
-      padding: 12px;
    }
 
    .seleccionar-filtros {

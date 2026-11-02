@@ -31,6 +31,7 @@ $urlVerTorneo = URL_BASE . 'index.php?c=panelOrganizador&a=administrar&seccion=r
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCEND | Resultados</title>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+    <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">

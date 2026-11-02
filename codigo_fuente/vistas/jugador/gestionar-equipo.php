@@ -33,6 +33,7 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
    <title>ASCEND - Gestionar <?php echo htmlspecialchars($nombreEquipo); ?></title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -128,7 +129,7 @@ $esCapitanFn = function ($usuarioId) use ($idsCapitanes) {
 
                <div class="campo-grupo">
                   <label>Disciplina deportiva</label>
-                  <div class="codigo-invitacion-box" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 14px; border-radius: 8px;">
+                  <div class="codigo-invitacion-box" style="background: rgba(var(--contraste-rgb), 0.05); border: 1px solid rgba(var(--contraste-rgb), 0.1); padding: 10px 14px; border-radius: 8px;">
                      <span><i class="fa-solid fa-trophy" style="color: var(--color-primario, #ff4655); margin-right: 8px;"></i><?php echo htmlspecialchars($equipo['nombre_juego'] ?? 'No especificada'); ?></span>
                   </div>
                   <small style="color: var(--color-texto-secundario, #94a3b8); font-size: 0.82rem; margin-top: 4px; display: block;">La disciplina asignada queda fija mientras el equipo participe en torneos.</small>

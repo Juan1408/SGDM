@@ -69,7 +69,7 @@ body {
 }
 
 .hero-subtitulo {
-   color: #00FFED;
+   color: var(--color-secundario-texto);
    font-size: 13px;
    font-weight: 600;
    letter-spacing: 2px;
@@ -93,12 +93,13 @@ body {
    color: transparent;
    
    filter: drop-shadow(8px 10px 0 rgba(0,0,0,.35));
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 
 }
 
 .hero-descripcion {
    max-width: 580px;
-   color: #c9c9dc;
+   color: var(--texto-suave);
    font-size: 14px;
    line-height: 1.7;
    margin-bottom: 60px;
@@ -117,7 +118,7 @@ body {
 .primary-btn {
   outline: none;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.18); /* igual que secundario */
+  border: 1px solid rgba(var(--contraste-rgb), 0.18); /* igual que secundario */
   padding: 14px 28px;
   margin: 0;
   width: 100%;
@@ -130,7 +131,7 @@ body {
   font-weight: 700;
   border-radius: 8px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.06); /* igual que secundario */
+  background: rgba(var(--contraste-rgb), 0.06); /* igual que secundario */
   backdrop-filter: blur(12px);           /* igual que secundario */
   color: var(--texto-principal);
   text-decoration: none;
@@ -153,6 +154,7 @@ body {
   background: #9D00C6;
   transform: skew(30deg) translateX(-120%); /* empieza afuera */
   transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .primary-btn:hover::before {
@@ -167,8 +169,8 @@ body {
    text-decoration: none;
    font-weight: 700;
    color: var(--texto-principal);
-   border: 1px solid rgba(255, 255, 255, 0.18);
-   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(var(--contraste-rgb), 0.18);
+   background: rgba(var(--contraste-rgb), 0.06);
    backdrop-filter: blur(12px);
    font-size: 1rem;
    cursor: pointer;
@@ -229,7 +231,7 @@ body {
 .tarjetas {
    min-height: 220px;
    padding: 40px 32px;
-   background: #111;
+   background: var(--fondo-superficie);
    border: 1px solid rgba(var(--color-primario-rgb), 0.35);
    border-radius: 22px;
    color: var(--texto-principal);
@@ -244,6 +246,7 @@ body {
 
 .tarjeta-activa {
    background: linear-gradient(135deg, #4b1fa8, #163f89);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjetas i {
@@ -259,7 +262,7 @@ body {
 }
 
 .tarjetas p {
-   color: #e0e0ea;
+   color: var(--texto-suave);
    line-height: 1.5;
 }
 
@@ -272,11 +275,23 @@ body {
 .funcionalidades {
    width: 100%;
    padding: 80px 6%;
-   background: #110B19;
+   background:
+   radial-gradient(circle at 15% 30%, rgba(180, 55, 255, 0.18), transparent 25%),
+   radial-gradient(circle at 85% 70%, rgba(var(--color-primario-rgb), 0.14), transparent 26%),
+   var(--fondo-tarjeta);
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 45px;
    align-items: center;
+}
+
+/* MODO DIA: fondo con degradado claro para Funcionalidades (solo afecta al modo dia).
+   Cambia los 3 colores de abajo para probar. */
+:root[data-theme="light"] .funcionalidades {
+   --degradado-1: #7475be;
+   --degradado-2: #ccbad4;
+   --degradado-3: #536fec;
+   background: linear-gradient(135deg, var(--degradado-1) 0%, var(--degradado-2) 35%, var(--degradado-3) 100%);
 }
 
 .funcionalidades-imagen img {
@@ -291,7 +306,7 @@ body {
 }
 
 .caracteristica-tag {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 800;
    letter-spacing: 2px;
    margin-bottom: 15px;
@@ -307,7 +322,7 @@ body {
 .funcionalidades-contenido h2 span {
    display: block;
    color: transparent;
-   -webkit-text-stroke: 1px #fff;
+   -webkit-text-stroke: 1px var(--texto-principal);
    text-shadow: 0 0 28px rgba(var(--color-primario-rgb), 0.55);
 }
 
@@ -323,13 +338,14 @@ body {
 }
 
 .funcionalidades-slider::-webkit-scrollbar-track {
-   background: rgba(255, 255, 255, 0.08);
+   background: rgba(var(--contraste-rgb), 0.08);
    border-radius: 20px;
 }
 
 .funcionalidades-slider::-webkit-scrollbar-thumb {
    background: linear-gradient(var(--color-primario), var(--color-secundario));
    border-radius: 20px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .funcionalidades-item {
@@ -339,8 +355,8 @@ body {
    margin-bottom: 22px;
    padding: 16px;
    border-radius: 16px;
-   background: #101010;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   background: var(--fondo-superficie);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    backdrop-filter: blur(12px);
 }
 
@@ -352,11 +368,11 @@ body {
    justify-content: center;
    align-items: center;
    font-size: 24px;
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
 }
 
 .caracteristica-icon.cyan {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    border: 1px solid var(--color-secundario);
    box-shadow: 0 0 10px rgba(var(--color-secundario-rgb), 0.25);
 }
@@ -374,7 +390,7 @@ body {
 }
 
 .funcionalidades-item p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
    line-height: 1.6;
    font-size: 14px;
 }
@@ -388,6 +404,18 @@ body {
 .torneos-destacados {
    padding: 60px 6% 70px;
    background: #080111;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+/* MODO DIA: fondo de Torneos Destacados (solo afecta al modo dia).
+   Cambia el color de --fondo-destacados para probar.
+   - Fondo CLARO: dejar las dos lineas de abajo (textos oscuros).
+   - Fondo OSCURO: borrar la linea que empieza con "--texto-principal" y la de "color". */
+:root[data-theme="light"] .torneos-destacados {
+   --fondo-destacados: #e9e4f7;
+   background: var(--fondo-destacados);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+   color: var(--texto-principal);
 }
 
 
@@ -399,21 +427,38 @@ body {
    margin-bottom: 28px;
 }
 
-.seccion-titulo h2 {
-   font-size: 26px;
-}
+
 
 .seccion-titulo a {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-decoration: none;
    font-weight: 600;
+}
+
+/* El titulo usa el degradado de titulos.css: va centrado y "Ver todos" queda debajo */
+.torneos-destacados .seccion-titulo {
+   flex-direction: column;
+   align-items: stretch;
+   gap: 14px;
+}
+
+.torneos-destacados .seccion-titulo h2 {
+   width: 100%;
+   margin-bottom: 0;
+}
+
+.torneos-destacados .seccion-titulo a {
+   text-align: center;
 }
 
 /* grid */
 
 .torneo-tarjeta {
    height: 410px;
-   background: #101010;
+   background: var(--fondo-superficie);
+   /* La seccion es oscura y fija sus textos en blanco; la tarjeta sigue el tema (fondo claro = texto oscuro) */
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+   color: var(--texto-principal);
    border: 1px solid rgba(var(--color-primario-rgb), 0.35);
    border-radius: 22px;
    overflow: hidden;
@@ -457,30 +502,35 @@ body {
    display: flex;
    align-items: center;
    gap: 6px;
-   color: #c8c8d8;
+   color: var(--texto-suave);
    font-size: 14px;
 }
 
 .tarjeta-meta i,
 .tarjeta-tipo i {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    margin-right: 8px;
 }
 
 .tarjeta-tipo {
    display: flex;
    align-items: center;
-   color: #c8c8d8;
+   color: var(--texto-suave);
    font-size: 14px;
    margin-bottom: 14px;
 }
 
 .tarjeta-fecha {
    padding-top: 14px;
-   border-top: 1px solid rgba(255, 255, 255, 0.1);
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.1);
    color: #ff8be8;
    font-weight: 600;
    font-size: 14px;
+}
+
+/* En modo dia el rosa claro no se lee sobre la tarjeta blanca */
+:root[data-theme="light"] .tarjeta-fecha {
+   color: #b0238f;
 }
 
 /* ==========================================================================
@@ -493,10 +543,11 @@ body {
 .calendario-vs {
    padding: 60px 5%;
    background:
-      url("../../img/bg3.jpg") no-repeat center top / cover;
+      url("../../img/bg3.jpg") no-repeat center center / cover fixed;
    color: var(--texto-principal);
    overflow: visible;
    position: relative;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .agenda-header {
@@ -505,7 +556,7 @@ body {
 }
 
 .agenda-header .seccion-subtitulo {
-   color: #00f0ff; /* Cian Cyberpunk brillante */
+   color: var(--color-secundario-texto); /* Cian Cyberpunk brillante */
    font-size: 15px;
    font-weight: 800;
    letter-spacing: 3px;
@@ -547,8 +598,8 @@ body {
    width: 100%;
    padding: 18px 20px;
 
-   background: rgba(255, 255, 255, 0.05);
-   border: 1px solid rgba(255, 255, 255, 0.12);
+   background: rgba(var(--contraste-rgb), 0.05);
+   border: 1px solid rgba(var(--contraste-rgb), 0.12);
    border-radius: 18px;
    backdrop-filter: blur(16px);
    -webkit-backdrop-filter: blur(16px);
@@ -617,7 +668,7 @@ body {
    letter-spacing: 0.5px;
    text-transform: uppercase;
    white-space: nowrap;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .enfrentamiento-canal {
@@ -685,7 +736,7 @@ body {
 
 .comunidad-contenido span,
 .noticias-tarjeta span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 800;
    text-transform: uppercase;
    letter-spacing: 2px;
@@ -700,11 +751,11 @@ body {
 .comunidad-contenido h2 strong {
    display: block;
    color: transparent;
-   -webkit-text-stroke: 1px #fff;
+   -webkit-text-stroke: 1px var(--texto-principal);
 }
 
 .comunidad-contenido p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
    line-height: 1.8;
    margin-bottom: 30px;
 }
@@ -717,9 +768,13 @@ body {
    color: #07101c;
    text-decoration: none;
    font-weight: 800;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .noticias-grid {
+   list-style: none;
+   margin: 0;
+   padding: 0;
    display: grid;
    grid-template-columns: minmax(0, 1fr);
    gap: 20px;
@@ -733,6 +788,12 @@ body {
    box-shadow: 0 0 26px rgba(var(--color-primario-rgb), 0.18);
    border-radius: 22px;
    transition: 0.3s ease;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+a.noticias-tarjeta {
+   display: block;
+   text-decoration: none;
 }
 
 .noticias-tarjeta:hover {
@@ -769,7 +830,7 @@ a.noticias-tarjeta {
 }
 
 .noticias-tarjeta p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
    line-height: 1.6;
 }
 
@@ -787,7 +848,8 @@ a.noticias-tarjeta {
    justify-content: center;
    overflow: hidden;
 
-   background: url("../../img/banners/stats.jpg")no-repeat center center / cover;
+   background: url("../../img/banners/stats.jpg") no-repeat center center / cover fixed;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .stats-overlay {
@@ -870,7 +932,7 @@ padding: 70px 6%;
 background:
 radial-gradient(circle at 15% 30%, rgba(180, 55, 255, 0.18), transparent 25%),
 radial-gradient(circle at 85% 70%, rgba(var(--color-primario-rgb), 0.14), transparent 26%),
-#171236;
+var(--fondo-tarjeta);
 overflow: hidden;
 }
 
@@ -880,7 +942,7 @@ margin-bottom: 50px;
 }
 
 .top-jugadores-header span {
-color: var(--color-secundario);
+color: var(--color-secundario-texto);
 text-transform: uppercase;
 font-size: 13px;
 font-weight: 700;
@@ -893,7 +955,7 @@ margin-top: 8px;
 }
 
 .top-jugadores-header p {
-color: #c7c1ea;
+color: var(--texto-secundario);
 margin-top: 10px;
 }
 
@@ -953,6 +1015,7 @@ margin-top: 10px;
 
     box-shadow:
         0 15px 35px rgba(0,0,0,.35);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 
 }
 
@@ -969,7 +1032,7 @@ margin-top: 10px;
 .jugador-info p{
 
     font-size:.9rem;
-    color:rgba(255,255,255,.85);
+    color:var(--texto-principal);
 
 }
 
@@ -984,6 +1047,7 @@ margin-top: 10px;
    letter-spacing: 3px;
    margin-bottom: 25px;
    box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.35);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 
@@ -993,12 +1057,12 @@ margin-top: 10px;
    Desde 700px: caja en fila, formulario en fila.
    ========================================== */
 .newsletter-seccion {
-   background-color: #090714;
+   background-color: var(--fondo-principal);
    padding: 40px 6%;
 }
 
 .newsletter-caja {
-   background: linear-gradient(90deg, #131129 0%, #0d0a1b 100%);
+   background: linear-gradient(90deg, var(--fondo-superficie) 0%, var(--fondo-superficie) 100%);
    border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
    padding: 28px 22px;
    display: flex;
@@ -1012,7 +1076,7 @@ margin-top: 10px;
 .newsletter-caja h2 {
    font-size: 20px;
    font-weight: 800;
-   color: #fff;
+   color: var(--texto-principal);
    letter-spacing: 1px;
 }
 
@@ -1026,15 +1090,16 @@ margin-top: 10px;
 .newsletter-formulario input {
    width: 100%;
    min-width: 0;
-   background: #18152e;
-   border: 1px solid rgba(255,255,255,0.1);
+   background: var(--fondo-tarjeta);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
    padding: 14px 16px;
-   color: #fff;
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 14px;
    border-radius: 8px;
    outline: none;
    margin-bottom: 10px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .newsletter-formulario button {
@@ -1050,12 +1115,28 @@ margin-top: 10px;
    letter-spacing: 1px;
    border-radius: 8px;
    transition: 0.3s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .newsletter-formulario button:hover {
    background: var(--color-primario);
    color: #fff;
    box-shadow: 0 0 15px rgba(var(--color-primario-rgb), 0.4);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+.newsletter-mensaje {
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 1.5;
+}
+
+.newsletter-mensaje--exito {
+   color: var(--texto-ok, #4ade80);
+}
+
+.newsletter-mensaje--error {
+   color: var(--texto-error, #f87171);
 }
 
 @media (min-width: 700px) {
@@ -1330,10 +1411,6 @@ margin-top: 10px;
       padding: 70px 8% 90px;
    }
 
-   .seccion-titulo h2 {
-      font-size: 34px;
-   }
-
    .comunidad-y-noticias {
       grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
       padding: 100px 8%;
@@ -1419,16 +1496,25 @@ margin-top: 10px;
   color: inherit;
   text-decoration: none;
 }
-.newsletter-mensaje {
-   font-size: 14px;
-   font-weight: 600;
-   line-height: 1.5;
+
+
+/* =========================================================
+   FONDO FIJO (efecto parallax)
+   Próximos enfrentamientos y Estadísticas: la imagen queda fija
+   y el resto de las secciones pasa por encima al hacer scroll.
+   "fixed" no funciona dentro de un elemento con transform, por eso
+   estas dos secciones solo animan la opacidad (sin translateY).
+   Con "reducir movimiento" el fondo vuelve a moverse con la página.
+========================================================= */
+
+.calendario-vs.reveal,
+.estadisticas-banner.reveal {
+   transform: none;
 }
 
-.newsletter-mensaje--exito {
-   color: var(--texto-ok, #4ade80);
-}
-
-.newsletter-mensaje--error {
-   color: var(--texto-error, #f87171);
+@media (prefers-reduced-motion: reduce) {
+   .calendario-vs,
+   .estadisticas-banner {
+      background-attachment: scroll;
+   }
 }

@@ -11,7 +11,7 @@
    background-size: cover;
    background-position: center;
 */
-   border-top: 1px solid rgba(255,255,255,0.08);
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.08);
 
    padding-top: 70px;
 }
@@ -43,7 +43,7 @@
 
 .footer-logo h1 {
 
-   color: var(--color-secundario) ;
+   color: var(--color-secundario-texto) ;
    
 }
 
@@ -60,11 +60,12 @@
    margin-top: 15px;
    font-weight: 600;
    text-transform: uppercase;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .footer-links h4 {
 
-   color: white;
+   color: var(--texto-principal);
    margin-bottom: 18px;
 }
 
@@ -72,7 +73,7 @@
 
    display: block;
 
-   color: #b8b8c9;
+   color: var(--texto-secundario);
 
    text-decoration: none;
 
@@ -83,7 +84,7 @@
 
 .footer-links a:hover {
 
-   color: #00FFEE;
+   color: var(--color-secundario-texto);
 
    transform: translateX(5px);
 }
@@ -105,18 +106,19 @@
    justify-content: center;
    align-items: center;
 
-   background: rgba(255,255,255,0.05);
+   background: rgba(var(--contraste-rgb), 0.05);
 
-   border: 1px solid rgba(255,255,255,0.08);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
 
-   color: white;
+   color: var(--texto-principal);
 
    transition: .3s;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .footer-social a:hover {
 
-   color: #00FFEE;
+   color: var(--color-secundario-texto);
 
    border-color: #00FFEE;
 
@@ -129,13 +131,13 @@
 
    padding: 25px 8%;
 
-   border-top: 1px solid rgba(255,255,255,0.08);
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.08);
 
    display: flex;
    justify-content: space-between;
    align-items: center;
 
-   color: #8b8ba0;
+   color: var(--texto-secundario);
 
    font-size: 14px;
 }

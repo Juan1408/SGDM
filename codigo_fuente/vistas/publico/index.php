@@ -6,9 +6,9 @@ if (!defined('URL_BASE')) {
 <?php
 $torneosDestacados = $torneosDestacados ?? [];
 $proximosEnfrentamientos = $proximosEnfrentamientos ?? [];
-$ultimosComentarios = $ultimosComentarios ?? [];
 $estadisticas = $estadisticas ?? [];
 $topJugadores = $topJugadores ?? [];
+$ultimosComentarios = $ultimosComentarios ?? [];
 
 //Ruta de imagen: URL completa si viene con http(s), si no se antepone URL_BASE
 $urlImagen = static function (?string $ruta, string $porDefecto): string {
@@ -75,10 +75,13 @@ $canalPartido = static function (array $p): array {
 
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/carruseles.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/titulos.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
 
    <!-- Font Awesome -->
@@ -125,7 +128,7 @@ $canalPartido = static function (array $p): array {
 
          <div class="hero-contenido">
 
-            <p class="hero-subtitulo">
+            <p class="hero-subtitulo efecto-glitch">
                Sistema de Gestión de Deportes y eSports
             </p>
 
@@ -264,7 +267,7 @@ $canalPartido = static function (array $p): array {
 
          <div class="seccion-titulo">
 
-            <h2>Torneos Destacados</h2>
+            <h2 class="seccion-gradiente-titulo">Torneos Destacados</h2>
 
             <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=catalogoPublico">
                Ver todos
@@ -544,6 +547,7 @@ $canalPartido = static function (array $p): array {
    <script src="<?php echo URL_BASE; ?>js/preloader.js"></script>
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/featured-games.js"></script>
 

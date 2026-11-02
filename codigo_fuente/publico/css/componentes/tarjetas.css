@@ -27,6 +27,7 @@
    background: var(--fondo-tarjeta);
    border: 1px solid var(--borde-suave);
    border-radius: var(--radio-lg);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .tarjeta-estadistica-icono {
@@ -42,7 +43,7 @@
    font-size: 1.5rem;
 
    background: rgba(0, 255, 238, .15);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .tarjeta-estadistica-icono--rosa { background: rgba(245, 17, 203, .15); color: var(--color-primario); }
@@ -84,7 +85,7 @@
    text-align: center;
 
    border-radius: var(--radio-lg);
-   background: rgba(22, 22, 45, 0.85);
+   background: color-mix(in srgb, var(--fondo-tarjeta) 85%, transparent);
    border: 1px solid var(--borde-suave);
 
    transition: var(--transicion);
@@ -134,7 +135,7 @@
 }
 
 .info-torneo p i {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    margin-right: .3rem;
 }
 
@@ -170,7 +171,7 @@
 
    border-radius: var(--radio-md);
    background: rgba(0, 255, 238, 0.12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .fecha-encuentro strong {

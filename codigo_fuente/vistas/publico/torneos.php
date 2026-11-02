@@ -40,7 +40,10 @@ $tipoDeJuego = static function (string $categoria): string {
 
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -91,7 +94,7 @@ $tipoDeJuego = static function (string $categoria): string {
 
          <div class="hero-contenido">
 
-            <p class="hero-subtitulo">
+            <p class="hero-subtitulo efecto-glitch">
                Sistema de Gestión de Deportes y eSports
             </p>
 
@@ -149,10 +152,10 @@ $tipoDeJuego = static function (string $categoria): string {
          <div class="top-fila">
 
             <ul class="chips-contenedor">
-               <li><button type="button" class="chip active" data-tipo="todos">Todos</button></li>
-               <li><button type="button" class="chip" data-tipo="esports">eSports</button></li>
-               <li><button type="button" class="chip" data-tipo="tradicionales">Tradicionales</button></li>
-               <li><button type="button" class="chip" data-tipo="mentales">Mentales</button></li>
+               <li><button type="button" class="boton-filtro active" data-tipo="todos">Todos</button></li>
+               <li><button type="button" class="boton-filtro" data-tipo="esports">eSports</button></li>
+               <li><button type="button" class="boton-filtro" data-tipo="tradicionales">Tradicionales</button></li>
+               <li><button type="button" class="boton-filtro" data-tipo="mentales">Mentales</button></li>
             </ul>
 
             <div class="buscador">
@@ -250,9 +253,7 @@ $tipoDeJuego = static function (string $categoria): string {
             <p class="lista-vacia oculto" id="torneos-sin-resultados">No encontramos torneos con esos filtros.</p>
 
             <div class="ver-mas-boton" id="torneos-mas">
-               <button type="button" id="torneos-cargar-mas" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
-       transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
+               <button type="button" id="torneos-cargar-mas" class="boton boton--ver-mas">Cargar más</button>
             </div>
          <?php endif; ?>
 
@@ -266,6 +267,7 @@ $tipoDeJuego = static function (string $categoria): string {
 
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
    <script src="<?php echo URL_BASE; ?>js/torneos.js"></script>

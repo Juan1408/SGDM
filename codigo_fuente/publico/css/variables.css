@@ -35,4 +35,170 @@
    --transicion: 0.25s ease;
 
    --alto-navbar: 4.5rem;
+
+   /* ---- Tema (modo noche = valores por defecto) ---- */
+   color-scheme: dark;
+   --fondo-superficie: #111111;
+   --fondo-elevado: #272641;
+   --texto-suave: #d6d6e6;
+   --contraste-rgb: 255, 255, 255;
+   --color-secundario-texto: #00ffee;
+   --sombra-tema: rgba(0, 0, 0, 0.45);
+   /* alias del tema (para volver al color del tema dentro de zonas fijas) */
+   --tp: #ffffff;
+   --ts: #d6d6e6;
+   --tx: #aaaac2;
+   --tc: 255, 255, 255;
+   --tcs: #00ffee;
+}
+
+
+/* =========================================================
+   MODO DÍA
+   Se activa con <html data-theme="light"> (ver js/tema.js).
+   Solo cambian las variables: el resto de los CSS no se toca.
+   Los acentos neón (violeta, rosa, azul) se mantienen.
+========================================================= */
+:root[data-theme="light"] {
+   color-scheme: light;
+
+   --fondo-principal: #f4f2fb;
+   --fondo-dashboard: #eeeaf8;
+   --fondo-panel: #ffffff;
+   --fondo-tarjeta: #ffffff;
+   --fondo-superficie: #ffffff;
+   --fondo-elevado: #e9e5f6;
+
+   --texto-principal: #17142e;
+   --texto-suave: #2e2a4a;
+   --texto-secundario: #5a5675;
+
+   --borde-suave: rgba(23, 20, 46, 0.14);
+   --contraste-rgb: 23, 20, 46;
+   --color-secundario-texto: #00756f;
+   --sombra-tema: rgba(40, 20, 90, 0.18);
+
+   /* login / registro (style.css) */
+   --color-fondo: #f4f2fb;
+   --color-tarjeta: rgba(255, 255, 255, 0.92);
+   --color-borde: rgba(23, 20, 46, 0.14);
+   --color-texto-principal: #17142e;
+   --color-texto-secundario: #5a5675;
+   --degradado-fondo: radial-gradient(circle at top, #ffffff 0%, #ece8f8 55%, #dcd6f0 100%);
+   --sombra-tarjeta: 0 8px 28px rgba(40, 20, 90, 0.15);
+}
+
+/* Botón flotante para cambiar de tema */
+.boton-tema {
+   position: fixed;
+   left: 16px;
+   bottom: 16px;
+   z-index: 950;
+   width: 46px;
+   height: 46px;
+   border-radius: 50%;
+   border: 1px solid var(--borde-suave);
+   background: var(--fondo-tarjeta);
+   color: var(--texto-principal);
+   font-size: 18px;
+   line-height: 1;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-shadow: 0 6px 18px var(--sombra-tema);
+   transition: transform 0.2s ease;
+}
+
+.boton-tema:hover {
+   transform: scale(1.08);
+}
+
+.boton-tema:focus-visible {
+   outline: 2px solid var(--color-violeta);
+   outline-offset: 2px;
+}
+
+@media (min-width: 881px) {
+   body:has(.sidebar-jugador-flotante) .boton-tema {
+      left: 104px;
+   }
+}
+
+
+/* =========================================================
+   AJUSTES DEL MODO DÍA POR COMPONENTE
+   Zonas con foto o fondo de color que se quedan oscuras/claras
+   en los dos modos (texto siempre claro encima).
+========================================================= */
+:root[data-theme="light"] .hero {
+   --texto-principal: #ffffff;
+   --texto-suave: #e4e4f0;
+   --texto-secundario: #c4c4d8;
+   --contraste-rgb: 255, 255, 255;
+   --color-secundario-texto: #00ffee;
+   color: #ffffff;
+}
+
+:root[data-theme="light"] .hero-overlay {
+   background: linear-gradient(to bottom, transparent, #030205 95%);
+}
+
+
+:root[data-theme="light"] {
+   --texto-ok: #166534;
+   --texto-error: #b91c1c;
+   --texto-info: #1d4ed8;
+}
+
+:root[data-theme="light"] {
+   --tp: #17142e;
+   --ts: #2e2a4a;
+   --tx: #5a5675;
+   --tc: 23, 20, 46;
+   --tcs: #00756f;
+}
+
+/* El riel lateral (jugador y organizador) se mantiene oscuro en modo día */
+:root[data-theme="light"] .sidebar-jugador-flotante,
+:root[data-theme="light"] .sidebar-jugador-flotante.sidebar-organizador-flotante {
+   background: rgba(10, 10, 24, 0.96);
+   border-right: 1px solid rgba(255, 255, 255, 0.08);
+   --texto-principal: #ffffff;
+   --texto-suave: #e4e4f0;
+   --texto-secundario: #c4c4d8;
+   --contraste-rgb: 255, 255, 255;
+   --color-secundario-texto: #00ffee;
+   --fondo-tarjeta: #16182c;
+   --fondo-superficie: #111111;
+}
+
+/* Navbar, panel de perfil móvil y footer siempre oscuros (también en modo día) */
+:root[data-theme="light"] .navbar,
+:root[data-theme="light"] .panel-mi-perfil-mobile,
+:root[data-theme="light"] .footer {
+   --fondo-principal: #030205;
+   --fondo-dashboard: #100714;
+   --fondo-panel: #101322;
+   --fondo-tarjeta: #16182c;
+   --fondo-superficie: #111111;
+   --fondo-elevado: #272641;
+   --texto-principal: #ffffff;
+   --texto-suave: #d6d6e6;
+   --texto-secundario: #aaaac2;
+   --borde-suave: rgba(255, 255, 255, 0.12);
+   --contraste-rgb: 255, 255, 255;
+   --color-secundario-texto: #00ffee;
+   --tp: #ffffff;
+   --ts: #d6d6e6;
+   --tx: #aaaac2;
+   --tc: 255, 255, 255;
+   --tcs: #00ffee;
+   color: #ffffff;
+}
+
+/* El footer no define color de fondo propio (solo un background-image
+   inválido), así que en modo día se lo damos explícito */
+:root[data-theme="light"] .footer {
+   background-color: #030205;
 }

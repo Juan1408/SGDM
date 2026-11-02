@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
    const tarjetas = Array.from(document.querySelectorAll(".juegos-grillas > li"));
    const mensajeVacio = document.getElementById("juegos-sin-resultados");
 
-   const chips = document.querySelectorAll(".chip");
+   const chips = document.querySelectorAll(".boton-filtro");
    const inputBuscar = document.getElementById("buscar-juego");
    const selectModalidad = document.getElementById("filtro-modalidad");
    const selectOrden = document.getElementById("filtro-orden");

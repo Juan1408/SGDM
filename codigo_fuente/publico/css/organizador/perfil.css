@@ -73,7 +73,7 @@
 }
 
 .perfil-notificacion.success {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    background: rgba(0, 255, 238, .1);
    border: 1px solid rgba(0, 255, 238, .3);
 }
@@ -146,6 +146,7 @@
    background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
    color: #07101c;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .perfil-identidad {
@@ -161,11 +162,12 @@
    background: rgba(0, 255, 238, .12);
    border: 1px solid rgba(0, 255, 238, .3);
 
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .68rem;
    font-weight: 700;
    letter-spacing: .5px;
    text-transform: uppercase;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .perfil-identidad h2 {
@@ -192,7 +194,7 @@
    padding: .75rem .4rem;
    text-align: center;
 
-   background: rgba(255, 255, 255, .03);
+   background: rgba(var(--contraste-rgb), 0.03);
    border: 1px solid var(--borde-suave);
    border-radius: var(--radio-md);
 }
@@ -278,7 +280,7 @@
    border: 1px solid var(--color-primario);
    background: rgba(245, 17, 203, .1);
 
-   color: #fff;
+   color: var(--texto-principal);
    font: inherit;
    font-size: .8rem;
    font-weight: 600;
@@ -309,8 +311,8 @@
    min-width: 0;
 
    padding: .85rem 1rem;
-   background: rgba(255, 255, 255, .03);
-   border: 1px solid rgba(255, 255, 255, .08);
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    border-radius: var(--radio-md);
 }
 
@@ -329,7 +331,7 @@
 ============================= */
 
 .perfil-biografia {
-   color: #d8d8e5;
+   color: var(--texto-suave);
    font-size: .9rem;
    line-height: 1.6;
    overflow-wrap: break-word;
@@ -340,7 +342,7 @@
 ============================= */
 
 .perfil-tarjeta--seguridad .perfil-tarjeta-etiqueta {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .perfil-seguridad-acciones {
@@ -359,10 +361,10 @@
 
    padding: .85rem;
    border-radius: var(--radio-md);
-   background: rgba(255, 255, 255, .03);
-   border: 1px solid rgba(255, 255, 255, .06);
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: 1px solid rgba(var(--contraste-rgb), 0.06);
 
-   color: #fff;
+   color: var(--texto-principal);
    font: inherit;
    text-align: left;
    cursor: pointer;
@@ -384,7 +386,7 @@
 
    border-radius: 10px;
    background: rgba(0, 255, 238, .12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 1rem;
 }
 
@@ -466,7 +468,7 @@ dialog.perfil-modal::backdrop {
 }
 
 .perfil-modal-header span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .72rem;
    font-weight: 700;
    text-transform: uppercase;
@@ -488,8 +490,8 @@ dialog.perfil-modal::backdrop {
 
    border: none;
    border-radius: 50%;
-   background: rgba(255, 255, 255, .06);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.06);
+   color: var(--texto-principal);
    cursor: pointer;
    transition: var(--transicion);
 }
@@ -534,11 +536,12 @@ dialog.perfil-modal::backdrop {
    padding: .7rem .85rem;
    border-radius: 10px;
    border: 1px solid var(--borde-suave);
-   background: rgba(255, 255, 255, .04);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.04);
+   color: var(--texto-principal);
    font: inherit;
    font-size: .9rem;
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .perfil-campo input:focus,
@@ -576,7 +579,7 @@ dialog.perfil-modal::backdrop {
 }
 
 .perfil-boton-cancelar {
-   color: #fff;
+   color: var(--texto-principal);
    background: transparent;
    border: 1px solid var(--borde-suave);
 }
@@ -589,6 +592,7 @@ dialog.perfil-modal::backdrop {
    color: #07101c;
    background: linear-gradient(90deg, var(--color-secundario), #097AEC);
    border: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .perfil-boton-principal:hover {

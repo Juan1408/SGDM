@@ -8,6 +8,7 @@
    <title>ASCEND - Términos y Condiciones</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -99,7 +100,7 @@
                </p>
                <p>
                   <strong>Contacto:</strong>
-                  <a href="mailto:arena.core@torneos.com">arena.core@torneos.com</a>.
+                  <a href="mailto:charrua.code@ascend.com">charrua.code@ascend.com</a>.
                </p>
             </section>
 
@@ -137,7 +138,7 @@
                <ul>
                   <li>El correo electrónico es único por cuenta y debe verificarse antes del primer inicio de sesión.</li>
                   <li>En el entorno académico actual, la verificación de correo se simula: el sistema muestra el enlace de activación en pantalla en lugar de enviar un correo real.</li>
-                  <li>El correo electrónico no puede modificarse desde el perfil. Si necesitás corregirlo, escribinos a <a href="mailto:arena.core@torneos.com">arena.core@torneos.com</a>.</li>
+                  <li>El correo electrónico no puede modificarse desde el perfil. Si necesitás corregirlo, escribinos a <a href="mailto:charrua.code@ascend.com">charrua.code@ascend.com</a>.</li>
                   <li>Sos responsable de mantener la confidencialidad de tu contraseña y de toda la actividad realizada con tu cuenta.</li>
                   <li>No compartas tu cuenta ni permitas que otra persona la use. Avisanos de inmediato si detectás un acceso no autorizado.</li>
                   <li>Podemos suspender preventivamente una cuenta ante indicios de compromiso de seguridad, suplantación de identidad o incumplimiento de estos Términos.</li>
@@ -256,7 +257,7 @@
                </p>
                <p>
                   Podés solicitar la baja de tu cuenta escribiendo a
-                  <a href="mailto:arena.core@torneos.com">arena.core@torneos.com</a>. La baja
+                  <a href="mailto:charrua.code@ascend.com">charrua.code@ascend.com</a>. La baja
                   desactiva el acceso a la cuenta. El historial deportivo y los registros de
                   seguridad pueden conservarse conforme a la Política de Privacidad.
                </p>
@@ -299,7 +300,7 @@
                </p>
                <p>
                   Las personas responsables legales pueden escribir a
-                  <a href="mailto:arena.core@torneos.com">arena.core@torneos.com</a> para consultar,
+                  <a href="mailto:charrua.code@ascend.com">charrua.code@ascend.com</a> para consultar,
                   rectificar o solicitar la baja de los datos de un menor a su cargo. Los
                   organizadores deben extremar los recaudos cuando sus torneos estén dirigidos a
                   menores de edad.
@@ -321,7 +322,7 @@
                </p>
                <p>
                   Por consultas generales sobre estos Términos:
-                  <a href="mailto:arena.core@torneos.com">arena.core@torneos.com</a>. Para ejercer
+                  <a href="mailto:charrua.code@ascend.com">charrua.code@ascend.com</a>. Para ejercer
                   tus derechos sobre datos personales, indicá «Datos personales» en el asunto y
                   consultá la <a href="<?php echo URL_BASE; ?>index.php?c=inicio&a=privacidad">Política de Privacidad</a>.
                </p>

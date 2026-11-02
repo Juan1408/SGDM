@@ -9,6 +9,21 @@ $esJugadorNavbar = $rolNavbar === 3;
 $esOrganizadorNavbar = $rolNavbar === 2;
 $haySesionNavbar = $esJugadorNavbar || $esOrganizadorNavbar;
 $idNavbar = (int) ($_SESSION['usuario_id'] ?? 0);
+//Foto del usuario logueado para el boton "Mi perfil" (si no tiene, se usa el icono)
+$urlFotoNav = '';
+if ($haySesionNavbar) {
+   try {
+      require_once __DIR__ . '/../../modelos/Conexion.php';
+      $stmtFotoNav = \App\Modelos\Conexion::getInstance()->getBD()->prepare('SELECT foto_perfil_url FROM usuarios WHERE id = :id LIMIT 1');
+      $stmtFotoNav->execute([':id' => $idNavbar]);
+      $fotoNav = trim((string) $stmtFotoNav->fetchColumn());
+      if ($fotoNav !== '') {
+         $urlFotoNav = preg_match('#^https?://#i', $fotoNav) ? $fotoNav : URL_BASE . ltrim($fotoNav, '/');
+      }
+   } catch (\Throwable $e) {
+      $urlFotoNav = '';
+   }
+}
 if ($esOrganizadorNavbar) {
    $urlVerPerfilNavbar = URL_BASE . 'index.php?c=perfil&a=organizador&id=' . $idNavbar;
    $urlEditarPerfilNavbar = URL_BASE . 'index.php?c=panelOrganizador&a=editarPerfil';
@@ -243,3 +258,4 @@ if ($haySesionNavbar) {
 ------------------------------------>
 
 <?php endif; ?>
+<script src="<?php echo URL_BASE; ?>js/ui-global.js"></script>

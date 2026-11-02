@@ -83,7 +83,10 @@ if (!$esPublico || $rolSesion === 3) {
    <title>ASCEND - Perfil Jugador</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/titulos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/jugador/perfil-jugador.css">
@@ -262,9 +265,14 @@ if (!$esPublico || $rolSesion === 3) {
          <?php if (empty($torneos)): ?>
             <p><?php echo $esPublico ? 'Todavía no participa en ningún torneo.' : 'Todavía no te inscribiste en ningún torneo.'; ?></p>
          <?php else: ?>
-            <ul class="torneos-organiza-grilla">
-               <?php foreach ($torneos as $t): ?>
-                  <li>
+            <?php
+            // Se muestran 9 torneos al inicio; el botón "Ver más" revela de a 3
+            $torneosIniciales = 9;
+            $torneosPaso = 3;
+            ?>
+            <ul class="torneos-organiza-grilla" id="torneos-jugador-lista">
+               <?php foreach (array_values($torneos) as $indiceTorneo => $t): ?>
+                  <li<?php echo $indiceTorneo >= $torneosIniciales ? ' data-oculto="1" style="display:none"' : ''; ?>>
                      <a href="<?php echo URL_BASE; ?>index.php?c=torneo&a=detalle&id=<?php echo (int) $t['torneo_id']; ?>" class="torneos-organiza-tarjeta">
                         <img src="<?php echo htmlspecialchars($urlImagen($t['torneo_banner'] ?? '', 'img/torneos/card1.jpg')); ?>" alt="<?php echo htmlspecialchars($t['torneo_nombre']); ?>">
                         <div class="torneo-organiza-info">
@@ -278,6 +286,28 @@ if (!$esPublico || $rolSesion === 3) {
                   </li>
                <?php endforeach; ?>
             </ul>
+
+            <?php if (count($torneos) > $torneosIniciales): ?>
+               <div class="ver-mas-contenedor">
+                  <button type="button" id="torneos-jugador-ver-mas" class="boton boton--ver-mas" data-paso="<?php echo $torneosPaso; ?>">Ver más</button>
+               </div>
+               <script>
+                  (function () {
+                     var boton = document.getElementById('torneos-jugador-ver-mas');
+                     var paso = parseInt(boton.getAttribute('data-paso'), 10) || 3;
+                     boton.addEventListener('click', function () {
+                        var ocultos = document.querySelectorAll('#torneos-jugador-lista li[data-oculto]');
+                        for (var i = 0; i < paso && i < ocultos.length; i++) {
+                           ocultos[i].style.display = '';
+                           ocultos[i].removeAttribute('data-oculto');
+                        }
+                        if (!document.querySelector('#torneos-jugador-lista li[data-oculto]')) {
+                           boton.parentNode.style.display = 'none';
+                        }
+                     });
+                  })();
+               </script>
+            <?php endif; ?>
          <?php endif; ?>
 
       </section>

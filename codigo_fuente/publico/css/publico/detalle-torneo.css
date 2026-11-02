@@ -1,9 +1,9 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    CONFIGURACIÓN GENERAL
    ========================================================================== */
 .tournament-detail {
    background: var(--fondo-principal);
-   color: #fff;
+   color: var(--texto-principal);
    font-family: 'Poppins', sans-serif;
 }
 
@@ -26,6 +26,7 @@
    background-size: cover;
    background-repeat: no-repeat;
    background-position: center;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .td-team-logo img {
@@ -69,7 +70,7 @@
 }
 
 .td-hero-contenido span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
 }
 
@@ -89,6 +90,7 @@
    font-weight: 700;
    background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
    border-radius: 8px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 /*
@@ -108,6 +110,7 @@
          linear-gradient(rgba(0, 180, 200, .35), rgba(45, 0, 60, .85)),
          var(--td-banner, url("../../img/banners/humo1.jpg"));
       background-size: cover;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
    }
 
    .td-team-logo img {
@@ -173,20 +176,14 @@
    border-radius: 8px;
    cursor: pointer;
    transition: 0.3s ease;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .td-tabs button:hover,
 .td-tabs button.active {
    background: linear-gradient(90deg, var(--color-violeta));
    color: #fefdff;
-}
-
-.td-search input {
-   width: 100%;
-   min-width: 0;
-   padding: 14px 18px;
-   border: none;
-   background: #e8e8e8;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 /*=========================================================
@@ -195,20 +192,12 @@ TABS RESPONSIVE (min-width: 700px)
 
 @media (min-width: 700px) {
    .td-tabs-search {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
       padding: 24px 8%;
-      gap: 40px;
    }
 
    .td-tabs button {
       font-size: 16px;
       padding: 12px;
-   }
-
-   .td-search input {
-      width: 300px;
    }
 }
 
@@ -239,8 +228,17 @@ TABS RESPONSIVE (min-width: 700px)
    gap: 28px;
 }
 
+/* Mobile: primero la info del torneo (info-principal), luego el
+   organizador y al final el próximo torneo (column-reverse invierte
+   el orden en que están escritos dentro del aside) */
 .td-sidebar {
-   order: -1; /* sidebar arriba en mobile */
+   display: flex;
+   flex-direction: column-reverse;
+   gap: 28px;
+}
+
+.td-sidebar .proximo-torneo {
+   margin-bottom: 0;
 }
 
 .info-principal {
@@ -256,7 +254,7 @@ TABS RESPONSIVE (min-width: 700px)
    min-width: 0;
    border-radius: 10px;
    padding: 22px;
-   background: #111;
+   background: var(--fondo-superficie);
    border: 1px solid rgba(var(--color-azul-rgb), 0.35);
 }
 
@@ -276,18 +274,19 @@ TABS RESPONSIVE (min-width: 700px)
    background: rgba(255, 0, 255, 0.1);
    border: 1px solid rgba(255, 0, 255, 0.3);
    border-radius: 10px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .td-info-general h2,
 .td-comentarios h2,
 .td-formulario-comentarios h2 {
    margin: 20px 0 12px;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .td-info-general p {
    line-height: 1.6;
-   color: #eee;
+   color: var(--texto-suave);
    overflow-wrap: break-word;
 }
 
@@ -310,7 +309,7 @@ TABS RESPONSIVE (min-width: 700px)
    gap: 10px;
    padding: 14px 16px;
    border-radius: 12px;
-   background: rgba(255, 255, 255, 0.03);
+   background: rgba(var(--contraste-rgb), 0.03);
    border-left: 3px solid var(--color-secundario);
 }
 
@@ -319,7 +318,7 @@ TABS RESPONSIVE (min-width: 700px)
    align-items: baseline;
    gap: 8px;
    font-size: 0.8rem;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
 }
 
@@ -350,7 +349,7 @@ TABS RESPONSIVE (min-width: 700px)
 .actividad-titulo {
    font-size: 0.9rem;
    font-weight: 600;
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 /* Colores distintos según el tipo de actividad */
@@ -361,16 +360,16 @@ TABS RESPONSIVE (min-width: 700px)
 .actividad-item.tipo-premiacion .actividad-icono { background: rgba(255, 208, 0, 0.15); color: #ffd000; }
 
 .actividad-item.tipo-pausa { border-left-color: #888; opacity: 0.75; }
-.actividad-item.tipo-pausa .actividad-icono { background: rgba(255, 255, 255, 0.08); color: #aaa; }
+.actividad-item.tipo-pausa .actividad-icono { background: rgba(var(--contraste-rgb), 0.08); color: var(--texto-secundario); }
 
 .actividad-item.tipo-competencia { border-left-color: var(--color-azul); }
 .actividad-item.tipo-competencia .actividad-icono { background: rgba(var(--color-azul-rgb), 0.15); color: var(--color-azul); }
 
 .actividad-item.tipo-reunion { border-left-color: #00c2a8; }
-.actividad-item.tipo-reunion .actividad-icono { background: rgba(0, 194, 168, 0.15); color: #00c2a8; }
+.actividad-item.tipo-reunion .actividad-icono { background: rgba(0, 194, 168, 0.15); color: var(--color-secundario-texto); }
 
 .actividad-item.tipo-administrativo { border-left-color: #888; }
-.actividad-item.tipo-administrativo .actividad-icono { background: rgba(255, 255, 255, 0.08); color: #aaa; }
+.actividad-item.tipo-administrativo .actividad-icono { background: rgba(var(--contraste-rgb), 0.08); color: var(--texto-secundario); }
 
 .actividad-item.tipo-partido { border-left-color: var(--color-primario); }
 
@@ -378,7 +377,7 @@ TABS RESPONSIVE (min-width: 700px)
    margin-left: auto;
    flex-shrink: 0;
    font-weight: 800;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .streaming-video-enlace {
@@ -421,6 +420,7 @@ TABS RESPONSIVE (min-width: 700px)
    text-align: center;
    padding: 18px;
    border-radius: 10px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-trofeo i {
@@ -439,7 +439,7 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .tarjeta-trofeo--plata i {
-   color: #c0c8d0;
+   color: var(--texto-secundario);
 }
 
 .tarjeta-trofeo--bronce i {
@@ -470,7 +470,7 @@ TABS RESPONSIVE (min-width: 700px)
    height: 44px;
    border-radius: 50%;
    overflow: hidden;
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
    border: 1px solid rgba(var(--color-azul-rgb), 0.35);
 }
 
@@ -510,7 +510,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 .caja-comentario p {
    margin: 12px 0;
-   color: #ddd;
+   color: var(--texto-suave);
    overflow-wrap: break-word;
 }
 
@@ -523,6 +523,7 @@ TABS RESPONSIVE (min-width: 700px)
    background: linear-gradient(90deg, var(--color-violeta));
    border-radius: 8px;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .load-more {
@@ -544,18 +545,20 @@ TABS RESPONSIVE (min-width: 700px)
 .td-formulario-comentarios textarea {
    width: 100%;
    min-width: 0;
-   background: rgba(255, 255, 255, 0.05);
+   background: rgba(var(--contraste-rgb), 0.05);
    border: 1px solid rgba(0, 255, 238, 0.2);
-   color: #fff;
+   color: var(--texto-principal);
    padding: 14px;
    margin-bottom: 20px;
    border-radius: 8px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 .td-formulario-comentarios input:focus,
 .td-formulario-comentarios textarea:focus {
    outline: none;
    border-color: var(--color-azul);
-   background: rgba(255, 255, 255, 0.1);
+   background: rgba(var(--contraste-rgb), 0.1);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .td-formulario-comentarios textarea {
@@ -634,8 +637,14 @@ TABS RESPONSIVE (min-width: 700px)
       align-items: start;
    }
 
+   /* Escritorio: vuelve al orden original (próximo torneo arriba) */
    .td-sidebar {
-      order: 0;
+      display: block;
+      flex-direction: column;
+   }
+
+   .td-sidebar .proximo-torneo {
+      margin-bottom: 10%;
    }
 
    .info-principal {
@@ -675,7 +684,7 @@ TABS RESPONSIVE (min-width: 700px)
    background:
       radial-gradient(circle at 20% 20%, rgba(var(--color-primario-rgb), 0.13), transparent 28%),
       radial-gradient(circle at 85% 60%, rgba(var(--color-secundario-rgb), 0.1), transparent 30%),
-      #160b2d;
+      var(--fondo-superficie);
 }
 
 .seccion-participantes h3 {
@@ -700,7 +709,7 @@ TABS RESPONSIVE (min-width: 700px)
    position: relative;
    overflow: hidden;
    background: #000;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    box-shadow:
       0 0 26px rgba(var(--color-primario-rgb), 0.16),
       0 0 40px rgba(var(--color-secundario-rgb), 0.08);
@@ -812,18 +821,6 @@ TABS RESPONSIVE (min-width: 700px)
    margin-top: 90px;
 }
 
-.seccion-gradiente-titulo {
-   width: fit-content;
-   max-width: 100%;
-   margin: 0 auto 30px;
-   padding: 10px 20px;
-   font-size: 1.15rem;
-   font-weight: 700;
-   color: #fff;
-   text-align: center;
-   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
-   overflow-wrap: break-word;
-}
 
 .miembros-grilla {
    display: grid;
@@ -843,6 +840,7 @@ TABS RESPONSIVE (min-width: 700px)
    width: 100%;
    height: 170px;
    background: linear-gradient(var(--color-violeta), var(--fondo-principal));
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .miembro-foto {
@@ -886,12 +884,6 @@ TABS RESPONSIVE (min-width: 700px)
 
 @media (min-width: 700px) {
 
-   .seccion-gradiente-titulo {
-      font-size: 2rem;
-      padding: 10px 60px;
-      margin-bottom: 60px;
-      white-space: nowrap;
-   }
 
    .equipo-miembros {
       margin-top: 60px;
@@ -941,23 +933,11 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .ranking-tabla {
-   background: #061331;
+   background: var(--fondo-superficie);
    border-radius: 16px;
    overflow-x: auto;
    width: 100%;
    text-align: center;
-}
-
-.ranking-header {
-   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
-   text-align: center;
-   padding: 18px;
-}
-
-.ranking-header h2 {
-   font-size: 1.4rem;
-   font-weight: 800;
-   color: #fff;
 }
 
 .ranking-tabla table {
@@ -993,6 +973,7 @@ TABS RESPONSIVE (min-width: 700px)
    background: #10275c;
    font-size: 15px;
    font-weight: 700;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .ranking-row {
@@ -1001,6 +982,7 @@ TABS RESPONSIVE (min-width: 700px)
    background: #2d3956;
    border-radius: 60px;
    transition: .25s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .ranking-individual .ranking-head,
@@ -1046,7 +1028,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 .ranking-row > td {
    font-size: 14px;
-   color: white;
+   color: var(--texto-principal);
 }
 
 .ranking-puntos {
@@ -1063,9 +1045,6 @@ TABS RESPONSIVE (min-width: 700px)
       border-radius: 22px;
    }
 
-   .ranking-header h2 {
-      font-size: 2rem;
-   }
 
    .ranking-head,
    .ranking-row {
@@ -1127,8 +1106,8 @@ TABS RESPONSIVE (min-width: 700px)
 /* Contenedor del Árbol (Sin fondos invasivos de pantalla completa) */
 .bracket-container {
     width: 100%;
-    background-color: #0b071e;
-    background-image: radial-gradient(circle at 50% 50%, #1a0b36 0%, #05020c 100%);
+    background-color: var(--fondo-superficie);
+    background-image: radial-gradient(circle at 50% 50%, var(--fondo-superficie) 0%, var(--fondo-principal) 100%);
     padding: 20px 16px;
     text-align: center;
     border: 1px solid rgba(var(--color-secundario-rgb), 0.35);
@@ -1143,7 +1122,7 @@ TABS RESPONSIVE (min-width: 700px)
     font-size: 20px;
     font-weight: 800;
     letter-spacing: 1px;
-    color: #fff;
+    color: var(--texto-principal);
     margin-bottom: 5px;
 }
 
@@ -1189,7 +1168,8 @@ TABS RESPONSIVE (min-width: 700px)
       0 0 26px rgba(var(--color-primario-rgb), .45),
       0 0 42px rgba(var(--color-secundario-rgb), .25);
    border-radius: 4px;
-   animation: pulse 2s infinite alternate;   /* <-- AGREGAR esta línea */
+   animation: pulse 2s infinite alternate;   /* <-- AGREGAR esta línea */;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 @media (max-width: 950px) {
@@ -1243,7 +1223,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 .bracket-round h4,
 .final-match h4 {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 11px;
    letter-spacing: 1.5px;
    text-transform: uppercase;
@@ -1254,7 +1234,7 @@ TABS RESPONSIVE (min-width: 700px)
 .bracket-matchup {
    position: relative;
    width: 130px;
-   background: rgba(13, 10, 27, .95);
+   background: var(--fondo-superficie);
    border: 1px solid rgba(var(--color-primario-rgb), .45);
    border-radius: 6px;
    box-shadow: 0 0 16px rgba(var(--color-primario-rgb), .22);
@@ -1268,7 +1248,7 @@ TABS RESPONSIVE (min-width: 700px)
    align-items: center;
    gap: 6px;
    padding: 0 8px;
-   border-bottom: 1px solid rgba(255, 255, 255, .06);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.06);
 }
 
 .matchup-team:last-child {
@@ -1276,7 +1256,7 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .matchup-team span {
-   color: #d8caff;
+   color: var(--texto-suave);
    font-size: 10px;
    font-weight: 600;
    overflow: hidden;
@@ -1290,7 +1270,7 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .matchup-team.winner span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 800;
 }
 
@@ -1342,6 +1322,7 @@ TABS RESPONSIVE (min-width: 700px)
    box-shadow:
       0 0 26px rgba(var(--color-primario-rgb), .45),
       0 0 42px rgba(var(--color-secundario-rgb), .25);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .champion-box span {
@@ -1354,7 +1335,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 .champion-box strong {
    display: block;
-   color: #fff;
+   color: var(--texto-principal);
    font-size: 12px;
    margin-top: 5px;
 }
@@ -1452,7 +1433,7 @@ TABS RESPONSIVE (min-width: 700px)
 .contenido-streaming h2 {
    font-size: 26px;
    font-weight: 700;
-   color: #fff;
+   color: var(--texto-principal);
    margin-bottom: 20px;
 }
 
@@ -1465,9 +1446,9 @@ TABS RESPONSIVE (min-width: 700px)
 .redes-streaming a {
    width: 50px;
    height: 50px;
-   background: #0d0a1b;
-   border: 1px solid rgba(255,255,255,0.1);
-   color: #fff;
+   background: var(--fondo-superficie);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
+   color: var(--texto-principal);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -1475,6 +1456,7 @@ TABS RESPONSIVE (min-width: 700px)
    font-size: 18px;
    text-decoration: none;
    transition: 0.3s;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .redes-streaming a:hover {
@@ -1482,6 +1464,7 @@ TABS RESPONSIVE (min-width: 700px)
    border-color: var(--color-primario);
    box-shadow: 0 0 15px rgba(var(--color-primario-rgb), 0.5);
    transform: translateY(-3px);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .streaming-video-placeholder {
@@ -1511,6 +1494,7 @@ TABS RESPONSIVE (min-width: 700px)
    display: flex;
    align-items: center;
    gap: 8px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .live-badge i {
@@ -1552,12 +1536,12 @@ TABS RESPONSIVE (min-width: 700px)
    Desde 700px: caja en fila, formulario en fila.
    ========================================== */
 .newsletter-seccion {
-   background-color: #090714;
+   background-color: var(--fondo-principal);
    padding: 40px 6%;
 }
 
 .newsletter-caja {
-   background: linear-gradient(90deg, #131129 0%, #0d0a1b 100%);
+   background: linear-gradient(90deg, var(--fondo-superficie) 0%, var(--fondo-superficie) 100%);
    border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
    padding: 28px 22px;
    display: flex;
@@ -1571,7 +1555,7 @@ TABS RESPONSIVE (min-width: 700px)
 .newsletter-caja h3 {
    font-size: 20px;
    font-weight: 800;
-   color: #fff;
+   color: var(--texto-principal);
    letter-spacing: 1px;
 }
 
@@ -1585,15 +1569,16 @@ TABS RESPONSIVE (min-width: 700px)
 .newsletter-formulario input {
    width: 100%;
    min-width: 0;
-   background: #18152e;
-   border: 1px solid rgba(255,255,255,0.1);
+   background: var(--fondo-tarjeta);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
    padding: 14px 16px;
-   color: #fff;
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 14px;
    border-radius: 8px;
    outline: none;
    margin-bottom: 10px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .newsletter-formulario button {
@@ -1609,12 +1594,14 @@ TABS RESPONSIVE (min-width: 700px)
    letter-spacing: 1px;
    border-radius: 8px;
    transition: 0.3s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .newsletter-formulario button:hover {
    background: var(--color-primario);
    color: #fff;
    box-shadow: 0 0 15px rgba(var(--color-primario-rgb), 0.4);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 @media (min-width: 700px) {
@@ -1666,9 +1653,10 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .resultado-card {
-   background: rgba(255, 255, 255, 0.03);
+   background: rgba(var(--contraste-rgb), 0.03);
    border-radius: 12px;
    overflow: hidden;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 .resultado-cabecera {
@@ -1692,7 +1680,7 @@ TABS RESPONSIVE (min-width: 700px)
 .resultado-marcador {
    flex-shrink: 0;
    font-weight: 800;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.95rem;
 }
 
@@ -1706,7 +1694,7 @@ TABS RESPONSIVE (min-width: 700px)
 .resultado-detalles {
    display: none;
    padding: 0 16px 14px;
-   border-top: 1px solid rgba(255, 255, 255, 0.06);
+   border-top: 1px solid rgba(var(--contraste-rgb), 0.06);
 }
 
 .resultado-card.abierto .resultado-detalles {
@@ -1741,7 +1729,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 /* Tarjeta Dinámica de Enfrentamiento (Sólida) */
 .bracket-matchup {
-   background-color: #0d0a1b;
+   background-color: var(--fondo-superficie);
    border: 1px solid rgba(var(--color-primario-rgb), 0.3);
    border-radius: 8px;
    width: 100%;
@@ -1755,7 +1743,7 @@ TABS RESPONSIVE (min-width: 700px)
    align-items: center;
    justify-content: space-between;
    padding: 10px 14px;
-   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.04);
 }
 
 .matchup-team:last-child {
@@ -1770,7 +1758,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 /* Resaltado para el equipo ganador */
 .bracket-matchup.completed .matchup-team.winner span {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
 }
 
@@ -1797,14 +1785,14 @@ TABS RESPONSIVE (min-width: 700px)
 }
 
 .ronda-card {
-   background: rgba(255, 255, 255, 0.03);
+   background: rgba(var(--contraste-rgb), 0.03);
    border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
    border-radius: 12px;
    padding: 16px;
 }
 
 .ronda-card h4 {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.8rem;
    text-transform: uppercase;
    letter-spacing: 1px;
@@ -1817,7 +1805,7 @@ TABS RESPONSIVE (min-width: 700px)
    justify-content: space-between;
    gap: 10px;
    padding: 8px 0;
-   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.06);
    font-size: 0.85rem;
 }
 
@@ -1854,7 +1842,7 @@ TABS RESPONSIVE (min-width: 700px)
 .league-table {
    width: 100%;
    border-collapse: collapse;
-   background-color: #0d0a1b;
+   background-color: var(--fondo-superficie);
    border-radius: 8px;
    overflow: hidden;
    border: 1px solid rgba(var(--color-secundario-rgb), 0.2);
@@ -1868,13 +1856,13 @@ TABS RESPONSIVE (min-width: 700px)
 
 .league-table th {
    background-color: rgba(var(--color-primario-rgb), 0.08);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-transform: uppercase;
    letter-spacing: 1px;
 }
 
 .league-table tr {
-   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.04);
 }
 
 .league-table tr:hover {
@@ -1902,7 +1890,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 
 .proximo-torneo {
-   background: #111;
+   background: var(--fondo-superficie);
    border-radius: 10px;
    margin-bottom: 10%;
 }
@@ -1911,6 +1899,7 @@ TABS RESPONSIVE (min-width: 700px)
    padding: 18px;
    text-align: center;
    background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .proximo-torneo img {
@@ -1927,7 +1916,7 @@ TABS RESPONSIVE (min-width: 700px)
 
 .perfil-organizador {
    padding: 26px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 10px;
 }
 
@@ -1953,7 +1942,7 @@ TABS RESPONSIVE (min-width: 700px)
    margin: 0 auto;
    aspect-ratio: 1 / 1;
    border-radius: 22px;
-   background: #111 no-repeat center/cover;
+   background: var(--fondo-superficie) no-repeat center/cover;
    overflow: hidden;
    border: 3px solid rgba(var(--color-azul-rgb), 0.45);
 }
@@ -2003,6 +1992,7 @@ TABS RESPONSIVE (min-width: 700px)
    background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
    border: none;
    color: var(--texto-principal);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .perfil-boton-primario:hover {
@@ -2016,7 +2006,7 @@ TABS RESPONSIVE (min-width: 700px)
    gap: 8px;
    border: 1px solid rgba(var(--color-violeta-rgb), 0.72);
    background: rgba(var(--fondo-principal), 0.06);
-   color: #f4f7ff;
+   color: var(--texto-principal);
 }
 
 .perfil-boton-secundario:hover {
@@ -2130,11 +2120,12 @@ TABS RESPONSIVE (min-width: 700px)
    font-weight: 700;
    text-decoration: none;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .td-boton-inscripcion--cerrado {
-   background: rgba(255, 255, 255, 0.15);
-   color: rgba(255, 255, 255, 0.7);
+   background: rgba(var(--contraste-rgb), 0.15);
+   color: var(--texto-principal);
    cursor: not-allowed;
 }
 
@@ -2146,11 +2137,11 @@ TABS RESPONSIVE (min-width: 700px)
    width: min(420px, 90vw);
    height: fit-content;
    padding: 28px;
-   border: 1px solid rgba(255, 255, 255, 0.12);
+   border: 1px solid rgba(var(--contraste-rgb), 0.12);
    border-radius: 12px;
-   background: #101010;
+   background: var(--fondo-superficie);
    color: var(--texto-principal);
-   color-scheme: dark;
+   color-scheme: inherit;
    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
 }
 
@@ -2173,11 +2164,12 @@ TABS RESPONSIVE (min-width: 700px)
    width: 100%;
    margin-bottom: 18px;
    padding: 10px 12px;
-   border: 1px solid rgba(255, 255, 255, 0.16);
+   border: 1px solid rgba(var(--contraste-rgb), 0.16);
    border-radius: 8px;
-   background: #1d1d33;
-   color: #fff;
+   background: var(--fondo-tarjeta);
+   color: var(--texto-principal);
    font-family: inherit;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .td-modal select:focus {
@@ -2200,6 +2192,7 @@ TABS RESPONSIVE (min-width: 700px)
    font-family: inherit;
    font-weight: 700;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .td-modal-cancelar {
@@ -2232,7 +2225,7 @@ TABS RESPONSIVE (min-width: 700px)
 .participantes-tarjeta--seleccionable.seleccionado { border-color: #00FFEE; }
 
 .participantes-info h3 a { color: inherit; text-decoration: none; }
-.participantes-info h3 a:hover { text-decoration: underline; color: #00FFEE; }
+.participantes-info h3 a:hover { text-decoration: underline; color: var(--color-secundario-texto); }
 
 .enlace-jugador { display: block; color: inherit; text-decoration: none; }
 
@@ -2255,27 +2248,46 @@ TABS RESPONSIVE (min-width: 700px)
    align-items: center;
    justify-content: center;
    border-radius: 50%;
-   border: 1px solid rgba(255, 255, 255, 0.35);
+   border: 1px solid rgba(var(--contraste-rgb), 0.35);
    background: rgba(0, 0, 0, 0.4);
-   color: #fff;
+   color: var(--texto-principal);
    font-size: 18px;
    cursor: pointer;
    transition: background 0.2s, transform 0.2s;
 }
 
 .boton-guardar-torneo:hover {
-   background: rgba(255, 255, 255, 0.15);
+   background: rgba(var(--contraste-rgb), 0.15);
    transform: scale(1.08);
 }
 
 .boton-guardar-torneo.guardado {
    background: var(--color-primario);
    border-color: var(--color-primario);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
+
+/* Espaciado propio de esta pantalla para el título .seccion-gradiente-titulo
+   (el estilo base está en componentes/titulos.css) */
+.seccion-gradiente-titulo {
+   width: 100%;
+   max-width: 100%;
+   margin-bottom: 30px;
+}
+
+@media (min-width: 700px) {
+   .seccion-gradiente-titulo {
+      margin-bottom: 60px;
+   }
+}
+
+/* Mensajes del formulario del boletin (exito / error) */
 .newsletter-mensaje {
    font-size: 14px;
    font-weight: 600;
    line-height: 1.5;
+   margin-top: 12px;
+   text-align: center;
 }
 
 .newsletter-mensaje--exito {

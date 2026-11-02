@@ -23,6 +23,7 @@
          var(--color-violeta)
       );
    border: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-gestion {
@@ -30,4 +31,125 @@
    font-weight: 800;
    background: linear-gradient(90deg, var(--color-secundario), #097AEC);
    border: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+
+/* ---------- Variantes ---------- */
+
+/* "Ver más" / "Cargar más": violeta sólido con brillo al pasar el mouse */
+.boton--ver-mas {
+   color: #fff;
+   background: var(--color-violeta);
+   border: 0;
+   font-weight: 600;
+   padding: 0.7rem 1.9rem;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+.boton--ver-mas:hover {
+   background: #8a00d0;
+   box-shadow: 0 8px 22px rgba(var(--color-violeta-rgb), 0.55);
+   transform: translateY(-1px);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+/* Secundario: solo borde, para acciones menos importantes */
+.boton--secundario {
+   color: var(--texto-principal);
+   background: transparent;
+   border: 1px solid var(--borde-suave);
+}
+
+.boton--secundario:hover {
+   border-color: var(--color-violeta);
+   color: var(--color-violeta);
+}
+
+/* Peligro: eliminar, cancelar, quitar */
+.boton--peligro {
+   color: #fff;
+   background: #c62828;
+   border: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+.boton--peligro:hover {
+   background: #e53935;
+   box-shadow: 0 8px 22px rgba(229, 57, 53, 0.35);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+/* Foco visible para teclado */
+.boton:focus-visible {
+   outline: 2px solid var(--color-secundario);
+   outline-offset: 2px;
+}
+
+.boton:disabled,
+.boton[aria-disabled="true"] {
+   opacity: 0.5;
+   cursor: not-allowed;
+   pointer-events: none;
+}
+
+
+/* ---------- Botón de filtro (chips de Todos / eSports / ...) ---------- */
+/* Se usa en los paneles de filtros de torneos y juegos.
+   El botón marcado con la clase "active" es el filtro elegido. */
+
+.boton-filtro {
+   display: inline-block;
+   text-decoration: none;          /* también se usa en enlaces <a> */
+   border: none;
+   background: transparent;
+   color: #2102d1;
+   font-family: inherit;
+   font-size: 14px;
+   white-space: nowrap;
+   padding: 10px 12px;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: 0.3s ease;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.boton-filtro.active,
+.boton-filtro:hover {
+   background: var(--color-violeta);
+   color: #fefdff;
+   box-shadow: none;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+.boton-filtro:focus-visible {
+   outline: 2px solid var(--color-violeta);
+   outline-offset: 2px;
+}
+
+@media (min-width: 900px) {
+   .boton-filtro {
+      font-size: 16px;
+      padding: 12px;
+   }
+}
+
+
+/* Contenedor centrado para el botón "Ver más" debajo de una lista */
+.ver-mas-contenedor {
+   margin-top: 28px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+/* Para paneles con fondo oscuro (el azul de .boton-filtro es para fondo claro) */
+.boton-filtro--oscuro {
+   color: var(--texto-secundario);
+   border: 1px solid var(--borde-suave);
+}
+
+.boton-filtro--oscuro.active,
+.boton-filtro--oscuro:hover {
+   border-color: var(--color-violeta);
 }

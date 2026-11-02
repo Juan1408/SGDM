@@ -62,16 +62,17 @@
    box-shadow:
       0 0 25px rgba(0, 255, 238, 0.45),
       0 0 45px rgba(245, 17, 203, 0.25);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .vertical-carousel-body {
    width: 100%;
    min-height: 122px;
-   background: rgba(22, 22, 45, 0.92);
+   background: color-mix(in srgb, var(--fondo-tarjeta) 92%, transparent);
    border: 1px solid rgba(245, 17, 203, 0.35);
    border-radius: 18px;
    padding: 22px 24px 22px 78px;
-   color: #fff;
+   color: var(--texto-principal);
    box-shadow:
       0 0 26px rgba(245, 17, 203, 0.18),
       inset 0 0 24px rgba(0, 255, 238, 0.04);
@@ -82,13 +83,13 @@
    text-transform: uppercase;
    font-size: 20px;
    font-weight: 800;
-   color: #00FFEE;
+   color: var(--color-secundario-texto);
    margin-bottom: 8px;
    letter-spacing: 1px;
 }
 
 .vertical-carousel-body p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
    line-height: 1.6;
    font-size: 15px;
 }

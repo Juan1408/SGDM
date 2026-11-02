@@ -112,6 +112,7 @@
 .boton-aceptar-solicitud {
    background: linear-gradient(90deg, #30f5d2, #0aa88e);
    color: #06170f;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-aceptar-solicitud:hover {
@@ -126,4 +127,57 @@
 
 .boton-rechazar-solicitud:hover {
    background: rgba(255, 80, 80, 0.1);
+}
+
+/* ---------- Secciones y solicitudes enviadas ---------- */
+
+.solicitudes-subtitulo {
+   font-size: 1.1rem;
+   font-weight: 700;
+   margin-bottom: 4px;
+}
+
+.solicitudes-ayuda {
+   font-size: 0.8rem;
+   color: var(--texto-secundario);
+   margin-bottom: 14px;
+}
+
+.solicitud-enlace-equipo {
+   color: inherit;
+   text-decoration: none;
+}
+
+.solicitud-enlace-equipo:hover {
+   color: var(--color-violeta);
+}
+
+.solicitud-estado {
+   display: inline-flex;
+   align-items: center;
+   padding: 6px 12px;
+   border-radius: 999px;
+   font-size: 0.72rem;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.solicitud-estado--pendiente {
+   background: rgba(255, 193, 7, 0.15);
+   color: #ffc107;
+}
+
+.solicitud-estado--aprobado {
+   background: rgba(48, 245, 210, 0.15);
+   color: var(--color-secundario-texto);
+}
+
+.solicitud-estado--rechazado {
+   background: rgba(255, 80, 80, 0.15);
+   color: #ff8080;
+}
+
+.solicitud-estado--cancelado {
+   background: rgba(var(--contraste-rgb), 0.1);
+   color: var(--texto-secundario);
 }

@@ -20,6 +20,13 @@
    overflow: hidden;
 }
 
+/* Titulo con el degradado de titulos.css: ocupa todo el ancho, arriba de las dos columnas */
+.contacto-titulo {
+   grid-column: 1 / -1;
+   width: 100%;
+   margin-bottom: 0;
+}
+
 .section-tag {
    display: inline-block;
    background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
@@ -29,6 +36,7 @@
    letter-spacing: 3px;
    margin-bottom: 25px;
    box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.35);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .contacto-info h1 {
@@ -41,7 +49,7 @@
 .contacto-info h1 span {
    display: block;
    color: transparent;
-   -webkit-text-stroke: 1px #fff;
+   -webkit-text-stroke: 1px var(--texto-principal);
 }
 
 .contacto-item {
@@ -56,14 +64,14 @@
    height: 56px;
    flex-shrink: 0;
    border: 1px solid rgba(var(--color-secundario-rgb), 0.45);
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
    display: flex;
    align-items: center;
    justify-content: center;
 }
 
 .contacto-icon i {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 22px;
 }
 
@@ -73,7 +81,7 @@
 }
 
 .contacto-item p {
-   color: #c9c9dc;
+   color: var(--texto-suave);
 }
 
 .contacto-formulario {
@@ -86,7 +94,7 @@
 .contacto-formulario textarea {
    width: 100%;
    min-width: 0;
-   background: rgba(22, 22, 45, 0.75);
+   background: color-mix(in srgb, var(--fondo-tarjeta) 75%, transparent);
    border: 1px solid rgba(var(--color-primario-rgb), 0.25);
    outline: none;
    color: var(--texto-principal);
@@ -95,6 +103,7 @@
    font-size: 15px;
    backdrop-filter: blur(14px);
    box-shadow: 0 0 22px rgba(var(--color-primario-rgb), 0.1);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .contacto-formulario textarea {
@@ -112,6 +121,38 @@
    background: linear-gradient(90deg, var(--color-secundario), #097AEC);
    box-shadow: 0 0 24px rgba(var(--color-secundario-rgb), 0.35);
    transition: 0.3s ease;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
+}
+
+/* Campo trampa anti-bots: fuera de pantalla, no usar display:none (algunos bots lo ignoran) */
+.contacto-trampa {
+   position: absolute !important;
+   left: -9999px !important;
+   width: 1px !important;
+   height: 1px !important;
+   opacity: 0 !important;
+   pointer-events: none !important;
+}
+
+.contacto-mensaje {
+   margin: 0;
+   padding: 12px 16px;
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 1.5;
+   border: 1px solid transparent;
+}
+
+.contacto-mensaje--exito {
+   color: var(--texto-ok, #4ade80);
+   border-color: var(--texto-ok, #4ade80);
+   background: color-mix(in srgb, var(--texto-ok, #4ade80) 10%, transparent);
+}
+
+.contacto-mensaje--error {
+   color: var(--texto-error, #f87171);
+   border-color: var(--texto-error, #f87171);
+   background: color-mix(in srgb, var(--texto-error, #f87171) 10%, transparent);
 }
 
 .contacto-formulario button:hover {
@@ -133,19 +174,21 @@
    width: 40px;
    height: 40px;
    border: 1px solid rgba(var(--color-secundario-rgb), 0.45);
-   background: rgba(255, 255, 255, 0.06);
-   color: var(--color-secundario);
+   background: rgba(var(--contraste-rgb), 0.06);
+   color: var(--color-secundario-texto);
    display: flex;
    align-items: center;
    justify-content: center;
    text-decoration: none;
    font-size: 16px;
    transition: 0.25s ease;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .contacto-redes a:hover {
    background: var(--color-secundario);
    color: #07101c;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 /* =========================
@@ -213,35 +256,4 @@
    .contacto-mapa {
       height: 420px;
    }
-}
-
-/* Campo trampa anti-bots: fuera de pantalla (no display:none, algunos bots lo ignoran) */
-.contacto-trampa {
-   position: absolute !important;
-   left: -9999px !important;
-   width: 1px !important;
-   height: 1px !important;
-   opacity: 0 !important;
-   pointer-events: none !important;
-}
-
-.contacto-mensaje {
-   margin: 0;
-   padding: 12px 16px;
-   font-size: 14px;
-   font-weight: 600;
-   line-height: 1.5;
-   border: 1px solid transparent;
-}
-
-.contacto-mensaje--exito {
-   color: var(--texto-ok, #4ade80);
-   border-color: var(--texto-ok, #4ade80);
-   background: rgba(74, 222, 128, 0.1);
-}
-
-.contacto-mensaje--error {
-   color: var(--texto-error, #f87171);
-   border-color: var(--texto-error, #f87171);
-   background: rgba(248, 113, 113, 0.1);
 }

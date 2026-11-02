@@ -19,7 +19,7 @@
 }
 
 .chip-exito {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    background: rgba(0, 255, 238, 0.13);
 }
 

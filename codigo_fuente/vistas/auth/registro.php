@@ -19,6 +19,7 @@ $requisitosContrasena = \App\Modelos\PoliticaContrasena::describirRequisitos($po
 
    <!-- CSS -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/login.css">
 
    <!-- Font Awesome -->

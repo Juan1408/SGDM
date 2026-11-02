@@ -7,7 +7,10 @@
    <title>ASCEND</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/titulos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/detalle-torneo.css">
@@ -133,12 +136,12 @@
 
          <div class="td-hero-contenido td-hero-contenido--solo">            
              <?php if (!empty($_SESSION['mensaje_exito'])): ?>
-                <div class="alerta alerta-exito" style="background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #86efac; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <div class="alerta alerta-exito" style="background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: var(--texto-ok, #86efac); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
                    <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($_SESSION['mensaje_exito']); unset($_SESSION['mensaje_exito']); ?>
                 </div>
              <?php endif; ?>
              <?php if (!empty($_SESSION['mensaje_error'])): ?>
-                <div class="alerta alerta-error" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <div class="alerta alerta-error" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: var(--texto-error, #fca5a5); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem;">
                    <i class="fa-solid fa-triangle-exclamation"></i> <?php echo htmlspecialchars($_SESSION['mensaje_error']); unset($_SESSION['mensaje_error']); ?>
                 </div>
              <?php endif; ?>
@@ -180,7 +183,7 @@
                         <?php if ($miInscripcion['tipo'] === 'equipo'): ?>
                            <input type="hidden" name="equipo_id" value="<?php echo (int) $miInscripcion['referencia_id']; ?>">
                         <?php endif; ?>
-                        <button type="submit" class="td-boton-inscripcion" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; cursor: pointer; padding: 6px 14px; font-size: 0.9rem;">
+                        <button type="submit" class="td-boton-inscripcion" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: var(--texto-error, #fca5a5); cursor: pointer; padding: 6px 14px; font-size: 0.9rem;">
                            <i class="fa-solid fa-ban"></i> Retirar solicitud
                         </button>
                      </form>
@@ -266,10 +269,6 @@
             <button data-tab="encuentros">Encuentros</button>
             <button data-tab="bracket">Brackets</button>
             <button data-tab="resultados">Resultados</button>
-         </div>
-
-         <div class="td-search">
-            <input type="text" placeholder="Buscar torneo">
          </div>
       </section>
 
@@ -441,7 +440,6 @@
                      </div>
                      <div class="perfil-organizador-label"><?php echo htmlspecialchars($torneo['nombre_organizador']); ?></div>
                         <div class="perfil-organizador-actions perfil-organizador-actions--centered">
-                        <button class="perfil-boton-primario">Seguir</button>
                            <a href="<?php echo URL_BASE; ?>index.php?c=perfil&a=organizador&id=<?php echo (int) $torneo['organizador_id']; ?>" class="perfil-boton-secundario">Ver perfil</a>
                      </div>
                   </div>
@@ -462,7 +460,7 @@
 
                <!-- ======= MODALIDAD EQUIPOS: lista de equipos + miembros del equipo elegido ======= -->
                <section class="seccion-participantes">
-                  <h2 id="titulo-participantes">Equipos que participan</h2>
+                  <h2 id="titulo-participantes" class="seccion-gradiente-titulo">Equipos que participan</h2>
 
                   <?php if (empty($participantes)): ?>
                      <p>Todavía no hay participantes confirmados.</p>
@@ -494,9 +492,7 @@
 
                      <?php if (count($participantes) > 3): ?>
                         <div class="ver-mas-miembros">
-                           <button type="button" data-cargar-mas="participantes-grid" data-paso="3" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
-       transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
+                           <button type="button" data-cargar-mas="participantes-grid" data-paso="3" class="boton boton--ver-mas">Cargar más</button>
                         </div>
                      <?php endif; ?>
                   <?php endif; ?>
@@ -544,9 +540,7 @@
 
                <section class="ranking-equipo">
 
-                  <div class="ranking-header">
-                     <h2 id="titulo-ranking">Rankings del Equipo</h2>
-                  </div>
+                  <h2 id="titulo-ranking" class="seccion-gradiente-titulo">Rankings del Equipo</h2>
 
                   <div class="ranking-tabla" id="ranking-tabla-contenedor">
 
@@ -596,9 +590,7 @@
 
                      <?php if (count($participantes) > 8): ?>
                         <div class="ver-mas-miembros">
-                           <button type="button" data-cargar-mas="jugadores-grid" data-paso="8" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
-       transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
+                           <button type="button" data-cargar-mas="jugadores-grid" data-paso="8" class="boton boton--ver-mas">Cargar más</button>
                         </div>
                      <?php endif; ?>
                   <?php endif; ?>
@@ -740,9 +732,7 @@
 
                <?php if (count($proximos) > 5): ?>
                <div class="ver-mas-miembros">
-                  <button type="button" id="proximos-cargar-mas" class="cursor-pointer bg-violet-500 rounded-md text-white font-semibold 
-       transition duration-300 ease-in-out hover:bg-violet-700 hover:ring-2 hover:ring-violet-800 
-       hover:shadow-xl hover:shadow-violet-500 focus:ring-violet-300 focus:shadow-violet-400 px-5 py-2">Cargar más</button>
+                  <button type="button" id="proximos-cargar-mas" class="boton boton--ver-mas">Cargar más</button>
                </div>
                <script>
                   (function () {
@@ -926,10 +916,10 @@
                         <tbody>
                            <?php foreach ($posiciones as $indice => $fila): ?>
                               <tr>
-                                 <td style="color: #00f0ff; font-weight: bold;"><?php echo $indice + 1; ?></td>
+                                 <td style="color: var(--color-secundario-texto, #00f0ff); font-weight: bold;"><?php echo $indice + 1; ?></td>
                                  <td style="font-weight: 600;"><?php echo htmlspecialchars($fila['nombre']); ?></td>
                                  <td><?php echo (int) $fila['partidos_jugados']; ?></td>
-                                 <td style="color: #30f5d2;"><?php echo (int) $fila['partidos_ganados']; ?></td>
+                                 <td style="color: var(--color-secundario-texto, #30f5d2);"><?php echo (int) $fila['partidos_ganados']; ?></td>
                                  <td><?php echo (int) $fila['partidos_empatados']; ?></td>
                                  <td style="color: #ff00c8;"><?php echo (int) $fila['partidos_perdidos']; ?></td>
                                  <td style="font-weight: bold; color: #b03eff;"><?php echo $numeroMarcador($fila['puntos']); ?></td>

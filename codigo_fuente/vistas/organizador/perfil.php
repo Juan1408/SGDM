@@ -10,6 +10,7 @@ $escapar = static fn($valor): string => htmlspecialchars((string) $valor, ENT_QU
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCEND | Mi perfil</title>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+    <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">
@@ -43,9 +44,10 @@ $escapar = static fn($valor): string => htmlspecialchars((string) $valor, ENT_QU
             padding: .7rem;
             border: 1px solid var(--borde-suave);
             border-radius: var(--radio-md);
-            background: rgba(255, 255, 255, .04);
-            color: #fff;
+            background: rgba(var(--contraste-rgb), 0.04);
+            color: var(--texto-principal);
             font: inherit;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
         }
 
         .perfil-formulario textarea {

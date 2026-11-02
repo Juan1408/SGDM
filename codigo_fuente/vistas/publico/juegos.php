@@ -7,7 +7,10 @@
    <title>ASCEND - Juegos</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -47,7 +50,7 @@
       <div class="hero-overlay"></div>
 
       <div class="hero-contenido">
-         <p class="hero-subtitulo">Sistema de Gestión de Deportes y eSports</p>
+         <p class="hero-subtitulo efecto-glitch">Sistema de Gestión de Deportes y eSports</p>
          <h1>Descubrí <br>Nuestros Juegos<br></h1>
          <p class="hero-descripcion">
             Explorá todas las disciplinas disponibles en ASCEND: eSports, juegos de mesa
@@ -68,10 +71,10 @@
          <div class="top-fila">
 
             <ul class="chips-contenedor">
-               <li><button class="chip active" data-categoria="todos">Todos</button></li>
-               <li><button class="chip" data-categoria="esports">eSports</button></li>
-               <li><button class="chip" data-categoria="tradicionales">Tradicionales</button></li>
-               <li><button class="chip" data-categoria="mentales">Mentales</button></li>
+               <li><button class="boton-filtro active" data-categoria="todos">Todos</button></li>
+               <li><button class="boton-filtro" data-categoria="esports">eSports</button></li>
+               <li><button class="boton-filtro" data-categoria="tradicionales">Tradicionales</button></li>
+               <li><button class="boton-filtro" data-categoria="mentales">Mentales</button></li>
             </ul>
 
             <div class="buscador">
@@ -164,6 +167,7 @@
 
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
    <script src="<?php echo URL_BASE; ?>js/juegos.js"></script>

@@ -38,7 +38,7 @@ try {
       background: transparent;
       border: none;
       cursor: pointer;
-      color: #fff;
+      color: var(--texto-principal);
       font-size: 34px;
       padding: 0;
    }
@@ -159,6 +159,7 @@ try {
    </div>
 
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-user"></i> Mi Perfil</a>
+   <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=editarPerfil"><i class="fa-solid fa-pen"></i> Editar perfil</a>
    <a href="<?php echo URL_BASE; ?>index.php?c=panelJugador&a=perfil"><i class="fa-solid fa-gear"></i> Configuración</a>
 
    <div class="etiqueta-seccion">Mi actividad</div>
@@ -291,4 +292,5 @@ try {
       }
    });
 </script>
-<script src="<?php echo URL_BASE; ?>js/sidebar-riel.js"></script>
+<script src="<?php echo URL_BASE; ?>js/sidebar-riel.js"></script>
+<script src="<?php echo URL_BASE; ?>js/ui-global.js"></script>

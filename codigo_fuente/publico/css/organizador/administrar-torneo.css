@@ -62,7 +62,7 @@
 }
 
 .back-link:hover {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 /* ============================
@@ -87,7 +87,7 @@
 }
 
 .torneo-header-label {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
    letter-spacing: 1.5px;
    font-size: .75rem;
@@ -116,7 +116,7 @@
 }
 
 .estado.abierta {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .estado.curso {
@@ -162,12 +162,12 @@
 }
 
 .torneo-menu-boton:hover {
-   color: #fff;
+   color: var(--texto-principal);
    border-color: var(--color-secundario);
 }
 
 .torneo-menu-boton.active {
-   color: #fff;
+   color: var(--texto-principal);
    background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
 }
@@ -235,17 +235,20 @@
    text-align: left;
    cursor: pointer;
    transition: var(--transicion);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .torneo-menu-submenu button:hover {
-   color: #fff;
+   color: var(--texto-principal);
    background: rgba(0, 255, 238, .08);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .torneo-menu-submenu button.active {
-   color: #fff;
+   color: var(--texto-principal);
    background: rgba(245, 17, 203, .1);
    border-color: var(--color-primario);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .torneo-menu-lista {
@@ -298,8 +301,8 @@
 .information-card {
    min-width: 0;
    padding: .9rem;
-   background: rgba(255, 255, 255, .03);
-   border: 1px solid rgba(255, 255, 255, .06);
+   background: rgba(var(--contraste-rgb), 0.03);
+   border: 1px solid rgba(var(--contraste-rgb), 0.06);
    border-radius: var(--radio-md);
 }
 
@@ -322,13 +325,13 @@
 .tournament-description strong {
    display: block;
    margin-bottom: .4rem;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: .85rem;
 }
 
 .tournament-description p {
    font-size: .88rem;
-   color: #d8d8e5;
+   color: var(--texto-suave);
    line-height: 1.5;
    overflow-wrap: break-word;
 }

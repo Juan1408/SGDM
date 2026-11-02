@@ -9,10 +9,13 @@
    <title>ASCEND - Contacto</title>
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
+   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/titulos.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/contacto.css">
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -52,7 +55,7 @@
          <div class="hero-overlay"></div>
 
          <div class="hero-contenido">
-            <p class="hero-subtitulo">Sistema de Gestión de Deportes y eSports</p>
+            <p class="hero-subtitulo efecto-glitch">Sistema de Gestión de Deportes y eSports</p>
             <h1>Organiza y <br>Gestiona Torneos<br></h1>
             <p class="hero-descripcion">
                Administra competiciones, rankings, participantes y resultados
@@ -79,13 +82,9 @@
       <!-------------------------------------->
 
       <section class="contacto reveal">
-         <div class="contacto-info">
-            <span class="section-tag">CONTACTO ASCEND</span>
+         <h2 class="seccion-gradiente-titulo contacto-titulo">Contactanos y conocé nuestro equipo</h2>
 
-            <h1>
-               Contactanos y conocé
-               <span>nuestro equipo</span>
-            </h1>
+         <div class="contacto-info">
 
             <address class="contacto-item">
                <div class="contacto-icon">
@@ -103,7 +102,7 @@
                </div>
                <div>
                   <h2>Contacto</h2>
-                  <p>arena.core@torneos.com</p>
+                  <p>charrua.code@ascend.com</p>
                </div>
             </address>
 
@@ -174,6 +173,7 @@
 
    <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
    <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+   <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
    <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
    <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
 

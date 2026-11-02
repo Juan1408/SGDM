@@ -54,7 +54,9 @@ $imprimirTabla = function (array $lista, string $columnaNombre) use ($iniciales,
   
   <!-- CSS -->
   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+  <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
+  <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/efectos.css">
   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/navbar.css">
   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/publico/home.css">
   <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/layouts/footer.css">
@@ -105,7 +107,7 @@ $imprimirTabla = function (array $lista, string $columnaNombre) use ($iniciales,
 
       <div class="hero-contenido">
 
-        <p class="hero-subtitulo">
+        <p class="hero-subtitulo efecto-glitch">
           Sistema de Gestión de Deportes y eSports
         </p>
 
@@ -275,6 +277,7 @@ $imprimirTabla = function (array $lista, string $columnaNombre) use ($iniciales,
 
   <script src="<?php echo URL_BASE; ?>js/navbar.js"></script>
   <script>document.dispatchEvent(new Event("navbarPublicoListo"));</script>
+  <script src="<?php echo URL_BASE; ?>js/efecto-glitch.js"></script>
   <script src="<?php echo URL_BASE; ?>js/hero-slider.js"></script>
   <script src="<?php echo URL_BASE; ?>js/scroll-reveal.js"></script>
   <script src="<?php echo URL_BASE; ?>js/featured-games.js"></script>

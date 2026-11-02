@@ -10,6 +10,7 @@
 
    <!-- Layout compartido de organizador -->
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">
@@ -44,7 +45,7 @@
    ];
    ?>
 
-   <main class="dashboard-organizador">
+   <main class="dashboard-organizador dashboard-inicio">
 
       <header class="dashboard-header">
          <div>

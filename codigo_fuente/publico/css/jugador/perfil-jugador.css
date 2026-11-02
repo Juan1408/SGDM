@@ -13,8 +13,8 @@
 }
 
 .equipo-pagina {
-   background: #030205;
-   color: #fff;
+   background: var(--fondo-principal);
+   color: var(--texto-principal);
    font-family: 'Poppins', sans-serif;
    padding-top: 80px; /* alto del navbar fijo */
    padding-bottom: 40px;
@@ -28,7 +28,6 @@
 .torneos-organiza-grilla,
 .mis-equipos-grid,
 .juegos-grillas,
-.seccion-gradiente-titulo,
 .trofeos-fila,
 .logros-grilla {
    width: 92%;
@@ -40,7 +39,7 @@
 .tarjeta-equipo {
    margin-top: 24px;
    padding: 24px 20px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 20px;
 }
 
@@ -105,6 +104,7 @@
    background-origin: border-box;
    background-clip: content-box, border-box;
    z-index: 2;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .equipo-logo img {
@@ -120,7 +120,7 @@
    padding: 5px 14px;
    border-radius: 999px;
    background: rgba(var(--color-secundario-rgb), 0.12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.75rem;
    font-weight: 700;
 }
@@ -133,7 +133,7 @@
 
 .equipo-descripcion {
    font-size: 0.9rem;
-   color: #d8d8e0;
+   color: var(--texto-suave);
    line-height: 1.6;
    margin-bottom: 18px;
 }
@@ -145,7 +145,7 @@
    gap: 10px;
    margin-bottom: 20px;
    padding-bottom: 18px;
-   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.1);
 }
 
 .equipo-dato {
@@ -153,11 +153,11 @@
    align-items: center;
    gap: 8px;
    font-size: 0.85rem;
-   color: #eee;
+   color: var(--texto-suave);
 }
 
 .equipo-dato i {
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .equipo-estadisticas {
@@ -180,6 +180,7 @@
    padding: 14px 10px;
    border-radius: 12px;
    background: linear-gradient(180deg, #52228e, #170928);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-estadistica dd {
@@ -190,7 +191,7 @@
 
 .tarjeta-estadistica dt {
    font-size: 0.85rem;
-   color: #e4e0f0;
+   color: var(--texto-suave);
 }
 
 @media (min-width: 900px) {
@@ -267,9 +268,9 @@
    display: inline-flex;
    align-items: center;
    gap: 8px;
-   background: rgba(255, 255, 255, 0.08);
+   background: rgba(var(--contraste-rgb), 0.08);
    border: 1px solid rgba(48, 245, 210, 0.45);
-   color: #fff;
+   color: var(--texto-principal);
    padding: 10px 18px;
    border-radius: 999px;
    font-size: 14px;
@@ -294,8 +295,8 @@
    align-items: center;
    gap: 6px;
    background: transparent;
-   border: 1px solid rgba(255, 255, 255, 0.25);
-   color: #c7c7d8;
+   border: 1px solid rgba(var(--contraste-rgb), 0.25);
+   color: var(--texto-suave);
    padding: 10px 18px;
    border-radius: 999px;
    font-size: 14px;
@@ -329,15 +330,17 @@
    background: rgba(0, 0, 0, 0.6);
    border: 2px solid #30f5d2;
    border-radius: 50%;
-   color: #fff;
+   color: var(--texto-principal);
    font-size: 13px;
    cursor: pointer;
    z-index: 6;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .boton-cambiar-avatar:hover {
    background: #30f5d2;
    color: #06070d;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-cambiar-banner {
@@ -348,8 +351,8 @@
    align-items: center;
    gap: 8px;
    background: rgba(0, 0, 0, 0.55);
-   border: 1px solid rgba(255, 255, 255, 0.25);
-   color: #fff;
+   border: 1px solid rgba(var(--contraste-rgb), 0.25);
+   color: var(--texto-principal);
    padding: 8px 16px;
    border-radius: 999px;
    font-size: 13px;
@@ -377,7 +380,7 @@
 
 .perfil-organizador-cta-texto {
    font-size: 0.9rem;
-   color: #d8d8e0;
+   color: var(--texto-suave);
 }
 
 .perfil-redes {
@@ -389,17 +392,18 @@
    width: 40px;
    height: 40px;
    border-radius: 10px;
-   background: #1a1a1a;
-   color: #fff;
+   background: var(--fondo-tarjeta);
+   color: var(--texto-principal);
    display: flex;
    align-items: center;
    justify-content: center;
    text-decoration: none;
    transition: 0.25s ease;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .perfil-redes a:hover {
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
    box-shadow: 0 0 18px rgba(48, 245, 210, 0.35);
 }
 
@@ -419,34 +423,6 @@
    margin-top: 40px;
 }
 
-.seccion-gradiente-titulo {
-   width: fit-content;
-   max-width: 92%;
-   margin-left: auto;
-   margin-right: auto;
-   margin-bottom: 24px;
-   padding: 10px 24px;
-   font-size: 1.3rem;
-   font-weight: 700;
-   color: #fff;
-   text-align: center;
-   background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
-   overflow-wrap: break-word;
-}
-
-@media (min-width: 650px) {
-   .seccion-gradiente-titulo {
-      font-size: 1.7rem;
-      padding: 10px 40px;
-   }
-}
-
-@media (min-width: 900px) {
-   .seccion-gradiente-titulo {
-      font-size: 2rem;
-      padding: 10px 60px;
-   }
-}
 
 /* =========================================================
    EQUIPOS — reutiliza el mismo código de tarjeta que
@@ -468,7 +444,7 @@
    gap: 14px;
    text-align: center;
    padding: 20px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 16px;
 }
 
@@ -497,16 +473,17 @@
 .mi-equipo-badge.badge-lider {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .mi-equipo-badge.badge-capitan {
    background: rgba(48, 245, 210, 0.15);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .mi-equipo-badge.badge-miembro {
-   background: rgba(255, 255, 255, 0.08);
-   color: #c7c7d8;
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-suave);
 }
 
 .boton-secundario {
@@ -514,9 +491,9 @@
    align-items: center;
    justify-content: center;
    width: 100%;
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
    border: 1px solid rgba(48, 245, 210, 0.35);
-   color: #fff;
+   color: var(--texto-principal);
    padding: 10px 18px;
    border-radius: 999px;
    font-size: 0.8rem;
@@ -589,6 +566,7 @@
    background: var(--background);
    position: relative;
    z-index: 1;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-juego::after {
@@ -605,6 +583,7 @@
    background: var(--background);
    opacity: 0;
    transition: opacity 0.5s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-juego:hover::after {
@@ -612,7 +591,7 @@
 }
 
 .tarjeta-info {
-   background: #1f1a1d;
+   background: var(--fondo-tarjeta);
    width: 100%;
    height: 100%;
    border-radius: 0.7rem;
@@ -639,14 +618,14 @@
 }
 
 .tarjeta-overlay h3 {
-   color: #fff;
+   color: var(--texto-principal);
    font-size: 13px;
    font-weight: 700;
    margin-bottom: 3px;
 }
 
 .tarjeta-overlay p {
-   color: #ccc;
+   color: var(--texto-suave);
    font-size: 11px;
 }
 
@@ -701,10 +680,10 @@
    display: block;
    text-decoration: none;
    color: inherit;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 16px;
    overflow: hidden;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    transition: 0.25s ease;
 }
 
@@ -767,6 +746,7 @@
    justify-content: center;
    align-items: center;
    box-shadow: 0 0 22px rgba(245, 17, 203, 0.18);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-trofeo i {
@@ -814,7 +794,7 @@
 }
 
 .logro-tarjeta.bloqueado {
-   background: linear-gradient(90deg, rgba(150, 150, 150, .3), rgba(40, 40, 40, .8));
+   background: linear-gradient(90deg, rgba(150, 150, 150, .3), color-mix(in srgb, var(--fondo-elevado) 80%, transparent));
 }
 
 .logro-icon {
@@ -831,7 +811,7 @@
 
 .logro-tarjeta p {
    font-size: 12px;
-   color: #eee;
+   color: var(--texto-suave);
 }
 
 .logro-tarjeta span {
@@ -842,6 +822,7 @@
    font-size: 9px;
    font-weight: 800;
    white-space: nowrap;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 @media (min-width: 650px) {

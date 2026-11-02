@@ -14,8 +14,8 @@
 }
 
 .crear-equipo-pagina {
-   background: #030205;
-   color: #fff;
+   background: var(--fondo-principal);
+   color: var(--texto-principal);
    font-family: 'Poppins', sans-serif;
    padding-top: 80px;
    padding-bottom: 60px;
@@ -37,7 +37,7 @@
 
 .crear-equipo-header p {
    font-size: 0.9rem;
-   color: #c9c9d6;
+   color: var(--texto-suave);
    line-height: 1.6;
 }
 
@@ -47,7 +47,7 @@
    padding: 6px 16px;
    border-radius: 999px;
    background: rgba(var(--color-secundario-rgb), 0.12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.75rem;
    font-weight: 700;
    letter-spacing: 0.04em;
@@ -64,7 +64,7 @@
 
 .tarjeta-equipo {
    padding: 22px 20px;
-   background: #101010;
+   background: var(--fondo-superficie);
    border-radius: 20px;
 }
 
@@ -94,8 +94,8 @@
    height: 140px;
    border-radius: 14px;
    overflow: hidden;
-   background: #1a1a1a;
-   border: 1px dashed rgba(255, 255, 255, 0.2);
+   background: var(--fondo-tarjeta);
+   border: 1px dashed rgba(var(--contraste-rgb), 0.2);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -113,8 +113,8 @@
    height: 110px;
    border-radius: 50%;
    overflow: hidden;
-   background: #1a1a1a;
-   border: 1px dashed rgba(255, 255, 255, 0.2);
+   background: var(--fondo-tarjeta);
+   border: 1px dashed rgba(var(--contraste-rgb), 0.2);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -141,9 +141,9 @@
    display: inline-flex;
    align-items: center;
    gap: 8px;
-   background: rgba(255, 255, 255, 0.06);
+   background: rgba(var(--contraste-rgb), 0.06);
    border: 1px solid rgba(48, 245, 210, 0.35);
-   color: #fff;
+   color: var(--texto-principal);
    padding: 10px 18px;
    border-radius: 999px;
    font-size: 0.8rem;
@@ -189,7 +189,7 @@
 
 .campo-grupo label {
    font-size: 0.8rem;
-   color: #b8b8c9;
+   color: var(--texto-secundario);
 }
 
 .campo-grupo input,
@@ -197,14 +197,15 @@
 .campo-grupo textarea {
    width: 100%;
    min-width: 0;
-   background: #292844;
-   border: 1px solid rgba(255, 255, 255, 0.08);
-   color: #fff;
+   background: var(--fondo-elevado);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-principal);
    padding: 12px 14px;
    border-radius: 8px;
    font-family: inherit;
    font-size: 0.9rem;
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .campo-grupo select {
@@ -230,8 +231,8 @@
    align-items: center;
    justify-content: space-between;
    gap: 10px;
-   background: #292844;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   background: var(--fondo-elevado);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    border-radius: 8px;
    padding: 12px 14px;
 }
@@ -240,23 +241,25 @@
    font-family: monospace;
    font-size: 1rem;
    letter-spacing: 1px;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .codigo-invitacion-box button {
    flex-shrink: 0;
    border: none;
-   background: rgba(255, 255, 255, 0.08);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-principal);
    padding: 8px 14px;
    border-radius: 999px;
    font-size: 0.75rem;
    font-family: inherit;
    cursor: pointer;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .codigo-invitacion-box button:hover {
    background: rgba(48, 245, 210, 0.18);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 /* --- Buscador de jugadores --- */
@@ -265,14 +268,14 @@
    display: flex;
    align-items: center;
    gap: 10px;
-   background: #292844;
+   background: var(--fondo-elevado);
    border-radius: 8px;
    padding: 12px 16px;
    margin-bottom: 18px;
 }
 
 .buscador-jugadores i {
-   color: #999;
+   color: var(--texto-secundario);
 }
 
 .buscador-jugadores input {
@@ -280,10 +283,11 @@
    min-width: 0;
    border: none;
    background: transparent;
-   color: #fff;
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 0.9rem;
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 /* --- Filas de jugadores (miembros / resultados / solicitudes) --- */
@@ -310,7 +314,7 @@
    gap: 12px;
    padding: 10px 12px;
    border-radius: 12px;
-   background: #1a1a1a;
+   background: var(--fondo-tarjeta);
    flex-wrap: wrap;
 }
 
@@ -320,7 +324,7 @@
    border-radius: 50%;
    object-fit: cover;
    flex-shrink: 0;
-   background: #333;
+   background: var(--fondo-elevado);
 }
 
 .fila-jugador-info {
@@ -350,11 +354,12 @@
 .fila-jugador-badge.badge-lider {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .fila-jugador-badge.badge-capitan {
    background: rgba(var(--color-secundario-rgb), 0.15);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .fila-jugador-badge.badge-pendiente {
@@ -381,7 +386,7 @@
 
 .boton-hacer-capitan {
    background: rgba(48, 245, 210, 0.12);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .boton-hacer-capitan:hover {
@@ -400,6 +405,7 @@
 .boton-invitar {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-invitar:hover {
@@ -420,7 +426,7 @@
 
 .boton-simular-aceptar {
    background: rgba(48, 245, 210, 0.15);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
    border: 1px dashed rgba(48, 245, 210, 0.4) !important;
 }
 
@@ -448,6 +454,7 @@
    font-size: 0.9rem;
    font-weight: 800;
    cursor: pointer;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-cancelar-edicion {
@@ -455,8 +462,8 @@
    align-items: center;
    justify-content: center;
    background: transparent;
-   border: 1px solid rgba(255, 255, 255, 0.25);
-   color: #c7c7d8;
+   border: 1px solid rgba(var(--contraste-rgb), 0.25);
+   color: var(--texto-suave);
    padding: 14px;
    border-radius: 999px;
    font-size: 0.9rem;

@@ -16,6 +16,7 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCEND | Mis torneos</title>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+    <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">
@@ -24,17 +25,16 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         .mis-torneos-toolbar { display: flex; gap: .75rem; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
-        .mis-torneos-filtros { display: flex; gap: .5rem; flex-wrap: wrap; }
-        .mis-torneos-filtros a { padding: .55rem .8rem; border: 1px solid var(--borde-suave); border-radius: var(--radio-md); color: var(--texto-secundario); text-decoration: none; }
-        .mis-torneos-filtros a:hover { color: var(--color-secundario); border-color: var(--color-secundario); }
+        .mis-torneos-filtros { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
         .mis-torneos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
         .mi-torneo-card { display: flex; flex-direction: column; gap: .85rem; padding: 1.1rem; background: var(--fondo-tarjeta); border: 1px solid var(--borde-suave); border-radius: var(--radio-lg); }
         .mi-torneo-card header { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; }
         .mi-torneo-card h2 { font-size: 1rem; margin: 0; }
         .mi-torneo-card p { margin: 0; color: var(--texto-secundario); font-size: .85rem; }
         .mi-torneo-meta { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: auto; }
-        .mi-torneo-meta span { display: block; padding: .6rem; background: rgba(255,255,255,.03); border-radius: var(--radio-md); font-size: .78rem; color: var(--texto-secundario); }
-        .mi-torneo-meta strong { display: block; color: #fff; font-size: .9rem; }
+        .mi-torneo-meta span { display: block; padding: .6rem; background: rgba(var(--contraste-rgb), 0.03); border-radius: var(--radio-md); font-size: .78rem; color: var(--texto-secundario);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs); }
+        .mi-torneo-meta strong { display: block; color: var(--texto-principal); font-size: .9rem; }
         .mis-torneos-vacio { padding: 2rem; text-align: center; color: var(--texto-secundario); }
     </style>
 </head>
@@ -53,12 +53,19 @@ $escapar = static fn ($valor): string => htmlspecialchars((string) $valor, ENT_Q
                 <h2>Todos los torneos creados</h2>
                 <a class="boton boton-gestion" href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=crear"><i class="fa-solid fa-plus"></i> Crear torneo</a>
             </div>
+            <?php $estadoFiltro = (string) ($_GET['estado'] ?? ''); ?>
             <nav class="mis-torneos-filtros" aria-label="Filtrar torneos">
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos">Todos</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos&amp;estado=borrador">Borradores</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos&amp;estado=inscripciones_abiertas">Abiertos</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos&amp;estado=en_curso">En curso</a>
-                <a href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos&amp;estado=finalizado">Finalizados</a>
+                <?php foreach ([
+                    ''                       => 'Todos',
+                    'borrador'               => 'Borradores',
+                    'inscripciones_abiertas' => 'Abiertos',
+                    'en_curso'               => 'En curso',
+                    'finalizado'             => 'Finalizados',
+                ] as $valorFiltro => $etiquetaFiltro): ?>
+                    <a class="boton-filtro boton-filtro--oscuro<?php echo $estadoFiltro === $valorFiltro ? ' active' : ''; ?>"
+                       href="<?php echo URL_BASE; ?>index.php?c=panelOrganizador&amp;a=misTorneos<?php echo $valorFiltro !== '' ? '&amp;estado=' . $valorFiltro : ''; ?>"
+                       <?php echo $estadoFiltro === $valorFiltro ? 'aria-current="page"' : ''; ?>><?php echo $etiquetaFiltro; ?></a>
+                <?php endforeach; ?>
             </nav>
             <?php if ($torneos === []): ?>
                 <p class="mis-torneos-vacio">No hay torneos para mostrar.</p>

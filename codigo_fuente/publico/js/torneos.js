@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
    const items = Array.from(document.querySelectorAll("#torneos-grid > li"));
    if (items.length === 0) return;
 
-   const chips = document.querySelectorAll(".chips-contenedor .chip");
+   const chips = document.querySelectorAll(".chips-contenedor .boton-filtro");
    const inputBuscar = document.getElementById("buscar-torneo");
    const selectJuego = document.getElementById("filtro-juego");
    const selectFormato = document.getElementById("filtro-formato");

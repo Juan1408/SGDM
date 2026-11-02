@@ -118,6 +118,7 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCEND | Crear torneo</title>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+    <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
     <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">
@@ -128,7 +129,7 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
     <style>
         .etapas-torneo { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1.5rem 0; }
         .etapa-torneo { padding: .65rem 1rem; border: 1px solid var(--borde-suave); border-radius: var(--radio-md); color: var(--texto-secundario); }
-        .etapa-torneo.activa { border-color: var(--color-secundario); color: var(--color-secundario); }
+        .etapa-torneo.activa { border-color: var(--color-secundario); color: var(--color-secundario-texto); }
         .etapa-torneo.completada { color: var(--color-primario); }
         .wizard-acciones { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
         .wizard-resumen { display: grid; gap: .75rem; }
@@ -147,15 +148,16 @@ $pasos = [1 => 'Información general', 2 => 'Fechas y datos', 3 => 'Actividades'
         /* Premios */
         .premios-grilla { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; margin-top: .5rem; }
         .premio-bloque { display: grid; gap: .5rem; justify-items: center; align-content: start; text-align: center; padding: 1rem .75rem; border: 1px dashed var(--borde-suave); border-radius: 10px; }
-        .premio-bloque.activo { border-style: solid; background: linear-gradient(var(--color-azul), var(--color-violeta)); }
+        .premio-bloque.activo { border-style: solid; background: linear-gradient(var(--color-azul), var(--color-violeta));
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal); }
         .premio-agregar { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--borde-suave); background: transparent; color: var(--texto-secundario); font-size: 1.3rem; cursor: pointer; }
-        .premio-agregar:hover { color: var(--color-secundario); border-color: var(--color-secundario); }
+        .premio-agregar:hover { color: var(--color-secundario-texto); border-color: var(--color-secundario); }
         .premio-nombre { font-weight: 600; }
         .premio-contenido { display: grid; gap: .5rem; justify-items: center; width: 100%; }
         .premio-contenido[hidden], .premio-agregar[hidden] { display: none; }
         .premio-insignia { font-size: 2.6rem; }
         .premio-insignia.oro { color: #ffb300; }
-        .premio-insignia.plata { color: #c0c8d0; }
+        .premio-insignia.plata { color: var(--texto-secundario); }
         .premio-insignia.bronce { color: #cd7f32; }
         .premio-contenido input { width: 100%; text-align: center; }
         .premio-quitar { background: none; border: none; color: var(--texto-secundario); cursor: pointer; font-size: .85rem; text-decoration: underline; }

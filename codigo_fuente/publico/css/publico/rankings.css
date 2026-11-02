@@ -6,7 +6,7 @@
 .juegos-header { margin-bottom: 48px; }
 
 .ganador-subtitulo {
-  color: var(--color-secundario);
+  color: var(--color-secundario-texto);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -15,7 +15,7 @@
 }
 
 .juegos-header h2 {
-  color: #fff;
+  color: var(--texto-principal);
   font-size: clamp(32px, 5vw, 52px);
   font-weight: 800;
 }
@@ -28,9 +28,9 @@
 }
 
 .carrusel-btn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #fff;
+  background: rgba(var(--contraste-rgb), 0.06);
+  border: 1px solid rgba(var(--contraste-rgb), 0.15);
+  color: var(--texto-principal);
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -44,7 +44,7 @@
   z-index: 2;
 }
 
-.carrusel-btn:hover { background: rgba(255,255,255,0.15); }
+.carrusel-btn:hover { background: rgba(var(--contraste-rgb), 0.15); }
 .carrusel-btn:disabled { opacity: 0.3; cursor: default; }
 
 .carrusel-track-wrapper {
@@ -79,6 +79,7 @@
   z-index: 1;
   cursor: pointer;
   flex-shrink: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-juego::after {
@@ -94,6 +95,7 @@
   filter: blur(34.5px);
   background: var(--background);
   transition: opacity 0.5s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .tarjeta-juego:hover::after {
@@ -106,7 +108,7 @@
 
 
 .tarjeta-info {
-  background: #1f1a1d;
+  background: var(--fondo-tarjeta);
   width: 100%;
   height: 100%;
   border-radius: 0.7rem;
@@ -132,8 +134,8 @@
   padding: 16px 14px 14px;
 }
 
-.tarjeta-overlay h3 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.tarjeta-overlay p  { color: #ccc; font-size: 12px; }
+.tarjeta-overlay h3 { color: var(--texto-principal); font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.tarjeta-overlay p  { color: var(--texto-suave); font-size: 12px; }
 
 .tarjeta-juego.lol  { --background: linear-gradient(to right, #C89B3C, #785A28); }
 .tarjeta-juego.apex { --background: linear-gradient(to right, #ff4500, #e91e8c); }
@@ -160,7 +162,7 @@
 .ganadores-izquierda { flex: 1; min-width: 260px; }
 
 .ganadores-izquierda .tag {
-  color: var(--color-secundario);
+  color: var(--color-secundario-texto);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -169,14 +171,14 @@
 }
 
 .ganadores-izquierda h2 {
-  color: #fff;
+  color: var(--texto-principal);
   font-size: 30px;
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 22px;
 }
 
-.ganadores-izquierda h2 span { color: var(--color-secundario); }
+.ganadores-izquierda h2 span { color: var(--color-secundario-texto); }
 
 .ganadores-izquierda .trofeo {
   font-size: 70px;
@@ -204,11 +206,12 @@
   border-radius: 999px;
   z-index: 2;
   white-space: nowrap;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .ganadores-lista {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(var(--contraste-rgb), 0.04);
+  border: 1px solid rgba(var(--contraste-rgb), 0.1);
   border-radius: 18px;
   padding: 36px 22px 22px;
   display: flex;
@@ -220,8 +223,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(var(--contraste-rgb), 0.03);
+  border: 1px solid rgba(var(--contraste-rgb), 0.08);
   border-radius: 999px;
   padding: 10px 18px;
 }
@@ -241,9 +244,12 @@
   flex-shrink: 0;
 }
 
-.winner-row.gold .ganador-rango   { background: linear-gradient(135deg, #ffe27a, #ffb300); }
-.winner-row.silver .ganador-rango { background: linear-gradient(135deg, #e8e8e8, #b0b0b0); }
-.winner-row.bronze .ganador-rango { background: linear-gradient(135deg, #e0a868, #b87333); }
+.winner-row.gold .ganador-rango   { background: linear-gradient(135deg, #ffe27a, #ffb300);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal); }
+.winner-row.silver .ganador-rango { background: linear-gradient(135deg, #e8e8e8, #b0b0b0);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp); }
+.winner-row.bronze .ganador-rango { background: linear-gradient(135deg, #e0a868, #b87333);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal); }
 
 .ganador-avatar {
   width: 38px;
@@ -257,10 +263,11 @@
   font-weight: 700;
   color: var(--fondo-principal);
   flex-shrink: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .ganador-nombre {
-  color: #fff;
+  color: var(--texto-principal);
   font-size: 14px;
   font-weight: 600;
   flex: 1;
@@ -268,7 +275,7 @@
 
 .ganador-monto {
   background: rgba(0, 255, 238,0.12);
-  color: var(--color-secundario);
+  color: var(--color-secundario-texto);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 14px;
@@ -308,7 +315,7 @@
 }
 
 .ranking-header p {
-  color: var(--color-secundario);
+  color: var(--color-secundario-texto);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -317,7 +324,7 @@
 }
 
 .ranking-header h2 {
-  color: #fff;
+  color: var(--texto-principal);
   font-size: 36px;
   font-weight: 800;
 }
@@ -325,7 +332,7 @@
 /* Tabla de ranking (mismo estilo que el ranking del detalle del torneo) */
 .seccion-tabla {
   width: 100%;
-  background: #061331;
+  background: var(--fondo-superficie);
   border-radius: 16px;
   overflow-x: auto;
 }
@@ -362,6 +369,7 @@
   color: #fff;
   font-size: 14px;
   transition: 0.25s;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .ranking-row.head {
@@ -371,6 +379,7 @@
   border-radius: 0;
   font-size: 15px;
   font-weight: 700;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .ranking-row:not(.head):hover {
@@ -379,7 +388,7 @@
 }
 
 .rk-pos {
-  color: #fff;
+  color: var(--texto-principal);
   font-weight: 800;
   font-size: 15px;
 }
@@ -390,9 +399,11 @@
   font-size: 13px;
   color: #1a1a1a;
 }
-.rk-pos.gold { background: linear-gradient(135deg, #ffe27a, #ffb300); }
+.rk-pos.gold { background: linear-gradient(135deg, #ffe27a, #ffb300);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal); }
 .rk-pos.silver { background: linear-gradient(135deg, #e8e8e8, #b0b0b0); }
-.rk-pos.bronze { background: linear-gradient(135deg, #e0a868, #b87333); }
+.rk-pos.bronze { background: linear-gradient(135deg, #e0a868, #b87333);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal); }
 
 .rk-player { display: flex; align-items: center; gap: 12px; }
 .rk-avatar {
@@ -402,8 +413,9 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 700; color: var(--fondo-principal);
   flex-shrink: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
-.rk-player span { color: #fff; font-size: 14px; font-weight: 600; }
+.rk-player span { color: var(--texto-principal); font-size: 14px; font-weight: 600; }
 
 .rk-points { font-weight: 800; }
 
@@ -415,7 +427,7 @@
   border: 3px ridge #149CEA;
   outline: none;
   background-color: transparent;
-  color: white;
+  color: var(--texto-principal);
   transition: 1s;
   border-radius: 0.3em;
   font-size: 16px;
@@ -509,7 +521,7 @@
 }
 
 .ranking-filtro label {
-  color: var(--color-secundario);
+  color: var(--color-secundario-texto);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -523,13 +535,14 @@
   border: 3px ridge #149CEA;
   border-radius: 0.3em;
   background-color: transparent;
-  color: #fff;
+  color: var(--texto-principal);
   font-family: inherit;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   outline: none;
   transition: 0.5s;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .ranking-filtro select:hover,
@@ -540,14 +553,14 @@
 /* Sin esto la lista desplegable queda con letras blancas sobre fondo blanco */
 .ranking-filtro select option {
   background: var(--fondo-principal);
-  color: #fff;
+  color: var(--texto-principal);
 }
 
 
 
 /* Mensaje cuando no hay resultados */
 .ranking-vacio {
-  color: #a0a0c0;
+  color: var(--texto-secundario);
   font-size: 15px;
   padding: 8px 0;
 }

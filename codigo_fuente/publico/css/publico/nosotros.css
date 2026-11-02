@@ -4,7 +4,7 @@
 
 .nosotros-etiqueta,
 .seccion-titulo-centrado p {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-transform: uppercase;
    font-size: 13px;
    font-weight: 700;
@@ -12,62 +12,141 @@
 }
 
 /* ============================
-   QUIÉNES SOMOS
+   QUIÉNES SOMOS + MISIÓN Y VISIÓN
+   Tarjeta con efecto hover: la barra de color del borde
+   izquierdo se expande hasta cubrir toda la tarjeta.
+   El degradado se cambia en --degradado-tarjeta.
 ============================= */
 
-.nosotros-intro {
-   padding: 60px 6% 0;
+.nosotros-tarjeta-seccion {
+   padding: 60px 6% 20px;
    max-width: 900px;
    margin: 0 auto;
-   text-align: center;
 }
 
-.nosotros-intro h1 {
+.tarjeta-nosotros {
+   --degradado-tarjeta: linear-gradient(-45deg, var(--color-azul), var(--color-violeta));
+
+   position: relative;
+   isolation: isolate;               /* mantiene la barra detrás del texto, dentro de la tarjeta */
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 32px 24px;
+   overflow: hidden;
+   border-radius: 10px;
+   background: var(--fondo-tarjeta);
+   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+   transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.tarjeta-nosotros::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   bottom: 0;
+   width: 5px;
+   height: 100%;
+   background: var(--degradado-tarjeta);
+   z-index: -1;
+   transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
+}
+
+.tarjeta-nosotros:hover::before,
+.tarjeta-nosotros:focus-within::before,
+.tarjeta-nosotros.abierta::before {
+   width: 100%;
+}
+
+.tarjeta-nosotros:hover,
+.tarjeta-nosotros.abierta {
+   box-shadow: none;
+}
+
+.tarjeta-nosotros-contenido {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 18px;
+   width: 100%;
+   color: var(--texto-suave);
+}
+
+.tarjeta-nosotros h1 {
    font-size: 32px;
-   margin: 10px 0 20px;
+   font-weight: 700;
+   margin: 0;
 }
 
-.nosotros-intro p {
-   color: #c7c1ea;
+.tarjeta-nosotros-texto {
    line-height: 1.7;
+   color: var(--texto-suave);
 }
 
-/* ============================
-   MISIÓN Y VISIÓN
-============================= */
+.tarjeta-nosotros:hover .nosotros-etiqueta,
+.tarjeta-nosotros.abierta .nosotros-etiqueta {
+   color: var(--texto-principal);
+}
 
-.mision-vision {
-   padding: 50px 6%;
+/* Al estar la tarjeta coloreada, el botón pasa a claro (como el original) */
+.tarjeta-nosotros:hover .boton--ver-mas,
+.tarjeta-nosotros.abierta .boton--ver-mas {
+   color: #212121;
+   background: #e8e8e8;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+.tarjeta-nosotros .boton--ver-mas:hover {
+   background: transparent;
+   color: var(--texto-suave);
+   outline: 2px solid #e8e8e8;
+   box-shadow: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
+}
+
+/* Panel desplegable: crece suavemente de 0 a su alto real */
+.nosotros-desplegable {
+   display: grid;
+   grid-template-rows: 0fr;
+   width: 100%;
+   visibility: hidden;
+   transition: grid-template-rows 0.5s cubic-bezier(0.23, 1, 0.320, 1),
+               visibility 0.5s;
+}
+
+.tarjeta-nosotros.abierta .nosotros-desplegable {
+   grid-template-rows: 1fr;
+   visibility: visible;
+}
+
+.nosotros-desplegable-interior {
+   overflow: hidden;
+   min-height: 0;
    display: grid;
    grid-template-columns: minmax(0, 1fr);
-   gap: 24px;
-   max-width: 1100px;
-   margin: 0 auto;
-   
+   gap: 22px;
 }
 
-.mv-card {
-   background: #171236;
-   border-radius: 16px;
-   padding: 30px 24px;
-   text-align: center;
+.tarjeta-nosotros.abierta .nosotros-desplegable-interior {
+   padding-top: 8px;
 }
 
-.mv-card i {
-   font-size: 34px;
-   color: var(--color-secundario);
-   margin-bottom: 14px;
+.nosotros-mv i {
+   font-size: 28px;
+   color: var(--texto-principal);
+   margin-bottom: 10px;
 }
 
-.mv-card h2 {
+.nosotros-mv h2 {
    font-size: 22px;
-   margin-bottom: 14px;
+   margin-bottom: 8px;
 }
 
-.mv-card p {
-   color: #c7c1ea;
+.nosotros-mv p {
    line-height: 1.7;
-   font-size: 14px;
+   font-size: 15px;
+   color: var(--texto-suave);
 }
 
 /* ============================
@@ -109,6 +188,7 @@
    border-radius: 16px;
    padding: 26px 22px;
    text-align: center;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .valor-icono {
@@ -124,7 +204,7 @@
 
 .valor-icono.cyan {
    background: rgba(var(--color-secundario-rgb), .25);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .valor-icono.pink {
@@ -138,7 +218,7 @@
 }
 
 .valor-tarjeta p {
-   color: #c7c1ea;
+   color: var(--texto-secundario);
    font-size: 14px;
    line-height: 1.6;
 }
@@ -149,7 +229,7 @@
 
 .reglas {
    padding: 50px 6%;
-   background: #171236;
+   background: var(--fondo-tarjeta);
 }
 
 .reglas-grid {
@@ -163,7 +243,7 @@
 }
 
 .regla-categoria {
-   background: #0f0c26;
+   background: var(--fondo-superficie);
    border-radius: 16px;
    padding: 26px 22px;
    text-align: left;
@@ -171,7 +251,7 @@
 
 .regla-categoria i {
    font-size: 26px;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    margin-bottom: 12px;
    display: block;
 }
@@ -193,7 +273,7 @@
 .regla-lista li {
    position: relative;
    padding-left: 18px;
-   color: #c7c1ea;
+   color: var(--texto-secundario);
    font-size: 13.5px;
    line-height: 1.6;
 }
@@ -207,6 +287,7 @@
    height: 6px;
    border-radius: 50%;
    background: var(--color-primario);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 /* ============================
@@ -228,7 +309,7 @@
 }
 
 .publico-tarjeta {
-   background: #171236;
+   background: var(--fondo-tarjeta);
    border-radius: 14px;
    padding: 22px 14px;
    text-align: center;
@@ -283,7 +364,7 @@
 }
 
 .tarjeta-equipo p {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 12px;
    text-transform: uppercase;
    letter-spacing: .5px;
@@ -295,12 +376,17 @@
 
 @media (min-width: 700px) {
 
-   .nosotros-intro h1 {
+   .tarjeta-nosotros {
+      padding: 40px 44px;
+   }
+
+   .tarjeta-nosotros h1 {
       font-size: 42px;
    }
 
-   .mision-vision {
+   .nosotros-desplegable-interior {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
    }
 
    .valores-grid {

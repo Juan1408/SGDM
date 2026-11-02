@@ -89,6 +89,7 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/variables.css">
+   <script src="<?php echo URL_BASE; ?>js/tema.js"></script>
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/base.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/botones.css">
    <link rel="stylesheet" href="<?php echo URL_BASE; ?>css/componentes/tarjetas.css">
@@ -868,7 +869,7 @@ $formatoMarcador = static fn ($valor): string => rtrim(rtrim(number_format((floa
                                  <?php if ($torneoEnCurso): ?>
                                     <div style="margin-top: 8px;">
                                        <button type="button" class="fixture-programar-boton"
-                                          style="font-size: 0.8rem; padding: 4px 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: #93c5fd; border-radius: 4px; cursor: pointer;"
+                                          style="font-size: 0.8rem; padding: 4px 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: var(--texto-info, #93c5fd); border-radius: 4px; cursor: pointer;"
                                           onclick="document.getElementById('modal-corregir-<?php echo (int) $partido['id']; ?>').showModal()">
                                           <i class="fa-solid fa-pen-to-square"></i> Corregir marcador
                                        </button>

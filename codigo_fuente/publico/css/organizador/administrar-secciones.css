@@ -1,4 +1,4 @@
-﻿/*
+/*
 =====================================================
    ADMINISTRAR TORNEO - SECCIONES DE CONTENIDO
    Fixture, Participantes, Resultados, Posiciones,
@@ -75,6 +75,7 @@
     background: var(--background-card);
     border: 1px solid var(--border);
     border-radius: 14px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .fixture-summary-item span {
@@ -109,6 +110,7 @@
 
     cursor: pointer;
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .fixture-round-button:hover {
@@ -127,6 +129,7 @@
         );
 
     border-color: transparent;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .fixture-match-list {
@@ -142,6 +145,7 @@
     border-radius: 16px;
 
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .fixture-card:hover {
@@ -252,6 +256,7 @@
     background: var(--background-card);
     border: 1px solid var(--border);
     border-radius: 14px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .participantes-resumen strong {
@@ -282,6 +287,7 @@
     border-radius: 18px;
 
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .participante-card:hover {
@@ -469,6 +475,7 @@
     background: var(--background-card);
     border: 1px solid var(--border);
     border-radius: 18px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .resultado-card__encabezado {
@@ -544,7 +551,7 @@
 
     padding: 14px 16px;
 
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(var(--contraste-rgb), 0.035);
     border: 1px solid var(--border);
     border-radius: 12px;
 }
@@ -595,6 +602,7 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     outline: none;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .resultado-equipo input:focus {
@@ -630,6 +638,7 @@
 
     cursor: pointer;
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .resultado-guardar:hover {
@@ -705,6 +714,7 @@
     min-width: 800px;
     border-collapse: collapse;
     background: var(--background-card);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .posiciones-tabla th,
@@ -722,7 +732,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
 
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(var(--contraste-rgb), 0.035);
 }
 
 .posiciones-tabla tbody tr {
@@ -758,9 +768,10 @@
     color: var(--text);
     font-weight: 800;
 
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(var(--contraste-rgb), 0.06);
     border: 1px solid var(--border);
     border-radius: 9px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .posiciones-tabla tbody tr:nth-child(1)
@@ -768,6 +779,7 @@
     color: #111;
     background: #ffd54a;
     border-color: #ffd54a;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .posiciones-tabla tbody tr:nth-child(2)
@@ -775,6 +787,7 @@
     color: #111;
     background: #c9d0d9;
     border-color: #c9d0d9;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .posiciones-tabla tbody tr:nth-child(3)
@@ -782,6 +795,7 @@
     color: #111;
     background: #d58c4b;
     border-color: #d58c4b;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .posicion-puntos {
@@ -808,7 +822,7 @@
     color: var(--text-secondary);
     font-size: 0.76rem;
 
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(var(--contraste-rgb), 0.025);
     border: 1px solid var(--border);
     border-radius: 12px;
 }
@@ -882,6 +896,7 @@
     background: rgba(245, 17, 203, 0.1);
     border: 1px solid rgba(245, 17, 203, 0.25);
     border-radius: 10px;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .cronograma-dia__lista {
@@ -898,7 +913,7 @@
     left: 31px;
 
     width: 2px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--contraste-rgb), 0.08);
 }
 
 .cronograma-evento {
@@ -935,6 +950,7 @@
         );
 
     border-radius: 10px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .cronograma-evento__contenido {
@@ -946,6 +962,7 @@
     background: var(--background-card);
     border: 1px solid var(--border);
     border-radius: 16px;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .cronograma-evento__encabezado {
@@ -992,7 +1009,7 @@
     font-size: 0.72rem;
     font-weight: 700;
 
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(var(--contraste-rgb), 0.05);
     border: 1px solid var(--border);
     border-radius: 999px;
 }
@@ -1075,6 +1092,7 @@
     border-radius: 18px;
 
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .solicitud-card:hover {
@@ -1197,7 +1215,7 @@
 
     padding: 18px 20px;
 
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(var(--contraste-rgb), 0.025);
     border: 1px solid var(--border);
     border-radius: 14px;
 }
@@ -1233,6 +1251,7 @@
 
     cursor: pointer;
     transition: var(--transition);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .fixture-generar-boton:hover {
@@ -1297,11 +1316,12 @@ a.fixture-round-button {
     box-sizing: border-box;
 
     color: var(--text);
-    color-scheme: dark;
+    color-scheme: inherit;
     background: var(--background-card);
     border: 1px solid var(--border);
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .programar-modal::backdrop {
@@ -1395,6 +1415,7 @@ a.fixture-round-button {
    font: inherit;
    font-size: .9rem;
    outline: none;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .form-group input:focus,
@@ -1448,13 +1469,14 @@ a.fixture-round-button {
 
 .button-secondary:hover {
    border-color: var(--color-primary);
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 .button-primary {
    color: #fff;
    background: linear-gradient(90deg, var(--color-primary), #6425A7);
    border: 0;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .button-primary:hover {
@@ -1566,21 +1588,21 @@ a.participante-btn {
    min-height: 44px;
    padding: 0 12px;
    border-radius: 10px;
-   border: 1px solid rgba(255, 255, 255, 0.18);
-   background: rgba(255, 255, 255, 0.06);
-   color: #fff;
+   border: 1px solid rgba(var(--contraste-rgb), 0.18);
+   background: rgba(var(--contraste-rgb), 0.06);
+   color: var(--texto-principal);
    text-align: center;
    font: 600 16px 'Poppins', sans-serif;
 }
 
 .marcador-form span {
-   color: #94a3b8;
+   color: var(--texto-secundario);
    font-weight: 700;
 }
 
 .marcador-final {
    margin-top: 14px;
-   color: #cbd5e1;
+   color: var(--texto-suave);
 }
 
 .marcador-final strong {
@@ -1592,14 +1614,14 @@ a.participante-btn {
 .posiciones-tabla-contenedor {
    overflow-x: auto;
    border-radius: 14px;
-   border: 1px solid rgba(255, 255, 255, 0.1);
+   border: 1px solid rgba(var(--contraste-rgb), 0.1);
 }
 
 .posiciones-tabla {
    width: 100%;
    min-width: 560px;
    border-collapse: collapse;
-   color: #e2e8f0;
+   color: var(--texto-suave);
    font-size: 14px;
 }
 
@@ -1607,12 +1629,12 @@ a.participante-btn {
 .posiciones-tabla td {
    padding: 12px 10px;
    text-align: center;
-   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+   border-bottom: 1px solid rgba(var(--contraste-rgb), 0.08);
 }
 
 .posiciones-tabla thead th {
-   background: rgba(255, 255, 255, 0.05);
-   color: #94a3b8;
+   background: rgba(var(--contraste-rgb), 0.05);
+   color: var(--texto-secundario);
    font-weight: 600;
 }
 
@@ -1652,7 +1674,7 @@ a.participante-btn {
    display: flex;
    align-items: center;
    gap: 12px;
-   color: #cbd5e1;
+   color: var(--texto-suave);
 }
 
 .podio-lista i {
@@ -1660,7 +1682,7 @@ a.participante-btn {
 }
 
 .podio-lista strong {
-   color: #fff;
+   color: var(--texto-principal);
 }
 
 /* Editar torneo */
@@ -1670,7 +1692,7 @@ a.participante-btn {
    max-height: 140px;
    margin-top: 10px;
    border-radius: 10px;
-   border: 1px solid rgba(255, 255, 255, 0.12);
+   border: 1px solid rgba(var(--contraste-rgb), 0.12);
    object-fit: cover;
 }
 

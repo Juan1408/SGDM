@@ -63,7 +63,7 @@ body {
 }
 
 .dashboard-tag {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-weight: 700;
    letter-spacing: 2px;
 }
@@ -98,8 +98,9 @@ body {
    min-width: 0;
    background: none;
    border: none;
-   color: #fff;
+   color: var(--texto-principal);
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .dashboard-icon {
@@ -109,7 +110,7 @@ body {
    border: none;
    border-radius: 50%;
    background: var(--fondo-tarjeta);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .boton-crear-torneo {
@@ -127,6 +128,7 @@ body {
    font-weight: 700;
    text-decoration: none;
    white-space: nowrap;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 /*
@@ -140,6 +142,7 @@ body {
    background: linear-gradient(90deg, var(--color-azul), var(--color-primario));
    border-radius: var(--radio-lg);
    border: 1px solid var(--borde-suave);
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;color:var(--texto-principal);
 }
 
 .panel-header {
@@ -156,7 +159,7 @@ body {
 }
 
 .panel-header a {
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    text-decoration: none;
    font-size: .9rem;
    white-space: nowrap;

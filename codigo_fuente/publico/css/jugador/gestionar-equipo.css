@@ -10,7 +10,7 @@
    padding: 6px 16px;
    border-radius: 999px;
    background: rgba(var(--color-secundario-rgb), 0.12);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
    font-size: 0.75rem;
    font-weight: 700;
    letter-spacing: 0.04em;
@@ -23,8 +23,8 @@
    align-items: center;
    justify-content: space-between;
    gap: 10px;
-   background: #292844;
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   background: var(--fondo-elevado);
+   border: 1px solid rgba(var(--contraste-rgb), 0.08);
    border-radius: 8px;
    padding: 12px 14px;
 }
@@ -33,23 +33,25 @@
    font-family: monospace;
    font-size: 1rem;
    letter-spacing: 1px;
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .codigo-invitacion-box button {
    flex-shrink: 0;
    border: none;
-   background: rgba(255, 255, 255, 0.08);
-   color: #fff;
+   background: rgba(var(--contraste-rgb), 0.08);
+   color: var(--texto-principal);
    padding: 8px 14px;
    border-radius: 999px;
    font-size: 0.75rem;
    font-family: inherit;
    cursor: pointer;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 .codigo-invitacion-box button:hover {
    background: rgba(48, 245, 210, 0.18);
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);color:var(--tp);
 }
 
 /* --- Buscador de jugadores --- */
@@ -58,14 +60,14 @@
    display: flex;
    align-items: center;
    gap: 10px;
-   background: #292844;
+   background: var(--fondo-elevado);
    border-radius: 8px;
    padding: 12px 16px;
    margin-bottom: 18px;
 }
 
 .buscador-jugadores i {
-   color: #999;
+   color: var(--texto-secundario);
 }
 
 .buscador-jugadores input {
@@ -73,10 +75,11 @@
    min-width: 0;
    border: none;
    background: transparent;
-   color: #fff;
+   color: var(--texto-principal);
    font-family: inherit;
    font-size: 0.9rem;
    outline: none;
+   --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
 }
 
 /* --- Filas de jugadores (miembros / resultados / solicitudes) --- */
@@ -100,7 +103,7 @@
    gap: 12px;
    padding: 10px 12px;
    border-radius: 12px;
-   background: #1a1a1a;
+   background: var(--fondo-tarjeta);
    flex-wrap: wrap;
 }
 
@@ -110,7 +113,7 @@
    border-radius: 50%;
    object-fit: cover;
    flex-shrink: 0;
-   background: #333;
+   background: var(--fondo-elevado);
 }
 
 .fila-jugador-info {
@@ -152,11 +155,12 @@
 .fila-jugador-badge.badge-lider {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .fila-jugador-badge.badge-capitan {
    background: rgba(var(--color-secundario-rgb), 0.15);
-   color: var(--color-secundario);
+   color: var(--color-secundario-texto);
 }
 
 .fila-jugador-badge.badge-pendiente {
@@ -183,7 +187,7 @@
 
 .boton-hacer-capitan {
    background: rgba(48, 245, 210, 0.12);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
 }
 
 .boton-hacer-capitan:hover {
@@ -193,6 +197,7 @@
 .boton-invitar {
    background: linear-gradient(90deg, #52228e, #f300ef);
    color: #fff;
+   --texto-principal:#ffffff;--texto-suave:#e4e4f0;--texto-secundario:#c4c4d8;--contraste-rgb:255,255,255;--color-secundario-texto:#00ffee;
 }
 
 .boton-invitar:hover {
@@ -213,7 +218,7 @@
 
 .boton-simular-aceptar {
    background: rgba(48, 245, 210, 0.15);
-   color: #30f5d2;
+   color: var(--color-secundario-texto);
    border: 1px dashed rgba(48, 245, 210, 0.4) !important;
 }
 

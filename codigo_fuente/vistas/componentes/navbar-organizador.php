@@ -48,7 +48,7 @@ try {
       background: transparent;
       border: none;
       cursor: pointer;
-      color: #fff;
+      color: var(--texto-principal);
       font-size: 34px;
       padding: 0;
    }
@@ -87,8 +87,8 @@ try {
       align-items: center;
       border-radius: 0;
       border: none;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(10, 10, 24, 0.92);
+      border-right: 1px solid rgba(var(--contraste-rgb), 0.08);
+      background: color-mix(in srgb, var(--fondo-superficie) 92%, transparent);
       /* Si el riel queda corto (footer a la vista), los iconos se deslizan adentro */
       overflow-y: auto;
       overflow-x: hidden;
@@ -102,7 +102,8 @@ try {
    .sidebar-flotante-item.activo,
    .sidebar-flotante-submenu a.activo {
       background: rgba(0, 255, 238, 0.12);
-      color: #00FFEE;
+      color: var(--color-secundario-texto);
+      --texto-principal:var(--tp);--texto-suave:var(--ts);--texto-secundario:var(--tx);--contraste-rgb:var(--tc);--color-secundario-texto:var(--tcs);
    }
 
    .sidebar-flotante-desplegable.cerrado .sidebar-flotante-submenu { display: none; }
@@ -362,4 +363,5 @@ try {
          ajustarRiel();
       }
    });
-</script>
+</script>
+<script src="<?php echo URL_BASE; ?>js/ui-global.js"></script>
